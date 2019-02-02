@@ -1,0 +1,156 @@
+{"language indices": [
+	
+	{
+		"file": "en",
+		"name": "english"
+	},
+	{
+		"file": "ar",
+		"name": "العربية",
+		"parent": "en",
+		"direction": "rtl"
+	},
+	{
+		"file": "bg",
+		"name": "Български",
+		"parent": "en"
+	},
+	{
+		"file": "bs",
+		"name": "Bosanski",
+		"parent": "hr"
+	},
+	{
+		"file": "cs",
+		"name": "Čeština",
+		"parent": "en"
+	},
+	{
+		"file": "de",
+		"name": "Deutsch",
+		"parent": "en"
+	},
+	{
+		"file": "el",
+		"name": "ελληνικά",
+		"parent": "en"
+	},
+	{
+		"file": "es",
+		"name": "Español",
+		"parent": "en"
+	},
+	{
+		"file": "fa",
+		"name": "فارسی",
+		"parent": "en",
+		"direction": "rtl"
+	},
+	{
+		"file": "fil",
+		"name": "Filipino",
+		"parent": "tl"
+	},
+	{
+		"file": "fr",
+		"name": "Français",
+		"parent": "en"
+	},
+	{
+		"file": "hr",
+		"name": "Hrvatski",
+		"parent": "en"
+	},
+	{
+		"file": "hu",
+		"name": "magyar",
+		"parent": "en"
+	},
+	{
+		"file": "it",
+		"name": "Italiano",
+		"parent": "en"
+	},
+	{
+		"file": "ja",
+		"name": "日本語",
+		"parent": "en"
+	},
+	{
+		"file": "la",
+		"name": "Latine",
+		"parent": "en"
+	},
+	{
+		"file": "nl",
+		"name": "Nederlands",
+		"parent": "en"
+	},
+	{
+		"file": "pl",
+		"name": "Polszczyzna",
+		"parent": "en"
+	},
+	{
+		"file": "pt",
+		"name": "Português",
+		"parent": "en"
+	},
+	{
+		"file": "ru",
+		"name": "Русский",
+		"parent": "en"
+	},
+	{
+		"file": "sah",
+		"name": "Саха",
+		"parent": "ru"
+	},
+	{
+		"file": "sk",
+		"name": "Slovenčina",
+		"parent": "cs"
+	},
+	{
+		"file": "sr",
+		"name": "Српски",
+		"parent": "sr-Cyrl"
+	},
+	{
+		"file": "sr-Cyrl",
+		"name": "Српски ћирилицом",
+		"parent": "sr-Latn"
+	},
+	{
+		"file": "sr-Latn",
+		"name": "Srpski latinicom",
+		"parent": "hr"
+	},
+	{
+		"file": "tl",
+		"name": "Tagalog",
+		"parent": "en"
+	},
+	{
+		"file": "tr",
+		"name": "Türkçe",
+		"parent": "en"
+	},
+	{
+		"file": "uk",
+		"name": "Українська",
+		"parent": "ru"
+	},
+	{
+		"file": "zh",
+		"name": "中文",
+		"parent": "zh-Hans"
+	},
+	{
+		"file": "zh-Hans",
+		"name": "白话文",
+		"parent": "en"
+	}
+
+]
+}
