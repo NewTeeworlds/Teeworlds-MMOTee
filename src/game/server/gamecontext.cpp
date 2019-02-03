@@ -813,7 +813,7 @@ void CGameContext::BossTick()
 		{
 			m_BossStartTick = 0;
 			m_BossStart = false;
-			SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("The boss is canceled, players are not in waiting room"), NULL);	
+			SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("Boss战被取消了, 玩家们不在等待室内(waiting room)"), NULL);	
 		}
 		
 		if(m_BossStartTick == 50)
@@ -828,7 +828,7 @@ void CGameContext::BossTick()
 				}
 			}
 			int CountBoss = GetBossCount();
-			SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("The raid on the boss room started. Players {int:num}"), "num", &CountBoss, NULL);	
+			SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("对Boss战开始了. 玩家数量:{int:num}"), "num", &CountBoss, NULL);	
 		}
 	}
 
@@ -838,7 +838,7 @@ void CGameContext::BossTick()
 		m_BossStartTick = 0;
 		m_BossStart = false;
 		
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("Players die, boss {str:name} won"), "name", GetBossName(m_BossType), NULL);
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("Boss战的玩家都死亡了, boss {str:name} 最终胜利了"), "name", GetBossName(m_BossType), NULL);
 		
 		m_BossType = 0;
 		DeleteBotBoss();
@@ -851,7 +851,7 @@ void CGameContext::SendMail(int ClientID, const char* pText, int ItemID, int Ite
 		return;
 	
 	Server()->SendMail(Server()->GetUserID(ClientID), pText, ItemID, ItemNum);
-	SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("New message see MailBox"), NULL);
+	SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("您的邮箱内有新的信息"), NULL);
 }
 
 void CGameContext::AreaTick()
@@ -865,7 +865,7 @@ void CGameContext::AreaTick()
 			int count = GetAreaCount();
 			if(count < 2)
 			{
-				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] No started need min 2 player's"), NULL);	
+				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 最少需要两名玩家才能开始"), NULL);	
 				for(int i = 0; i < MAX_NOBOT; ++i)
 				{
 					if(m_apPlayers[i] && m_apPlayers[i]->m_InArea)
@@ -879,7 +879,7 @@ void CGameContext::AreaTick()
 			else
 			{
 				m_AreaEndGame = 120*Server()->TickSpeed();
-				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] Started, {int:num} players"), "num", &count, NULL);
+				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 事件开始了, 一共有 {int:num} 名玩家参加"), "num", &count, NULL);
 			}	
 		}
 	}
@@ -901,7 +901,7 @@ void CGameContext::AreaTick()
 						m_apPlayers[i]->GetCharacter()->Die(i, WEAPON_WORLD);
 				}
 			}		
-			SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] End. No winning player"), NULL);		
+			SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 事件结束了. 没有获胜的玩家"), NULL);		
 		}
 
 		if(GetAreaCount() == 1)
@@ -924,7 +924,7 @@ void CGameContext::AreaTick()
 								
 								int RandGet = rand()%2;
 								if(RandGet == 1)
-									SendMail(i, "Lucky you got item!", RELRINGS, 1);						
+									SendMail(i, "你获得了奖品，真幸运!", RELRINGS, 1);						
 							} break;
 							case 2: 
 							{
@@ -932,13 +932,13 @@ void CGameContext::AreaTick()
 								
 								int RandGet = rand()%20;
 								if(RandGet == 1)
-									SendMail(i, "Lucky you got item!", FREEAZER, 1);	
+									SendMail(i, "你获得了奖品，真幸运!", FREEAZER, 1);	
 							} break;
 						}					
 					}
 				}
 			}
-			SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] Winner {str:name}:"), "name", Server()->ClientName(is), NULL);	
+			SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 最终赢家是:{str:name}:"), "name", Server()->ClientName(is), NULL);	
 			m_AreaEndGame = 0;
 		}
 	}
@@ -1264,14 +1264,14 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 				}
 				if(KickID == ClientID)
 				{
-					SendChatTarget(ClientID, "You can't kick yourself");
+					SendChatTarget(ClientID, "你不能把你自己踢出房间");
 					return;
 				}
 				if(Server()->IsAuthed(KickID))
 				{
-					SendChatTarget(ClientID, "You can't kick admins");
+					SendChatTarget(ClientID, "你不能把管理员踢出房间");
 					char aBufKick[128];
-					str_format(aBufKick, sizeof(aBufKick), "'%s' called for vote to kick you", Server()->ClientName(ClientID));
+					str_format(aBufKick, sizeof(aBufKick), "'%s' 投票把你踢出房间", Server()->ClientName(ClientID));
 					SendChatTarget(KickID, aBufKick);
 					return;
 				}
@@ -3689,7 +3689,8 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		m_apPlayers[ClientID]->m_LastVotelist = AUTH;
 		AddVote_Localization(ClientID, "null", "☪ 信息 ( ′ ω ` )?:");
 		AddVote_Localization(ClientID, "null", "这是你的物品栏");
-		AddVote_Localization(ClientID, "null", "选择类型在 () 数量");
+		AddVote_Localization(ClientID, "null", "选择物品类型");
+		AddVote_Localization(ClientID, "null", "括号内为你所拥有的该类物品种类数");
 		AddVote("", "null", ClientID);
 
 		int Counts = Server()->GetItemCountType(ClientID, 6);
@@ -3759,8 +3760,9 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote_Localization(ClientID, "null", "☪ 信息 ( ′ ω ` )?:");
 		AddVote_Localization(ClientID, "null", Server()->GetItemDesc(ClientID, SelectItem));	
 		AddVote("", "null", ClientID);	
-		AddVote_Localization(ClientID, "null", "在投票的理由填写处填写数量");	
-		AddVote_Localization(ClientID, "null", "如果投票的理由处不是一个数字或没有东西，就使用一个");	
+		AddVote_Localization(ClientID, "null", "在投票理处填写使用数量");
+		AddVote_Localization(ClientID, "null", "如果为空或非数字");	
+		AddVote_Localization(ClientID, "null", "就默认只使用一个");	
 		AddVote("", "null", ClientID);	
 		AddVote_Localization(ClientID, "null", "▶ 你选中了物品 {str:name}", "name", Server()->GetItemName(ClientID, m_apPlayers[ClientID]->m_SelectItem));
 		
@@ -3798,26 +3800,38 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			if(m_apPlayers[ClientID]->AccData.Quest == 1)
 			{
 				int Need = QUEST1, Counts = Server()->GetItemCount(ClientID, PIGPORNO);
-				AddVote_Localization(ClientID, "null", "可爱的佩奇 [第一步] - 拿起你的杀猪刀朝可爱的小猪砍去，你可能会获得它的肉 [{int:get}/{int:need}]", "get", &Counts, "need", &Need);
-				AddVote_Localization(ClientID, "null", "你有 {str:got} 个肉", "got", "4000经验/200000白银");
+				AddVote_Localization(ClientID, "null", "可爱的佩奇 I");
+				AddVote_Localization(ClientID, "null", "拿起你的杀猪刀朝可爱的小猪砍去，");
+				AddVote_Localization(ClientID, "null", "你将有机会会获得它的肉。");
+				AddVote_Localization(ClientID, "null", "[已获得: {int:get}/共需要: {int:need}]", "get", &Counts, "need", &Need);
+				AddVote_Localization(ClientID, "null", "任务奖励: {str:got}", "got", "4000经验/200000白银");
 			}
 			else if(m_apPlayers[ClientID]->AccData.Quest == 2)
 			{
 				int Need = QUEST2, Counts = Server()->GetItemCount(ClientID, PIGPORNO);
-				AddVote_Localization(ClientID, "null", "可爱的佩奇 [第二步] - 拿起你的杀猪刀朝可爱的小猪砍去，你可能会获得它的肉 [{int:get}/{int:need}]", "get", &Counts, "need", &Need);
-				AddVote_Localization(ClientID, "null", "你有 {str:got} 个肉", "got", "4000经验/250000白银");
+				AddVote_Localization(ClientID, "null", "可爱的佩奇 II");
+				AddVote_Localization(ClientID, "null", "拿起你的杀猪刀朝可爱的小猪砍去，");
+				AddVote_Localization(ClientID, "null", "你将有机会会获得它的肉。");
+				AddVote_Localization(ClientID, "null", "[已获得: {int:get}/共需要: {int:need}]", "get", &Counts, "need", &Need);
+				AddVote_Localization(ClientID, "null", "任务奖励: {str:got}", "got", "4000经验/250000白银");
 			}
 			else if(m_apPlayers[ClientID]->AccData.Quest == 3)
 			{
 				int Need = QUEST3, Counts = Server()->GetItemCount(ClientID, KWAHGANDON);
-				AddVote_Localization(ClientID, "null", "Kwah [第一步] - 杀死 kwah 就可能获得他的头 [{int:get}/{int:need}]", "get", &Counts, "need", &Need);
-				AddVote_Localization(ClientID, "null", "你有 {str:got} 个头", "got", "8000经验/500000白银");
+				AddVote_Localization(ClientID, "null", "Kwah I");
+				AddVote_Localization(ClientID, "null", "杀死盘踞在矿坑中部的kwah们,");
+				AddVote_Localization(ClientID, "null", "把它们的头给我带过来!");
+				AddVote_Localization(ClientID, "null", "[已获得: {int:get}/共需要: {int:need}]", "get", &Counts, "need", &Need);
+				AddVote_Localization(ClientID, "null", "任务奖励: {str:got}", "got", "8000经验/500000白银");
 			}
 			else if(m_apPlayers[ClientID]->AccData.Quest == 4)
 			{
 				int Need = QUEST4, Counts = Server()->GetItemCount(ClientID, KWAHGANDON);
-				AddVote_Localization(ClientID, "null", "Kwah [第二步 - 杀死 kwah 就可能获得他的头 [{int:get}/{int:need}]", "get", &Counts, "need", &Need);
-				AddVote_Localization(ClientID, "null", "你有 {str:got} 个头", "got", "8000经验/550000白银");
+				AddVote_Localization(ClientID, "null", "Kwah II");
+				AddVote_Localization(ClientID, "null", "杀死盘踞在矿坑中部的kwah们,");
+				AddVote_Localization(ClientID, "null", "把它们的头给我带过来!");
+				AddVote_Localization(ClientID, "null", "[已获得: {int:get}/共需要: {int:need}]", "get", &Counts, "need", &Need);
+				AddVote_Localization(ClientID, "null", "任务奖励: {str:got}", "got", "8000经验/550000白银");
 			}	
 			else if(m_apPlayers[ClientID]->AccData.Quest == 5)
 			{
@@ -4012,8 +4026,8 @@ void CGameContext::StartArea(int WaitTime, int Type)
 		case 2: NameGame = "FNG"; Gets = 5; break;
 	}
 	SendChatTarget(-1, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] Registration started. {str:name}"), "name", NameGame, NULL);
-	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] Reward: money bag, artifacts {int:gets}%"), "gets", &Gets, NULL);
+	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] Registration 开始了. {str:name}"), "name", NameGame, NULL);
+	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 回报: 钱袋, 神器 {int:gets}%"), "gets", &Gets, NULL);
 	SendChatTarget(-1, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 }
 
@@ -4023,7 +4037,7 @@ void CGameContext::EnterArea(int ClientID)
 		return;
 		
 	if(m_apPlayers[ClientID]->m_JailTick || m_apPlayers[ClientID]->m_Search)
-		return 	SendBroadcast_Localization(ClientID, 250, 150, _("You are wanted. No enter in area room."));
+		return 	SendBroadcast_Localization(ClientID, 250, 150, _("你被通缉了. 不能进入area room."));
 		
 	if(!m_AreaStartTick)
 		return 	SendBroadcast_Localization(ClientID, 250, 150, _("Survial not registration wait registration"));
@@ -4082,9 +4096,9 @@ bool CGameContext::PrivateMessage(const char* pStr, int ClientID, bool TeamChat)
 	
 	if(!ArgumentFound)
 	{
-		SendChatTarget(ClientID, "Usage: /msg <username or group> <message>");
-		SendChatTarget(ClientID, "Send a private message to a player or a group of players");
-		SendChatTarget(ClientID, "Available groups: #clan");
+		SendChatTarget(ClientID, "用法: /msg <用户名或群体> <信息>");
+		SendChatTarget(ClientID, "向玩家或一群玩家发送私聊消息");
+		SendChatTarget(ClientID, "可用的群体名: #clan(公会名)");
 		return true;
 	}
 	
@@ -4139,7 +4153,7 @@ bool CGameContext::PrivateMessage(const char* pStr, int ClientID, bool TeamChat)
 	}	
 	if(!aChatTitle[0])
 	{
-		SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("No player was found with this name"));
+		SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("没有找到改名字的玩家"));
 		return true;
 	}
 	
@@ -4211,7 +4225,7 @@ void CGameContext::ExitClan(int ClientID)
 {
 	if(Server()->GetClanID(ClientID))
 	{
-		SendChatClan(Server()->GetClanID(ClientID), _("The player {str:name} left the clan"), "name", Server()->ClientName(ClientID), NULL);
+		SendChatClan(Server()->GetClanID(ClientID), _("玩家 {str:name} 退出了公会"), "name", Server()->ClientName(ClientID), NULL);
 		m_apPlayers[ClientID]->m_LoginSync = 150;
 		Server()->ExitClanOff(ClientID, Server()->ClientName(ClientID));
 	}
@@ -4224,7 +4238,7 @@ void CGameContext::EnterClan(int ClientID, int ClanID)
 	{
 		Server()->EnterClan(ClientID, ClanID);
 		m_apPlayers[ClientID]->m_LoginSync = 150;
-		SendChatClan(Server()->GetClanID(ClientID), _("The player {str:name} join the clan"), "name", Server()->ClientName(ClientID), NULL);
+		SendChatClan(Server()->GetClanID(ClientID), _("玩家 {str:name} 加入了公会"), "name", Server()->ClientName(ClientID), NULL);
 	}
 	return;
 }
@@ -4597,7 +4611,7 @@ void CGameContext::UseItem(int ClientID, int ItemID, int Count, int Type)
 	if(Type == USEDUSE)
 	{
 		if(ItemID == CLANTICKET)
-			return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("Use: /newclan <nameclan>"), NULL);
+			return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("用法: /newclan <公会名> - 创建一个新的公会"), NULL);
 
 		int PackOne = 0;
 		for(int i = 0; i < Count; ++i)
@@ -4610,7 +4624,7 @@ void CGameContext::UseItem(int ClientID, int ItemID, int Count, int Type)
 					int GetGold = PackOne/10000;
 					int GetSilv = PackOne - GetGold*10000;
 
-					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x{int:num} and get Gold {int:pvar} Silver {int:pvars}"), 
+					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:used} x{int:num} 而且获得了 {int:pvar} 黄金与 {int:pvars} 白银"), 
 						"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvar", &GetGold, "pvars", &GetSilv , NULL);	
 				
 					pPlayer->MoneyAdd(PackOne);
@@ -4621,7 +4635,7 @@ void CGameContext::UseItem(int ClientID, int ItemID, int Count, int Type)
 				PackOne += 15;
 				if(i == Count-1)
 				{
-					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x{int:num} and get {int:pvars} exp"), 
+					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:used} x{int:num} 而且获得了 {int:pvars} 经验"), 
 						"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvars", &PackOne , NULL);	
 				
 					pPlayer->ExpAdd(PackOne, false);
@@ -4632,7 +4646,7 @@ void CGameContext::UseItem(int ClientID, int ItemID, int Count, int Type)
 				PackOne += 25;
 				if(i == Count-1)
 				{
-					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x{int:num} and get {int:pvars} exp"), 
+					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:used} x{int:num} 而且获得了 {int:pvars} 经验"), 
 						"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvars", &PackOne , NULL);	
 				
 					pPlayer->ExpAdd(PackOne, false);
@@ -4643,7 +4657,7 @@ void CGameContext::UseItem(int ClientID, int ItemID, int Count, int Type)
 				PackOne += 10;
 				if(i == Count-1)
 				{
-					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x{int:num} and get {int:pvars} exp"), 
+					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:used} x{int:num} 而且获得了 {int:pvars} 经验"), 
 						"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvars", &PackOne , NULL);	
 				
 					pPlayer->ExpAdd(PackOne, false);
@@ -4655,36 +4669,36 @@ void CGameContext::UseItem(int ClientID, int ItemID, int Count, int Type)
 				PackOne += rand()%20000+5;
 				if(i == Count-1)
 				{
-					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("You used {str:items}x{int:num}"), "items", Server()->GetItemName(ClientID, ItemID), "num", &Count, NULL);
+					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你使用了物品:{str:items}x{int:num}"), "items", Server()->GetItemName(ClientID, ItemID), "num", &Count, NULL);
 					Server()->InitClanID(Server()->GetClanID(ClientID), PLUS, "Exp", PackOne, true);
 				}
 			}
 			else if(ItemID == CLANTICKET)
 			{		
-				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("Use: /newclan <nameclan>"), NULL);	
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("用法: /newclan <公会名> - 创建一个新的公会"), NULL);	
 				break;
 			}
 			else if(ItemID == RESETINGSKILL)
 			{		
-				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:items}x{int:num}"), "name", Server()->ClientName(ClientID), "items", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, NULL);
+				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:items}x{int:num}"), "name", Server()->ClientName(ClientID), "items", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, NULL);
 				m_apPlayers[ClientID]->ResetSkill(ClientID);
 			}
 			else if(ItemID ==  RESETINGUPGRADE)
 			{		
-				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:items}x{int:num}"), "name", Server()->ClientName(ClientID), "items", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, NULL);
+				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:items}x{int:num}"), "name", Server()->ClientName(ClientID), "items", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, NULL);
 				m_apPlayers[ClientID]->ResetUpgrade(ClientID);
 			}
 			else if(ItemID ==  BOOKEXPMIN)
 			{		
 				if(i == Count-1)
-					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("You used items {str:items}x{int:num}"), "items", Server()->GetItemName(ClientID, ItemID), "num", &Count, NULL);
+					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你使用了物品:{str:items}x{int:num}"), "items", Server()->GetItemName(ClientID, ItemID), "num", &Count, NULL);
 			
 				m_apPlayers[ClientID]->m_ExperienceAdd += 600*Server()->TickSpeed();
 			}
 			else if(ItemID ==  BOOKMONEYMIN)
 			{		
 				if(i == Count-1)
-					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("You used items {str:items}x{int:num}"), "items", Server()->GetItemName(ClientID, ItemID), "num", &Count, NULL);
+					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你使用了物品:{str:items}x{int:num}"), "items", Server()->GetItemName(ClientID, ItemID), "num", &Count, NULL);
 				
 				m_apPlayers[ClientID]->m_MoneyAdd += 600*Server()->TickSpeed();
 			}
@@ -4693,18 +4707,18 @@ void CGameContext::UseItem(int ClientID, int ItemID, int Count, int Type)
 				m_apPlayers[ClientID]->AccUpgrade.Upgrade += 20;
 				m_apPlayers[ClientID]->AccUpgrade.SkillPoint += 10;
 				if(i == Count-1)
-					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("You used items {str:items}x{int:num}"), "items", Server()->GetItemName(ClientID, ItemID), "num", &Count, NULL);
+					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你使用了物品:{str:items}x{int:num}"), "items", Server()->GetItemName(ClientID, ItemID), "num", &Count, NULL);
 
 				UpdateUpgrades(ClientID);
 			}
 			else if(ItemID == VIPPACKAGE)
 			{		
 				Count = 1;
-				SendMail(ClientID, "You buying VIP your bonus!", SKILLUPBOX, 1);
-				SendMail(ClientID, "You buying VIP your bonus!", SANTIPVP, 1);
-				SendMail(ClientID, "You buying VIP your bonus!", X2MONEYEXPVIP, 1);
-				SendMail(ClientID, "You buying VIP your bonus!", SPECSNAPDRAW, 1);
-				SendMail(ClientID, "You buying VIP your bonus!", MONEYBAG, 10000);
+				SendMail(ClientID, "您购买了VIP，这是你的奖金!", SKILLUPBOX, 1);
+				SendMail(ClientID, "您购买了VIP，这是你的奖金!", SANTIPVP, 1);
+				SendMail(ClientID, "您购买了VIP，这是你的奖金!", X2MONEYEXPVIP, 1);
+				SendMail(ClientID, "您购买了VIP，这是你的奖金!", SPECSNAPDRAW, 1);
+				SendMail(ClientID, "您购买了VIP，这是你的奖金!", MONEYBAG, 10000);
 				UpdateStats(ClientID);
 				break;
 			}
@@ -4727,8 +4741,8 @@ void CGameContext::UseItem(int ClientID, int ItemID, int Count, int Type)
 		NeedMoney = NeedMoney*Count;
 		pPlayer->AccData.Gold += NeedMoney;
 		
-		SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("You sell item's {str:name}x{int:count}"), "name", Server()->GetItemName(ClientID, ItemID), "count", &Count, NULL);							
-		SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("You got {int:count} golds"), "count", &NeedMoney, NULL);							
+		SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你卖出了:{str:name}x{int:count}"), "name", Server()->GetItemName(ClientID, ItemID), "count", &Count, NULL);							
+		SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("因此你获得了 {int:count} 黄金"), "count", &NeedMoney, NULL);							
 		
 		if(!Server()->GetItemCount(ClientID, ItemID))
 		{
@@ -4770,7 +4784,7 @@ void CGameContext::UseItem(int ClientID, int ItemID, int Count, int Type)
 		m_apPlayers[ClientID]->GetCharacter()->CreateDropItem(ItemID, Count, ClinID);
 
 		dbg_msg("drop", "%s drop item %s:%d (count: %d)", Server()->ClientName(ClientID), Server()->GetItemName(ClientID, ItemID, false), ItemID, Count);
-		SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("You drop items {str:items}x{int:counts}"), "items", Server()->GetItemName(ClientID, ItemID), "counts", &Count, NULL);				
+		SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你丢出了物品:{str:items}x{int:counts}"), "items", Server()->GetItemName(ClientID, ItemID), "counts", &Count, NULL);				
 		return;
 	}
 	return;
@@ -4783,10 +4797,10 @@ void CGameContext::StartBoss(int ClientID, int WaitTime, int BossType)
 		return;
 
 	if(m_apPlayers[ClientID]->m_JailTick || m_apPlayers[ClientID]->m_Search)
-		return 	SendBroadcast_Localization(ClientID, 250, 150, _("You are wanted. Not enter in boss room."));
+		return 	SendBroadcast_Localization(ClientID, 250, 150, _("你被通缉了，不能进入Boss房间."));
 		
 	if(m_BossStartTick || m_BossStart)
-		return 	SendBroadcast_Localization(ClientID, 250, 150, _("Already active raid in boss room. Enter in room."));
+		return 	SendBroadcast_Localization(ClientID, 250, 150, _("Boss房发起的Boss战即将开始. 进入Boss房以进入Boss战."));
 	
 	if (!m_apPlayers[BOSSID])
 	{
@@ -4798,7 +4812,7 @@ void CGameContext::StartBoss(int ClientID, int WaitTime, int BossType)
 	}
 	else
 	{
-		SendBroadcast_Localization(ClientID, 190, 150, _("Please create new request."));
+		SendBroadcast_Localization(ClientID, 190, 150, _("请创建一个新的请求."));
 		DeleteBotBoss();
 		return;
 	}
@@ -4810,8 +4824,8 @@ void CGameContext::StartBoss(int ClientID, int WaitTime, int BossType)
 	m_apPlayers[ClientID]->GetCharacter()->Die(ClientID, WEAPON_WORLD);
 
 	SendChatTarget(-1, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} created request in boss room {str:names}"), "name", Server()->ClientName(ClientID), "names", GetBossName(m_BossType), NULL);
-	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("Who wants to join, you need find a boss room"), "name", Server()->ClientName(ClientID), "names", GetBossName(m_BossType), NULL);
+	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 创建了需求，在Boss房(boss room) {str:names}"), "name", Server()->ClientName(ClientID), "names", GetBossName(m_BossType), NULL);
+	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("欲加入的玩家, 你需要进入Boss房(boss room)"), "name", Server()->ClientName(ClientID), "names", GetBossName(m_BossType), NULL);
 	SendChatTarget(-1, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 }
 
@@ -4821,13 +4835,13 @@ void CGameContext::EnterBoss(int ClientID, int BossType)
 		return;
 		
 	if(m_apPlayers[ClientID]->m_JailTick || m_apPlayers[ClientID]->m_Search)
-		return 	SendBroadcast_Localization(ClientID, 250, 150, _("You are wanted. Not enter in boss room."));
+		return 	SendBroadcast_Localization(ClientID, 250, 150, _("你被通缉了，不能进入Boss房间."));
 		
 	if(!m_BossStartTick && m_BossStart)
-		return 	SendBroadcast_Localization(ClientID, 250, 150, _("Raid in boss active. Wait and create."));
+		return 	SendBroadcast_Localization(ClientID, 250, 150, _("Boss战进行中. 等待其结束或者创建新的Boss."));
 			
 	if(!m_BossStartTick && !m_BossStart)
-		return 	SendBroadcast_Localization(ClientID, 250, 150, _("Need create request."));
+		return 	SendBroadcast_Localization(ClientID, 250, 150, _("需要创建请求."));
 
 	m_apPlayers[ClientID]->m_InBossed = true;	
 	if(Server()->GetClanID(ClientID) > 0)
@@ -4837,7 +4851,7 @@ void CGameContext::EnterBoss(int ClientID, int BossType)
 			if(i != ClientID && m_apPlayers[i] && m_apPlayers[i]->m_InBossed)
 			{
 				int Get = m_apPlayers[i]->AccData.Level*6;
-				SendChatTarget_Localization(i, CHATCATEGORY_DEFAULT, _("[Clan] Relevance added +{int:count}"), "count", &Get, NULL);			
+				SendChatTarget_Localization(i, CHATCATEGORY_DEFAULT, _("[公会] Relevance 增加了 +{int:count}"), "count", &Get, NULL);			
 				Server()->InitClanID(Server()->GetClanID(ClientID), PLUS, "Relevance", Get, true);
 			}
 		}
