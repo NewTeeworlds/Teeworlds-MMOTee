@@ -3263,9 +3263,9 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 
 		AddVote("", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "☄ {str:psevdo}", "psevdo", LocalizeText(ClientID, "排序与选择"));
-		AddVote_Localization(ClientID, "装备1", "☞ 胸甲 {str:enquip}", "enquip", Server()->GetItemName(ClientID, Server()->GetItemEnquip(ClientID, 15)));
-		AddVote_Localization(ClientID, "装备2", "☞ 靴子 {str:enquip}", "enquip", Server()->GetItemName(ClientID, Server()->GetItemEnquip(ClientID, 16)));
-		AddVote_Localization(ClientID, "装备3", "☞ Stabilized {str:enquip}", "enquip", Server()->GetItemName(ClientID, Server()->GetItemEnquip(ClientID, 17)));
+		AddVote_Localization(ClientID, "armor1", "☞ 胸甲 {str:enquip}", "enquip", Server()->GetItemName(ClientID, Server()->GetItemEnquip(ClientID, 15)));
+		AddVote_Localization(ClientID, "armor2", "☞ 靴子 {str:enquip}", "enquip", Server()->GetItemName(ClientID, Server()->GetItemEnquip(ClientID, 16)));
+		AddVote_Localization(ClientID, "armor3", "☞ Stabilized {str:enquip}", "enquip", Server()->GetItemName(ClientID, Server()->GetItemEnquip(ClientID, 17)));
 
 		AddBack(ClientID);
 		AddVote("", "null", ClientID);
