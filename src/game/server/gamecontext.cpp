@@ -1,3 +1,4 @@
+/*保存时间2019年2月8日14:25:08*/
 /* (c) Magnus Auvinen. See licence.txt in the root of the distribution for more information. */
 /* If you are missing that file, acquire a complete release at teeworlds.com.                */
 #include <new>
@@ -503,7 +504,7 @@ void CGameContext::SendGuide(int ClientID, int BossType)
 		}
 	}
 	int Time = m_BossStartTick/Server()->TickSpeed();
-	SendMOTD_Localization(ClientID, "Guide / Boss: {str:name}\nHealth sum level*{int:hp}\nRecomended class: {str:rclass}\n\n{str:guide}\n\n\nWait players for raid {int:siska} sec.", 
+	SendMOTD_Localization(ClientID, "Guide / Boss: {str:name}\n生命值加上等级*{int:hp}\nRecomended class: {str:rclass}\n\n{str:guide}\n\n\n等待玩家进入Boss战，还剩下 {int:siska} 秒.", 
 		"name", GetBossName(m_BossType), "hp", &arghealth, "rclass", argtext, "guide", Buffer.buffer(), "siska", &Time);
 		
 	Buffer.clear();
@@ -1070,13 +1071,13 @@ void CGameContext::OnTick()
 				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("(* ^ ω ^) 玩家排行榜前五名:{str:name}:"), "name", "击杀", NULL);	
 				Server()->ShowTop10(25, "Killing", 2); break;
 			case 4:
-				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("(* ^ ω ^) 玩家排行榜前五名:{str:name}:"), "name", "等级", NULL);	
+				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("(* ^ ω ^) 公会排行榜前五名:{str:name}:"), "name", "等级", NULL);	
 				Server()->ShowTop10Clans(25, "Level", 2); break;
 			case 5:
-				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("(* ^ ω ^) 玩家排行榜前五名:{str:name}:"), "name", "Relevance", NULL);	
+				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("(* ^ ω ^) 公会排行榜前五名:{str:name}:"), "name", "Relevance", NULL);	
 				Server()->ShowTop10Clans(25, "Relevance", 2); break;
 			default:
-				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("(* ^ ω ^) 玩家排行榜前五名:{str:name}:"), "name", "白银", NULL);	
+				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("(* ^ ω ^) 公会排行榜前五名:{str:name}:"), "name", "白银", NULL);	
 				Server()->ShowTop10Clans(25, "Money", 2); break;
 		}
 	}
@@ -1515,7 +1516,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					return;
 				}	
 
-				// КВЕСТЫ ФУНКЦИИ
+				// КВЕСТЫ ФУНКЦИИ -- 寻宝游戏功能? -- 任务相关
 				
 				else if(str_comp(aCmd, "passquest") == 0)
 				{
@@ -3689,8 +3690,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		m_apPlayers[ClientID]->m_LastVotelist = AUTH;
 		AddVote_Localization(ClientID, "null", "☪ 信息 ( ′ ω ` )?:");
 		AddVote_Localization(ClientID, "null", "这是你的物品栏");
-		AddVote_Localization(ClientID, "null", "选择物品类型");
-		AddVote_Localization(ClientID, "null", "括号内为你所拥有的该类物品种类数");
+		AddVote_Localization(ClientID, "null", "选择类型在 () 数量");
 		AddVote("", "null", ClientID);
 
 		int Counts = Server()->GetItemCountType(ClientID, 6);
@@ -3748,7 +3748,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 	}
 	
 
-	// ############################### Инвентарь действие
+	// ############################### Инвентарь действие -- 选择物品后的操作
 	else if(Type == SELITEM)
 	{
 		int SelectItem = m_apPlayers[ClientID]->m_SelectItem;
@@ -3760,9 +3760,8 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote_Localization(ClientID, "null", "☪ 信息 ( ′ ω ` )?:");
 		AddVote_Localization(ClientID, "null", Server()->GetItemDesc(ClientID, SelectItem));	
 		AddVote("", "null", ClientID);	
-		AddVote_Localization(ClientID, "null", "在投票理处填写使用数量");
-		AddVote_Localization(ClientID, "null", "如果为空或非数字");	
-		AddVote_Localization(ClientID, "null", "就默认只使用一个");	
+		AddVote_Localization(ClientID, "null", "在投票的理由填写处填写数量");	
+		AddVote_Localization(ClientID, "null", "如果投票的理由处不是一个数字或没有东西，就使用一个");	
 		AddVote("", "null", ClientID);	
 		AddVote_Localization(ClientID, "null", "▶ 你选中了物品 {str:name}", "name", Server()->GetItemName(ClientID, m_apPlayers[ClientID]->m_SelectItem));
 		
@@ -3787,7 +3786,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		return;
 	}
 	
-	// ############################### Квесты меню
+	// ############################### Квесты меню -- 任务相关
 	else if(Type == QUEST)
 	{
 		m_apPlayers[ClientID]->m_LastVotelist = AUTH;	
@@ -4153,7 +4152,7 @@ bool CGameContext::PrivateMessage(const char* pStr, int ClientID, bool TeamChat)
 	}	
 	if(!aChatTitle[0])
 	{
-		SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("没有找到改名字的玩家"));
+		SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("没有找到该名字的玩家"));
 		return true;
 	}
 	
@@ -4812,7 +4811,7 @@ void CGameContext::StartBoss(int ClientID, int WaitTime, int BossType)
 	}
 	else
 	{
-		SendBroadcast_Localization(ClientID, 190, 150, _("请创建一个新的请求."));
+		SendBroadcast_Localization(ClientID, 190, 150, _("请创建一个新的请求(/createboss)."));
 		DeleteBotBoss();
 		return;
 	}
@@ -4841,7 +4840,7 @@ void CGameContext::EnterBoss(int ClientID, int BossType)
 		return 	SendBroadcast_Localization(ClientID, 250, 150, _("Boss战进行中. 等待其结束或者创建新的Boss."));
 			
 	if(!m_BossStartTick && !m_BossStart)
-		return 	SendBroadcast_Localization(ClientID, 250, 150, _("需要创建请求."));
+		return 	SendBroadcast_Localization(ClientID, 250, 150, _("需要创建请求(/createboss)."));
 
 	m_apPlayers[ClientID]->m_InBossed = true;	
 	if(Server()->GetClanID(ClientID) > 0)
