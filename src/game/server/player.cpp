@@ -1,3 +1,4 @@
+/*更新时间2019年2月8日22:52:38*/
 /* (c) Magnus Auvinen. See licence.txt in the root of the distribution for more information. */
 /* If you are missing that file, acquire a complete release at teeworlds.com.                */
 #include <new>
@@ -125,7 +126,7 @@ void CPlayer::RandomBoxTick()
 
 				int Get = 1;
 				GameServer()->GiveItem(m_ClientID, getitem, Get);
-				GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x{int:num} and get {str:get} x{int:num2}"), 
+				GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:used} x{int:num} 而且获得了 {str:get} x{int:num2}"), 
 					"name", Server()->ClientName(m_ClientID), "used", Server()->GetItemName(m_ClientID, RANDOMCRAFTITEM, false), "num", &Get, "get", Server()->GetItemName(m_ClientID, getitem, false), "num2", &Get, NULL);	
 			
 			}
@@ -153,7 +154,7 @@ void CPlayer::RandomBoxTick()
 
 				int Get = 1;
 				GameServer()->GiveItem(m_ClientID, getitem, Get);
-				GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x{int:num} and get {str:get} x{int:num2}"), 
+				GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:used} x{int:num} 而且获得了 {str:get} x{int:num2}"), 
 					"name", Server()->ClientName(m_ClientID), "used", Server()->GetItemName(m_ClientID, EVENTBOX, false), "num", &Get, "get", Server()->GetItemName(m_ClientID, getitem, false), "num2", &Get, NULL);	
 			
 			}
@@ -198,7 +199,7 @@ void CPlayer::RandomBoxTick()
 					GameServer()->CreateDeath(m_pCharacter->m_Pos, m_ClientID);
 
 				GameServer()->GiveItem(m_ClientID, getitem, Get);
-				GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x1 and get {str:get} x{int:num2}"), 
+				GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:used} x1 而且获得了 {str:get} x{int:num2}"), 
 					"name", Server()->ClientName(m_ClientID), "used", Server()->GetItemName(m_ClientID, FARMBOX, false), "get", Server()->GetItemName(m_ClientID, getitem, false), "num2", &Get, NULL);	
 			
 			}
@@ -231,7 +232,7 @@ void CPlayer::BasicAuthedTick()
 	}
 
 	if(Server()->GetItemCount(m_ClientID, PIGPORNO) > 1000 && !Server()->GetItemCount(m_ClientID, PIGPIG))
-		GameServer()->SendMail(m_ClientID, "You unlock new title!", PIGPIG, 1);
+		GameServer()->SendMail(m_ClientID, "你解锁了一个新的称号!", PIGPIG, 1);
 
 	if(AccData.Money >= 10000)
 	{
@@ -243,7 +244,7 @@ void CPlayer::BasicAuthedTick()
 
 	if(AccData.Exp >= AccData.Level*GetNeedForUp())
 	{
-		GameServer()->SendChatTarget_Localization(m_ClientID, CHATCATEGORY_DEFAULT, _("[Level UP] Added Skill and Upgrade points."), NULL);
+		GameServer()->SendChatTarget_Localization(m_ClientID, CHATCATEGORY_DEFAULT, _("[Level UP] 恭喜你你升级了! 你获得了技能点和升级点."), NULL);
 		AccData.Exp -= AccData.Level*GetNeedForUp();
 		AccData.Level++;
 		AccUpgrade.SkillPoint += 1;
@@ -252,9 +253,9 @@ void CPlayer::BasicAuthedTick()
 		int GetBag = Server()->GetItemCount(m_ClientID, AMULETCLEEVER) ? 2 : 1;
 		GameServer()->GiveItem(m_ClientID, MONEYBAG, GetBag);
 		if(AccData.Level % 10 == 0)
-			GameServer()->SendMail(m_ClientID, "You got bonus every 10 level!", RANDOMCRAFTITEM, 3);
+			GameServer()->SendMail(m_ClientID, "每升十级，你就会获得奖金!", RANDOMCRAFTITEM, 3);
 		if(AccData.Level == 2)
-			GameServer()->SendChatTarget_Localization(m_ClientID, CHATCATEGORY_DEFAULT, _("You have opened quest in vote quest."), NULL);		
+			GameServer()->SendChatTarget_Localization(m_ClientID, CHATCATEGORY_DEFAULT, _("你现在可以去做任务了."), NULL);		
 		if(m_pCharacter)
 		{
 			GameServer()->CreateLolText(m_pCharacter, false, vec2(0,-75), vec2 (0,-1), 50, "Level ++");
@@ -279,12 +280,12 @@ void CPlayer::Tick()
 	{
 		AccData.Level = 1;
 		if(!Server()->GetSeccurity(m_ClientID))
-			GameServer()->SendChatTarget_Localization(m_ClientID, CHATCATEGORY_DEFAULT, _("Your account is at risk, set security"), NULL);				
+			GameServer()->SendChatTarget_Localization(m_ClientID, CHATCATEGORY_DEFAULT, _("你的账户有风险, 请设置安全设置(security)"), NULL);				
 	}
 	
 	if(!IsBot())
 	{
-		// Мана сучка ебал вас геи ебанные в рт вы шлюхи
+		// Мана сучка ебал вас геи ебанные в рт вы шлюхи - 这句是作者在抱怨吧
 		if(m_Mana < GetNeedMana())
 		{
 			if(!m_ManaTick)
@@ -311,10 +312,10 @@ void CPlayer::Tick()
 			if(Server()->Tick() % (1 * Server()->TickSpeed() * 120) == 0 && m_MoneyAdd > 1500)		
 			{
 				int Time = m_MoneyAdd/Server()->TickSpeed()/60;
-				GameServer()->SendChatTarget_Localization(m_ClientID, CHATCATEGORY_DEFAULT, _("Item's ending {str:name} after {int:ends} min."), "name", Server()->GetItemName(m_ClientID, BOOKMONEYMIN), "ends", &Time, NULL);				
+				GameServer()->SendChatTarget_Localization(m_ClientID, CHATCATEGORY_DEFAULT, _("物品:{str:name} 效果即将在 {int:ends} 分钟后失效."), "name", Server()->GetItemName(m_ClientID, BOOKMONEYMIN), "ends", &Time, NULL);				
 			}
 			if(m_MoneyAdd == 1)
-				GameServer()->SendChatTarget_Localization(m_ClientID, CHATCATEGORY_DEFAULT, _("Item's ending {str:name}"), "name", Server()->GetItemName(m_ClientID, BOOKMONEYMIN), NULL);				
+				GameServer()->SendChatTarget_Localization(m_ClientID, CHATCATEGORY_DEFAULT, _("物品:{str:name} 效果失效"), "name", Server()->GetItemName(m_ClientID, BOOKMONEYMIN), NULL);				
 		}
 		if(m_ExperienceAdd)
 		{
@@ -322,10 +323,10 @@ void CPlayer::Tick()
 			if(Server()->Tick() % (1 * Server()->TickSpeed() * 120) == 0 && m_ExperienceAdd > 1500)		
 			{
 				int Time = m_ExperienceAdd/Server()->TickSpeed()/60;
-				GameServer()->SendChatTarget_Localization(m_ClientID, CHATCATEGORY_DEFAULT, _("This item ending {str:name} after {int:ends} min."), "name", Server()->GetItemName(m_ClientID, BOOKEXPMIN), "ends", &Time, NULL);				
+				GameServer()->SendChatTarget_Localization(m_ClientID, CHATCATEGORY_DEFAULT, _("物品:{str:name} 即将在 {int:ends} 分钟后失效(ending)."), "name", Server()->GetItemName(m_ClientID, BOOKEXPMIN), "ends", &Time, NULL);				
 			}
 			if(m_ExperienceAdd == 1)
-				GameServer()->SendChatTarget_Localization(m_ClientID, CHATCATEGORY_DEFAULT, _("This item ending {str:name}"), "name", Server()->GetItemName(m_ClientID, BOOKEXPMIN), NULL);				
+				GameServer()->SendChatTarget_Localization(m_ClientID, CHATCATEGORY_DEFAULT, _("物品:{str:name} 失效(ended)了"), "name", Server()->GetItemName(m_ClientID, BOOKEXPMIN), NULL);				
 		}
 		
 		// Уровни и все такое повышение
@@ -348,14 +349,14 @@ void CPlayer::Tick()
 						default: Type = EVENTCUSTOMSOUL;
 					}
 
-					GameServer()->SendMail(m_ClientID, "Event Back to School you got item!", Type, 1);
-					GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Back to School] {str:name} got {str:item}."), "name", Server()->ClientName(m_ClientID), "item", Server()->GetItemName(m_ClientID, Type), NULL);					
+					GameServer()->SendMail(m_ClientID, "在线奖励[Back to School]!", Type, 1);
+					GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Back to School] 在线奖励:{str:name} 获得了 {str:item}."), "name", Server()->ClientName(m_ClientID), "item", Server()->GetItemName(m_ClientID, Type), NULL);					
 
 					if(Server()->GetItemCount(m_ClientID, EVENTCUSTOMSOUL) >= 25)
 					{
 						Server()->RemItem(m_ClientID, EVENTCUSTOMSOUL, 25, -1);
-						GameServer()->SendMail(m_ClientID, "Soul automatic changes Custom Skin!", CUSTOMSKIN, 1);
-						GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Back to School] {str:name} Collect 25 Soul & get Custom Skin."), "name", Server()->ClientName(m_ClientID), NULL);					
+						GameServer()->SendMail(m_ClientID, "你现在获得了Soul automatic, 能够使用自定义皮肤了!", CUSTOMSKIN, 1);
+						GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Back to School] 在线奖励:{str:name} 收集了 25 个灵魂(Soul)并且得到了自定义皮肤的机会."), "name", Server()->ClientName(m_ClientID), NULL);					
 					}
 				}
 			}
@@ -367,12 +368,12 @@ void CPlayer::Tick()
 		if(!m_Search && AccData.Rel >= 1000)
 		{
 			m_Search = true;
-			GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_HEALER, _("Player {str:name}, in the wanted list"), "name", Server()->ClientName(m_ClientID), NULL);
+			GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_HEALER, _("玩家 {str:name} 被通缉了!"), "name", Server()->ClientName(m_ClientID), NULL);
 		}
 		if(m_JailTick && AccData.Jail)
 		{
 			int Time = m_JailTick/Server()->TickSpeed();
-			GameServer()->SendBroadcast_Localization(m_ClientID, 100, 100, _("You in jail, wait {sec:siska}."), "siska", &Time, NULL);		
+			GameServer()->SendBroadcast_Localization(m_ClientID, 100, 100, _("你不小心进了监狱, 刑期:{sec:siska}."), "siska", &Time, NULL);		
 			
 			m_JailTick--;
 			if(!m_JailTick)
@@ -384,7 +385,7 @@ void CPlayer::Tick()
 					m_pCharacter->Die(m_ClientID, WEAPON_WORLD);
 				
 				GameServer()->UpdateStats(m_ClientID);
-				GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_HEALER, _("The player {str:name}, leaves the prison"), "name", Server()->ClientName(m_ClientID), NULL);
+				GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_HEALER, _("玩家 {str:name}, 出狱了"), "name", Server()->ClientName(m_ClientID), NULL);
 			}
 		}
 		if(GetTeam() != TEAM_SPECTATORS && AccData.Rel > 0 && Server()->Tick() % (1 * Server()->TickSpeed() * 60) == 0)
@@ -396,9 +397,9 @@ void CPlayer::Tick()
 			if(AccData.Rel == 0 && m_Search)
 			{
 				m_Search = false;
-				GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_HEALER, _("Player {str:name}, crosed out in wanted list"), "name", Server()->ClientName(m_ClientID), NULL);
+				GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_HEALER, _("玩家 {str:name} 被取消通缉了"), "name", Server()->ClientName(m_ClientID), NULL);
 			}
-			GameServer()->SendBroadcast_Localization(m_ClientID, BROADCAST_PRIORITY_GAMEANNOUNCE, BROADCAST_DURATION_GAMEANNOUNCE, _("Relations angry -100. Your {int:rel}"), "rel", &AccData.Rel, NULL);		
+			GameServer()->SendBroadcast_Localization(m_ClientID, BROADCAST_PRIORITY_GAMEANNOUNCE, BROADCAST_DURATION_GAMEANNOUNCE, _("交际愤怒值 -100. 你的交际愤怒值:{int:rel}"), "rel", &AccData.Rel, NULL);		
 			GameServer()->UpdateStats(m_ClientID);
 		}
 		
@@ -427,12 +428,12 @@ void CPlayer::Tick()
 			if(GameServer()->m_WinWaitBoss)
 			{
 				int Time = GameServer()->m_WinWaitBoss/Server()->TickSpeed();
-				GameServer()->SendBroadcast_Localization(m_ClientID, 101, 100, _("Wait players for pick item's {int:siska} sec."), "siska", &Time, NULL);						
+				GameServer()->SendBroadcast_Localization(m_ClientID, 101, 100, _("等待玩家在 {int:siska} 秒捡起物品."), "siska", &Time, NULL);						
 			}
 			else if(GameServer()->m_BossStartTick > 10*Server()->TickSpeed())
 			{
 				int Time = GameServer()->m_BossStartTick/Server()->TickSpeed();
-				GameServer()->SendBroadcast_Localization(m_ClientID, 101, 100, _("Wait players for raid {sec:siska}. Boss: {str:name}"), "siska", &Time, "name", GameServer()->GetBossName(GameServer()->m_BossType), NULL);		
+				GameServer()->SendBroadcast_Localization(m_ClientID, 101, 100, _("等待玩家加入Boss战 {sec:siska}. Boss:{str:name}"), "siska", &Time, "name", GameServer()->GetBossName(GameServer()->m_BossType), NULL);		
 			}
 			else if(Server()->Tick() % (1 * Server()->TickSpeed()) == 0 && GameServer()->m_BossStartTick > 100)
 				GameServer()->SendGuide(m_ClientID, GameServer()->m_BossType);
@@ -519,7 +520,7 @@ void CPlayer::Tick()
 
 int CPlayer::GetNeedForUp()
 {
-
+	//玩家升级所需经验基数赋值
 	if(AccData.Level >= 100) return 10000;
 	else if(AccData.Level >= 200) return 50000;
 	else if(AccData.Level >= 300) return 80000;
@@ -646,7 +647,7 @@ void CPlayer::ExpAdd(int Size, bool Bonus)
 	if(Server()->GetClanID(m_ClientID) && 
 		Server()->GetClan(DEXP, Server()->GetClanID(m_ClientID)) >= Server()->GetClan(DLEVEL, Server()->GetClanID(m_ClientID))*GetNeedForUpClan())
 	{
-		GameServer()->SendChatClan(Server()->GetClanID(m_ClientID), "[Clan Level UP] Great!");
+		GameServer()->SendChatClan(Server()->GetClanID(m_ClientID), "[公会] 您所在的公会升级了!");
 
 		int warpminus = Server()->GetClan(DLEVEL, Server()->GetClanID(m_ClientID))*GetNeedForUpClan();
 		Server()->InitClanID(Server()->GetClanID(m_ClientID), MINUS, "Exp", warpminus, true);

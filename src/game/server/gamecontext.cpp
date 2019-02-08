@@ -3103,13 +3103,13 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote_Localization(ClientID, "null", "♫ {str:psevdo}", "psevdo", LocalizeText(ClientID, "子菜单--账户"));
 		AddVoteMenu_Localization(ClientID, MAILMENU, MENUONLY, "☞ 邮箱 ✉");	
 		AddVoteMenu_Localization(ClientID, ARMORMENU, MENUONLY, "☞ 装备 ☭");	
-		AddVoteMenu_Localization(ClientID, INVENTORY, MENUONLY, "☞ 物品栏/背包");		
-		AddVoteMenu_Localization(ClientID, CRAFTING, MENUONLY, "☞ 合成栏");
-		AddVoteMenu_Localization(ClientID, QUEST, MENUONLY, "☞ 任务与报酬");
+		AddVoteMenu_Localization(ClientID, INVENTORY, MENUONLY, "☞ 物品栏/背包 ✪");		
+		AddVoteMenu_Localization(ClientID, CRAFTING, MENUONLY, "☞ 合成栏 〄");
+		AddVoteMenu_Localization(ClientID, QUEST, MENUONLY, "☞ 任务与报酬 ⊹");
 
 		AddVote("······················· ", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "✪ {str:psevdo}", "psevdo", LocalizeText(ClientID, "子菜单--设置"));
-		AddVoteMenu_Localization(ClientID, CLMENU, MENUONLY, "☞ 升级与class {str:class}", "class", m_apPlayers[ClientID]->GetClassName());
+		AddVoteMenu_Localization(ClientID, CLMENU, MENUONLY, "☞ 升级与职业 [♣{str:class}♣]", "class", m_apPlayers[ClientID]->GetClassName());
 		AddVoteMenu_Localization(ClientID, SETTINGS, MENUONLY, "☞ 设置与安全");
 		AddVoteMenu_Localization(ClientID, CDONATE, MENUONLY, "☞ 充钱与特权");
 		AddVoteMenu_Localization(ClientID, INTITLE, MENUONLY, "☞ 成就与称号");
@@ -3280,7 +3280,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 	}
 
 
-	// ############################### Ачивки и Титулы
+	// ############################### Ачивки и Титулы - 成就与称号还有头衔之类的
 	else if(Type == INTITLE)
 	{
 		m_apPlayers[ClientID]->m_UpdateMenu = Type;
@@ -3301,7 +3301,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		return;
 	}
 	
-	// ############################### Меню настроек
+	// ############################### Меню настроек - 设置菜单
 	else if(Type == SETTINGS)
 	{
 		m_apPlayers[ClientID]->m_UpdateMenu = Type;
@@ -3309,6 +3309,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote_Localization(ClientID, "null", "☪ 信息 ( ′ ω ` )?:");
 		AddVote_Localization(ClientID, "null", "这是动态的设置");
 		AddVote_Localization(ClientID, "null", "是提供给私人的升级的");
+		AddVote_Localization(ClientID, "null", "当你购买物品后需要到这里来开启");
 		AddVote("", "null", ClientID);
 
 		AddVote_Localization(ClientID, "null", "☪ {str:psevdo}", "psevdo", LocalizeText(ClientID, "修改"));
@@ -3375,10 +3376,10 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		m_apPlayers[ClientID]->m_UpdateMenu = Type;
 		m_apPlayers[ClientID]->m_LastVotelist = AUTH;
 		AddVote_Localization(ClientID, "null", "☪ 信息 ( ′ ω ` )?:");
-		AddVote_Localization(ClientID, "null", "这是升级类");
+		AddVote_Localization(ClientID, "null", "这是升级职业的");
 		AddVote_Localization(ClientID, "null", "被动技能与主动技能");		
 		AddVote_Localization(ClientID, "null", "在投票的理由填写处填写升级数");		
-		AddVote_Localization(ClientID, "null", "C - 类点数.");		
+		AddVote_Localization(ClientID, "null", "C - 职业点数.");		
 		AddVote_Localization(ClientID, "null", "SP - 需要技能点.");	
 		AddVote_Localization(ClientID, "null", "UP - 需要升级点.");	
 		AddVote("", "null", ClientID);
@@ -3390,9 +3391,9 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote_Localization(ClientID, "uammoregen", "☞ [{int:sum}] 子弹回复速度 +1({str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.AmmoRegen, "bonus", "C+0");
 		AddVote_Localization(ClientID, "uammo", "☞ [{int:sum}] 子弹 +1(UP5 {str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.Ammo, "bonus", "C+0");
 		AddVote_Localization(ClientID, "uhpregen", "☞ [{int:sum}] 生命恢复速度 +1({str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.HPRegen, "bonus", "C+0");
-		AddVote_Localization(ClientID, "uhandle", "☞ [{int:sum}] Handle +1({str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.Speed, "bonus", "C+0");
+		AddVote_Localization(ClientID, "uhandle", "☞ [{int:sum}] 射速 +1({str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.Speed, "bonus", "C+0");
 		AddVote_Localization(ClientID, "umana", "☞ [{int:sum}] 魔能 +1({str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.Mana, "bonus", "C+0");
-		AddVote_Localization(ClientID, "uspray", "☞ [{int:sum}] Spread +1(UP10 {str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.Spray, "bonus", "C+0");
+		AddVote_Localization(ClientID, "uspray", "☞ [{int:sum}] 子弹散射 +1(UP10 {str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.Spray, "bonus", "C+0");
 		AddVote("············", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "♞ {str:psevdo}", "psevdo", LocalizeText(ClientID, "Passive Skills"));
 		
@@ -3600,7 +3601,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		m_apPlayers[ClientID]->m_LastVotelist = CLAN;	
 		AddVote_Localization(ClientID, "null", "☪ 信息 ( ′ ω ` )?:");
 		AddVote_Localization(ClientID, "null", "这个菜单可以捐赠黄金给公会的");
-		AddVote_Localization(ClientID, "null", "Money for all members");
+		AddVote_Localization(ClientID, "null", "钱是为了大家的");
 		AddVote_Localization(ClientID, "null", "在投票的理由填写处填写数量");	
 		AddVote("", "null", ClientID);
 		AddVote_Localization(ClientID, "cm1", "- 捐赠黄金给公会");
@@ -3649,17 +3650,17 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote_Localization(ClientID, "null", "☪ 信息 ( ′ ω ` )?:");
 		AddVote_Localization(ClientID, "null", "玩家/公会排名");
 		AddVote("", "null", ClientID);
-		AddVote_Localization(ClientID, "null", "★ {str:psevdo}", "psevdo", LocalizeText(ClientID, "Players"));
+		AddVote_Localization(ClientID, "null", "★ 玩家 - {str:psevdo}", "psevdo", LocalizeText(ClientID, "Players"));
 		AddVote_Localization(ClientID, "sort1", "☞ 等级排名");
 		AddVote_Localization(ClientID, "sort2", "☞ 黄金排名");
 		AddVote_Localization(ClientID, "sort3", "☞ 任务排名");
 		AddVote_Localization(ClientID, "sort6", "☞ 击杀排名");
 		AddVote_Localization(ClientID, "sort7", "☞ Win Area排名");
 		AddVote("", "null", ClientID);
-		AddVote_Localization(ClientID, "null", "★ {str:psevdo}", "psevdo", LocalizeText(ClientID, "Clans"));		
+		AddVote_Localization(ClientID, "null", "★ 公会 - {str:psevdo}", "psevdo", LocalizeText(ClientID, "Clans"));		
 		AddVote_Localization(ClientID, "sort4", "☞ 等级排名");
-		AddVote_Localization(ClientID, "sort5", "☞ Top by Gold");
-		AddVote_Localization(ClientID, "sort8", "☞ Top by Relevance");
+		AddVote_Localization(ClientID, "sort5", "☞ 黄金排名");
+		AddVote_Localization(ClientID, "sort8", "☞ Relevance排名");
 
 		AddBack(ClientID);
 		AddVote("", "null", ClientID);
@@ -3730,8 +3731,8 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote_Localization(ClientID, "null", "☪ 信息 ( ′ ω ` )?:");
 		AddVote_Localization(ClientID, "null", "充钱与特权");
 		AddVote_Localization(ClientID, "null", "1 欧元 - 100 点券(donate coin)");
-		AddVote_Localization(ClientID, "null", "For buy say Kurosio");
-		AddVote_Localization(ClientID, "null", "Or in Discord");
+		AddVote_Localization(ClientID, "null", "向 Kurosio 捐赠(打钱)");
+		AddVote_Localization(ClientID, "null", "或者在 Discord 内进行");
 		AddVote_Localization(ClientID, "info", "{str:dis}", "dis", g_Config.m_Discord);
 		AddVote("", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "$ 你充了 {int:don}", "don", &m_apPlayers[ClientID]->AccData.Donate);
