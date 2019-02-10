@@ -1,3 +1,4 @@
+/* 2019年2月10日13:26:47 */
 /* (c) Alexandre Díaz. See licence.txt in the root of the distribution for more information. */
 /* If you are missing that file, acquire a complete release at teeworlds.com.                */
 #include <new>
@@ -208,9 +209,9 @@ void CNpcSold::TickBotAI()
 					if(Server()->GetItemSettings(i, SCHAT)  != 2)
 					{
 						static const char *pPhrases[3] = {
-							"[Guard] Hello {str:name}, today is a good day!!",
-							"[Guard] {str:name}. Do you think we'll save?",
-							"[Guard] {str:name}. Live in the capital. This bad...",
+							"[Guard] 你好 {str:name}, 今天天气不错吧!!",
+							"[Guard] {str:name}. 我会保护你们哒!",
+							"[Guard] {str:name}. 住在首都. 真棒...",
 						};
 						GameServer()->SendChatTarget_Localization(i, CHATCATEGORY_ACCUSATION, _(pPhrases[rand()%3]), "name", Server()->ClientName(i), NULL);
 					}
