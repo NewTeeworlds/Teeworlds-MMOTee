@@ -1,3 +1,4 @@
+/* 2019年2月10日13:28:00 */
 /* (c) Alexandre Díaz. See licence.txt in the root of the distribution for more information. */
 /* If you are missing that file, acquire a complete release at teeworlds.com.                */
 #include <new>
@@ -128,7 +129,7 @@ void CNpcWSold::TickBotAI()
 				if(Server()->GetItemSettings(i, SCHAT) != 2)
 				{
 					static const char *pPhrases[3] = {
-						"[NPC] {str:name}, hello bitch!!"
+						"[NPC] {str:name}, 你好, 欢迎回来!!"
 					};
 					GameServer()->SendChatTarget_Localization(i, CHATCATEGORY_ACCUSATION, _(pPhrases[0]), "name", Server()->ClientName(i), NULL);
 				}

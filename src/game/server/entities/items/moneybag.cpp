@@ -61,7 +61,7 @@ void CMoneyBag::Tick()
 					if(m_SubType != 3)
 					{
 						int Count = 4+rand()%4;
-						GameServer()->SendChatTarget_Localization(-1, -1, _("{str:name} found Secret Bag! Got {int:got} + Time {int:bonus} Money Bag!"), "name", Server()->ClientName(p->GetPlayer()->GetCID()), "got", &Count, "bonus", &m_TimeActive, NULL);
+						GameServer()->SendChatTarget_Localization(-1, -1, _("{str:name} 捡到一个钱袋! 拿到了 {int:got} + {int:bonus} 个钱袋!"), "name", Server()->ClientName(p->GetPlayer()->GetCID()), "got", &Count, "bonus", &m_TimeActive, NULL);
 						GameServer()->CreateSound(m_Pos, SOUND_PICKUP_HEALTH);
 						GameServer()->GiveItem(p->GetPlayer()->GetCID(), MONEYBAG, Count+m_TimeActive);
 						Picking(300+rand()%2000);

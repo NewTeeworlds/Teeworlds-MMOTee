@@ -1,3 +1,4 @@
+/* 2019年2月10日13:37:33 */
 /* (c) Alexandre Díaz. See licence.txt in the root of the distribution for more information. */
 /* If you are missing that file, acquire a complete release at teeworlds.com.                */
 #include <new>
@@ -139,7 +140,7 @@ void CNpcFarmer::TickBotAI()
 				if(Server()->GetItemSettings(i, SCHAT) != 2)
 				{
 					static const char *pPhrases[3] = {
-						"[WORKER] Hello {str:name}, open vote menu!!"
+						"[WORKER] Hello {str:name}, 用投票菜单来进行互动!!"
 					};
 					GameServer()->SendChatTarget_Localization(i, CHATCATEGORY_ACCUSATION, _(pPhrases[0]), "name", Server()->ClientName(i), NULL);
 				}

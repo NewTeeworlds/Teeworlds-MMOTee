@@ -87,7 +87,7 @@ void CDropItem::Tick()
 		else str_format(aBuf, sizeof(aBuf), "%s", Server()->GetItemName(ClientID, m_ItemID));
 
 		GameServer()->SendBroadcast_Localization(ClientID, 200, 10,
-			_("Use {str:button} for drop \n'{str:name}'x{int:num}\nPersonal item for {str:nhow}"), "button", Server()->GetItemSettings(ClientID, SDROP) ? "F3" : "Hammer", "name", aBuf, "num", &m_Count, "nhow", m_HowID != -1 ? Server()->ClientName(m_HowID) : "Nope", NULL);
+			_("使用 {str:button} 来丢出 \n'{str:name}'x{int:num}\n这个物品是属于 {str:nhow} 的"), "button", Server()->GetItemSettings(ClientID, SDROP) ? "F3" : "Hammer", "name", aBuf, "num", &m_Count, "nhow", m_HowID != -1 ? Server()->ClientName(m_HowID) : "Nope", NULL);
 	}
 
 	vec2 LastPos;
@@ -143,7 +143,7 @@ bool CDropItem::TakeItem(int ClientID)
 	{
 		if(pOwner->AccData.Level < Server()->GetItemPrice(ClientID, m_ItemID, 0))
 		{
-			GameServer()->SendBroadcast_Localization(ClientID, 201, 100, _("Your level small for this items"), NULL);	
+			GameServer()->SendBroadcast_Localization(ClientID, 201, 100, _("你的级别太低了, 这个物品你驾驭不住"), NULL);	
 			return false;
 		}
 		switch(m_ItemID)
