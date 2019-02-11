@@ -129,7 +129,7 @@ void CNpcWSold::TickBotAI()
 				if(Server()->GetItemSettings(i, SCHAT) != 2)
 				{
 					static const char *pPhrases[3] = {
-						"[NPC] {str:name}, 你好, 欢迎回来!!"
+						"[NPC] {str:name}, 哟~小家伙"
 					};
 					GameServer()->SendChatTarget_Localization(i, CHATCATEGORY_ACCUSATION, _(pPhrases[0]), "name", Server()->ClientName(i), NULL);
 				}

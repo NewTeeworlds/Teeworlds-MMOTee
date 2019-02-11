@@ -209,9 +209,9 @@ void CNpcSold::TickBotAI()
 					if(Server()->GetItemSettings(i, SCHAT)  != 2)
 					{
 						static const char *pPhrases[3] = {
-							"[Guard] 你好 {str:name}, 今天天气不错吧!!",
-							"[Guard] {str:name}. 我会保护你们哒!",
-							"[Guard] {str:name}. 住在首都. 真棒...",
+							"[Guard] 你好 {str:name}, 今天天气不错!",
+							"[Guard] {str:name}. 你觉得我们会得救吗?",
+							"[Guard] {str:name}. 总是躲在首都不出来. 你这小坏蛋...",
 						};
 						GameServer()->SendChatTarget_Localization(i, CHATCATEGORY_ACCUSATION, _(pPhrases[rand()%3]), "name", Server()->ClientName(i), NULL);
 					}

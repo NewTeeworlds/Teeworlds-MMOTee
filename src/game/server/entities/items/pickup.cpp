@@ -152,7 +152,7 @@ void CPickup::StartFarm(int ClientID)
 			if(!Dropable)
 			{
 				Server()->RemItem(ClientID, DIAMONDPIX, Server()->GetItemCount(ClientID, DIAMONDPIX), -1);
-				GameServer()->SendChatTarget_Localization(ClientID, -1, _("~ 矿工: {str:name} 坏了, 不能用了"), "name", Server()->GetItemName(ClientID, DIAMONDPIX), NULL);
+				GameServer()->SendChatTarget_Localization(ClientID, -1, _("~ 矿具: {str:name} 坏了, 不能用了"), "name", Server()->GetItemName(ClientID, DIAMONDPIX), NULL);
 			}
 			Server()->SetItemSettingsCount(ClientID, DIAMONDPIX, Dropable-1);
 			ItemName = Server()->GetItemName(ClientID, DIAMONDPIX);
@@ -166,7 +166,7 @@ void CPickup::StartFarm(int ClientID)
 			if(!Dropable)
 			{
 				Server()->RemItem(ClientID, GOLDPIX, Server()->GetItemCount(ClientID, GOLDPIX), -1);
-				GameServer()->SendChatTarget_Localization(ClientID, -1, _("~ 矿工: {str:name} 坏了, 不能用了"), "name", Server()->GetItemName(ClientID, GOLDPIX), NULL);
+				GameServer()->SendChatTarget_Localization(ClientID, -1, _("~ 矿具: {str:name} 坏了, 不能用了"), "name", Server()->GetItemName(ClientID, GOLDPIX), NULL);
 			}
 			Server()->SetItemSettingsCount(ClientID, GOLDPIX, Dropable-1);
 			ItemName = Server()->GetItemName(ClientID, GOLDPIX);
@@ -180,7 +180,7 @@ void CPickup::StartFarm(int ClientID)
 			if(!Dropable)
 			{
 				Server()->RemItem(ClientID, IRONPIX, Server()->GetItemCount(ClientID, IRONPIX), -1);
-				GameServer()->SendChatTarget_Localization(ClientID, -1, _("~ 矿工: {str:name} 坏了, 不能用了"), "name", Server()->GetItemName(ClientID, IRONPIX), NULL);
+				GameServer()->SendChatTarget_Localization(ClientID, -1, _("~ 矿具: {str:name} 坏了, 不能用了"), "name", Server()->GetItemName(ClientID, IRONPIX), NULL);
 			}
 			Server()->SetItemSettingsCount(ClientID, IRONPIX, Dropable-1);
 			ItemName = Server()->GetItemName(ClientID, IRONPIX);
@@ -194,7 +194,7 @@ void CPickup::StartFarm(int ClientID)
 			if(!Dropable)
 			{
 				Server()->RemItem(ClientID, COOPERPIX, Server()->GetItemCount(ClientID, COOPERPIX), -1);
-				GameServer()->SendChatTarget_Localization(ClientID, -1, _("~ 矿工: {str:name} 坏了, 不能用了"), "name", Server()->GetItemName(ClientID, COOPERPIX), NULL);
+				GameServer()->SendChatTarget_Localization(ClientID, -1, _("~ 矿具: {str:name} 坏了, 不能用了"), "name", Server()->GetItemName(ClientID, COOPERPIX), NULL);
 			}
 			Server()->SetItemSettingsCount(ClientID, COOPERPIX, Dropable-1);
 			ItemName = Server()->GetItemName(ClientID, COOPERPIX);
@@ -212,7 +212,7 @@ void CPickup::StartFarm(int ClientID)
 		
 		float getlv = (m_Drop*100.0)/100;
 		const char *Pick = GameServer()->LevelString(100, (int)getlv, 10, ':', ' ');
-		GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("专长 - 挖土: {int:lvl}级 : {int:exp}/{int:expneed}经验\n物品: {str:name}x{int:cout} ({int:brok}/{int:brok2})\n挖掘进度: {str:got} / {int:gotp}%"), 
+		GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("专长 - 采掘: {int:lvl}级 : {int:exp}/{int:expneed}经验\n物品: {str:name}x{int:cout} ({int:brok}/{int:brok2})\n挖掘进度: {str:got} / {int:gotp}%"), 
 			"lvl", &LevelItem, "exp", &Exp, "expneed", &ExpNeed, "brok", &Dropable, "brok2", &Broke, "name", ItemName, "cout", &Count, "got", Pick, "gotp", &m_Drop, NULL);
 		delete Pick;
 
@@ -280,10 +280,10 @@ void CPickup::StartFarm(int ClientID)
 void CPickup::MaterFarm(int ClientID, int MaterialID)
 {
 	if(Server()->GetMaterials(MaterialID) < 25)
-		return	GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("你没有足够的砖头(material). 至少需要25个"), NULL); 
+		return	GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("你没有足够的附魔材料(material). 至少需要25个"), NULL); 
 	
 	if(Server()->GetItemCount(ClientID, MATERIAL) > 3000)
-		return	GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("物品栏内最多塞3000个砖头(material). 来店里消费吧!"), NULL); 
+		return	GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("物品栏内最多塞3000个附魔材料(material). 在物品栏对装备附魔吧!"), NULL); 
 
 	m_Drop += 25;
 	GameServer()->CreateSound(m_Pos, 20); 
@@ -295,14 +295,14 @@ void CPickup::MaterFarm(int ClientID, int MaterialID)
 
 	float getlv = (m_Drop*100.0)/100;
 	const char *Pick = GameServer()->LevelString(100, (int)getlv, 10, ':', ' ');
-	GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("专长 - 搬砖: {int:lvl}级 : {int:exp}/{int:expneed}经验\n奖励: 25+{int:bonus} : 搬砖进度: {str:got} / {int:gotp}%"), 
+	GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("专长 - 萃取: {int:lvl}级 : {int:exp}/{int:expneed}经验\n奖励: 25+{int:bonus} : 萃取进度: {str:got} / {int:gotp}%"), 
 		"lvl", &LevelItem, "exp", &Exp, "expneed", &NeedExp, "bonus", &Bonus, "got", Pick, "gotp", &m_Drop, NULL);
 	delete Pick;
 	
 	if(m_Drop >= 100)
 	{
 		Server()->SetMaterials(MaterialID, Server()->GetMaterials(MaterialID)-25);
-		GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("来店里消费吧."), NULL);
+		GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("在物品栏对装备附魔吧."), NULL);
 		GameServer()->GiveItem(ClientID, MATERIAL, 25+LevelItem*3);
 		GameServer()->GiveItem(ClientID, LOADEREXP, 10);
 
