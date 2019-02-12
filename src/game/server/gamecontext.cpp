@@ -3225,7 +3225,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		Level = 1+Server()->GetItemCount(ClientID, LOADEREXP)/g_Config.m_SvMaterExp;
 		NeedExp = Level*g_Config.m_SvMaterExp;
 		Exp = Server()->GetItemCount(ClientID, LOADEREXP);
-		AddVote_Localization(ClientID, "null", "专长 搬砖 ({int:exp}/{int:nexp} 等级: {int:lvl})", "exp", &Exp, "nexp", &NeedExp, "lvl", &Level);
+		AddVote_Localization(ClientID, "null", "专长 萃取 ({int:exp}/{int:nexp} 等级: {int:lvl})", "exp", &Exp, "nexp", &NeedExp, "lvl", &Level);
 
 		AddVote_Localization(ClientID, "null", "专长 伐木工 (光头强不会升级)");
 		AddVote_Localization(ClientID, "null", "专长 摸鱼 (敬请期待)");
@@ -3364,7 +3364,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 
 		Data = "HAMMER";
 		if(Server()->GetItemSettings(ClientID, SDROP)) Data = "F3";
-		AddVote_Localization(ClientID, "sssetingsdrop", "☞ 拾得物品 ({str:stat})", "stat", Data);
+		AddVote_Localization(ClientID, "sssetingsdrop", "☞ 拾取物品方法 ({str:stat})", "stat", Data);
 
 		AddBack(ClientID);
 		return;
