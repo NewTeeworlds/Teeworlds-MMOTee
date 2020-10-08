@@ -7,8 +7,8 @@
 #include <game/server/classes.h>
 
 /* DDNET MODIFICATION START *******************************************/
-#include "sql_connector.h"
-#include "sql_server.h"
+#include "engine/server/sql_connector.h"
+#include "engine/server/sql_server.h"
 /* DDNET MODIFICATION END *********************************************/
 
 class CSnapIDPool

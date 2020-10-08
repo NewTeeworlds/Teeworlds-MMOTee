@@ -16,6 +16,7 @@
 #include "gamemodes/mod.h"  
 #include <game/server/entities/loltext.h>
 #define BOSSID 62
+const int MAX_COUNT = 1e9;
 
 enum
 {
@@ -2084,7 +2085,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					m_apPlayers[ClientID]->m_LastChangeInfo = Server()->Tick();
 					int SelectItem = m_apPlayers[ClientID]->m_SelectItem;
 					
-					int Get = chartoint(pReason, 100000);
+					int Get = chartoint(pReason, MAX_COUNT );
 					if(SelectItem == RANDOMCRAFTITEM || SelectItem == EVENTBOX || SelectItem == FARMBOX ||
 						SelectItem == RESETINGUPGRADE || SelectItem == RESETINGSKILL || SelectItem == VIPPACKAGE)
 						Get = 1;
@@ -2099,7 +2100,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 				{	
 					int SelectItem = m_apPlayers[ClientID]->m_SelectItem;
 
-					Server()->RemItem(ClientID, SelectItem, chartoint(pReason, 1000), USEDSELL);
+					Server()->RemItem(ClientID, SelectItem, chartoint(pReason, MAX_COUNT), USEDSELL);
 					m_apPlayers[ClientID]->m_SelectItem = -1;
 					return;
 				}	
@@ -2111,7 +2112,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 
 					m_apPlayers[ClientID]->m_LastChangeInfo = Server()->Tick();
 					int SelectItem = m_apPlayers[ClientID]->m_SelectItem;					
-					Server()->RemItem(ClientID, SelectItem, chartoint(pReason, 10000), USEDDROP); // Выброс предметов для всех игроков
+					Server()->RemItem(ClientID, SelectItem, chartoint(pReason, MAX_COUNT), USEDDROP); // Выброс предметов для всех игроков
 					m_apPlayers[ClientID]->m_SelectItem = -1;
 					ResetVotes(ClientID, AUTH);
 					return;
@@ -2155,7 +2156,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 
 					m_apPlayers[ClientID]->m_LastChangeInfo = Server()->Tick();
 					int SelectItem = m_apPlayers[ClientID]->m_SelectItem;
-					int Get = chartoint(pReason, 1000000);
+					int Get = chartoint(pReason, MAX_COUNT);
 					
 					if(Server()->GetItemCount(ClientID, SelectItem) < Get)	
 						Get = Server()->GetItemCount(ClientID, SelectItem);
@@ -2297,7 +2298,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					str_format(aBuf, sizeof(aBuf), "seli%d", i);
 					if(str_comp(aCmd, aBuf) == 0)
 					{
-						Server()->RemItem(ClientID, i, chartoint(pReason, 1000), USEDSELL);
+						Server()->RemItem(ClientID, i, chartoint(pReason, MAX_COUNT), USEDSELL);
 						return;	
 					}	
 

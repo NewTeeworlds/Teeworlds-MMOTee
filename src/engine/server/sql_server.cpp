@@ -4,7 +4,6 @@
 
 #include "sql_server.h"
 
-
 int CSqlServer::ms_NumReadServer = 0;
 int CSqlServer::ms_NumWriteServer = 0;
 
