@@ -227,7 +227,7 @@ void CPickup::StartFarm(int ClientID)
 				case 3: GameServer()->GiveItem(ClientID, IRONORE, 1+LevelItem/15); break; 
 				case 4: GameServer()->GiveItem(ClientID, GOLDORE, 1+LevelItem/15); break; 
 				case 5: GameServer()->GiveItem(ClientID, DIAMONDORE, 1+LevelItem/15); break; 
-				case 7: GameServer()->GiveItem(ClientID, DRAGONORE, 1); break; 
+				case 7: GameServer()->GiveItem(ClientID, DRAGONORE, 1 + LevelItem / 50); break; 
 				default: GameServer()->GiveItem(ClientID, COOPERORE, 1+LevelItem/15); break;
 			}
 			GameServer()->GiveItem(ClientID, MINEREXP, 1);

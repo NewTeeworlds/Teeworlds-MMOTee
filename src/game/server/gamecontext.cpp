@@ -3202,7 +3202,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			CreateSellWorkItem(ClientID, IRONORE, 2);
 			CreateSellWorkItem(ClientID, GOLDORE, 2);
 			CreateSellWorkItem(ClientID, DIAMONDORE, 3);
-			CreateSellWorkItem(ClientID, DRAGONORE, 5);
+			CreateSellWorkItem(ClientID, DRAGONORE, 10);
 		}
 		return;
 	}
