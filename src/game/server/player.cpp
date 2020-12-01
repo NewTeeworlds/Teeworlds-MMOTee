@@ -521,17 +521,17 @@ void CPlayer::Tick()
 int CPlayer::GetNeedForUp()
 {
 	//玩家升级所需经验基数赋值
-	if(AccData.Level >= 100) return 10000;
-	else if(AccData.Level >= 200) return 50000;
-	else if(AccData.Level >= 300) return 80000;
-	else if(AccData.Level >= 400) return 110000;
-	else if(AccData.Level >= 500) return 130000;
-	else if(AccData.Level >= 600) return 160000;
-	else if(AccData.Level >= 700) return 190000;
-	else if(AccData.Level >= 1000) return 240000;
-	else if(AccData.Level >= 1100) return 300000;
-	else if(AccData.Level >= 1200) return 400000;
-	else return 400;
+	if(AccData.Level < 100) return 400;
+	else if(AccData.Level < 200) return 10000;
+	else if(AccData.Level < 300) return 50000;
+	else if(AccData.Level < 400) return 80000;
+	else if(AccData.Level < 500) return 110000;
+	else if(AccData.Level < 600) return 130000;
+	else if(AccData.Level < 700) return 160000;
+	else if(AccData.Level < 1000) return 190000;
+	else if(AccData.Level < 1100) return 240000;
+	else if(AccData.Level < 1200) return 300000;
+	else return 400000;
 
 	/*
 	if(AccData.Level >= 100) return 1000;
