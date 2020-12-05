@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# usage ./build.sh [bam path]
+# usage ./build.sh [bam_path]
 # bam need be compiled
 
 BASEDIR=$(dirname "$0")

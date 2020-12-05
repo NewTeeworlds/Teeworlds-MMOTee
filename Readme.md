@@ -12,8 +12,12 @@ Dependencies: (Debian 10)
 
 	libmariadb-dev-compat libmariadb-dev libssl-dev libmysqlcppconn-dev
 
-build with bam ( version 0.4.x required)
+build with bam (version 0.4.x required)
 
 	bam server_sql_release
+
+build with docker (need bam be compiled with version 0.4.x)
+
+    ./build.sh [bam_path]
 
 Notice: only sql version could be build.
