@@ -18,6 +18,6 @@ build with bam (version 0.4.x required)
 
 build with docker (need bam be compiled with version 0.4.x)
 
-    ./build.sh [bam_path]
+    ./build.sh <bam_path>
 
 Notice: only sql version could be build.
