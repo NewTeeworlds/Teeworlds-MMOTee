@@ -16,7 +16,7 @@ build with bam (version 0.4.x required)
 
 	bam server_sql_release
 
-build with docker ([`bam-0.4.0`](https://github.com/matricks/bam/) will be automatically built.)
+build with docker ([`bam-0.4.0`](https://github.com/matricks/bam/) will be automatically compiled.)
 
     ./build.sh 
 
