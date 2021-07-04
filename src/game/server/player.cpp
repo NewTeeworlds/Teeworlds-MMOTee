@@ -136,7 +136,8 @@ void CPlayer::RandomBoxTick()
 			}
 		}	
 	}
-/*Event Box 概率：
+/*
+Event Box 概率：
 79/80 概率为钱袋
 1/80 概率为 Rare Event Hammer
 */
@@ -168,7 +169,8 @@ void CPlayer::RandomBoxTick()
 			}
 		}	
 	}
-/*Farming Box 概率：
+/*
+Farming Box 概率：
 92% 中，5 个种地经验值，2 个钱袋，5 个 Event Box 各占三分之一
 剩下 8% 中，Jump Impuls 占 50%,Rare Freeazer 和 Rare Slime Dirt 各占 25%
 */

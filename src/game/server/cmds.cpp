@@ -83,7 +83,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 			return GameServer()->SendChatTarget(ClientID, "Use: /sendmail <id> <itemid> <itemcount>");
 
 		if(GameServer()->m_apPlayers[id] && GameServer()->Server()->IsClientLogged(id) && itemid > 0 && itemid < 500 && citem > 0)
-			GameServer()->SendMail(id, "Sender mail Kurosio!", itemid, citem);
+			GameServer()->SendMail(id, "来自玩家的物品", itemid, citem);
 		return;
 	}
 	
