@@ -84,7 +84,11 @@ bool CPlayer::GetWork()
 	
 	return false;
 }
-
+/*
+Rand Craft Box 概率：
+95% 中的 50% 为 Body Boomer，50% 为 Foot Kwah
+5% 中，耳环蓝图、戒指蓝图、武器蓝图、Rare Slime Dirt各占 25%
+*/
 void CPlayer::RandomBoxTick()
 {
 	if(m_OpenBox && m_OpenBoxType == RANDOMCRAFTITEM)
@@ -132,6 +136,10 @@ void CPlayer::RandomBoxTick()
 			}
 		}	
 	}
+/*Event Box 概率：
+79/80 概率为钱袋
+1/80 概率为 Rare Event Hammer
+*/
 	if(m_OpenBox && m_OpenBoxType == EVENTBOX)
 	{
 		int getitem = 0;
@@ -160,6 +168,10 @@ void CPlayer::RandomBoxTick()
 			}
 		}	
 	}
+/*Farming Box 概率：
+92% 中，5 个种地经验值，2 个钱袋，5 个 Event Box 各占三分之一
+剩下 8% 中，Jump Impuls 占 50%,Rare Freeazer 和 Rare Slime Dirt 各占 25%
+*/
 	if(m_OpenBox && m_OpenBoxType == FARMBOX)
 	{
 		int getitem = 0;

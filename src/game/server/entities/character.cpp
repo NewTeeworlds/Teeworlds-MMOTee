@@ -471,7 +471,7 @@ void CCharacter::FireWeapon()
 				}
 			}
 
-			// ---------- ПРОВЕРЯЕМ ЯВЛЯЕТСЯ ЛИ КЛАСС БЕРСЕРКОМ ИЛИ СОСИНОМ
+			// ---------- 检查玩家职业是 Berserk(狂战士) 还是 Assasins(刺客)
 			int Range = 0;
 			if(m_pPlayer->AccData.Class == PLAYERCLASS_BERSERK)	Range = m_pPlayer->AccUpgrade.HammerRange*20;
 			else if(m_pPlayer->AccData.Class == PLAYERCLASS_ASSASINS) Range = 100;
@@ -866,7 +866,8 @@ void CCharacter::Tick()
 		if(m_ReloadOther)
 			m_ReloadOther--;
 
-		// инициализация хп босса по кол-ву
+		// 通过计数初始化boss的生命值
+		// 计算方法：玩家等级之和*500
 		if(m_pPlayer->GetBotType() == BOT_BOSSSLIME && !GameServer()->m_BossStart)
 		{
 			if(!g_Config.m_SvCityStart) m_Health = 10+GameServer()->GetBossLeveling()*500;
@@ -875,7 +876,7 @@ void CCharacter::Tick()
 			m_pPlayer->m_HealthStart = m_Health;
 		}
 		
-		// Регенерация здоровья
+		// 生命值回复
 		if(m_pPlayer->AccUpgrade.HPRegen && m_pPlayer->m_Health < m_pPlayer->m_HealthStart)
 		{
 			if(!HPRegenTick) HPRegenTick = 900-m_pPlayer->AccUpgrade.HPRegen*3;
@@ -897,7 +898,7 @@ void CCharacter::Tick()
 		int Index3 = GameServer()->Collision()->GetZoneValueAt(GameServer()->m_ZoneHandle_Damage, m_Pos.x+m_ProximityRadius/3.f, m_Pos.y-m_ProximityRadius/3.f);
 		int IndexShit = GameServer()->Collision()->GetZoneValueAt(GameServer()->m_ZoneHandle_Bonus, m_Pos.x, m_Pos.y);
 		
-		// ------------------- Стулья с опытом и т.д 
+		// ------------------- 公会房屋设置（有经验的椅子等）
 		if(IndexShit == ZONE_INCLAN1)
 		{	
 			if(!Server()->GetTopHouse(0))
@@ -1101,7 +1102,7 @@ void CCharacter::Tick()
 			m_pPlayer->m_ActiveChair = false;
 		}
 
-		// ------------------- ПВП Урон ЗОНЫ 
+		// ------------------- PvP 区域伤害开关
 		if(IndexShit == ZONE_ANTIPVP && !m_AntiPVP) {
 			m_AntiPVP = true;
 			GameServer()->SendBroadcast_LStat(m_pPlayer->GetCID(), 101, 100, INANTIPVP);
@@ -1111,12 +1112,13 @@ void CCharacter::Tick()
 			m_AntiPVP = false;
 			GameServer()->SendBroadcast_LStat(m_pPlayer->GetCID(), 101, 50, EXITANTIPVP);
 		}
+		// 防止机器人(Pig, Kwah, Boomer等怪物)进入 non-PvP 区域
 		if(IndexShit == ZONE_PVP && m_pPlayer->IsBot() && m_pPlayer->GetBotType() != BOT_NPC)
 		{
 			Die(m_pPlayer->GetCID(), WEAPON_WORLD);	
 		}
 		
-		// ------------------- Места Магазин и т.д 
+		// ------------------- 功能区 & 商店
 		if(IndexShit == ZONE_SHOP && !InShop) {
 			InShop = true;
 			GameServer()->SendBroadcast_LStat(m_pPlayer->GetCID(), 101, 100, INSHOP);
@@ -1299,7 +1301,8 @@ void CCharacter::Tick()
 		m_Core.m_Pos = PrevPos;
 	}
 	
-	//Hook protection
+	// Hook protection
+	// 钩子保护
 	if(m_Core.m_HookedPlayer >= 0)
 	{
 		if(GameServer()->m_apPlayers[m_Core.m_HookedPlayer] && GameServer()->m_apPlayers[m_Core.m_HookedPlayer]->GetCharacter())
@@ -1314,6 +1317,7 @@ void CCharacter::Tick()
 			}
 	
 			// Если хукаешь НПС
+			// 如果玩家勾住 NPC
 			if((GameServer()->m_apPlayers[m_Core.m_HookedPlayer]->GetBotType() == BOT_NPC 
 					&& GameServer()->m_apPlayers[m_Core.m_HookedPlayer]->IsBot()) || GameServer()->m_apPlayers[m_Core.m_HookedPlayer]->m_ActiveChair)
 			{
@@ -1562,10 +1566,12 @@ void CCharacter::Die(int Killer, int Weapon)
 	// a nice sound
 	GameServer()->CreateSound(m_Pos, SOUND_PLAYER_DIE);
 
+	// 因为boss/玩家的死亡导致的boss战结束
 	// вся хуйня когда мрут боссы и игроки
 	if(GameServer()->m_BossStartTick < 10 && GameServer()->m_BossStart)
 	{
-		// если босс проебал то отсосите все пидорасы ебаные ебал всех
+		// 打败了boss
+		// 原注释：если босс проебал то отсосите все пидорасы ебаные ебал всех
 		if(m_pPlayer->GetBotType() == BOT_BOSSSLIME && !GameServer()->m_WinWaitBoss)
 		{
 			int CountWin = GameServer()->GetBossCount();
@@ -1574,7 +1580,7 @@ void CCharacter::Die(int Killer, int Weapon)
 			GameServer()->m_WinWaitBoss = 1000;
 		}
 		
-		// если игрок погиб он уже окончательно вышел с комнаты босса
+		// 如果玩家死了，就会离开boss房间
 		if(m_pPlayer->m_InBossed)
 		{	
 			m_pPlayer->m_InBossed = false;
@@ -1582,10 +1588,11 @@ void CCharacter::Die(int Killer, int Weapon)
 		}
 	}
 
-	//Арена 
+	// 竞技场
 	if(GameServer()->m_AreaEndGame && m_pPlayer->m_InArea)
 	{		
 		// если игрок погиб он уже окончательно вышел с арены
+		// 如果玩家死亡，他就会离开竞技场
 		if(m_pPlayer->m_InArea)
 		{	
 			m_pPlayer->m_InArea = false;
@@ -2006,7 +2013,7 @@ void CCharacter::Snap(int SnappingClient)
 	if(!pCharacter)
 		return;
 		
-	// ЭМОЦИИ
+	// 表情
 	if(m_pPlayer && m_pPlayer->GetBotType() <= 0)
 	{
 		EmoteNormal = EMOTE_NORMAL;
@@ -2025,7 +2032,8 @@ void CCharacter::Snap(int SnappingClient)
 		if(m_InWater)
 			EmoteNormal = EMOTE_BLINK;
 	}
-	
+
+	//TODO
 	// РИСУЕМ ИГРОКА ПРИ ПАУЗЕ
 	if(!m_ReckoningTick || GameServer()->m_World.m_Paused)
 	{
@@ -2038,7 +2046,8 @@ void CCharacter::Snap(int SnappingClient)
 		m_SendCore.Write(pCharacter);
 	}
 
-	// УСТАНОВКА ЭМОЦИИ
+	// 安装表情(?)
+	// 原注释：УСТАНОВКА ЭМОЦИИ
 	if (m_EmoteStop < Server()->Tick())
 	{
 		m_EmoteType = EmoteNormal;
@@ -2057,7 +2066,8 @@ void CCharacter::Snap(int SnappingClient)
 	pCharacter->m_Armor = 0;
 	pCharacter->m_Weapon = m_ActiveWeapon;
 
-	// ОРУЖИЕ
+	// 武器：
+	// 在玩家被冻结时，或者玩家职业为 Assasins(刺客)且切换到锤子武器时，将玩家武器（外观）设置为 Ninja(忍者)
 	if((GetInfWeaponID(m_ActiveWeapon) == INFWEAPON_HAMMER && m_pPlayer && m_pPlayer->AccData.Class == PLAYERCLASS_ASSASINS && !m_pPlayer->m_InArea) || m_IsFrozen)
 	{
 		if(m_IsFrozen)
@@ -2087,13 +2097,13 @@ void CCharacter::Snap(int SnappingClient)
 	pCharacter->m_PlayerFlags = GetPlayer()->m_PlayerFlags;
 }
 
-// ОТКРЫТИЕ ВЫБОРА КЛАССА
+// 获得职业
 void CCharacter::OpenClassChooser()
 {
 	m_pPlayer->OpenMapMenu(1);
 }
 
-// ПОЛУЧИТЬ КЛАСС ИГРОКА
+// 
 int CCharacter::GetClass()
 {
 	if(m_pPlayer)
@@ -2118,7 +2128,7 @@ bool CCharacter::InQuest()
 	return false;
 }
 
-// ДАТЬ НИНДЗЮ
+// 给 Ninja(忍者) Buff(加成)
 void CCharacter::GiveNinjaBuf()
 {
 	if(GetClass() != PLAYERCLASS_ASSASINS)
@@ -2126,26 +2136,26 @@ void CCharacter::GiveNinjaBuf()
 	
 	switch(random_int(0, 2))
 	{
-		case 0: //Velocity Buff
+		case 0: //速度增益
 			m_NinjaVelocityBuff++;
 			GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("Sword velocity increased"), NULL);
 			break;
-		case 1: //Strength Buff
+		case 1: //力量增益
 			m_NinjaStrengthBuff++;
 			GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("Sword strength increased"), NULL);
 			break;
-		case 2: //Ammo Buff
+		case 2: //弹药增益
 			m_NinjaAmmoBuff++;
 			GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("Grenade limit increased"), NULL);
 			break;
 	}
 }
 
-// АТРИБУТЫ СПАВНА
+// 空间属性
 void CCharacter::ClassSpawnAttributes()
 {			
 	if(!Server()->GetItemSettings(m_pPlayer->GetCID(), SCHAT))
-		GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("Attention! All settings in vote"), NULL);
+		GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("Attention! All settings in vote \n注意！所有的设置项都在投票选项里面"), NULL);
 
 	if(m_pPlayer->m_InArea)
 	{
@@ -2169,7 +2179,10 @@ void CCharacter::ClassSpawnAttributes()
 		m_Health = 1;
 		return;
 	}
-	
+	// 初始化职业属性
+	// 1.Healer: 每个生命升级点增加 50 血量; 每 4 点散射增加 1% 血量
+	// 2.Berserk: 无
+	// 3.Assasins: 初始生命值为 5
 	switch(GetClass())
 	{
 		case PLAYERCLASS_HEALER:
@@ -2233,7 +2246,7 @@ void CCharacter::ClassSpawnAttributes()
 		m_Armor += 1000;
 	}
 
-	// антипвп мелких уровней
+	// 新手保护，禁用 PvP
 	m_pPlayer->m_AntiPvpSmall = false;
 	if(m_pPlayer->AccData.Level < 20)
 	{
@@ -2242,7 +2255,7 @@ void CCharacter::ClassSpawnAttributes()
 		if(Server()->GetItemSettings(m_pPlayer->GetCID(), SCHAT) != 2)
 			GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("Anti PVP / Small level active."), NULL);	
 	}
-	
+	//TODO
 	// книги инфа
 	if(m_pPlayer->m_MoneyAdd)
 		GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("You have an active {str:name}."), "name", Server()->GetItemName(m_pPlayer->GetCID(), BOOKMONEYMIN), NULL);		
@@ -2252,25 +2265,25 @@ void CCharacter::ClassSpawnAttributes()
 	if(m_pPlayer->IsBot())
 		m_Health = 10+m_pPlayer->AccUpgrade.Health*10;
 
-	// прибавка 5% к хп
+	// 佩戴 Ring Boomer 生命值增加 5%
 	if(Server()->GetItemCount(m_pPlayer->GetCID(), RINGBOOMER))
 		m_Health += (m_Health/100)*5;		
 
-	// настройки прокачек оружия
-	int geta = (int)(5+m_pPlayer->AccUpgrade.Ammo);
-	int getsp = 1000+m_pPlayer->AccUpgrade.Speed*20;
-	int getspg = 1000+m_pPlayer->AccUpgrade.Speed*8;
-	int getar = 0;
+	// 武器属性设置
+	int geta = (int)(5+m_pPlayer->AccUpgrade.Ammo);// 弹药数量
+	int getsp = 1000+m_pPlayer->AccUpgrade.Speed*20;// 射速
+	int getspg = 1000+m_pPlayer->AccUpgrade.Speed*8;// Grenade（火箭炮）射速
+	int getar = 0;									// 子弹回复速度
 	if(m_pPlayer->AccUpgrade.AmmoRegen > 0) 
 		getar= (int)(650-m_pPlayer->AccUpgrade.AmmoRegen*2);
 		
-	// Оружие пак крафт +3 аммо
+	// 按照弹夹数量添加弹药
 	if(Server()->GetItemCount(m_pPlayer->GetCID(), WEAPONPRESSED))
-		geta += Server()->GetItemCount(m_pPlayer->GetCID(), WEAPONPRESSED)*3;
+		geta += Server()->GetItemCount(m_pPlayer->GetCID(), WEAPONPRESSED)*5;
 		
 	if(m_pPlayer->GetCharacter())
 	{
-		// Датие боссу оружия
+		// 给boss武器 
 		if(m_pPlayer->GetBotType() == BOT_BOSSSLIME)
 		{
 			Server()->SetMaxAmmo(m_pPlayer->GetCID(), INFWEAPON_SHOTGUN, 99999);
@@ -2331,7 +2344,7 @@ void CCharacter::ClassSpawnAttributes()
 	Server()->SetFireDelay(m_pPlayer->GetCID(), INFWEAPON_NONE, 0);
 	Server()->SetAmmoRegenTime(m_pPlayer->GetCID(), INFWEAPON_NONE, 0);
 	
-	// Выдача оружия
+	// 发放武器
 	if(Server()->GetItemCount(m_pPlayer->GetCID(), IGUN) || Server()->GetItemCount(m_pPlayer->GetCID(), WEAPONPRESSED))
 		GiveWeapon(WEAPON_GUN, geta);
 	if(Server()->GetItemCount(m_pPlayer->GetCID(), ISHOTGUN) || Server()->GetItemCount(m_pPlayer->GetCID(), WEAPONPRESSED))
