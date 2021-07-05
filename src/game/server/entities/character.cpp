@@ -1115,7 +1115,7 @@ void CCharacter::Tick()
 		// 防止机器人(Pig, Kwah, Boomer等怪物)进入 non-PvP 区域
 		if(IndexShit == ZONE_PVP && m_pPlayer->IsBot() && m_pPlayer->GetBotType() != BOT_NPC)
 		{
-			Die_Bot(m_pPlayer->GetCID());	
+			Die(m_pPlayer->GetCID(),WEAPON_WORLD);
 		}
 		
 		// ------------------- 功能区 & 商店
@@ -1175,10 +1175,12 @@ void CCharacter::Tick()
 		if(IndexShit == ZONE_WHITEROOM) 
 		{
 			if(!Server()->GetItemCount(m_pPlayer->GetCID(), WHITETICKET))
+			{
 				Die(m_pPlayer->GetCID(), WEAPON_WORLD);
-				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), 200, 100,  ("你没有进入白房间的门票，请购买门票 (White Ticket)!"), NULL);
-			else
-				GameServer()->SendBroadcast_Localization(m_pPlayer->GetCID(), 200, 100, _("欢迎来到白房间。"), NULL);				
+				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), 200, ("你没有进入白房间的门票，请购买门票 (White Ticket)!"), NULL);
+			}else{
+				GameServer()->SendBroadcast_Localization(m_pPlayer->GetCID(), 200, 100, _("欢迎来到白房间。"), NULL);
+			}
 		}
 		
 		if(IndexShit == ZONE_DEATH)
@@ -1556,15 +1558,15 @@ void CCharacter::Die(int Killer, int Weapon)
 	// we got to wait 0.5 secs before respawning
 	m_pPlayer->m_RespawnTick = Server()->Tick()+Server()->TickSpeed()/2;
 	int ModeSpecial = GameServer()->m_pController->OnCharacterDeath(this, GameServer()->m_apPlayers[Killer], Weapon);
-
-	// send the kill message
-	CNetMsg_Sv_KillMsg Msg;
-	Msg.m_Killer = Killer;
-	Msg.m_Victim = m_pPlayer->GetCID();
-	Msg.m_Weapon = Weapon;
-	Msg.m_ModeSpecial = ModeSpecial;
-	Server()->SendPackMsg(&Msg, MSGFLAG_VITAL, -1);
-
+	if(!m_pPlayer->IsBot()){
+		// send the kill message
+		CNetMsg_Sv_KillMsg Msg;
+		Msg.m_Killer = Killer;
+		Msg.m_Victim = m_pPlayer->GetCID();
+		Msg.m_Weapon = Weapon;
+		Msg.m_ModeSpecial = ModeSpecial;
+		Server()->SendPackMsg(&Msg, MSGFLAG_VITAL, -1);
+	}
 	// a nice sound
 	GameServer()->CreateSound(m_Pos, SOUND_PLAYER_DIE);
 
@@ -1653,6 +1655,7 @@ void CCharacter::Die(int Killer, int Weapon)
 	}
 }
 
+/*
 void CCharacter::Die_Bot(int Killer) //机器人(如 Pig)因为进入 non-PvP 区域而判定死亡，不在 HUD 中显示
 {
 	DestroyChildEntities();
@@ -1661,7 +1664,7 @@ void CCharacter::Die_Bot(int Killer) //机器人(如 Pig)因为进入 non-PvP �
 	m_pPlayer->m_RespawnTick = Server()->Tick()+Server()->TickSpeed()/2;
 	int ModeSpecial = GameServer()->m_pController->OnCharacterDeath(this, GameServer()->m_apPlayers[Killer], Weapon);
 
-	/*
+	
 	// send the kill message
 	CNetMsg_Sv_KillMsg Msg;
 	Msg.m_Killer = Killer;
@@ -1669,7 +1672,7 @@ void CCharacter::Die_Bot(int Killer) //机器人(如 Pig)因为进入 non-PvP �
 	Msg.m_Weapon = Weapon;
 	Msg.m_ModeSpecial = ModeSpecial;
 	Server()->SendPackMsg(&Msg, MSGFLAG_VITAL, -1);
-	*/
+	
 
 	// a nice sound
 	GameServer()->CreateSound(m_Pos, SOUND_PLAYER_DIE);
@@ -1686,7 +1689,7 @@ void CCharacter::Die_Bot(int Killer) //机器人(如 Pig)因为进入 non-PvP �
 	
 
 }
-
+*/
 
 bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 {
