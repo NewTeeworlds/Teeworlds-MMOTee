@@ -1115,7 +1115,7 @@ void CCharacter::Tick()
 		// 防止机器人(Pig, Kwah, Boomer等怪物)进入 non-PvP 区域
 		if(IndexShit == ZONE_PVP && m_pPlayer->IsBot() && m_pPlayer->GetBotType() != BOT_NPC)
 		{
-			Die(m_pPlayer->GetCID(), WEAPON_WORLD);	
+			Die_Bot(m_pPlayer->GetCID());	
 		}
 		
 		// ------------------- 功能区 & 商店
@@ -1161,7 +1161,7 @@ void CCharacter::Tick()
 			m_InWater = false;
 		}
 		
-		// -------------------- Босс вход
+		// -------------------- 进入区域
 		if(IndexShit == ZONE_BONUS_BONUS) 
 		{
 			GameServer()->EnterBoss(m_pPlayer->GetCID(), BOT_BOSSSLIME);
@@ -1176,8 +1176,9 @@ void CCharacter::Tick()
 		{
 			if(!Server()->GetItemCount(m_pPlayer->GetCID(), WHITETICKET))
 				Die(m_pPlayer->GetCID(), WEAPON_WORLD);
+				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), 200, 100,  ("你没有进入白房间的门票，请购买门票 (White Ticket)!"), NULL);
 			else
-				GameServer()->SendBroadcast_Localization(m_pPlayer->GetCID(), 200, 100, _("Welcome in White Room."), NULL);				
+				GameServer()->SendBroadcast_Localization(m_pPlayer->GetCID(), 200, 100, _("欢迎来到白房间。"), NULL);				
 		}
 		
 		if(IndexShit == ZONE_DEATH)
@@ -1186,6 +1187,7 @@ void CCharacter::Tick()
 		}
 
 		// ------------------- Хуйня которую ебут и т.д
+		// 大概是原作者暴走了
 		if(Index0 == ZONE_DAMAGE_DEATH || Index1 == ZONE_DAMAGE_DEATH || Index2 == ZONE_DAMAGE_DEATH || Index3 == ZONE_DAMAGE_DEATH)
 		{
 			Die(m_pPlayer->GetCID(), WEAPON_WORLD);
@@ -1650,6 +1652,41 @@ void CCharacter::Die(int Killer, int Weapon)
 		}
 	}
 }
+
+void CCharacter::Die_Bot(int Killer) //机器人(如 Pig)因为进入 non-PvP 区域而判定死亡，不在 HUD 中显示
+{
+	DestroyChildEntities();
+
+	// we got to wait 0.5 secs before respawning
+	m_pPlayer->m_RespawnTick = Server()->Tick()+Server()->TickSpeed()/2;
+	int ModeSpecial = GameServer()->m_pController->OnCharacterDeath(this, GameServer()->m_apPlayers[Killer], Weapon);
+
+	/*
+	// send the kill message
+	CNetMsg_Sv_KillMsg Msg;
+	Msg.m_Killer = Killer;
+	Msg.m_Victim = m_pPlayer->GetCID();
+	Msg.m_Weapon = Weapon;
+	Msg.m_ModeSpecial = ModeSpecial;
+	Server()->SendPackMsg(&Msg, MSGFLAG_VITAL, -1);
+	*/
+
+	// a nice sound
+	GameServer()->CreateSound(m_Pos, SOUND_PLAYER_DIE);
+
+	
+
+	// this is for auto respawn after 3 secs
+	m_pPlayer->m_DieTick = Server()->Tick();
+
+	m_Alive = false;
+	GameServer()->m_World.RemoveEntity(this);
+	GameServer()->m_World.m_Core.m_apCharacters[m_pPlayer->GetCID()] = 0;
+	GameServer()->CreateDeath(m_Pos, m_pPlayer->GetCID());
+	
+
+}
+
 
 bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 {
