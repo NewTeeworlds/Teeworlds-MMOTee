@@ -1,3 +1,4 @@
+.vscode/**
 bam
 .bam
 /config.lua
@@ -6,7 +7,7 @@ bam
 /objs
 src/game/generated
 /*.dll
-
+build/**
 /crapnet*
 /dilate*
 /fake_server*
