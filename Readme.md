@@ -30,6 +30,7 @@
 	bam server_sql_release
 
 用 `Docker` 构建([`bam-0.4.0`](https://github.com/matricks/bam/) 会被自动编译。)
+**说明**:目前根目录下的 `bam` 是在 Debian 10 x86_64 上构建的 `bam-0.4.0`,默认直接使用。
 
     ./build.sh 
 
