@@ -3,7 +3,7 @@
 #include <engine/shared/config.h>
 
 #include "sql_server.h"
-
+//#include <cppconn/driver.h>
 int CSqlServer::ms_NumReadServer = 0;
 int CSqlServer::ms_NumWriteServer = 0;
 

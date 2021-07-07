@@ -859,6 +859,7 @@ void CGameContext::SendMail(int ClientID, const char* pText, int ItemID, int Ite
 void CGameContext::AreaTick()
 {
 	// Старт игры сюрвиал
+	// 游戏开始后幸存
 	if(m_AreaStartTick)
 	{	
 		m_AreaStartTick--;
@@ -886,6 +887,7 @@ void CGameContext::AreaTick()
 		}
 	}
 	// Arena уже игра да пидоры
+	// Arena 已经是一个游戏了(?)
 	if(m_AreaEndGame)
 	{
 		m_AreaEndGame--;
@@ -945,6 +947,7 @@ void CGameContext::AreaTick()
 		}
 	}
 	// старт арены 
+	// 生存活动开始
 	if(Server()->Tick() % (1 * Server()->TickSpeed() * 600) == 0)
 		StartArea(120, rand()%2+1);
 }
@@ -1377,8 +1380,8 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					}
 					if(Server()->SetOpenHouse(Server()->GetOwnHouse(ClientID)))
 					{
-						SendChatTarget_Localization(-1, -1, _("公会 {str:name} {str:type} 的房屋!"), 
-							"name", Server()->GetClanName(Server()->GetClanID(ClientID)), "type", Server()->GetOpenHouse(Server()->GetOwnHouse(ClientID)) ? "OPEN" : "CLOSE");
+						SendChatTarget_Localization(-1, -1, _("公会 {str:name} {str:type} 了房屋!"), 
+							"name", Server()->GetClanName(Server()->GetClanID(ClientID)), "type", Server()->GetOpenHouse(Server()->GetOwnHouse(ClientID)) ? "打开" : "关闭");
 					}
 					ResetVotes(ClientID, CHOUSE);
 					return;
@@ -1402,7 +1405,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 						}
 					
 						if(Type) SendChatClan(Server()->GetClanID(ClientID), "会长将玩家 {str:name} 踢出了公会", "name", m_apPlayers[ClientID]->m_SelectPlayer);
-						else SendChatClan(Server()->GetClanID(ClientID), "会长将离线玩家 {str:name} 提出了公会", "name", m_apPlayers[ClientID]->m_SelectPlayer);
+						else SendChatClan(Server()->GetClanID(ClientID), "会长将离线玩家 {str:name} 踢出了公会", "name", m_apPlayers[ClientID]->m_SelectPlayer);
 
 						Server()->ExitClanOff(ClientID, m_apPlayers[ClientID]->m_SelectPlayer);			
 						ResetVotes(ClientID, CLANLIST);
@@ -1612,6 +1615,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 				}	
 				
 				// ПРОКАЧКА ФУНКЦИИ
+
 				
 				else if(str_comp(aCmd, "uhealth") == 0)
 				{
@@ -1990,6 +1994,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 				}
 				
 				// НАСТРОЙКИ ФУНКЦИИ
+				// 功能设置
 				else if(str_comp(aCmd, "ssantiping") == 0)
 				{
 					if(Server()->GetClientAntiPing(ClientID))
@@ -3601,7 +3606,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 	{
 		m_apPlayers[ClientID]->m_LastVotelist = CLAN;	
 		AddVote_Localization(ClientID, "null", "☪ 信息 ( ′ ω ` )?:");
-		AddVote_Localization(ClientID, "null", "这个菜单可以捐赠黄金给公会的");
+		AddVote_Localization(ClientID, "null", "这个菜单可以捐赠黄金给公会");
 		AddVote_Localization(ClientID, "null", "钱是为了大家的");
 		AddVote_Localization(ClientID, "null", "在投票的理由填写处填写数量");	
 		AddVote("", "null", ClientID);
