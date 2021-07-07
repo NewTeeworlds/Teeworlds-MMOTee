@@ -177,6 +177,7 @@ public:
 	};
 
 	// Визуальные функции
+	// 视觉功能
 	void CreateDamageInd(vec2 Pos, float AngleMod, int Amount);
 	void CreateExplosion(vec2 Pos, int Owner, int Weapon, bool NoDamage, int TakeDamageMode = TAKEDAMAGEMODE_NOINFECTION);
 	void CreateExplosionDisk(vec2 Pos, float InnerRadius, float DamageRadius, int Damage, float Force, int Owner, int Weapon, int TakeDamageMode = TAKEDAMAGEMODE_NOINFECTION);
@@ -187,6 +188,7 @@ public:
 	void CreateSoundGlobal(int Sound, int Target=-1);
 	
 	// Голосования
+	// 投票
 	void ClearVotes(int ClientID);
 	void AddVote(const char *Desc, const char *Cmd, int ClientID = -1);
 	void ResetVotes(int ClientID, int Type);
@@ -200,10 +202,12 @@ public:
 	array<CVoteOptions> m_PlayerVotes[MAX_CLIENTS];
 
 	// Клан функции
+	// 公会
 	void ExitClan(int ClientID);
 	void EnterClan(int ClientID, int ClanID);
 
 	// Предметы апгрейды
+	// 物品升级
 	void BuyItem(int ItemType, int ClientID, int Type = 0);
 	void GiveItem(int ClientID, int ItemID, int Count, int Enchant = 0);
 
@@ -217,6 +221,7 @@ public:
 	void CreateSellWorkItem(int ClientID, int ItemID, int Price);
 
 	// Арена
+	// 竞技场
 	void AreaTick();
 	void StartArea(int WaitTime, int Type);
 	void EnterArea(int ClientID);
@@ -225,6 +230,7 @@ public:
 	int m_AreaType;
 
 	// Босс
+	// Boss战
 	void BossTick();
 	void StartBoss(int ClientID, int WaitTime, int BossType);
 	void EnterBoss(int ClientID, int BossType);
@@ -239,6 +245,7 @@ public:
 	int m_BossType;
 
 	// Помощь, прочие
+	// 帮助别人(?)
 	void UpdateBotInfo(int ClientID);
 	void CreateBot(int ClientID, int BotType, int BotSubType = 0);
 	void CreateLolText(CEntity *pParent, bool Follow, vec2 Pos, vec2 Vel, int Lifespan, const char *pText);
@@ -246,6 +253,7 @@ public:
 	void SendMail(int ClientID, const char* pText, int ItemID, int ItemNum);
 
 	// Обновление аккаунта
+	// 升级
 	void GetStat(int ClientID);
 	void GetUpgrade(int ClientID);
 	void UpdateStat(int ClientID);
@@ -262,6 +270,7 @@ public:
 	};
 
 	// Локализация текст
+	// 本地化文本
 	virtual void SendGuide(int ClientID, int BossType);
 	
 	virtual void SendMOTD(int To, const char* pParam);
@@ -288,6 +297,7 @@ public:
 	virtual void SendChatClan(int ClanID, const char* pText, ...);
 
 	// Основные функции
+	// 主要功能
 	void SendChat(int ClientID, int Team, const char *pText);
 	void SendEmoticon(int ClientID, int Emoticon);
 	void SendWeaponPickup(int ClientID, int Weapon);
