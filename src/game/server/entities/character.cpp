@@ -1701,10 +1701,12 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 		GameServer()->SendBroadcast_LStat(m_pPlayer->GetCID(), 106, 50, -1);
 		
 		// Боты
+		// 机器人
 		if(m_pPlayer->GetBotType() == BOT_NPCW || m_pPlayer->GetBotType() == BOT_FARMER)
 			return true; 
 	
 		// Антипвп в городе
+		// 城市中的 anti-PvP
 		if(pChr->m_AntiPVP || m_AntiPVP)
 			return true;
 
