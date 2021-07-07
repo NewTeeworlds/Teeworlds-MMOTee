@@ -1,4 +1,4 @@
-#ifdef CONF_SQL
+//#ifdef CONF_SQL
 #ifndef ENGINE_SERVER_SQL_CONNECTOR_H
 #define ENGINE_SERVER_SQL_CONNECTOR_H
 
@@ -46,4 +46,4 @@ private:
 };
 
 #endif
-#endif
+//#endif

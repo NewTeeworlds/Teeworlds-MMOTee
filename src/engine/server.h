@@ -517,7 +517,7 @@ public:
 
 	virtual bool IsClientLogged(int ClientID) = 0;
 	virtual int GetClanID(int ClientID) = 0;
-#ifdef CONF_SQL
+//#ifdef CONF_SQL
 	virtual void ShowTop10(int ClientID, const char* Type, int TypeGet) = 0;
 	virtual void ShowTop10Clans(int ClientID, const char* Type, int TypeGet) = 0;
 	virtual void GetTopClanHouse() = 0;
@@ -553,7 +553,7 @@ public:
 	virtual void InitClientDB(int ClientID) = 0;
 	virtual void UpdateStats(int ClientID, int Type = 0) = 0;
 	
-#endif
+//#endif
 	virtual void Ban(int i, int Seconds, const char* pReason) = 0;
 
 public:

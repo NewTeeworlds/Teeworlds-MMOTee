@@ -1,4 +1,4 @@
-#ifdef CONF_SQL
+//#ifdef CONF_SQL
 #include <stdint.h>
 #include <base/system.h>
 #include <openssl/evp.h>
@@ -17,4 +17,4 @@ void Crypt(const char* pass, const unsigned char* salt, int32_t iterations, uint
 	}
 }  
 
-#endif
+//#endif
