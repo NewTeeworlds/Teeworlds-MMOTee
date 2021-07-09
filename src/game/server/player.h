@@ -15,6 +15,7 @@ class CPlayer
 
 public:
 	// Основное
+	// 主要的
 	CPlayer(CGameContext *pGameServer, int ClientID, int Team);
 	~CPlayer();
 
@@ -59,6 +60,7 @@ public:
 	void SetBotSubType(int BotSubType) { m_BotSubType = BotSubType; }
 
 	// Пользовальские переменные
+	// 自定义变量
 	int m_HealthStart;
 	int m_Health;
 
@@ -79,6 +81,8 @@ public:
 	int m_SortedSelectCraft;
 	bool m_Search;
 	int m_JailTick;
+	bool m_IsJailed; // 是否被送进监狱
+	int m_JailLength; // 手动设置监禁时长
 	struct
 	{
 		int Level;
@@ -219,6 +223,7 @@ private:
 	int tickstr;
 
 	// Пользовальские переменные
+	// 自定义变量
 	char m_aLanguage[16];
 	
 	int m_MapMenu;

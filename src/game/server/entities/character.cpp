@@ -134,7 +134,16 @@ bool CCharacter::Spawn(CPlayer *pPlayer, vec2 Pos)
 		LockBotPos = m_Pos;
 	
 	if(m_pPlayer->AccData.Jail)
-		m_pPlayer->m_JailTick = Server()->TickSpeed()*360;
+	{
+		if(m_pPlayer->m_IsJailed)
+		{
+			m_pPlayer->m_JailTick = Server()->TickSpeed()*m_pPlayer->m_JailLength;
+		}
+		else
+		{
+			m_pPlayer->m_JailTick = Server()->TickSpeed()*360;
+		}
+	}
 	
 	m_Core.Reset();
 	m_Core.Init(&GameServer()->m_World.m_Core, GameServer()->Collision());
@@ -1688,6 +1697,48 @@ void CCharacter::Die_Bot(int Killer) //机器人(如 Pig)因为进入 non-PvP �
 	GameServer()->CreateDeath(m_Pos, m_pPlayer->GetCID());
 	
 
+}
+
+
+void CCharacter::SendToJail(int PlayerID, int JailLength) //手动送某人进监狱:)
+{
+	DestroyChildEntities();
+
+	// we got to wait 0.5 secs before respawning
+	m_pPlayer->m_RespawnTick = Server()->Tick()+Server()->TickSpeed()/2;
+	int ModeSpecial = GameServer()->m_pController->OnCharacterDeath(this, GameServer()->m_apPlayers[PlayerID], WEAPON_WORLD);
+
+	// send the kill message
+	CNetMsg_Sv_KillMsg Msg;
+	Msg.m_Killer = PlayerID;
+	Msg.m_Victim = m_pPlayer->GetCID();
+	Msg.m_Weapon = WEAPON_WORLD;
+	Msg.m_ModeSpecial = ModeSpecial;
+	Server()->SendPackMsg(&Msg, MSGFLAG_VITAL, -1);
+	
+	// a nice sound
+	GameServer()->CreateSound(m_Pos, SOUND_PLAYER_DIE);
+
+	// this is for auto respawn after 3 secs
+	m_pPlayer->m_DieTick = Server()->Tick();
+
+	m_Alive = false;
+	GameServer()->m_World.RemoveEntity(this);
+	GameServer()->m_World.m_Core.m_apCharacters[m_pPlayer->GetCID()] = 0;
+	GameServer()->CreateDeath(m_Pos, m_pPlayer->GetCID());
+	
+	CPlayer* pKillerPlayer = GameServer()->m_apPlayers[PlayerID];
+	pKillerPlayer->AccData.Kill++;
+	
+	m_pPlayer->m_Search = false;
+	GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_HEALER, _("玩家 {str:name} 被捕了!"), "name", Server()->ClientName(m_pPlayer->GetCID()), NULL);
+					
+	m_pPlayer->AccData.Jail = true;
+	m_pPlayer->AccData.Rel = 0;
+	GameServer()->UpdateStats(m_pPlayer->GetCID());
+	m_pPlayer->m_IsJailed = true;
+	m_pPlayer->m_JailLength = JailLength;
+	
 }
 
 

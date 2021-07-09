@@ -320,6 +320,7 @@ void CPlayer::Tick()
 		}
 		
 		// ОПЫТ КНИГИ ДОБАВКА НУЖНО ОПТИМИЗИРОВАТЬ
+		// 经验书追加需要优化
 		if(m_MoneyAdd)
 		{
 			m_MoneyAdd--;
@@ -379,6 +380,7 @@ void CPlayer::Tick()
 		}
 		
 		// Агресия и тюрьма
+		// 通缉和监狱
 		if(!m_Search && AccData.Rel >= 1000)
 		{
 			m_Search = true;
@@ -387,13 +389,21 @@ void CPlayer::Tick()
 		if(m_JailTick && AccData.Jail)
 		{
 			int Time = m_JailTick/Server()->TickSpeed();
-			GameServer()->SendBroadcast_Localization(m_ClientID, 100, 100, _("你不小心进了监狱, 刑期:{sec:siska}."), "siska", &Time, NULL);		
-			
+			if(!m_IsJailed)
+			{
+				GameServer()->SendBroadcast_Localization(m_ClientID, 100, 100, _("你不小心进了监狱, 刑期:{sec:siska}."), "siska", &Time, NULL);		
+			}
+			else
+			{
+				GameServer()->SendBroadcast_Localization(m_ClientID, 100, 100, _("你被管理员关进了监狱, 刑期:{sec:siska}."), "siska", &Time, NULL);	
+			}
 			m_JailTick--;
 			if(!m_JailTick)
 			{
 				m_JailTick = 0;
 				AccData.Jail = false;
+				m_IsJailed = false;
+				
 				
 				if(m_pCharacter)
 					m_pCharacter->Die(m_ClientID, WEAPON_WORLD);

@@ -203,6 +203,7 @@ void CNpcSold::TickBotAI()
 					m_BotDir = 0;
 				}
 				// ЧАТ
+				// 聊天
 				if (Server()->Tick()-m_BotTimeLastChat > 20*Server()->TickSpeed())
 				{
 					GameServer()->SendEmoticon(m_pPlayer->GetCID(), 4);
@@ -227,6 +228,7 @@ void CNpcSold::TickBotAI()
 	}
 
 	// РАНДОМНЫЙ СЦЕНАРИЙ
+	// 随机场景
 	if (!PlayerFound)
 	{
 		if (Server()->Tick()-m_BotTimeLastOption > Server()->TickSpeed()*1.0f)

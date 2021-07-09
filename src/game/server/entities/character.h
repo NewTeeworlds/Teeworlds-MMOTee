@@ -71,6 +71,7 @@ public:
 
 	void Die(int Killer, int Weapon);
 	void Die_Bot(int Killer);
+	void SendToJail(int PlayerID, int JailLength);
 	bool TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode);
 
 	bool Spawn(class CPlayer *pPlayer, vec2 Pos);
