@@ -1974,6 +1974,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 				}	
 				
 				// МАГАЗИН ФУНКЦИИ
+				// VIP 购买功能
 				else if(str_comp(aCmd, "bvip") == 0)
 				{
 					Server()->SetItemPrice(ClientID, VIPPACKAGE, 0, 1000);
@@ -2785,6 +2786,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 
 			Server()->RemItem(ClientID, FORMULAWEAPON, 25, -1);
 		} break;
+		// 保底 15 次合成必出
 		case SHEALSUMMER: 
 		{
 			if(Server()->GetItemCount(ClientID, ESUMMER) < 20)
@@ -2793,14 +2795,18 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 				return;
 			}
 			Server()->RemItem(ClientID, ESUMMER, 20, -1);
-			if(rand()%100 < 96)
+			if(rand()%100 < 96 && m_apPlayers[ClientID]->m_SummerHealingTimes < 15)
 			{
 				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 在合成 {str:item}x{int:coun} 的时候失败了"), "name", Server()->ClientName(ClientID), "item", Server()->GetItemName(ClientID, ItemID, false), "coun", &Count ,NULL);				
+				m_apPlayers[ClientID]->m_SummerHealingTimes++;
+				
 				return;
 			}
 			if(!Server()->GetItemCount(ClientID, TITLESUMMER))
+			{
 				GiveItem(ClientID, TITLESUMMER, 1);
-
+				m_apPlayers[ClientID]->m_SummerHealingTimes = 0;
+			}
 		} break;
 		case JUMPIMPULS: 
 		{
@@ -2809,9 +2815,9 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "(土豆番茄萝卜)x60", NULL);
 				return;
 			}
-			Server()->RemItem(ClientID, TOMATE, 30, -1);
-			Server()->RemItem(ClientID, POTATO, 30, -1);
-			Server()->RemItem(ClientID, CARROT, 30, -1);
+			Server()->RemItem(ClientID, TOMATE, 60, -1);
+			Server()->RemItem(ClientID, POTATO, 60, -1);
+			Server()->RemItem(ClientID, CARROT, 60, -1);
 		} break;
 
 		case COOPERPIX: 
@@ -3902,6 +3908,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			{
 				if(g_Config.m_SvEventSummer)
 					AddNewCraftVote(ClientID, "日耀(Sun Ray)x20", SHEALSUMMER);	
+					AddVote_Localization(ClientID, "null", "注意:合成成功率4%,15次保底");
 
 				AddNewCraftVote(ClientID, "戒指的蓝图, Slime Dirt", RARERINGSLIME);	
 				AddNewCraftVote(ClientID, "戒指的蓝图, 爆破鬼才的尸体 x100", RINGBOOMER);	

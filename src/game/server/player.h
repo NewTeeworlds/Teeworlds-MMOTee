@@ -83,6 +83,7 @@ public:
 	int m_JailTick;
 	bool m_IsJailed; // 是否被送进监狱
 	int m_JailLength; // 手动设置监禁时长
+	int m_SummerHealingTimes; // Skill Summer Healing 合成保底
 	struct
 	{
 		int Level;
