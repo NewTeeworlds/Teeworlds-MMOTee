@@ -210,6 +210,7 @@ public:
 	// 物品升级
 	void BuyItem(int ItemType, int ClientID, int Type = 0);
 	void GiveItem(int ClientID, int ItemID, int Count, int Enchant = 0);
+	void RemItem(int ClientID, int ItemID, int Count);
 
 	void CreateItem(int ClientID, int ItemID, int Count);
 	void BuyUpgradeClan(int ClientID, int Money, int Type, const char* SubType);

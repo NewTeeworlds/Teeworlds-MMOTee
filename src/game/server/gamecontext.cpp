@@ -2682,6 +2682,15 @@ void CGameContext::GiveItem(int ClientID, int ItemID, int Count, int Enchant)
 	Server()->GiveItem(ClientID, ItemID, Count, Settings, Enchant);
 }
 
+void CGameContext::RemItem(int ClientID, int ItemID, int Count)
+{
+	if(ClientID > MAX_NOBOT || ClientID < 0 || !m_apPlayers[ClientID])
+		return;
+	SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你失去了 {str:items}x{int:counts}"), "items", Server()->GetItemName(ClientID, ItemID), "counts", &Count, NULL);				
+	Server()->RemItem(ItemID, ClientID, Count, -1);
+}
+
+
 void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 {
 	if(!m_apPlayers[ClientID] || !m_apPlayers[ClientID]->GetCharacter())

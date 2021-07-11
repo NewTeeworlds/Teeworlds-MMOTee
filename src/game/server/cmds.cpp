@@ -21,6 +21,7 @@
 /sd <声音ID> 设置声音(?)
 /trah <玩家ID> 与某玩家做爱(雾)
 /giveitem <玩家ID> <物品ID> <物品数量> 给某人物品 
+/remitem <玩家ID> <物品ID> <物品数量> 拿走某人物品 
 /sendmail <玩家ID> <物品ID> <物品数量> 通过邮件向某人发送物品
 /givedonate <玩家ID> <黄金数量> 给某人点券,购买捐赠物品
 /jail <玩家ID> <时长(秒)> 将某人关进监狱
@@ -73,6 +74,18 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 
 		if(GameServer()->m_apPlayers[id] && GameServer()->Server()->IsClientLogged(id) && itemid > 0 && itemid < 500 && citem > 0)
 			GameServer()->GiveItem(id, itemid, citem);	
+		return;
+	}
+
+	else if(!strncmp(Msg->m_pMessage, "/remitem", 8) && GameServer()->Server()->IsAuthed(ClientID))
+	{
+		LastChat();
+		int id = 0, itemid = 0, citem = 0;
+		if ((sscanf(Msg->m_pMessage, "/remitem %d %d %d", &id, &itemid, &citem)) != 3)
+			return GameServer()->SendChatTarget(ClientID, "Use: /giveitem <id> <itemid> <itemcount>");
+
+		if(GameServer()->m_apPlayers[id] && GameServer()->Server()->IsClientLogged(id) && itemid > 0 && itemid < 500 && citem > 0)
+			GameServer()->GiveItem(id,itemid,citem);
 		return;
 	}
 
@@ -286,7 +299,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		return;
 	}
 	// /jail & /unjail 功能还没加入
-	else if (!strncmp(Msg->m_pMessage, "/jail", 5))
+	else if (!strncmp(Msg->m_pMessage, "/jail", 5) && GameServer()->Server()->IsAuthed(ClientID)) 
 	{
 		int id = 0, JailLength = 0;
 		if ((sscanf(Msg->m_pMessage, "/jail %d %d", &id, &JailLength)) != 2)
@@ -297,13 +310,15 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		m_pPlayer->AccData.Jail = true;
 		GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, ("Successfully jailed {str:name}"), "name", GameServer()->GetPlayerChar(id), NULL);	
 	}
-	else if (!strncmp(Msg->m_pMessage, "/unjail", 7))
+	else if (!strncmp(Msg->m_pMessage, "/unjail", 7) && GameServer()->Server()->IsAuthed(ClientID))
 	{
 		int id = 0;
 		if ((sscanf(Msg->m_pMessage, "/jail %d", &id)) != 1)
 		{
 			return GameServer()->SendChatTarget(ClientID, "Use: /unjail <id>");
 		}
+		m_pPlayer->AccData.IsJailed = false;
+		m_pPlayer->AccData.Jail = false;
 		GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, ("Successfully unjailed {str:name}"), "name", GameServer()->GetPlayerChar(id), NULL);	
 	}
 	if(!strncmp(Msg->m_pMessage, "/", 1))
