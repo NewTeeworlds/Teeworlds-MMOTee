@@ -1,5 +1,5 @@
 ## Standart
-sv_name MMOTee CHN 1-250 (测试中) 
+sv_name MMOTee CHN 1-250 
 sv_map 1-250
 sv_port 8300
 sv_register 1
@@ -29,5 +29,5 @@ mod_command option_status
 mod_command mod_status
 #mod_command inf_set_class
 
-inf_add_sqlserver r mmohard tw mmotee JohnJphan localhost 3306
-inf_add_sqlserver w mmohard tw mmotee JohnJphan localhost 3306
+inf_add_sqlserver r mmohard tw mmotee fsdhdakbkh localhost 3306
+inf_add_sqlserver w mmohard tw mmotee fsdhdakbkh localhost 3306
