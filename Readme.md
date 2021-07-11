@@ -91,7 +91,7 @@
   - 加成:生命值 +1500,护盾 +500
  5. Title Summer
   - 获得方法:成功合成 Skill Summer Healing
-  - 加成:
+  - 加成: (?)
  6. Title Big Craft **有 bug,请勿使用**
   - 获得方法:
   - 加成:
