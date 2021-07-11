@@ -157,6 +157,10 @@ public:
 		bool m_Seccurity;
 		char m_Clan[64];
 		long int m_ClanAdded;
+		
+		bool m_IsJailed;
+		int m_JailLength;
+		int m_SummerHealingTimes;
 
 		int m_ItemCount[7];
 

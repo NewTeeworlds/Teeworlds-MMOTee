@@ -81,9 +81,7 @@ public:
 	int m_SortedSelectCraft;
 	bool m_Search;
 	int m_JailTick;
-	bool m_IsJailed; // 是否被送进监狱
-	int m_JailLength; // 手动设置监禁时长
-	int m_SummerHealingTimes; // Skill Summer Healing 合成保底
+	
 	struct
 	{
 		int Level;
@@ -98,6 +96,9 @@ public:
 		int WinArea;
 		int Rel;
 		bool Jail;
+		bool IsJailed; // 是否被送进监狱
+		int JailLength; // 手动设置监禁时长
+		int SummerHealingTimes; // Skill Summer Healing 合成保底
 	} AccData;
 	struct
 	{

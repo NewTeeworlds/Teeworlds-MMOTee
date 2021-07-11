@@ -135,9 +135,9 @@ bool CCharacter::Spawn(CPlayer *pPlayer, vec2 Pos)
 	
 	if(m_pPlayer->AccData.Jail)
 	{
-		if(m_pPlayer->m_IsJailed)
+		if(m_pPlayer->AccData.IsJailed)
 		{
-			m_pPlayer->m_JailTick = Server()->TickSpeed()*m_pPlayer->m_JailLength;
+			m_pPlayer->m_JailTick = Server()->TickSpeed()*m_pPlayer->AccData.JailLength;
 		}
 		else
 		{
@@ -1735,8 +1735,8 @@ int CCharacter::SendToJail(int PlayerID, int JailLength) //手动送某人进监
 					
 	m_pPlayer->AccData.Jail = true;
 	m_pPlayer->AccData.Rel = 0;
-	m_pPlayer->m_IsJailed = true;
-	m_pPlayer->m_JailLength = JailLength;
+	m_pPlayer->AccData.IsJailed = true;
+	m_pPlayer->AccData.JailLength = JailLength;
 	GameServer()->UpdateStats(m_pPlayer->GetCID());
 	return 0;
 	
@@ -1774,7 +1774,7 @@ int CCharacter::Unjail(int PlayerID) //手动救某人出监狱
 					
 	m_pPlayer->AccData.Jail = false;
 	m_pPlayer->AccData.Rel = 0;
-	m_pPlayer->m_IsJailed = false;
+	m_pPlayer->AccData.IsJailed = false;
 	GameServer()->UpdateStats(m_pPlayer->GetCID());
 	return 0;
 	

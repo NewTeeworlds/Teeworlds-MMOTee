@@ -2362,6 +2362,9 @@ int CServer::GetStat(int ClientID, int Type)
 		case DKILL: return m_aClients[ClientID].m_Kill; break;
 		case DWINAREA: return m_aClients[ClientID].m_WinArea; break;
 		case DCLANADDED: return m_aClients[ClientID].m_ClanAdded; break;
+		case DISJAILED: return m_aClients[ClientID].m_IsJailed; break;
+		case DJAILLENGTH: return m_aClients[ClientID].m_JailLength; break;
+		case DSUMMERHEALINGTIMES: return m_aClients[ClientID].m_SummerHealingTimes; break;
 	}
 	return 0;
 }
@@ -2383,6 +2386,9 @@ void CServer::UpdateStat(int ClientID, int Type, int Size)
 		case DKILL: m_aClients[ClientID].m_Kill = Size; break;
 		case DWINAREA: m_aClients[ClientID].m_WinArea = Size; break;
 		case DCLANADDED: m_aClients[ClientID].m_ClanAdded = Size; break;
+		case DISJAILED: m_aClients[ClientID].m_IsJailed = Size; break;
+		case DJAILLENGTH: m_aClients[ClientID].m_JailLength = Size; break;
+		case DSUMMERHEALINGTIMES: m_aClients[ClientID].m_SummerHealingTimes = Size; break;
 	}
 }
 

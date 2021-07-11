@@ -2795,17 +2795,17 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 				return;
 			}
 			Server()->RemItem(ClientID, ESUMMER, 20, -1);
-			if(rand()%100 < 96 && m_apPlayers[ClientID]->m_SummerHealingTimes < 15)
+			if(rand()%100 < 96 && m_apPlayers[ClientID]->AccData.SummerHealingTimes < 15)
 			{
 				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 在合成 {str:item}x{int:coun} 的时候失败了"), "name", Server()->ClientName(ClientID), "item", Server()->GetItemName(ClientID, ItemID, false), "coun", &Count ,NULL);				
-				m_apPlayers[ClientID]->m_SummerHealingTimes++;
+				m_apPlayers[ClientID]->AccData.SummerHealingTimes++;
 				
 				return;
 			}
 			if(!Server()->GetItemCount(ClientID, TITLESUMMER))
 			{
 				GiveItem(ClientID, TITLESUMMER, 1);
-				m_apPlayers[ClientID]->m_SummerHealingTimes = 0;
+				m_apPlayers[ClientID]->AccData.SummerHealingTimes = 0;
 			}
 		} break;
 		case JUMPIMPULS: 
@@ -4410,6 +4410,9 @@ void CGameContext::GetStat(int ClientID) //set stat mysql pdata
 	m_apPlayers[ClientID]->AccData.Kill =  Server()->GetStat(ClientID, DKILL);
 	m_apPlayers[ClientID]->AccData.WinArea =  Server()->GetStat(ClientID, DWINAREA);
 	m_apPlayers[ClientID]->AccData.ClanAdded =  Server()->GetStat(ClientID, DCLANADDED);
+	m_apPlayers[ClientID]->AccData.IsJailed =  Server()->GetStat(ClientID, DISJAILED);
+	m_apPlayers[ClientID]->AccData.JailLength =  Server()->GetStat(ClientID, DJAILLENGTH);
+	m_apPlayers[ClientID]->AccData.SummerHealingTimes =  Server()->GetStat(ClientID, DSUMMERHEALINGTIMES);
 	return;
 }
 void CGameContext::UpdateStat(int ClientID) //update stat mysql pdata
@@ -4426,6 +4429,9 @@ void CGameContext::UpdateStat(int ClientID) //update stat mysql pdata
 	Server()->UpdateStat(ClientID, DKILL, m_apPlayers[ClientID]->AccData.Kill);
 	Server()->UpdateStat(ClientID, DWINAREA, m_apPlayers[ClientID]->AccData.WinArea);
 	Server()->UpdateStat(ClientID, DCLANADDED, m_apPlayers[ClientID]->AccData.ClanAdded);
+	Server()->UpdateStat(ClientID, DISJAILED, m_apPlayers[ClientID]->AccData.IsJailed);
+	Server()->UpdateStat(ClientID, DJAILLENGTH, m_apPlayers[ClientID]->AccData.JailLength);
+	Server()->UpdateStat(ClientID, DSUMMERHEALINGTIMES, m_apPlayers[ClientID]->AccData.SummerHealingTimes);
 	return;
 }
 void CGameContext::UpdateStats(int ClientID)

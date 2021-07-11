@@ -293,6 +293,8 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		{
 			return GameServer()->SendChatTarget(ClientID, "Use: /jail <id> <JailLength>");
 		}
+		m_pPlayer->AccData.IsJailed = true;
+		m_pPlayer->AccData.Jail = true;
 		GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, ("Successfully jailed {str:name}"), "name", GameServer()->GetPlayerChar(id), NULL);	
 	}
 	else if (!strncmp(Msg->m_pMessage, "/unjail", 7))

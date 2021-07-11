@@ -389,7 +389,7 @@ void CPlayer::Tick()
 		if(m_JailTick && AccData.Jail)
 		{
 			int Time = m_JailTick/Server()->TickSpeed();
-			if(!m_IsJailed)
+			if(!AccData.IsJailed)
 			{
 				GameServer()->SendBroadcast_Localization(m_ClientID, 100, 100, _("你不小心进了监狱, 刑期:{sec:siska}."), "siska", &Time, NULL);		
 			}
@@ -402,7 +402,7 @@ void CPlayer::Tick()
 			{
 				m_JailTick = 0;
 				AccData.Jail = false;
-				m_IsJailed = false;
+				AccData.IsJailed = false;
 				
 				
 				if(m_pCharacter)
