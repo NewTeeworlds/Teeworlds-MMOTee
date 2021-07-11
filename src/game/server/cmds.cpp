@@ -10,20 +10,21 @@
 1.注册与登录
 /login (用户名) <密码> 登录
 /register <用户名> <密码> 注册
-2.交换物品
-/giveitem <玩家ID> <物品ID> <物品数量> 给某人物品 
-/sendmail <玩家ID> <物品ID> <物品数量> 通过邮件向某人发送物品
-/givedonate <玩家ID> <黄金数量> 捐款(?)
-3.公会指令
+2.公会指令
 /newclan <公会名称> 创建公会
 /invite <玩家名称> 邀请玩家进入公会 (需要公会所有者权限)
-4.其他常用指令
+3.其他常用指令
 /cmdlist 显示命令列表 (不全)
 /createboss 创建boss
 /lang (语言ID) 设置语言 (留空显示可用语言列表)
-5.未知指令
+4.管理员指令
 /sd <声音ID> 设置声音(?)
 /trah <玩家ID> 与某玩家做爱(雾)
+/giveitem <玩家ID> <物品ID> <物品数量> 给某人物品 
+/sendmail <玩家ID> <物品ID> <物品数量> 通过邮件向某人发送物品
+/givedonate <玩家ID> <黄金数量> 给某人点券,购买捐赠物品
+/jail <玩家ID> <时长(秒)> 将某人关进监狱
+/unjail <玩家ID> 将某人放出监狱
 */
 CCmd::CCmd(CPlayer *pPlayer, CGameContext *pGameServer)
 {
@@ -284,7 +285,25 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		}
 		return;
 	}
-
+	// /jail & /unjail 功能还没加入
+	else if (!strncmp(Msg->m_pMessage, "/jail", 5))
+	{
+		int id = 0, JailLength = 0;
+		if ((sscanf(Msg->m_pMessage, "/jail %d %d", &id, &JailLength)) != 2)
+		{
+			return GameServer()->SendChatTarget(ClientID, "Use: /jail <id> <JailLength>");
+		}
+		GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, ("Successfully jailed {str:name}"), "name", GameServer()->GetPlayerChar(id), NULL);	
+	}
+	else if (!strncmp(Msg->m_pMessage, "/unjail", 7))
+	{
+		int id = 0;
+		if ((sscanf(Msg->m_pMessage, "/jail %d", &id)) != 1)
+		{
+			return GameServer()->SendChatTarget(ClientID, "Use: /unjail <id>");
+		}
+		GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, ("Successfully unjailed {str:name}"), "name", GameServer()->GetPlayerChar(id), NULL);	
+	}
 	if(!strncmp(Msg->m_pMessage, "/", 1))
 	{
 		LastChat();

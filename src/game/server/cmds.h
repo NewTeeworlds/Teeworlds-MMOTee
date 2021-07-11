@@ -16,6 +16,7 @@ private:
 	CGameContext *m_pGameServer;
 	CGameContext *GameServer() const { return m_pGameServer; }
 
+	CCharacter *Character;
 	void LastChat();
 };
 

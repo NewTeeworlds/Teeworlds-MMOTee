@@ -3907,9 +3907,10 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			else if(m_apPlayers[ClientID]->m_SortedSelectCraft == 2)
 			{
 				if(g_Config.m_SvEventSummer)
+				{
 					AddNewCraftVote(ClientID, "日耀(Sun Ray)x20", SHEALSUMMER);	
 					AddVote_Localization(ClientID, "null", "注意:合成成功率4%,15次保底");
-
+				}
 				AddNewCraftVote(ClientID, "戒指的蓝图, Slime Dirt", RARERINGSLIME);	
 				AddNewCraftVote(ClientID, "戒指的蓝图, 爆破鬼才的尸体 x100", RINGBOOMER);	
 				AddNewCraftVote(ClientID, "耳环的蓝图, Kwah 脚 x 100", EARRINGSKWAH);	
