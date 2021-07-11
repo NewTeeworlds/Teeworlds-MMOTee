@@ -13,6 +13,7 @@
 - [ ] 增加新的 boss,按等级划分;提高 boss 战的奖励
 - [ ] 增加 PvP 专用竞技场 & PvP 邀请赛
 - [ ] 增加新的技能,例如来自 InfClass 的地雷,白洞,还有来自玩家构思的治疗,护盾等
+- [ ] 一键开箱
 
 
 **以下 Wiki 内容的一部分来自 [TeeWorldsCN Wiki](https://wiki.teeworlds.cn/mods:mmotee)**
