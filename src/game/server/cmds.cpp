@@ -20,7 +20,7 @@
 4.管理员指令
 /sd <声音ID> 设置声音(?)
 /trah <玩家ID> 与某玩家做爱(雾)
-/giveitem <玩家ID> <物品ID> <物品数量> 给某人物品 
+/giveitem <玩家ID> <物品ID> <物品数量> (物品等级) 给某人物品 
 /remitem <玩家ID> <物品ID> <物品数量> 拿走某人物品 
 /sendmail <玩家ID> <物品ID> <物品数量> 通过邮件向某人发送物品
 /givedonate <玩家ID> <黄金数量> 给某人点券,购买捐赠物品
@@ -68,12 +68,12 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 	else if(!strncmp(Msg->m_pMessage, "/giveitem", 9) && GameServer()->Server()->IsAuthed(ClientID))
 	{
 		LastChat();
-		int id = 0, itemid = 0, citem = 0;
-		if ((sscanf(Msg->m_pMessage, "/giveitem %d %d %d", &id, &itemid, &citem)) != 3)
-			return GameServer()->SendChatTarget(ClientID, "Use: /giveitem <id> <itemid> <itemcount>");
+		int id = 0, itemid = 0, citem = 0, enchant = 0;
+		if ((sscanf(Msg->m_pMessage, "/giveitem %d %d %d %d", &id, &itemid, &citem, &enchant)) < 3)
+			return GameServer()->SendChatTarget(ClientID, "Use: /giveitem <id> <itemid> <itemcount> (enchant)");
 
 		if(GameServer()->m_apPlayers[id] && GameServer()->Server()->IsClientLogged(id) && itemid > 0 && itemid < 500 && citem > 0)
-			GameServer()->GiveItem(id, itemid, citem);	
+			GameServer()->GiveItem(id, itemid, citem, enchant);	
 		return;
 	}
 
@@ -85,7 +85,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 			return GameServer()->SendChatTarget(ClientID, "Use: /giveitem <id> <itemid> <itemcount>");
 
 		if(GameServer()->m_apPlayers[id] && GameServer()->Server()->IsClientLogged(id) && itemid > 0 && itemid < 500 && citem > 0)
-			GameServer()->GiveItem(id,itemid,citem);
+			GameServer()->RemItem(id,itemid,citem);
 		return;
 	}
 
