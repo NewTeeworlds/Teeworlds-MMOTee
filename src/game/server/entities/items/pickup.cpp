@@ -276,14 +276,14 @@ void CPickup::StartFarm(int ClientID)
 			Picking(30);
 	}
 }
-
+//TODO
 void CPickup::MaterFarm(int ClientID, int MaterialID)
 {
 	if(Server()->GetMaterials(MaterialID) < 25)
 		return	GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("你没有足够的附魔材料(material). 至少需要25个"), NULL); 
 	
-	if(Server()->GetItemCount(ClientID, MATERIAL) > 3000)
-		return	GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("物品栏内最多塞3000个附魔材料(material). 在物品栏对装备附魔吧!"), NULL); 
+	if(Server()->GetItemCount(ClientID, MATERIAL) > 50000)
+		return	GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("物品栏内最多塞50000个附魔材料(material). 在物品栏对装备附魔吧!"), NULL); 
 
 	m_Drop += 25;
 	GameServer()->CreateSound(m_Pos, 20); 
