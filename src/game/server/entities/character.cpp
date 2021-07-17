@@ -2300,9 +2300,9 @@ void CCharacter::ClassSpawnAttributes()
 		if(GameServer()->m_AreaType == 2)
 		{
 			m_aWeapons[WEAPON_HAMMER].m_Got = true;
-			Server()->SetMaxAmmo(m_pPlayer->GetCID(), INFWEAPON_HAMMER, 10000);
+			Server()->SetMaxAmmo(m_pPlayer->GetCID(), INFWEAPON_HAMMER, 114514000);// 我讨厌卡锤
 			Server()->SetFireDelay(m_pPlayer->GetCID(), INFWEAPON_HAMMER, 1000);
-			Server()->SetAmmoRegenTime(m_pPlayer->GetCID(), INFWEAPON_HAMMER, 1);
+			Server()->SetAmmoRegenTime(m_pPlayer->GetCID(), INFWEAPON_HAMMER, 0);
 		}
 
 		m_aWeapons[WEAPON_RIFLE].m_Got = true;
