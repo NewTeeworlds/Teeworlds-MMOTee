@@ -5,7 +5,8 @@ bam
 /datasrc/__pycache__
 /datasrc/*.pyc
 /objs
-src/game/generated
+#CMake 好像没法生成这些文件
+#src/game/generated
 /*.dll
 build/**
 /crapnet*
