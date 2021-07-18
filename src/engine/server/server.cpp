@@ -4265,7 +4265,67 @@ inline void CServer::Register(int ClientID, const char* pUsername, const char* p
 	pJob->Start();
 }
 
-// Топ 10
+class CSqlJob_Server_ChangePassword : public CSqlJob
+{
+private:
+	CServer* m_pServer;
+	int m_ClientID;
+	CSqlString<64> m_sPasswordHash;
+	
+public:
+	CSqlJob_Server_ChangePassword(CServer* pServer, int ClientID, const char* pPasswordHash)
+	{
+		m_pServer = pServer;
+		m_ClientID = ClientID;
+		m_sPasswordHash = CSqlString<64>(pPasswordHash);
+	}
+
+	virtual bool Job(CSqlServer* pSqlServer)
+	{
+		// 检查是否登录
+		if(m_pServer->m_aClients[m_ClientID].m_LogInstance = GetInstance())
+			return true;
+		
+		char aBuf[512];
+		
+		
+		// 更新密码 Hash
+		try
+		{	
+			str_format(aBuf, sizeof(aBuf), 
+				"UPDATE tw_Users SET PasswordHash = '%s' WHERE UserId = '%d';"
+				, m_sPasswordHash, m_pServer->m_aClients[m_ClientID].m_UserID);
+			pSqlServer->executeSqlQuery(aBuf);	
+		}
+		catch (sql::SQLException &e)
+		{
+			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("更改密码时发生了错误"));
+			m_pServer->AddGameServerCmd(pCmd);
+			dbg_msg("sql", "密码更改失败 (MySQL 错误: %s)", e.what());
+			
+			return false;
+		}
+		
+		return true;
+	}
+	
+};
+
+inline void CServer::ChangePassword(int ClientID, const char* pPassword) // 更改密码
+{
+	if(m_aClients[ClientID].m_LogInstance >= 0)
+		return;
+	
+	char aHash[64];
+	Crypt(pPassword, (const unsigned char*) "d9", 1, 16, aHash);
+	
+	CSqlJob* pJob = new CSqlJob_Server_ChangePassword(this, ClientID, aHash);
+	m_aClients[ClientID].m_LogInstance = pJob->GetInstance();
+	pJob->Start();
+}
+
+
+// Тоp 10
 class CSqlJob_Server_ShowTop10 : public CSqlJob
 {
 private:

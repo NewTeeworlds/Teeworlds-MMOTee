@@ -58,6 +58,7 @@
 1. 注册与登录
   * `/login` (用户名) <密码> 登录
   * `/register` <用户名> <密码> 注册
+  * `/password` <密码> <重复密码> 修改密码
 2. 公会指令
   * `/newclan` <公会名称> 创建公会
   * `/invite` <玩家名称> 邀请玩家进入公会 (需要公会所有者权限)
@@ -100,9 +101,9 @@
  5. Title Summer
   - 获得方法:成功合成 Skill Summer Healing
   - 加成: (?)
- 6. Title Big Craft **有 bug,请勿使用**
-  - 获得方法:
-  - 加成:
+ 6. Title Big Craft
+  - 获得方法:成功合成 End Explosion 模块
+  - 加成: (?)
  7. Title VIP
   - 获得方法:充钱(暂不开放)
   - 加成:获得翻倍黄金

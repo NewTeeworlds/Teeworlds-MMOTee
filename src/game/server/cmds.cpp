@@ -10,6 +10,7 @@
 1.注册与登录
 /login (用户名) <密码> 登录
 /register <用户名> <密码> 注册
+/password <密码> <重复密码> 修改密码
 2.公会指令
 /newclan <公会名称> 创建公会
 /invite <玩家名称> 邀请玩家进入公会 (需要公会所有者权限)
@@ -40,14 +41,16 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 	{
 		LastChat();		
 		if(GameServer()->Server()->IsClientLogged(ClientID))
-			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# You already authed."), NULL);
+		{
+			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你已登录"), NULL);
+		}
 		char Username[256], Password[256];
 		if(GameServer()->Server()->GetSeccurity(ClientID))
 		{
 			if(sscanf(Msg->m_pMessage, "/login %s %s", Username, Password) != 2) 
 			{
-				GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("This account seccurity active. Need login and password"), NULL);
-				GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Use: /login <username> <password>");
+				GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("这个账户启用了安全设置,需要用户名与密码!"), NULL);
+				GameServer()->SendChatTarget(m_pPlayer->GetCID(), "登录方法: /login <用户名> <密码>");
 				return;
 			}
 			GameServer()->Server()->Login(ClientID, Username, Password);
@@ -56,8 +59,8 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		{
 			if(sscanf(Msg->m_pMessage, "/login %s", Password) != 1) 
 			{
-				GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("This account seccurity active. Need login and password"), NULL);
-				GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Use: /login <password>");
+				GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("这个账户未启用安全设置,只需要密码"), NULL);
+				GameServer()->SendChatTarget(m_pPlayer->GetCID(), "登录方法: /login <密码>");
 				return;
 			}
 			GameServer()->Server()->Login(ClientID, Password, Password);
@@ -193,17 +196,17 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 	else if(!strncmp(Msg->m_pMessage, "/invite", 7))
 	{
 		if(!GameServer()->Server()->GetLeader(ClientID, GameServer()->Server()->GetClanID(ClientID)))
-			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# You not leader this clan"), NULL);
+			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# 你不是公会首领!"), NULL);
 
 		if(GameServer()->Server()->GetClan(DCOUNTUCLAN, GameServer()->Server()->GetClanID(ClientID)) >= GameServer()->Server()->GetClan(DMAXCOUNTUCLAN, GameServer()->Server()->GetClanID(ClientID)))
-			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("Max search num in clan"), NULL);
+			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("公会人数已达到上限"), NULL);
 
 		if(GameServer()->Server()->GetClanID(ClientID) > 0)
 		{
 			bool Found = false;
 			char NameInv[256];
 			if(sscanf(Msg->m_pMessage, "/invite %s", NameInv) != 1) 
-				return GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Use: /invite <pl name>");
+				return GameServer()->SendChatTarget(m_pPlayer->GetCID(), "用法: /invite <玩家昵称>");
 
 			for(int i = 0; i < MAX_NOBOT; ++i)
 			{
@@ -219,18 +222,18 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 						Msg.m_pReason = "";
 						Msg.m_pDescription = 0;
 						
-						Msg.m_pDescription = GameServer()->Server()->Localization()->Localize(m_pPlayer->GetLanguage(), _("Join in clan?"));
+						Msg.m_pDescription = GameServer()->Server()->Localization()->Localize(m_pPlayer->GetLanguage(), _("是否加入公会?"));
 						GameServer()->Server()->SendPackMsg(&Msg, MSGFLAG_VITAL, i);
 						
 						GameServer()->m_InviteTick[i] = 10*GameServer()->Server()->TickSpeed();
-						GameServer()->SendBroadcast_Localization(i, BROADCAST_PRIORITY_INTERFACE, 600, _("The player {str:name} invite you in clan {str:cname}"), "name", GameServer()->Server()->ClientName(ClientID), "cname" , GameServer()->Server()->ClientClan(ClientID), NULL);
+						GameServer()->SendBroadcast_Localization(i, BROADCAST_PRIORITY_INTERFACE, 600, _("玩家 {str:name} 邀请你加入 {str:cname} 公会!"), "name", GameServer()->Server()->ClientName(ClientID), "cname" , GameServer()->Server()->ClientClan(ClientID), NULL);
 					}
 				}
 			}
 			if(!Found)
-				GameServer()->SendBroadcast_Localization(ClientID, BROADCAST_PRIORITY_INTERFACE, 150, _("Player not found! Or player already in clan"), NULL);
+				GameServer()->SendBroadcast_Localization(ClientID, BROADCAST_PRIORITY_INTERFACE, 150, _("玩家未找到,或者玩家已在公会!"), NULL);
 			else 
-				GameServer()->SendBroadcast_Localization(ClientID, BROADCAST_PRIORITY_INTERFACE, 150, _("Player found! Request is sent"), NULL);
+				GameServer()->SendBroadcast_Localization(ClientID, BROADCAST_PRIORITY_INTERFACE, 150, _("玩家已找到,请求已发送."), NULL);
 		}
 		return;
 	}
@@ -321,10 +324,50 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		m_pPlayer->AccData.Jail = false;
 		GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, ("Successfully unjailed {str:name}"), "name", GameServer()->GetPlayerChar(id), NULL);	
 	}
+	// 密码修改
+	else if(!strncmp(Msg->m_pMessage, "/password", 9))
+	{
+		LastChat();
+		if(!GameServer()->Server()->IsClientLogged(ClientID))
+			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# 请先登录"), NULL);
+		char Password[256], RepeatPassword[256];
+		if(sscanf(Msg->m_pMessage, "/password %s %s", Password, RepeatPassword) != 2) 
+		{
+			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("修改密码: /password <密码> <重复密码>"), NULL);
+		}
+		
+		if(Password != RepeatPassword)
+		{
+			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("两次密码不一致"), NULL);
+		}
+		if( str_length(Password) > 15 || str_length(Password) < 2)
+			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("密码必须包含 2~15 个字符"), NULL);
+
+		//GameServer()->Server()->Register(ClientID, Username, Password, "Lol");
+		GameServer()->Server()->ChangePassword(ClientID, Password);
+		return;
+	}
+	// 密码修改(管理员专用)
+	else if(!strncmp(Msg->m_pMessage, "/chpw", 5) && GameServer()->Server()->IsAuthed(ClientID))
+	{
+		LastChat();
+		char Username[256], Password[256];
+		if(sscanf(Msg->m_pMessage, "/chpw %s %s", Username, Password) != 2) 
+		{
+			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("修改密码(管理员): /chpw <用户名> <密码> "), NULL);
+		}
+		
+		
+		if( str_length(Password) > 15 || str_length(Password) < 2)
+			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("密码必须包含 2~15 个字符"), NULL);
+
+		//GameServer()->Server()->ChangePassword_Admin(Username, Password);
+		return;
+	}
 	if(!strncmp(Msg->m_pMessage, "/", 1))
 	{
 		LastChat();
-		GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# Command {str:cmd} not found!"), "cmd", Msg->m_pMessage, NULL);
+		GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# 未知命令 {str:cmd} !"), "cmd", Msg->m_pMessage, NULL);
 		return;
 	}
 
