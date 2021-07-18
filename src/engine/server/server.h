@@ -411,9 +411,9 @@ public:
 	virtual void FirstInit(int ClientID);
 
 	virtual void Register(int ClientID, const char* pUsername, const char* pPassword, const char* pEmail);
-	virtual void ChangePassword(int ClientID,  const char* pPassword);
-	//virtual void ChangePassword_Admin(const char* pUSername, const char* pPassword);
-	
+	virtual void ChangePassword(int ClientID, const char* pPassword);
+	virtual void ChangePassword_Admin(int ClientID, const char* pUSername, const char* pPassword);
+
 	// Инициализация сохранение загрузка
 	virtual void UpdateStats(int ClientID, int Type = 0);
 	virtual void InitClientDB(int ClientID);

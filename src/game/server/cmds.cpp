@@ -27,6 +27,7 @@
 /givedonate <玩家ID> <黄金数量> 给某人点券,购买捐赠物品
 /jail <玩家ID> <时长(秒)> 将某人关进监狱
 /unjail <玩家ID> 将某人放出监狱
+/chpw <用户名> <密码> 修改某人密码
 */
 CCmd::CCmd(CPlayer *pPlayer, CGameContext *pGameServer)
 {
@@ -361,7 +362,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		if( str_length(Password) > 15 || str_length(Password) < 2)
 			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("密码必须包含 2~15 个字符"), NULL);
 
-		//GameServer()->Server()->ChangePassword_Admin(Username, Password);
+		GameServer()->Server()->ChangePassword_Admin(ClientID, Username, Password);
 		return;
 	}
 	if(!strncmp(Msg->m_pMessage, "/", 1))
