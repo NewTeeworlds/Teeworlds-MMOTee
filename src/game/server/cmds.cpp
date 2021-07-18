@@ -332,6 +332,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		if(!GameServer()->Server()->IsClientLogged(ClientID))
 			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# 请先登录"), NULL);
 		char Password[256], RepeatPassword[256];
+		/*
 		if(sscanf(Msg->m_pMessage, "/password %s %s", Password, RepeatPassword) != 2) 
 		{
 			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("修改密码: /password <密码> <重复密码>"), NULL);
@@ -341,6 +342,11 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		{
 			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("两次密码不一致"), NULL);
 		}
+		*/
+		if(sscanf(Msg->m_pMessage, "/password %s", Password) != 1) 
+			{
+				return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("修改密码: /password <密码>"), NULL);
+			}
 		if( str_length(Password) > 15 || str_length(Password) < 2)
 			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("密码必须包含 2~15 个字符"), NULL);
 
