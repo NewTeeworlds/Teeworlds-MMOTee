@@ -331,8 +331,9 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		LastChat();
 		if(!GameServer()->Server()->IsClientLogged(ClientID))
 			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# 请先登录"), NULL);
-		char Password[256], RepeatPassword[256];
+		char Password[256];
 		/*
+		char RepeatPassword[256]
 		if(sscanf(Msg->m_pMessage, "/password %s %s", Password, RepeatPassword) != 2) 
 		{
 			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("修改密码: /password <密码> <重复密码>"), NULL);

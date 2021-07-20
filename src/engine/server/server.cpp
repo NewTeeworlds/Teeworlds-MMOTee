@@ -4303,7 +4303,8 @@ public:
 			
 			return false;
 		}
-		
+		CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("成功更改密码"));
+			m_pServer->AddGameServerCmd(pCmd);
 		return true;
 	}
 	
@@ -4359,7 +4360,8 @@ public:
 			
 			return false;
 		}
-		
+		CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("成功更改密码"));
+			m_pServer->AddGameServerCmd(pCmd);
 		return true;
 	}
 	
