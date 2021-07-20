@@ -39,8 +39,8 @@ jobs:
       run: ctest -C ${{env.BUILD_TYPE}}
       
     - name: Archive production artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: Mmotee-Server
-          path: build/Mmotee-Server
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Mmotee-Server
+        path: build/Mmotee-Server
       
