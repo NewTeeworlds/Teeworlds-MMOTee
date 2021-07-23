@@ -121,8 +121,8 @@ class CGameContext : public IGameServer
 	CCollision m_Collision;
 	CNetObjHandler m_NetObjHandler;
 	CTuningParams m_Tuning;
-	int m_TargetToKill;
-	int m_TargetToKillCoolDown;
+	//int m_TargetToKill;
+	//int m_TargetToKillCoolDown;
 
 
 	static bool ConTuneParam(IConsole::IResult *pResult, void *pUserData);

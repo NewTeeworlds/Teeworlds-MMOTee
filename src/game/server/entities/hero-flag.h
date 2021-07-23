@@ -8,7 +8,7 @@
 class CHeroFlag : public CEntity
 {
 private:
-	bool m_Hidden;
+	//bool m_Hidden;
 	int m_CoolDownTick;
 	
 public:

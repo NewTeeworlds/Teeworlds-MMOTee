@@ -1303,7 +1303,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 							str_format(aDesc, sizeof(aDesc), "%s", m_PlayerVotes[ClientID][i].m_aDescription);
 							str_format(aCmd, sizeof(aCmd), "%s", m_PlayerVotes[ClientID][i].m_aCommand);
 				
-							m_PlayerVotes[ClientID][i].data;
+							//m_PlayerVotes[ClientID][i].data;
 						}
 					}
 				}

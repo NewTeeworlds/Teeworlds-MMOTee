@@ -15,7 +15,7 @@ public:
 	vec2 PosLine;
 
 private:
-	int m_Lifetime;
+	//int m_Lifetime;
 	vec2 m_Pos2;
 };
 

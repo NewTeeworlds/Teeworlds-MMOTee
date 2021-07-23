@@ -155,24 +155,24 @@ void CMonster::TickBotAI()
     }
 
     if(m_pPlayer->m_BigBot)
+    {
         EmoteNormal = EMOTE_ANGRY;
-
+    }
+    
     //Random Actions
-	if (!PlayerFound)
+	if (!PlayerFound && Server()->Tick()-m_BotTimeLastOption > Server()->TickSpeed()*10.0f)
 	{
-        if (Server()->Tick()-m_BotTimeLastOption > Server()->TickSpeed()*10.0f)
-        {
-            int Action = rand()%3;
-            if (Action == 0)
+        int Action = rand()%3;
+        if (Action == 0)
                 m_BotDir = -1;
-            else if (Action == 1)
+        else if (Action == 1)
                 m_BotDir = 1;
-            else if (Action == 2)
-                m_BotDir = 0;
+        else if (Action == 2)
+            m_BotDir = 0;
 
-            GameServer()->SendEmoticon(m_pPlayer->GetCID(), 2+rand()%2);	
-            m_BotTimeLastOption = Server()->Tick();
-        }
+        GameServer()->SendEmoticon(m_pPlayer->GetCID(), 2+rand()%2);	
+        m_BotTimeLastOption = Server()->Tick();
+    
 	}
 
     //Interact with the envirionment

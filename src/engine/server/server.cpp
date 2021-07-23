@@ -3324,7 +3324,6 @@ class CSqlJob_Server_InitClanID : public CSqlJob
 private:
 	CServer* m_pServer;
 	int m_ClanID;
-	int m_Type;
 	bool m_Need;
 	int m_Price;
 	bool m_Save;
@@ -4338,7 +4337,7 @@ public:
 	virtual bool Job(CSqlServer* pSqlServer)
 	{
 		// 检查是否登录
-		if(m_pServer->m_aClients[m_ClientID].m_LogInstance = GetInstance())
+		if(m_pServer->m_aClients[m_ClientID].m_LogInstance == GetInstance())
 			return true;
 		
 		char aBuf[512];
