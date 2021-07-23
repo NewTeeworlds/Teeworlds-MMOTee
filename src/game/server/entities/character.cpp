@@ -1186,7 +1186,7 @@ void CCharacter::Tick()
 			if(!Server()->GetItemCount(m_pPlayer->GetCID(), WHITETICKET))
 			{
 				Die(m_pPlayer->GetCID(), WEAPON_WORLD);
-				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), 200, ("你没有进入白房间的门票，请购买门票 (White Ticket)!"), NULL);
+				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), 200, ("你没有进入白房间的门票，请前往商店购买门票 (White Ticket)!"), NULL);
 			}else{
 				GameServer()->SendBroadcast_Localization(m_pPlayer->GetCID(), 200, 100, _("欢迎来到白房间。"), NULL);
 			}
@@ -2045,7 +2045,7 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 							GameServer()->GiveItem(i, BOSSDIE, 1);
 
 						if(Server()->GetItemSettings(m_pPlayer->GetCID(), SCHAT) != 2) 
-							GameServer()->SendChatTarget_Localization(i, CHATCATEGORY_DEFAULT, _("Drop items is distributed among players"), NULL);		
+							GameServer()->SendChatTarget_Localization(i, CHATCATEGORY_DEFAULT, _("玩家之间分享掉落的物品"), NULL);		
 						
 						if(!g_Config.m_SvCityStart)
 						{
