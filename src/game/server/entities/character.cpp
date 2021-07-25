@@ -1087,8 +1087,8 @@ void CCharacter::Tick()
 				}
 				else
 				{
-					Exp = 15;
-					Money = 400;
+					Exp = 400; // 白房间的座位
+					Money = 20000;
 
 					LegalExp = m_pPlayer->AccData.Exp + Exp;
 					LegalMoney = m_pPlayer->AccData.Money + Money;
@@ -1907,7 +1907,7 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 				Dmg = (int)(CritDamage/2);
 				
 			if(!Server()->GetItemSettings(From, SCHAT))
-				GameServer()->SendChatTarget_Localization(From, CHATCATEGORY_BERSERK, _("Crit damage {int:crit}"), "crit", &Dmg, NULL);
+				GameServer()->SendChatTarget_Localization(From, CHATCATEGORY_BERSERK, _("暴击伤害 {int:crit}"), "crit", &Dmg, NULL);
 		}
 		else
 		{
@@ -2260,7 +2260,9 @@ bool CCharacter::InQuest()
 	return false;
 }
 
+// InfClass 的功能,这边用不上
 // 给 Ninja(忍者) Buff(加成)
+/*
 void CCharacter::GiveNinjaBuf()
 {
 	if(GetClass() != PLAYERCLASS_ASSASINS)
@@ -2282,6 +2284,7 @@ void CCharacter::GiveNinjaBuf()
 			break;
 	}
 }
+*/
 
 // 空间属性
 void CCharacter::ClassSpawnAttributes()

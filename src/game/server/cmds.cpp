@@ -38,6 +38,12 @@ CCmd::CCmd(CPlayer *pPlayer, CGameContext *pGameServer)
 void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 {
 	int ClientID = m_pPlayer->GetCID() >= 0 ? m_pPlayer->GetCID() : -1;
+	if(!strncmp(Msg->m_pMessage, "、", 1))
+	{
+		LastChat();
+		GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# 为防止错误输入导致的账号密码泄露，系统已禁止聊天内容以“、”开头"), "cmd", Msg->m_pMessage, NULL);
+		return;
+	}
 	if(!strncmp(Msg->m_pMessage, "/login", 6))
 	{
 		LastChat();		
@@ -160,13 +166,13 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 	{
 		LastChat();
 		if(g_Config.m_SvCityStart > 0)
-			return 	GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("You need registered area 1-100."), NULL);
+			return 	GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("请在 1-250 服务器上注册"), NULL);
 		
 		char Username[256], Password[256];
 		if(sscanf(Msg->m_pMessage, "/register %s %s", Username, Password) != 2) 
-			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("Use: /register <username> <password>"), NULL);
+			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("使用方法: /register <用户名> <密码>"), NULL);
 		if(str_length(Username) > 15 || str_length(Username) < 2 || str_length(Password) > 15 || str_length(Password) < 2)
-			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("Username / Password must contain 2-15 characters"), NULL);
+			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("用户名 / 密码必须包含 2-15 个字符"), NULL);
 
 		GameServer()->Server()->Register(ClientID, Username, Password, "Lol");
 		return;
@@ -175,19 +181,19 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 	else if(!strncmp(Msg->m_pMessage, "/newclan", 8))
 	{
 		if(GameServer()->Server()->GetClanID(ClientID) > 0 || str_comp_nocase(GameServer()->Server()->ClientClan(ClientID), "NOPE") != 0)
-			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# You are already in clan"), NULL);
+			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# 你已经加入一个公会了!"), NULL);
 		
 		if(GameServer()->Server()->GetItemCount(ClientID, CLANTICKET))
 		{	
 			char Reformat[256];
 			if(sscanf(Msg->m_pMessage, "/newclan %s", Reformat) != 1) 
-				return GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Use: /newclan <nameclan>");
+				return GameServer()->SendChatTarget(m_pPlayer->GetCID(), "使用方法: /newclan <公会名称>");
 	
 			remove_spaces(Reformat);
 			if(str_length(Reformat) > 12 || str_length(Reformat) < 1)
-				return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("Characters max 12 and min 1"), NULL);
+				return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("公会名称长度必须在 1~12 个字符之间"), NULL);
 
-			GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("Used Ticket Create Clan"), NULL);
+			GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("Ticket Create Clan 已使用"), NULL);
 			GameServer()->Server()->NewClan(ClientID, Reformat);
 			m_pPlayer->m_LoginSync = 150;
 		}
@@ -247,10 +253,10 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 
 	else if(!strncmp(Msg->m_pMessage, "/cmdlist", 8))
 	{	
-		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "? ---- Command List");
-		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/invite ?<name>, /createboss, /cmdlist, /lang <lang>");
-		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/login ?<name> <pass>, /register <name> <pass>");
-		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/newclan <cname>");
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "? ---- 命令列表");
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/invite ?<玩家昵称>, /createboss, /cmdlist, /lang <语言>");
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/login ?<用户名> <密码>, /register <用户名> <密码>");
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/newclan <公会名称>");
 		return;
 	}
 

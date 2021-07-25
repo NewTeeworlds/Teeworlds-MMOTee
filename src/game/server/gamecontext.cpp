@@ -3144,7 +3144,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			{
 				int Count = Server()->GetItemCount(ClientID, MATERIAL);
 				int Gold = Count/5;
-				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("所需材料 {int:count} : 而你有 {int:money} 黄金"), 
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你向商店提供了 {int:count} 个材料，获得了 {int:money} 黄金"), 
 					"count", &Count, "money", &Gold, NULL);	
 
 				Server()->SetMaterials(0, Server()->GetMaterials(0)+Count);

@@ -4,7 +4,7 @@
 #define ENGINE_SHARED_CONFIG_VARIABLES_H
 #undef ENGINE_SHARED_CONFIG_VARIABLES_H // this file will be included several times
 
-// TODO: remove this
+///// TODO: remove this
 // #include "././game/variables.h"
 /*来自上述文件的内容 - 开始*/
 MACRO_CONFIG_INT(SvWarmup, sv_warmup, 0, 0, 0, CFGFLAG_SERVER, "Number of seconds to do warmup before round starts")

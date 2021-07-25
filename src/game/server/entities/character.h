@@ -90,7 +90,8 @@ public:
 	bool IsAlive() const { return m_Alive; }
 	class CPlayer *GetPlayer() { return m_pPlayer; }
 	
-	void GiveNinjaBuf();
+	// InfClass 的功能,这边用不上
+	//void GiveNinjaBuf();
 	bool ItemSucc();
 
 	int EmoteNormal;

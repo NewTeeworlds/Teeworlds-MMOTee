@@ -43,12 +43,12 @@ bool CBossSlime::TakeDamage(vec2 Force, int Dmg, int From, int Weapon)
 
 	return false;
 }
-
+/*
 void CBossSlime::PlaySound()
 {
 
 }
-
+*/
 void CBossSlime::RunAction()
 {
 	if (m_BotClientIDFix != -1 && GameServer()->m_apPlayers[m_BotClientIDFix])
@@ -75,7 +75,7 @@ void CBossSlime::TickBotAI()
     // ЗВУКИ
     if (Server()->Tick() - m_BotTimeLastSound > Server()->TickSpeed()*5.0f && !(rand()%50))
     {
-        PlaySound();
+        //PlaySound();
         m_BotTimeLastSound = Server()->Tick();
     }
     

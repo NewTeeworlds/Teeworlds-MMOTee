@@ -38,7 +38,7 @@ private:
     bool m_BotJumpTry;
 
 	void TickBotAI();
-	void PlaySound();
+	//void PlaySound();
 	void RunAction();
 };
 
