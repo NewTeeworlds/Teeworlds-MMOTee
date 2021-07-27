@@ -2083,6 +2083,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 				}		
 
 				// ИНВЕНТАРЬ ФУНКЦИИ 
+				// 库存功能
 				else if(str_comp(aCmd, "useitem") == 0)
 				{	
 					if(m_apPlayers[ClientID]->m_LastChangeInfo && m_apPlayers[ClientID]->m_LastChangeInfo+Server()->TickSpeed()*3 > Server()->Tick())
@@ -2188,6 +2189,23 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					return;
 				}	
 
+				// 批量领取邮件 命令: cleanmail	
+				//// 只领取在线奖励,不领取神器 & 升级奖励			
+				else if(str_comp(aCmd, "cleanmail") == 0)
+				{
+				
+					for(int i = 0; i < 20; i++)
+					{
+						Server()->RemMail(Server()->GetMailRewardDell(ClientID, i));
+						int ItemID = Server()->GetRewardMail(ClientID, i, 0);
+						int ItemNum = Server()->GetRewardMail(ClientID, i, 1);
+						Server()->SetRewardMail(ClientID, i, -1, -1);
+						if(ItemID != -1 && ItemNum != -1)
+						GiveItem(ClientID, ItemID, ItemNum);
+					}
+					ResetVotes(ClientID, MAILMENU);
+				}
+
 				for(int i = 0; i < 20; i++)
 				{
 					char aBuf[16];
@@ -2264,6 +2282,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 				}
 
 				// Все функции с предметами
+				// 带项目的所有功能
 				for(int i = 0; i < MAX_ITEM; ++i)
 				{
 					char aBuf[16];
@@ -3260,6 +3279,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		m_apPlayers[ClientID]->m_LastVotelist = AUTH;
 		AddVote_Localization(ClientID, "null", "☪ 信息 ( ′ ω ` )?:");
 		AddVote_Localization(ClientID, "null", "我的邮箱");
+		AddVote_Localization(ClientID, "cleanmail", "批量领取物品(一次20个)");
 		Server()->InitMailID(ClientID);
 		AddBack(ClientID);
 		AddVote("", "null", ClientID);

@@ -2752,7 +2752,90 @@ void CServer::RemMail(int IDMail)
 	CSqlJob* pJob = new CSqlJob_Server_RemMail(this, IDMail);
 	pJob->Start();
 }
+/*
+// 批量领取邮件
+class CSqlJob_Server_RemMails : public CSqlJob
+{
+private:
+	CServer* m_pServer;
+	int m_IDMail;
+	
+public:
+	CSqlJob_Server_RemMails(CServer* pServer, int IDOwner)
+	{
+		m_pServer = pServer;
+		m_IDOwner = IDOwner; 
+	}
 
+	virtual bool Job(CSqlServer* pSqlServer)
+	{
+		char aBuf[256];			
+		try
+		{
+			str_format(aBuf, sizeof(aBuf), 
+				"DELETE FROM tw_Mail " 
+				"WHERE IDOwner = '%d' ;"
+				, m_IDOwner);	
+			pSqlServer->executeSql(aBuf);
+		}
+		catch (sql::SQLException &e)
+		{
+			return false;
+		}
+		return true;
+	}
+};
+void CServer::RemMails(int IDOwner)
+{
+	CSqlJob* pJob = new CSqlJob_Server_RemMails(this, IDOwner);
+	pJob->Start();
+}
+*/
+/*
+class CSqlJob_Server_GetMailCount : public CSqlJob
+{
+private:
+	CServer* m_pServer;
+	int m_ClientID;
+	int m_MailCount;
+	
+public:
+	CSqlJob_Server_GetMailCount(CServer* pServer, int ClientID)
+	{
+		m_pServer = pServer;
+		m_ClientID = ClientID; 
+		m_MailCount = 0;
+	}
+
+	virtual bool Job(CSqlServer* pSqlServer)
+	{
+		char aBuf[256];			
+		try
+		{
+			str_format(aBuf, sizeof(aBuf), 
+				"SELECT count(*) FROM tw_Mail " 
+				"WHERE IDOwner = '%d' ;"
+				, m_ClientID);	
+			pSqlServer->executeSqlQuery(aBuf);
+			if(pSqlServer->GetResults()->next())
+			{
+				m_MailCount = (int)pSqlServer->GetResults()->getInt("count(*)");
+			}
+		}
+		catch (sql::SQLException &e)
+		{
+			return -1;
+		}
+		return m_MailCount;
+	}
+};
+int CServer::GetMailCount(int ClientID)
+{
+	CSqlJob* pJob = new CSqlJob_Server_GetMailCount(this, ClientID);
+	pJob->Start();
+	return ;
+}
+*/
 // Выдача предмета
 class CSqlJob_Server_SendMail : public CSqlJob
 {
@@ -4193,8 +4276,8 @@ public:
 		{	
 			str_format(aBuf, sizeof(aBuf), 
 				"INSERT INTO tw_Users "
-				"(Username, Nick, PasswordHash, Email, RegisterDate, RegisterIp) "
-				"VALUES ('%s', '%s', '%s', '%s', UTC_TIMESTAMP(), '%s');"
+				"(Username, Nick, PasswordHash, Email, ClanID ,RegisterDate, RegisterIp) "
+				"VALUES ('%s', '%s', '%s', '%s', '0', UTC_TIMESTAMP(), '%s');"
 				, m_sName.ClrStr(), m_sNick.ClrStr(), m_sPasswordHash.ClrStr(), m_sEmail.ClrStr(), aAddrStr);
 			pSqlServer->executeSql(aBuf);
 		}

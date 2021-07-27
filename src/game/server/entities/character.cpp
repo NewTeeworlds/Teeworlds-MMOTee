@@ -885,7 +885,7 @@ void CCharacter::Tick()
 			m_pPlayer->m_HealthStart = m_Health;
 		}
 		
-		// 生命值回复
+		// 生命值恢复
 		if(m_pPlayer->AccUpgrade.HPRegen && m_pPlayer->m_Health < m_pPlayer->m_HealthStart)
 		{
 			if(!HPRegenTick) HPRegenTick = 900-m_pPlayer->AccUpgrade.HPRegen*3;
@@ -1801,35 +1801,43 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 			return true;
 
 		// Кольцо антиурона
+		// 防止伤到自己的 Ring Selfine 
 		if(From == m_pPlayer->GetCID() && Server()->GetItemSettings(From, RINGNOSELFDMG))
 			return true;
 
 		// Если не арена
+		// 如果不是竞技场
 		if(!m_pPlayer->m_InArea && !pFrom->m_InArea)
 		{
 			// Тюрьма
+			// 监狱
 			if(m_pPlayer->AccData.Jail)
 				return true;
 
 			// АнтиПВП вся хуня
+			// AntiPVP
 			if((Server()->GetItemSettings(m_pPlayer->GetCID(), SANTIPVP) || Server()->GetItemSettings(From, SANTIPVP) || 
 				m_pPlayer->m_AntiPvpSmall) && !m_pPlayer->IsBot() && !pFrom->IsBot() && m_pPlayer->GetCID() != From)
 				return true;
 			
 			// Боссецкий
+			// (咱也布吉岛这是什么
 			if((pFrom->m_InBossed || (m_pPlayer->m_InBossed && m_pPlayer->GetCID() != From)) && !pFrom->IsBot() && !m_pPlayer->IsBot())
 				return true;
 
 			// Бот бота не бьет
+			// 机器人不打机器人 (除了守卫)
 			if(pFrom->GetBotType() == m_pPlayer->GetBotType() && pFrom->GetBotType() >= 0)
 				return true;
 		
 			// Сокланы
+			// (咱也布吉岛这是什么
 			if(Server()->GetClanID(From) && Server()->GetClanID(m_pPlayer->GetCID()) == Server()->GetClanID(From)
 				&& m_pPlayer->GetCID() != From)
 				return true;
 				
 			// Агрессия
+			// 守卫愤怒值
 			if(m_pPlayer->GetBotType() == BOT_NPC)
 			{
 				pFrom->AccData.Rel += 10;
@@ -1837,11 +1845,13 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 			}
 		}
 		// Арена
+		// 激光 PvP 竞技场
 		if((m_pPlayer->m_InArea && pFrom->m_InArea && GameServer()->m_AreaStartTick < 500 && GameServer()->m_AreaStartTick > 1) 
 			|| (m_pPlayer->m_InArea && GameServer()->m_AreaType == 2))
 			return true;
 
 		// Отталкивание 
+		// 霰弹枪的击退作用
 		if(m_pPlayer->GetBotType() != BOT_NPC)
 		{
 			if(m_ActiveWeapon == WEAPON_SHOTGUN)
@@ -1851,11 +1861,13 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 		}
 
 		// Кольцо анти урона по себе
+		// 自身抗伤害之戒 (Slime 的戒指)
 		if(Server()->GetItemCount(From, RARERINGSLIME) && From == m_pPlayer->GetCID())
 			return true;
 	}
 
 	// Тюрьма 
+	// 监狱
 	if(From >= 0 && pFrom->GetBotType() == BOT_NPC && !m_pPlayer->IsBot())
 	{
 		if(m_pPlayer->m_Search)

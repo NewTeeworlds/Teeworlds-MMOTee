@@ -370,6 +370,8 @@ public:
 	virtual void InitMailID(int ClientID) = 0;
 	virtual void SendMail(int AuthedID, const char* pText, int ItemID, int ItemNum) = 0;
 	virtual void RemMail(int IDMail) = 0;
+	// virtual void RemMails(int IDOwner) = 0;
+	//virtual int GetMailCount(int ClientID) = 0;
 	virtual int GetMailRewardDell(int ClientID, int ID) = 0;
 
 	virtual void SetRewardMail(int ClientID, int ID, int ItemID, int ItemNum) = 0;
