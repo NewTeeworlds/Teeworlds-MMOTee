@@ -847,12 +847,12 @@ void CGameContext::BossTick()
 	}
 }
 
-void CGameContext::SendMail(int ClientID, const char* pText, int ItemID, int ItemNum)
+void CGameContext::SendMail(int ClientID, int MailType, int ItemID, int ItemNum)
 {
 	if(!Server()->IsClientLogged(ClientID))
 		return;
 	
-	Server()->SendMail(Server()->GetUserID(ClientID), pText, ItemID, ItemNum);
+	Server()->SendMail(Server()->GetUserID(ClientID), MailType, ItemID, ItemNum);
 	SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("您的邮箱内有新的信息"), NULL);
 }
 
@@ -928,7 +928,7 @@ void CGameContext::AreaTick()
 								
 								int RandGet = rand()%2;
 								if(RandGet == 1)
-									SendMail(i, "你获得了奖品，真幸运!", RELRINGS, 1);						
+									SendMail(i, 1, RELRINGS, 1);						
 							} break;
 							case 2: 
 							{
@@ -936,7 +936,7 @@ void CGameContext::AreaTick()
 								
 								int RandGet = rand()%20;
 								if(RandGet == 1)
-									SendMail(i, "你获得了奖品，真幸运!", FREEAZER, 1);	
+									SendMail(i, 1, FREEAZER, 1);	
 							} break;
 						}					
 					}
@@ -1590,7 +1590,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 							m_apPlayers[ClientID]->AccData.Quest++;
 							Server()->RemItem(ClientID, KWAHGANDON, QUEST5, -1);
 							Server()->RemItem(ClientID, PIGPORNO, QUEST5, -1);
-							SendMail(ClientID, "Hello, 任务与报酬系统!", EARRINGSKWAH, 1);
+							SendMail(ClientID, 2, EARRINGSKWAH, 1);
 							UpdateStats(ClientID);
 						}
 					}
@@ -1604,8 +1604,8 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 							m_apPlayers[ClientID]->AccData.Quest++;
 							Server()->RemItem(ClientID, KWAHGANDON, QUEST6, -1);
 							Server()->RemItem(ClientID, FOOTKWAH, QUEST6, -1);
-							SendMail(ClientID, "Hello, 任务与报酬系统!", FORMULAWEAPON, 1);
-							SendMail(ClientID, "Hello, 你解锁了一个新的称号!", TITLEQUESTS, 1);
+							SendMail(ClientID, 2, FORMULAWEAPON, 1);
+							SendMail(ClientID, 3, TITLEQUESTS, 1);
 							UpdateStats(ClientID);
 						}
 					}
@@ -1694,7 +1694,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER && m_apPlayers[ClientID]->AccUpgrade.Damage > HMAXDAMAGE-1)||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_ASSASINS && m_apPlayers[ClientID]->AccUpgrade.Damage > AMAXDAMAGE-1))
 					{
-						SendMail(ClientID, "这已经是最后一件了!", SNAPDAMAGE, 1);	
+						SendMail(ClientID, 4, SNAPDAMAGE, 1);	
 					}
 					
 					UpdateUpgrades(ClientID);
@@ -1766,7 +1766,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER && m_apPlayers[ClientID]->AccUpgrade.AmmoRegen > HMAXAREGEN-1)||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_ASSASINS && m_apPlayers[ClientID]->AccUpgrade.AmmoRegen > AMAXAREGEN-1))
 					{
-						SendMail(ClientID, "You got finnaly item!", SNAPAMMOREGEN, 1);	
+						SendMail(ClientID, 4, SNAPAMMOREGEN, 1);	
 					}
 					
 					int getar = (int)(650-m_apPlayers[ClientID]->AccUpgrade.AmmoRegen*2);
@@ -1816,7 +1816,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER && m_apPlayers[ClientID]->AccUpgrade.Speed > HMAXHANDLE-1)||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_ASSASINS && m_apPlayers[ClientID]->AccUpgrade.Speed > AMAXHANDLE-1))
 					{
-						SendMail(ClientID, "You got finnaly item!", SNAPHANDLE, 1);
+						SendMail(ClientID, 4, SNAPHANDLE, 1);
 					}
 					
 					int getsp = (int)(1000+m_apPlayers[ClientID]->AccUpgrade.Speed*30);
@@ -2146,7 +2146,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					
 						if(Enchant == 10 && !Server()->GetItemCount(ClientID, TITLEENCHANT))
 						{
-							SendMail(ClientID, "Hello, 你解锁了一个新的称号!", TITLEENCHANT, 1);
+							SendMail(ClientID, 3, TITLEENCHANT, 1);
 						}
 					}
 					else SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("升级失败."), NULL); 
@@ -3050,7 +3050,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		} break;
 	}
 	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 合成了物品 {str:item}x{int:coun}"), "name", Server()->ClientName(ClientID), "item", Server()->GetItemName(ClientID, ItemID, false), "coun", &Count ,NULL);				
-	SendMail(ClientID, "Hello, 合成物品成功!", ItemID, Count);
+	SendMail(ClientID, 7, ItemID, Count);
 }
 
 void CGameContext::BuySkill(int ClientID, int Price, int ItemID)
@@ -3061,7 +3061,7 @@ void CGameContext::BuySkill(int ClientID, int Price, int ItemID)
 	if(m_apPlayers[ClientID]->AccUpgrade.SkillPoint < Price)
 		return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你没有足够的技能点"), NULL);	
 
-	SendMail(ClientID, "你解锁了一项新技能!", ItemID, 1);
+	SendMail(ClientID, 5, ItemID, 1);
 	m_apPlayers[ClientID]->AccUpgrade.SkillPoint -= Price;
 	SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你的技能成功地提升了"), NULL);							
 		
@@ -4435,9 +4435,9 @@ void CGameContext::GetStat(int ClientID) //set stat mysql pdata
 	m_apPlayers[ClientID]->AccData.Kill =  Server()->GetStat(ClientID, DKILL);
 	m_apPlayers[ClientID]->AccData.WinArea =  Server()->GetStat(ClientID, DWINAREA);
 	m_apPlayers[ClientID]->AccData.ClanAdded =  Server()->GetStat(ClientID, DCLANADDED);
-	/*m_apPlayers[ClientID]->AccData.IsJailed =  Server()->GetStat(ClientID, DISJAILED);
+	m_apPlayers[ClientID]->AccData.IsJailed =  Server()->GetStat(ClientID, DISJAILED);
 	m_apPlayers[ClientID]->AccData.JailLength =  Server()->GetStat(ClientID, DJAILLENGTH);
-	m_apPlayers[ClientID]->AccData.SummerHealingTimes =  Server()->GetStat(ClientID, DSUMMERHEALINGTIMES);*/
+	m_apPlayers[ClientID]->AccData.SummerHealingTimes =  Server()->GetStat(ClientID, DSUMMERHEALINGTIMES);
 	return;
 }
 void CGameContext::UpdateStat(int ClientID) //update stat mysql pdata
@@ -4454,9 +4454,9 @@ void CGameContext::UpdateStat(int ClientID) //update stat mysql pdata
 	Server()->UpdateStat(ClientID, DKILL, m_apPlayers[ClientID]->AccData.Kill);
 	Server()->UpdateStat(ClientID, DWINAREA, m_apPlayers[ClientID]->AccData.WinArea);
 	Server()->UpdateStat(ClientID, DCLANADDED, m_apPlayers[ClientID]->AccData.ClanAdded);
-	/*Server()->UpdateStat(ClientID, DISJAILED, m_apPlayers[ClientID]->AccData.IsJailed);
+	Server()->UpdateStat(ClientID, DISJAILED, m_apPlayers[ClientID]->AccData.IsJailed);
 	Server()->UpdateStat(ClientID, DJAILLENGTH, m_apPlayers[ClientID]->AccData.JailLength);
-	Server()->UpdateStat(ClientID, DSUMMERHEALINGTIMES, m_apPlayers[ClientID]->AccData.SummerHealingTimes);*/
+	Server()->UpdateStat(ClientID, DSUMMERHEALINGTIMES, m_apPlayers[ClientID]->AccData.SummerHealingTimes);
 	return;
 }
 void CGameContext::UpdateStats(int ClientID)
@@ -4759,11 +4759,11 @@ void CGameContext::UseItem(int ClientID, int ItemID, int Count, int Type)
 			else if(ItemID == VIPPACKAGE)
 			{		
 				Count = 1;
-				SendMail(ClientID, "您购买了VIP，这是你的奖金!", SKILLUPBOX, 1);
-				SendMail(ClientID, "您购买了VIP，这是你的奖金!", SANTIPVP, 1);
-				SendMail(ClientID, "您购买了VIP，这是你的奖金!", X2MONEYEXPVIP, 1);
-				SendMail(ClientID, "您购买了VIP，这是你的奖金!", SPECSNAPDRAW, 1);
-				SendMail(ClientID, "您购买了VIP，这是你的奖金!", MONEYBAG, 10000);
+				SendMail(ClientID, 6, SKILLUPBOX, 1);
+				SendMail(ClientID, 6, SANTIPVP, 1);
+				SendMail(ClientID, 6, X2MONEYEXPVIP, 1);
+				SendMail(ClientID, 6, SPECSNAPDRAW, 1);
+				SendMail(ClientID, 6, MONEYBAG, 10000);
 				UpdateStats(ClientID);
 				break;
 			}

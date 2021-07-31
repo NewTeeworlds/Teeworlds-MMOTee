@@ -246,9 +246,9 @@ enum
 	DCLANADDED,
 	DCHAIRHOUSE,
 
-	/*DISJAILED,
+	DISJAILED,
 	DJAILLENGTH,
-	DSUMMERHEALINGTIMES,*/
+	DSUMMERHEALINGTIMES,
 
 	DCOUNTUCLAN,
 	DMAXCOUNTUCLAN,
@@ -368,7 +368,7 @@ public:
 	virtual bool SetOpenHouse(int HouseID) = 0;
 
 	virtual void InitMailID(int ClientID) = 0;
-	virtual void SendMail(int AuthedID, const char* pText, int ItemID, int ItemNum) = 0;
+	virtual void SendMail(int AuthedID, int MailType, int ItemID, int ItemNum) = 0;
 	virtual void RemMail(int IDMail) = 0;
 	// virtual void RemMails(int IDOwner) = 0;
 	//virtual int GetMailCount(int ClientID) = 0;
