@@ -1046,10 +1046,10 @@ void CGameContext::OnTick()
 	if(Server()->Tick() % (1 * Server()->TickSpeed() * 610) == 0)
 	{
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("### Server Information:"), NULL);	
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("Warning!! New Rules:"), NULL);	
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("Play only one server, if play 1-250 and play 250-500"), NULL);	
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("Account deleted, and if you leader clan reform."), NULL);	
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("Server version: 1.1 stable by Kurosio."), NULL);	
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("注意！新人必须遵守的规则："), NULL);	
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("你只能玩一个服务器，玩了1-250服务器且等级到达要求才能玩250-500服务器"), NULL);	
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("账户若被删除，你的公会会被重组。"), NULL);	
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("服务器版本： 1.1 stable by Kurosio."), NULL);	
 	}
 
 	// вывод топ листа раз в 5 минут
@@ -1370,7 +1370,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 				{
 					if(!Server()->GetLeader(ClientID, Server()->GetClanID(ClientID)))
 					{
-						SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# You not leader this clan"), NULL);
+						SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# 你不是这个公会的会长"), NULL);
 						return;
 					}
 					if(Server()->SetOpenHouse(Server()->GetOwnHouse(ClientID)))
@@ -1406,7 +1406,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 						ResetVotes(ClientID, CLANLIST);
 					}
 					else
-						SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# You not leader this clan"), NULL);
+						SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# 你不是这个公会的会长"), NULL);
 												
 					return;
 				}	
@@ -1424,7 +1424,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 								if(Server()->GetClanID(i) == Server()->GetClanID(ClientID)){
 										
 									heh = true;
-									SendChatTarget_Localization(i, CHATCATEGORY_DEFAULT, _("New leader clan {str:name}"), "name", m_apPlayers[ClientID]->m_SelectPlayer, NULL);	
+									SendChatTarget_Localization(i, CHATCATEGORY_DEFAULT, _("公会的新会长 {str:name}"), "name", m_apPlayers[ClientID]->m_SelectPlayer, NULL);	
 								}
 							}
 						}
@@ -1437,7 +1437,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 						}
 					}
 					else
-						SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# You not leader this clan"), NULL);
+						SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# 你不是这个公会的会长"), NULL);
 												
 					return;
 				}	
@@ -1446,7 +1446,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 				{
 					if(Server()->GetLeader(ClientID, Server()->GetClanID(ClientID)))
 					{
-						SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("The leader cannot leave the clan"), NULL);							
+						SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("会长不能退出公会"), NULL);							
 						return;
 					}
 					ExitClan(ClientID);
@@ -4026,7 +4026,7 @@ void CGameContext::EnterArea(int ClientID)
 		return 	SendBroadcast_Localization(ClientID, 250, 150, _("You are wanted. No enter in area room."));
 		
 	if(!m_AreaStartTick)
-		return 	SendBroadcast_Localization(ClientID, 250, 150, _("Survial not registration wait registration"));
+		return 	SendBroadcast_Localization(ClientID, 250, 150, _("小游戏未开启。请等待开启。"));
 			
 	m_apPlayers[ClientID]->m_InArea = true;
 	m_apPlayers[ClientID]->GetCharacter()->Die(ClientID, WEAPON_WORLD);
