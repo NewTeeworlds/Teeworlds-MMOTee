@@ -21,6 +21,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Install required packages
+      run: sudo apt update
       run: sudo apt install libmariadb-dev-compat libmariadb-dev libssl-dev libmysqlcppconn-dev libicu-dev
     
     - name: Configure CMake
