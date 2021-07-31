@@ -912,13 +912,13 @@ void CCharacter::Tick()
 		{	
 			if(!Server()->GetTopHouse(0))
 			{
-				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), -1, _("This house empty."), NULL);
+				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), -1, _("这间公会房是空的。."), NULL);
 				Die(m_pPlayer->GetCID(), WEAPON_WORLD);	
 			}
 
 			if(!Server()->GetOpenHouse(0) && Server()->GetClanID(m_pPlayer->GetCID()) != Server()->GetTopHouse(0))
 			{
-				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), -1, _("Door in this clan closed."), NULL);
+				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), -1, _("这间公会房不对外开放。"), NULL);
 				Die(m_pPlayer->GetCID(), WEAPON_WORLD);	
 			}
 		} 
@@ -926,13 +926,13 @@ void CCharacter::Tick()
 		{	
 			if(!Server()->GetTopHouse(1))
 			{
-				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), -1, _("This house empty."), NULL);
+				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), -1, _("这间公会房是空的。."), NULL);
 				Die(m_pPlayer->GetCID(), WEAPON_WORLD);	
 			}
 
 			if(!Server()->GetOpenHouse(1) && Server()->GetClanID(m_pPlayer->GetCID()) != Server()->GetTopHouse(1))
 			{
-				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), -1, _("Door in this clan closed."), NULL);
+				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), -1, _("这间公会房不对外开放。"), NULL);
 				Die(m_pPlayer->GetCID(), WEAPON_WORLD);	
 			}
 		}
@@ -941,13 +941,13 @@ void CCharacter::Tick()
 		{	
 			if(!Server()->GetTopHouse(2))
 			{
-				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), -1, _("This house empty."), NULL);
+				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), -1, _("这间公会房是空的。."), NULL);
 				Die(m_pPlayer->GetCID(), WEAPON_WORLD);	
 			}
 
 			if(!Server()->GetOpenHouse(2) && Server()->GetClanID(m_pPlayer->GetCID()) != Server()->GetTopHouse(2))
 			{
-				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), -1, _("Door in this clan closed."), NULL);
+				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), -1, _("这间公会房不对外开放。"), NULL);
 				Die(m_pPlayer->GetCID(), WEAPON_WORLD);	
 			}
 		}
@@ -1366,15 +1366,15 @@ void CCharacter::Tick()
 					switch(m_pPlayer->m_MapMenuItem)
 					{
 						case CMapConverter::MENUCLASS_ASSASINS:
-							GameServer()->SendBroadcast_Localization(m_pPlayer->GetCID(), BROADCAST_PRIORITY_INTERFACE, BROADCAST_DURATION_REALTIME, _("Assasin"), NULL);
+							GameServer()->SendBroadcast_Localization(m_pPlayer->GetCID(), BROADCAST_PRIORITY_INTERFACE, BROADCAST_DURATION_REALTIME, _("刺客"), NULL);
 							Broadcast = true;	
 							break;
 						case CMapConverter::MENUCLASS_BERSERK:
-							GameServer()->SendBroadcast_Localization(m_pPlayer->GetCID(), BROADCAST_PRIORITY_INTERFACE, BROADCAST_DURATION_REALTIME, _("Berserk"), NULL);
+							GameServer()->SendBroadcast_Localization(m_pPlayer->GetCID(), BROADCAST_PRIORITY_INTERFACE, BROADCAST_DURATION_REALTIME, _("战士"), NULL);
 							Broadcast = true;
 							break;
 						case CMapConverter::MENUCLASS_HEALER:
-							GameServer()->SendBroadcast_Localization(m_pPlayer->GetCID(), BROADCAST_PRIORITY_INTERFACE, BROADCAST_DURATION_REALTIME, _("Healer"), NULL);
+							GameServer()->SendBroadcast_Localization(m_pPlayer->GetCID(), BROADCAST_PRIORITY_INTERFACE, BROADCAST_DURATION_REALTIME, _("医师"), NULL);
 							Broadcast = true;
 							break;
 					}
@@ -1382,7 +1382,7 @@ void CCharacter::Tick()
 				if(!Broadcast)
 				{
 					m_pPlayer->m_MapMenuItem = -1;
-					GameServer()->SendBroadcast_Localization(m_pPlayer->GetCID(), BROADCAST_PRIORITY_INTERFACE, BROADCAST_DURATION_REALTIME, _("You need to choose a class"), NULL);
+					GameServer()->SendBroadcast_Localization(m_pPlayer->GetCID(), BROADCAST_PRIORITY_INTERFACE, BROADCAST_DURATION_REALTIME, _("你需要选择一个职业。"), NULL);
 				}
 				
 				if(m_Input.m_Fire&1 && m_pPlayer->m_MapMenuItem >= 0)
@@ -1588,7 +1588,7 @@ void CCharacter::Die(int Killer, int Weapon)
 		if(m_pPlayer->GetBotType() == BOT_BOSSSLIME && !GameServer()->m_WinWaitBoss)
 		{
 			int CountWin = GameServer()->GetBossCount();
-			GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("Boss {str:bossn} killing, winning {int:cwin} players."), "bossn", "Slime", "cwin", &CountWin, NULL);			
+			GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("首领 {str:bossn} 被{int:cwin}个玩家击败。"), "bossn", "Slime", "cwin", &CountWin, NULL);			
 			
 			GameServer()->m_WinWaitBoss = 1000;
 		}
@@ -1597,7 +1597,7 @@ void CCharacter::Die(int Killer, int Weapon)
 		if(m_pPlayer->m_InBossed)
 		{	
 			m_pPlayer->m_InBossed = false;
-			GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("You die, boss {str:name}"), "name", GameServer()->GetBossName(GameServer()->m_BossType), NULL);
+			GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("你被首领{str:name}击败。"), "name", GameServer()->GetBossName(GameServer()->m_BossType), NULL);
 		}
 	}
 
@@ -1609,7 +1609,7 @@ void CCharacter::Die(int Killer, int Weapon)
 		if(m_pPlayer->m_InArea)
 		{	
 			m_pPlayer->m_InArea = false;
-			GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("You die."), NULL);
+			GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("你被击败。"), NULL);
 		}	
 	}
 
@@ -1638,7 +1638,7 @@ void CCharacter::Die(int Killer, int Weapon)
 			}
 			
 			pKillerPlayer->AccData.Rel += get;
-			GameServer()->SendChatTarget_Localization(Killer, CHATCATEGORY_DEFAULT, _("Relations angry: {int:rel}"), "rel", &pKillerPlayer->AccData.Rel, NULL);
+			GameServer()->SendChatTarget_Localization(Killer, CHATCATEGORY_DEFAULT, _("交际愤怒值: {int:rel}"), "rel", &pKillerPlayer->AccData.Rel, NULL);
 		}
 		
 		if(m_pPlayer->m_Search)
@@ -1647,7 +1647,7 @@ void CCharacter::Die(int Killer, int Weapon)
 				&& (!pKillerPlayer->IsBot() || pKillerPlayer->GetBotType() == BOT_NPC))
 			{
 				m_pPlayer->m_Search = false;
-				GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_HEALER, _("Player {str:name}, caught the player {str:name1}, and he went to jail"), "name", Server()->ClientName(Killer), "name1", Server()->ClientName(m_pPlayer->GetCID()), NULL);
+				GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_HEALER, _("玩家 {str:name}, 击败玩家 {str:name1}, 并将其打入大牢"), "name", Server()->ClientName(Killer), "name1", Server()->ClientName(m_pPlayer->GetCID()), NULL);
 						
 				m_pPlayer->AccData.Jail = true;
 				m_pPlayer->AccData.Rel = 0;
@@ -2400,7 +2400,7 @@ void CCharacter::ClassSpawnAttributes()
 		m_pPlayer->m_AntiPvpSmall = true;
 
 		if(Server()->GetItemSettings(m_pPlayer->GetCID(), SCHAT) != 2)
-			GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("Anti PVP / Small level active."), NULL);	
+			GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("PVP模式 -- 新手保护已开启。"), NULL);	
 	}
 	//TODO
 	// книги инфа
