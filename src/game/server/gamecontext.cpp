@@ -4669,7 +4669,7 @@ void CGameContext::UseItem(int ClientID, int ItemID, int Count, int Type)
 					int GetGold = PackOne/10000;
 					int GetSilv = PackOne - GetGold*10000;
 
-					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:used} x{int:num} 而且获得了 {int:pvar} 黄金与 {int:pvars} 白银"), 
+					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:used} x{int:num} ,获得了 {int:pvar} 黄金与 {int:pvars} 白银"), 
 						"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvar", &GetGold, "pvars", &GetSilv , NULL);	
 				
 					pPlayer->MoneyAdd(PackOne);
@@ -4680,7 +4680,7 @@ void CGameContext::UseItem(int ClientID, int ItemID, int Count, int Type)
 				PackOne += 15;
 				if(i == Count-1)
 				{
-					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:used} x{int:num} 而且获得了 {int:pvars} 经验"), 
+					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:used} x{int:num} ,获得了 {int:pvars} 经验"), 
 						"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvars", &PackOne , NULL);	
 				
 					pPlayer->ExpAdd(PackOne, false);
@@ -4691,7 +4691,7 @@ void CGameContext::UseItem(int ClientID, int ItemID, int Count, int Type)
 				PackOne += 25;
 				if(i == Count-1)
 				{
-					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:used} x{int:num} 而且获得了 {int:pvars} 经验"), 
+					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:used} x{int:num} ,获得了 {int:pvars} 经验"), 
 						"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvars", &PackOne , NULL);	
 				
 					pPlayer->ExpAdd(PackOne, false);
@@ -4702,7 +4702,7 @@ void CGameContext::UseItem(int ClientID, int ItemID, int Count, int Type)
 				PackOne += 10;
 				if(i == Count-1)
 				{
-					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:used} x{int:num} 而且获得了 {int:pvars} 经验"), 
+					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:used} x{int:num} ,获得了 {int:pvars} 经验"), 
 						"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvars", &PackOne , NULL);	
 				
 					pPlayer->ExpAdd(PackOne, false);
