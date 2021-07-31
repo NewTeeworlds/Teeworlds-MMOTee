@@ -2362,9 +2362,9 @@ int CServer::GetStat(int ClientID, int Type)
 		case DKILL: return m_aClients[ClientID].m_Kill; break;
 		case DWINAREA: return m_aClients[ClientID].m_WinArea; break;
 		case DCLANADDED: return m_aClients[ClientID].m_ClanAdded; break;
-		case DISJAILED: return m_aClients[ClientID].m_IsJailed; break;
+		/*case DISJAILED: return m_aClients[ClientID].m_IsJailed; break;
 		case DJAILLENGTH: return m_aClients[ClientID].m_JailLength; break;
-		case DSUMMERHEALINGTIMES: return m_aClients[ClientID].m_SummerHealingTimes; break;
+		case DSUMMERHEALINGTIMES: return m_aClients[ClientID].m_SummerHealingTimes; break;*/
 	}
 	return 0;
 }
@@ -2386,9 +2386,9 @@ void CServer::UpdateStat(int ClientID, int Type, int Size)
 		case DKILL: m_aClients[ClientID].m_Kill = Size; break;
 		case DWINAREA: m_aClients[ClientID].m_WinArea = Size; break;
 		case DCLANADDED: m_aClients[ClientID].m_ClanAdded = Size; break;
-		case DISJAILED: m_aClients[ClientID].m_IsJailed = Size; break;
+		/*case DISJAILED: m_aClients[ClientID].m_IsJailed = Size; break;
 		case DJAILLENGTH: m_aClients[ClientID].m_JailLength = Size; break;
-		case DSUMMERHEALINGTIMES: m_aClients[ClientID].m_SummerHealingTimes = Size; break;
+		case DSUMMERHEALINGTIMES: m_aClients[ClientID].m_SummerHealingTimes = Size; break;*/
 	}
 }
 
@@ -2692,7 +2692,7 @@ public:
 
 				char aProtocol[16];
 				str_format(aProtocol, sizeof(aProtocol), "reward%d", iscope);
-				str_format(Text, sizeof(Text), "Get Reward %s : %d and Delete Mail", m_pServer->GetItemName(m_ClientID, ItemID, false), ItemNum);	
+				str_format(Text, sizeof(Text), "领取 %s : %d 并删除邮件", m_pServer->GetItemName(m_ClientID, ItemID, false), ItemNum);	
 				pCmd = new CGameServerCmd_AddLocalizeVote_Language(m_ClientID, aProtocol, _(Text));
 				m_pServer->AddGameServerCmd(pCmd);
 
@@ -4597,8 +4597,9 @@ void CServer::ShowTop10Clans(int ClientID, const char* Type, int TypeGet)
 	pJob->Start();
 }
 
-// ********************************************** OZOZOZ ДОМА СОСАТЬ ЛЕЖАТЬ НАХУЙ!!!
+// ********************************************** OZOZOZ ДОМА СОСАТЬ ЛЕЖАТЬ НАХУЙ!!! ——抱怨
 // Получить дома кланов
+// 获得公会房屋
 class CSqlJob_Server_GetTopClanHouse : public CSqlJob
 {
 private:

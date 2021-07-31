@@ -244,10 +244,13 @@ void CPlayer::BasicAuthedTick()
 				SetMoveChar();		
 		}
 	}
-
+	//TODO 修复 bug 
 	if(Server()->GetItemCount(m_ClientID, PIGPORNO) > 1000 && !Server()->GetItemCount(m_ClientID, PIGPIG))
+	{
 		GameServer()->SendMail(m_ClientID, "你解锁了一个新的称号!", PIGPIG, 1);
-
+		GameServer()->SendChat(m_ClientID, m_Team, "系统已收回100个猪肉");
+		Server()->RemItem(m_ClientID, PIGPORNO, 100, -1);
+	}
 	if(AccData.Money >= 10000)
 	{
 		AccData.Gold += AccData.Money/10000;

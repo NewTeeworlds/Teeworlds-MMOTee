@@ -1081,7 +1081,7 @@ void CGameContext::OnTick()
 				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("(* ^ ω ^) 公会排行榜前五名:{str:name}:"), "name", "Relevance", NULL);	
 				Server()->ShowTop10Clans(25, "Relevance", 2); break;
 			default:
-				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("(* ^ ω ^) 公会排行榜前五名:{str:name}:"), "name", "白银", NULL);	
+				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("(* ^ ω ^) 公会排行榜前五名:{str:name}:"), "name", "黄金", NULL);	
 				Server()->ShowTop10Clans(25, "Money", 2); break;
 		}
 	}
@@ -4437,9 +4437,9 @@ void CGameContext::GetStat(int ClientID) //set stat mysql pdata
 	m_apPlayers[ClientID]->AccData.Kill =  Server()->GetStat(ClientID, DKILL);
 	m_apPlayers[ClientID]->AccData.WinArea =  Server()->GetStat(ClientID, DWINAREA);
 	m_apPlayers[ClientID]->AccData.ClanAdded =  Server()->GetStat(ClientID, DCLANADDED);
-	m_apPlayers[ClientID]->AccData.IsJailed =  Server()->GetStat(ClientID, DISJAILED);
+	/*m_apPlayers[ClientID]->AccData.IsJailed =  Server()->GetStat(ClientID, DISJAILED);
 	m_apPlayers[ClientID]->AccData.JailLength =  Server()->GetStat(ClientID, DJAILLENGTH);
-	m_apPlayers[ClientID]->AccData.SummerHealingTimes =  Server()->GetStat(ClientID, DSUMMERHEALINGTIMES);
+	m_apPlayers[ClientID]->AccData.SummerHealingTimes =  Server()->GetStat(ClientID, DSUMMERHEALINGTIMES);*/
 	return;
 }
 void CGameContext::UpdateStat(int ClientID) //update stat mysql pdata
@@ -4456,9 +4456,9 @@ void CGameContext::UpdateStat(int ClientID) //update stat mysql pdata
 	Server()->UpdateStat(ClientID, DKILL, m_apPlayers[ClientID]->AccData.Kill);
 	Server()->UpdateStat(ClientID, DWINAREA, m_apPlayers[ClientID]->AccData.WinArea);
 	Server()->UpdateStat(ClientID, DCLANADDED, m_apPlayers[ClientID]->AccData.ClanAdded);
-	Server()->UpdateStat(ClientID, DISJAILED, m_apPlayers[ClientID]->AccData.IsJailed);
+	/*Server()->UpdateStat(ClientID, DISJAILED, m_apPlayers[ClientID]->AccData.IsJailed);
 	Server()->UpdateStat(ClientID, DJAILLENGTH, m_apPlayers[ClientID]->AccData.JailLength);
-	Server()->UpdateStat(ClientID, DSUMMERHEALINGTIMES, m_apPlayers[ClientID]->AccData.SummerHealingTimes);
+	Server()->UpdateStat(ClientID, DSUMMERHEALINGTIMES, m_apPlayers[ClientID]->AccData.SummerHealingTimes);*/
 	return;
 }
 void CGameContext::UpdateStats(int ClientID)
