@@ -3949,13 +3949,13 @@ public:
 				m_pServer->m_aClients[m_ClientID].m_HammerRange = (int)pSqlServer->GetResults()->getInt("HammerRange");
 				m_pServer->m_aClients[m_ClientID].m_Pasive2 = (int)pSqlServer->GetResults()->getInt("Pasive2");
 				
-				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("You are now logged. Welcome"));
+				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("你已登录。欢迎。"));
 				m_pServer->AddGameServerCmd(pCmd);			
 			}					
 		}
 		catch (sql::SQLException &e)
 		{
-			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, "An error occured during the logging.");
+			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, "登录时出现错误。");
 			m_pServer->AddGameServerCmd(pCmd);
 			dbg_msg("sql", "Can't check username/password (MySQL Error: %s)", e.what());
 			return false;
@@ -4123,18 +4123,18 @@ public:
 				}
 				m_pServer->m_aClients[m_ClientID].m_UserID = (int)pSqlServer->GetResults()->getInt("UserId");
 				m_pServer->InitClientDB(m_ClientID);
-				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("Authed. In ESC press Play."));
+				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("登录成功。按下esc界面中的“开始游戏”进入。"));
 				m_pServer->AddGameServerCmd(pCmd);	
 			}
 			else
 			{
-				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("Wrong username/password or your nickname no this account."));
+				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("用户名或密码错误/或是您的账户不属于该昵称。"));
 				m_pServer->AddGameServerCmd(pCmd);
 			}
 		}
 		catch (sql::SQLException &e)
 		{
-			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, "An error occured during the logging.");
+			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, "登录时发生错误。");
 			m_pServer->AddGameServerCmd(pCmd);
 			dbg_msg("sql", "Can't check username/password (MySQL Error: %s)", e.what());
 			
@@ -4193,7 +4193,7 @@ public:
 				m_pServer->m_aClients[m_ClientID].m_Seccurity = (int)pSqlServer->GetResults()->getInt("Seccurity");
 			else
 			{
-				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(-1, CHATCATEGORY_DEFAULT, _("We have a new player."));
+				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(-1, CHATCATEGORY_DEFAULT, _("欢迎新玩家！"));
 				m_pServer->AddGameServerCmd(pCmd);
 			}
 		}
@@ -4307,20 +4307,20 @@ public:
 				pSqlServer->executeSql(aBuf);
 
 				str_copy(m_pServer->m_aClients[m_ClientID].m_Clan, "NOPE", sizeof(m_pServer->m_aClients[m_ClientID].m_Clan));
-				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("Your account created. Use /login <pass>"));
+				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("账户注册成功。请使用/login <密码> 登录。"));
 				m_pServer->AddGameServerCmd(pCmd);
 				return true;
 			}
 			else
 			{
-				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("An error occured during the creation of your account."));
+				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("注册时出现错误。"));
 				m_pServer->AddGameServerCmd(pCmd);
 				return false;
 			}
 		}
 		catch (sql::SQLException &e)
 		{
-			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("An error occured during the creation of your account."));
+			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("注册时出现错误。"));
 			m_pServer->AddGameServerCmd(pCmd);
 			dbg_msg("sql", "Can't get the ID of the new user (MySQL Error: %s)", e.what());
 			
@@ -4625,14 +4625,14 @@ public:
 				char aBuf[128];
 				if(m_pServer->m_HouseClanID[House] != m_pServer->m_HouseOldClanID[House])
 				{
-					str_format(aBuf, sizeof(aBuf), "[House#%d] Rich Clan %s got / Clan %s lose!", House,  m_pServer->GetClanName(ClanID), m_pServer->GetClanName(m_pServer->m_HouseOldClanID[House]));
+					str_format(aBuf, sizeof(aBuf), "[House#%d] 公会 %s 得到房屋 / 公会 %s 失去了它！", House,  m_pServer->GetClanName(ClanID), m_pServer->GetClanName(m_pServer->m_HouseOldClanID[House]));
 				
 					CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(-1, CHATCATEGORY_DEFAULT, _(aBuf));
 					m_pServer->AddGameServerCmd(pCmd);
 				}
 				else
 				{
-					str_format(aBuf, sizeof(aBuf), "[House#%d] Rich Clan %s saved house / No war!", House,  m_pServer->GetClanName(ClanID));
+					str_format(aBuf, sizeof(aBuf), "[House#%d] 公会 %s 守住了房屋 / 没有公会战！", House,  m_pServer->GetClanName(ClanID));
 				
 					CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(-1, CHATCATEGORY_DEFAULT, _(aBuf));
 					m_pServer->AddGameServerCmd(pCmd);

@@ -1472,7 +1472,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 				else if(str_comp(aCmd, "uchair") == 0)
 				{
 					if(!Server()->GetHouse(ClientID))
-						return 	SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你所在的公会没房屋!"), NULL);
+						return 	SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你所在的公会没有房屋!"), NULL);
 
 					BuyUpgradeClan(ClientID, m_apPlayers[ClientID]->GetNeedForUpgClan(DCHAIRHOUSE)*2, DCHAIRHOUSE,"ChairHouse");							
 				}
@@ -1480,7 +1480,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 				else if(str_comp(aCmd, "uspawnhouse") == 0)
 				{
 					if(!Server()->GetHouse(ClientID))
-						return 	SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你所在的公会没房屋!"), NULL);
+						return 	SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你所在的公会没有房屋!"), NULL);
 
 					if(Server()->GetSpawnInClanHouse(ClientID, 0) || Server()->GetSpawnInClanHouse(ClientID, 1))
 						return;
@@ -3209,7 +3209,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			// #################### СКИЛЫ
 			AddVote("············", "null", ClientID);
 			AddVote_Localization(ClientID, "null", "ღ  {str:psevdo}", "psevdo", LocalizeText(ClientID, "技巧"));
-			AddVote_Localization(ClientID, "null", "没有物品");
+			AddVote_Localization(ClientID, "null", "暂时没有物品");
 			
 			// #################### ПЕРСОНАЛЬНО
 			
@@ -3227,9 +3227,9 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			AddVote("············", "null", ClientID);
 			AddVote_Localization(ClientID, "null", "  {str:psevdo}", "psevdo", LocalizeText(ClientID, "稀有物品"));
 			CreateNewShop(ClientID, AMULETCLEEVER, 3, 1, 1200);
-			AddVote_Localization(ClientID, "null", "这个可以使你在升级的时候获得两个钱袋");
+			AddVote_Localization(ClientID, "null", "使你在升级时获得两个钱袋");
 			CreateNewShop(ClientID, RINGNOSELFDMG, 3, 1, 1000);
-			AddVote_Localization(ClientID, "null", "这个可以使你避免自己伤到自己");
+			AddVote_Localization(ClientID, "null", "不会受到自己的伤害（比如爆炸）");
 			AddVote("", "null", ClientID);
 		}
 
@@ -3260,7 +3260,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		Level = 1+Server()->GetItemCount(ClientID, MINEREXP)/g_Config.m_SvMinerExp;
 		NeedExp = Level*g_Config.m_SvMinerExp;
 		Exp = Server()->GetItemCount(ClientID, MINEREXP);
-		AddVote_Localization(ClientID, "null", "专长 挖土 ({int:exp}/{int:nexp} 等级: {int:lvl})", "exp", &Exp, "nexp", &NeedExp, "lvl", &Level);
+		AddVote_Localization(ClientID, "null", "专长 挖矿 ({int:exp}/{int:nexp} 等级: {int:lvl})", "exp", &Exp, "nexp", &NeedExp, "lvl", &Level);
 
 		Level = 1+Server()->GetItemCount(ClientID, LOADEREXP)/g_Config.m_SvMaterExp;
 		NeedExp = Level*g_Config.m_SvMaterExp;
@@ -3420,53 +3420,50 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote_Localization(ClientID, "null", "这是升级职业的");
 		AddVote_Localization(ClientID, "null", "被动技能与主动技能");		
 		AddVote_Localization(ClientID, "null", "在投票的理由填写处填写升级数");		
-		AddVote_Localization(ClientID, "null", "C - 职业点数.");		
-		AddVote_Localization(ClientID, "null", "SP - 需要技能点.");	
-		AddVote_Localization(ClientID, "null", "UP - 需要升级点.");	
 		AddVote("", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "统计数据(升级点 - {int:up} / 技能点 - {int:sp})", "up", &m_apPlayers[ClientID]->AccUpgrade.Upgrade, "sp", &m_apPlayers[ClientID]->AccUpgrade.SkillPoint);
 		AddVote("············", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "♛ {str:psevdo}", "psevdo", LocalizeText(ClientID, "升级选项"));
-		AddVote_Localization(ClientID, "uhealth", "☞ [{int:sum}] 生命值上限 +40({str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.Health, "bonus", m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER ? "C+10" : "C+0");
-		AddVote_Localization(ClientID, "udamage", "☞ [{int:sum}] 伤害 +1({str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.Damage, "bonus", "C+0");
-		AddVote_Localization(ClientID, "uammoregen", "☞ [{int:sum}] 子弹回复速度 +1({str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.AmmoRegen, "bonus", "C+0");
-		AddVote_Localization(ClientID, "uammo", "☞ [{int:sum}] 子弹 +1(UP5 {str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.Ammo, "bonus", "C+0");
-		AddVote_Localization(ClientID, "uhpregen", "☞ [{int:sum}] 生命恢复速度 +1({str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.HPRegen, "bonus", "C+0");
-		AddVote_Localization(ClientID, "uhandle", "☞ [{int:sum}] 射速 +1({str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.Speed, "bonus", "C+0");
-		AddVote_Localization(ClientID, "umana", "☞ [{int:sum}] 魔能 +1({str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.Mana, "bonus", "C+0");
-		AddVote_Localization(ClientID, "uspray", "☞ [{int:sum}] 子弹散射 +1(UP10 {str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.Spray, "bonus", "C+0");
+		AddVote_Localization(ClientID, "uhealth", "☞ [{int:sum}] 生命值上限 +40(1升级点 {str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.Health, "bonus", m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER ? "C+10" : "C+0");
+		AddVote_Localization(ClientID, "udamage", "☞ [{int:sum}] 伤害 +1(1升级点 {str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.Damage, "bonus", "C+0");
+		AddVote_Localization(ClientID, "uammoregen", "☞ [{int:sum}] 子弹回复速度 +1(1升级点 {str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.AmmoRegen, "bonus", "C+0");
+		AddVote_Localization(ClientID, "uammo", "☞ [{int:sum}] 子弹 +1(5升级点 {str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.Ammo, "bonus", "C+0");
+		AddVote_Localization(ClientID, "uhpregen", "☞ [{int:sum}] 生命恢复速度 +1(1升级点 {str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.HPRegen, "bonus", "C+0");
+		AddVote_Localization(ClientID, "uhandle", "☞ [{int:sum}] 射速 +1(1升级点 {str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.Speed, "bonus", "C+0");
+		AddVote_Localization(ClientID, "umana", "☞ [{int:sum}] 魔能 +1(1升级点 {str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.Mana, "bonus", "C+0");
+		AddVote_Localization(ClientID, "uspray", "☞ [{int:sum}] 子弹散射 +1(10升级点 {str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.Spray, "bonus", "C+0");
 		AddVote("············", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "♞ {str:psevdo}", "psevdo", LocalizeText(ClientID, "Passive Skills"));
 		
 		int Need = HAMMERRANGE;
 		if(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER)
 		{
-			AddVote_Localization(ClientID, "ushammerrange", "☞ ({int:need}SP) 生命值 +4% ({str:act}) ({int:sum})", "need", &Need, "act", 
+			AddVote_Localization(ClientID, "ushammerrange", "☞ ({int:need}技能点) 生命值 +4% ({str:act}) ({int:sum})", "need", &Need, "act", 
 				m_apPlayers[ClientID]->AccUpgrade.HammerRange ? "✔" : "x", "sum", &m_apPlayers[ClientID]->AccUpgrade.HammerRange);		
-			AddVote_Localization(ClientID, "upasive2", "☞ ({int:need}SP) 抵抗伤害 +2% ({str:act}) ({int:sum})", "need", &Need, "act", 
+			AddVote_Localization(ClientID, "upasive2", "☞ ({int:need}技能点) 抵抗伤害 +2% ({str:act}) ({int:sum})", "need", &Need, "act", 
 				m_apPlayers[ClientID]->AccUpgrade.Pasive2 ? "✔" : "x", "sum", &m_apPlayers[ClientID]->AccUpgrade.Pasive2);			
 		}
 		else if(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_ASSASINS)
 		{
-			AddVote_Localization(ClientID, "ushammerrange", "☞ ({int:need}SP) 暴击率 +6.67% ({str:act}) ({int:sum})", "need", &Need, "act", 
+			AddVote_Localization(ClientID, "ushammerrange", "☞ ({int:need}技能点) 暴击率 +6.67% ({str:act}) ({int:sum})", "need", &Need, "act", 
 				m_apPlayers[ClientID]->AccUpgrade.HammerRange ? "✔" : "x", "sum", &m_apPlayers[ClientID]->AccUpgrade.HammerRange);		
-			AddVote_Localization(ClientID, "upasive2", "☞ ({int:need}SP) 暴击伤害 +3% ({str:act}) ({int:sum})", "need", &Need, "act", 
+			AddVote_Localization(ClientID, "upasive2", "☞ ({int:need}技能点) 暴击伤害 +3% ({str:act}) ({int:sum})", "need", &Need, "act", 
 				m_apPlayers[ClientID]->AccUpgrade.Pasive2 ? "✔" : "x", "sum", &m_apPlayers[ClientID]->AccUpgrade.Pasive2);			
 		}
 		else if(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_BERSERK)
 		{
-			AddVote_Localization(ClientID, "ushammerrange", "☞ ({int:need}SP) 锤子范围 ({str:act}) ({int:sum})", "need", &Need, "act", 
+			AddVote_Localization(ClientID, "ushammerrange", "☞ ({int:need}技能点) 锤子范围 ({str:act}) ({int:sum})", "need", &Need, "act", 
 				m_apPlayers[ClientID]->AccUpgrade.HammerRange ? "✔" : "x", "sum", &m_apPlayers[ClientID]->AccUpgrade.HammerRange);		
-			AddVote_Localization(ClientID, "upasive2", "☞ ({int:need}SP) 伤害 +3% ({str:act}) ({int:sum})", "need", &Need, "act", 
+			AddVote_Localization(ClientID, "upasive2", "☞ ({int:need}技能点) 伤害 +3% ({str:act}) ({int:sum})", "need", &Need, "act", 
 				m_apPlayers[ClientID]->AccUpgrade.Pasive2 ? "✔" : "x", "sum", &m_apPlayers[ClientID]->AccUpgrade.Pasive2);			
 		}
 		AddVote("············", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "☭ {str:psevdo}", "psevdo", LocalizeText(ClientID, "Active Skills"));
-		AddVote_Localization(ClientID, "uskillwall", "☞ (70SP) Skill Walls ({str:act})", "act", Server()->GetItemCount(ClientID, SKWALL) ? "30 Mana ✔" : "x");	
+		AddVote_Localization(ClientID, "uskillwall", "☞ (70技能点) 魔能-光墙 ({str:act})", "act", Server()->GetItemCount(ClientID, SKWALL) ? "30 Mana ✔" : "x");	
 		SkillSettings(ClientID, SKWALL, "sskillwall");
-		AddVote_Localization(ClientID, "uskillheal", "☞ (60SP) Skill Heal ({str:act})", "act", Server()->GetItemCount(ClientID, SKHEAL) ? "50 Mana ✔" : "x");	
+		AddVote_Localization(ClientID, "uskillheal", "☞ (60技能点) 魔能-治疗器 ({str:act})", "act", Server()->GetItemCount(ClientID, SKHEAL) ? "50 Mana ✔" : "x");	
 		SkillSettings(ClientID, SKHEAL, "sskillheal");
-		AddVote_Localization(ClientID, "uskillsword", "☞ (20SP) Skill Sword ({str:act})", "act", Server()->GetItemCount(ClientID, SSWORD) ? "1 Mana ✔" : "x");	
+		AddVote_Localization(ClientID, "uskillsword", "☞ (20技能点) 魔能-光剑 ({str:act})", "act", Server()->GetItemCount(ClientID, SSWORD) ? "1 Mana ✔" : "x");	
 		SkillSettings(ClientID, SSWORD, "sskillsword");
 		SkillSettings(ClientID, SHEALSUMMER, "sskillsummer");
 		AddBack(ClientID);
@@ -3570,13 +3567,13 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		if(g_Config.m_SvEventSchool)
 		{
 			found = true;
-			AddVote_Localization(ClientID, "null", "事件在线奖励(Back to School):");
-			AddVote_Localization(ClientID, "null", "每10分钟你会得到奖励");
-			AddVote_Localization(ClientID, "null", "如果你收集了 25 soul patricle");
-			AddVote_Localization(ClientID, "null", "你将会得到自定义皮肤道具");
+			AddVote_Localization(ClientID, "null", "在线奖励(Back to School):");
+			AddVote_Localization(ClientID, "null", "每10分钟你会得到一次在线奖励");
+			AddVote_Localization(ClientID, "null", "如果你收集了 25个灵魂（soul patricle）");
+			AddVote_Localization(ClientID, "null", "你将会在下次在线奖励中得到自定义皮肤道具");
 		}
 		if(!found)
-			AddVote_Localization(ClientID, "null", "肥肠豹潜! 现在没有活动的事件.");
+			AddVote_Localization(ClientID, "null", "肥肠豹潜! 现在没有活动的事件.");// az ——翻译员
 
 		AddBack(ClientID);
 		return;
@@ -3658,8 +3655,8 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		
 		AddVote_Localization(ClientID, "null", "☪ 信息 ( ′ ω ` )?:");
 		AddVote_Localization(ClientID, "null", "这是被通缉玩家的列表");
-		AddVote_Localization(ClientID, "null", "如果你杀死了列表里的玩家");
-		AddVote_Localization(ClientID, "null", "你将会得到回报(白银)，而那个玩家将会进监狱");
+		AddVote_Localization(ClientID, "null", "如果你击败了列表里的玩家");
+		AddVote_Localization(ClientID, "null", "你将会得到回报(白银)，而那个玩家将会被打入大牢");
 		AddVote("", "null", ClientID);
 		
 		bool Found = false;
@@ -3926,30 +3923,31 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			{
 				AddNewCraftVote(ClientID, "骷髅骨头x30", SKELETSSBONE);	
 				AddNewCraftVote(ClientID, "僵尸眼x30", ZOMIBEBIGEYE);	
-				AddNewCraftVote(ClientID, "(铁矿, 铜矿)x100", FORMULAEARRINGS);	
-				AddNewCraftVote(ClientID, "(铁矿, 铜矿)x125", FORMULAFORRING);	
-				AddNewCraftVote(ClientID, "(铁矿, 铜矿)x150", FORMULAWEAPON);	
+				AddNewCraftVote(ClientID, "铁矿x100, 铜矿x100", FORMULAEARRINGS);	
+				AddNewCraftVote(ClientID, "铁矿x125, 铜矿x125", FORMULAFORRING);	
+				AddNewCraftVote(ClientID, "铁矿x150, 铜矿x150", FORMULAWEAPON);	
 					
 			}
 			else if(m_apPlayers[ClientID]->m_SortedSelectCraft == 2)
 			{
 				if(g_Config.m_SvEventSummer)
 				{
+					AddVote_Localization(ClientID, "null", "注意:合成成功率4%,15次失败后必定合成成功");
 					AddNewCraftVote(ClientID, "日耀(Sun Ray)x20", SHEALSUMMER);	
-					AddVote_Localization(ClientID, "null", "注意:合成成功率4%,15次保底");
+			
 				}
-				AddNewCraftVote(ClientID, "戒指的蓝图, Slime Dirt", RARERINGSLIME);	
-				AddNewCraftVote(ClientID, "戒指的蓝图, 爆破鬼才的尸体 x100", RINGBOOMER);	
-				AddNewCraftVote(ClientID, "耳环的蓝图, Kwah 脚 x 100", EARRINGSKWAH);	
-				AddNewCraftVote(ClientID, "(僵尸大眼睛与骷髅强化骨)x30", CUSTOMSKIN);	
-				AddNewCraftVote(ClientID, "(土豆番茄萝卜)x60", JUMPIMPULS);		
+				AddNewCraftVote(ClientID, "戒指蓝图x1, Slime Dirtx1", RARERINGSLIME);	
+				AddNewCraftVote(ClientID, "戒指蓝图x1, body boomerx100", RINGBOOMER);	
+				AddNewCraftVote(ClientID, "耳环蓝图x1, foot kwahx100", EARRINGSKWAH);	
+				AddNewCraftVote(ClientID, "僵尸大眼睛x30,骷髅强化骨x30", CUSTOMSKIN);	
+				AddNewCraftVote(ClientID, "土豆x60,番茄x60,萝卜x60", JUMPIMPULS);		
 			}
 			else if(m_apPlayers[ClientID]->m_SortedSelectCraft == 3)
 			{
 				AddNewCraftVote(ClientID, "眼睛表情 (happy, evil, surprise, blink, pain)", MODULEEMOTE);	
-				AddNewCraftVote(ClientID, "武器 (手枪, 散弹枪, 榴弹炮, 激光枪)", WEAPONPRESSED);	
-				AddNewCraftVote(ClientID, "武器蓝图, 爆破鬼才的戒指", MODULESHOTGUNSLIME);	
-				AddNewCraftVote(ClientID, "武器蓝图 x25", ENDEXPLOSION);	
+				AddNewCraftVote(ClientID, "手枪x1, 散弹枪x1, 榴弹炮x1, 激光枪x1", WEAPONPRESSED);	
+				AddNewCraftVote(ClientID, "武器蓝图x1, 爆破鬼才的戒指(ring boomer)x1", MODULESHOTGUNSLIME);	
+				AddNewCraftVote(ClientID, "武器蓝图(formula weapons)x25", ENDEXPLOSION);	
 			}
 			else if(m_apPlayers[ClientID]->m_SortedSelectCraft == 4)
 			{
@@ -4067,7 +4065,7 @@ void CGameContext::StartArea(int WaitTime, int Type)
 		case 2: NameGame = "FNG"; Gets = 5; break;
 	}
 	SendChatTarget(-1, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] Registration 开始了. {str:name}"), "name", NameGame, NULL);
+	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 小游戏 {str:name} 开启了。"), "name", NameGame, NULL);
 	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 回报: 钱袋, 神器 {int:gets}%"), "gets", &Gets, NULL);
 	SendChatTarget(-1, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 }
@@ -4081,7 +4079,7 @@ void CGameContext::EnterArea(int ClientID)
 		return 	SendBroadcast_Localization(ClientID, 250, 150, _("你被通缉了. 不能进入area room."));
 		
 	if(!m_AreaStartTick)
-		return 	SendBroadcast_Localization(ClientID, 250, 150, _("Survial not registration wait registration"));
+		return 	SendBroadcast_Localization(ClientID, 250, 150, _("小游戏未开启。请等待开启。"));
 			
 	m_apPlayers[ClientID]->m_InArea = true;
 	m_apPlayers[ClientID]->GetCharacter()->Die(ClientID, WEAPON_WORLD);
