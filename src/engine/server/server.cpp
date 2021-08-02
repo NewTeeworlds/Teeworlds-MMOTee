@@ -2739,6 +2739,7 @@ public:
 				char aProtocol[16];
 				str_format(aProtocol, sizeof(aProtocol), "reward%d", iscope);
 				str_format(Text, sizeof(Text), "领取 %s : %d 并删除邮件", m_pServer->GetItemName(m_ClientID, ItemID, false), ItemNum);	
+
 				pCmd = new CGameServerCmd_AddLocalizeVote_Language(m_ClientID, aProtocol, _(Text));
 				m_pServer->AddGameServerCmd(pCmd);
 
