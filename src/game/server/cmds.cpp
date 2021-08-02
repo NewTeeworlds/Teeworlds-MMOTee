@@ -316,8 +316,12 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		{
 			return GameServer()->SendChatTarget(ClientID, "Use: /jail <id> <JailLength>");
 		}
-		m_pPlayer->AccData.IsJailed = true;
+		/*m_pPlayer->AccData.IsJailed = true;
 		m_pPlayer->AccData.Jail = true;
+		m_pPlayer->AccData.JailLength = JailLength;*/
+		GameServer()->m_apPlayers[id]->AccData.IsJailed = true;
+		GameServer()->m_apPlayers[id]->AccData.Jail = true;
+		GameServer()->m_apPlayers[id]->AccData.JailLength = JailLength;
 		GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, ("成功将 {str:name} 关进监狱"), "name", GameServer()->GetPlayerChar(id), NULL);	
 	}
 	else if (!strncmp(Msg->m_pMessage, "/unjail", 7) && GameServer()->Server()->IsAuthed(ClientID))
@@ -327,8 +331,12 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		{
 			return GameServer()->SendChatTarget(ClientID, "Use: /unjail <id>");
 		}
-		m_pPlayer->AccData.IsJailed = false;
+		/*m_pPlayer->AccData.IsJailed = false;
 		m_pPlayer->AccData.Jail = false;
+		m_pPlayer->AccData.JailLength = 0;*/
+		GameServer()->m_apPlayers[id]->AccData.IsJailed = false;
+		GameServer()->m_apPlayers[id]->AccData.Jail = false;
+		GameServer()->m_apPlayers[id]->AccData.JailLength = 0;
 		GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, ("成功将 {str:name} 放出监狱"), "name", GameServer()->GetPlayerChar(id), NULL);	
 	}
 	// 密码修改

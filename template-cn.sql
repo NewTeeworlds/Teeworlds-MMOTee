@@ -50,6 +50,7 @@ CREATE TABLE `tw_Clans` (
 
 LOCK TABLES `tw_Clans` WRITE;
 /*!40000 ALTER TABLE `tw_Clans` DISABLE KEYS */;
+INSERT INTO `tw_Clans` VALUES (1,'Star','test',1,4,2595550,20,5001,16164,53,131,0,0,'0000-00-00');
 /*!40000 ALTER TABLE `tw_Clans` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -77,6 +78,7 @@ CREATE TABLE `tw_Mail` (
 
 LOCK TABLES `tw_Mail` WRITE;
 /*!40000 ALTER TABLE `tw_Mail` DISABLE KEYS */;
+INSERT INTO `tw_Mail` VALUES (1,1,1,1,10);
 /*!40000 ALTER TABLE `tw_Mail` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -154,8 +156,11 @@ CREATE TABLE `tw_Users` (
 
 LOCK TABLES `tw_Users` WRITE;
 /*!40000 ALTER TABLE `tw_Users` DISABLE KEYS */;
+INSERT INTO `tw_Users` VALUES (1,'test','天上的星星','null','505a47881334859c582f2731b59fac1e',712,1355885,8203,22959,0,0,0,0,0,0,2,0,1,7,0,1,53301,1,0,0,'2018-06-08 15:30:36','127.0.0.1');
 /*!40000 ALTER TABLE `tw_Users` ENABLE KEYS */;
 UNLOCK TABLES;
+
+-- 密码是978798
 
 --
 -- Table structure for table `tw_uClass`
@@ -190,6 +195,7 @@ CREATE TABLE `tw_uClass` (
 
 LOCK TABLES `tw_uClass` WRITE;
 /*!40000 ALTER TABLE `tw_uClass` DISABLE KEYS */;
+INSERT INTO `tw_uClass` VALUES (1,'test',600,300,0,0,0,0,0,0,0,0,0,0);
 /*!40000 ALTER TABLE `tw_uClass` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -204,7 +210,7 @@ CREATE TABLE `tw_uItemList` (
   `il_id` int(4) unsigned NOT NULL AUTO_INCREMENT,
   `item_type` int(11) DEFAULT '0',
   `item_name` char(50) NOT NULL,
-  `item_desc` char(50) NOT NULL DEFAULT '- No description',
+  `item_desc` char(100) NOT NULL DEFAULT '- No description',
   PRIMARY KEY (`il_id`) USING BTREE,
   KEY `item_type` (`item_type`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=124 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT;
@@ -217,130 +223,6 @@ CREATE TABLE `tw_uItemList` (
 LOCK TABLES `tw_uItemList` WRITE;
 /*!40000 ALTER TABLE `tw_uItemList` DISABLE KEYS */;
 INSERT INTO `tw_uItemList` VALUES 
-/*(1,4,'Money Bag','- Random get 5-20000 silvers'),
-(2,3,'Quest Pig Meat','- Need for quest'),
-(3,3,'Quest Kwah Head','- Need for quest'),
-(4,1,'Hook Damage','- Weapon / Upgrading'),
-(5,1,'Gun','- Weapon / Upgrading'),
-(6,1,'Shotgun','- Weapon / Upgrading'),
-(7,1,'Grenade','- Weapon / Upgrading'),
-(8,1,'Laser','- Weapon / Upgrading'),
-(9,2,'Amulet Cleever','This for got x2 money bag in level up'),
-(10,2,'Ring Selfine','This for don\'t get self damage'),
-(11,5,'Module Happy','Emote module if all modules + bonus'),
-(12,5,'Module Evil','Emote module if all modules + bonus'),
-(13,5,'Module Surprise','Emote module if all modules + bonus'),
-(14,5,'Module Blink','Emote module if all modules + bonus'),
-(15,5,'Module Pain','Emote module if all modules + bonus'),
-(16,4,'Ticket Create Clan','Ticket for created clan'),
-(17,2,'表情模块','Emote module if all modules + bonus'),
-(18,4,'Alpha Box','This bonus in alpha'),
-(19,4,'SP Upgrade Box','This bonus in alpha'),
-(20,2,'Leather','Craft Item'),
-(21,2,'Rare Draw HP Regen','Rare | This drawing item'),
-(22,2,'Rare Draw Damage','Rare | This drawing item'),
-(23,2,'Rare Draw Handle','Rare | This drawing item'),
-(24,2,'Rare Draw Ammo Regen','Rare | This drawing item'),
-(25,2,'Rare Ring Slime','Rare | Not self damage and jump'),
-(26,5,'Slime Dirt','Item for craft'),
-(27,5,'Formula Ring\'s','Item for craft'),
-(28,1,'Module Explode Gun','- Weapon / Upgrading'),
-(29,1,'Module Explode Shotgun','- Weapon / Upgrading'),
-(30,1,'Module Explode Laser','- Weapon / Upgrading'),
-(31,1,'Weapon Pressed','- All Weapon +5 ammo'),
-(32,5,'Body Boomer','Item for craft'),
-(33,2,'Rare Ring Boomer','Rare | Health +5% and item for craft'),
-(34,5,'Formula Earring\'s','Item for craft'),
-(35,5,'Formula Weapon\'s','Item for craft'),
-(36,1,'Module Shotgun Slime','- Weapon / Upgrading'),
-(37,1,'Rare Earrings Kwah','Item added +1 jump mabe stack'),
-(38,5,'Foot Kwah','Item for craft'),
-(39,4,'Book Money x2 (10min)','Book item\'s for added bonus'),
-(40,4,'Book Experince x2 (10min)','Book item\'s for added bonus'),
-(41,2,'Jioc Dual Ring\'s','Rare | Relation get -10'),
-(42,1,'Module Hook Explode','- Module hook damage in explode'),
-(43,1,'Auto Hammer','- Auto Fire Hammer'),
-(44,1,'Auto Gun','- Auto Fire Gun'),
-(45,1,'Module Ghost Gun','- Fire Ghost in Wall'),
-(46,1,'Module Ghost Shotgun','- Fire Ghost in Wall'),
-(47,1,'Module Ghost Grenade','- Fire Ghost in Wall'),
-(48,2,'White Ticket','- Need for Enter in White'),
-(49,1,'Rare Freeazer','- %1 freeze for 1sec'),
-(50,4,'Rand Box Craft','- This box gived rand craft item'),
-(51,4,'Event Box','Event Box'),
-(52,1,'Rare Event Hammer','- Snap & added +5 crit damage'),
-(53,1,'Bounce Gun','- Gun Ammo Bounce'),
-(54,1,'Hybrid SGUN','- Hybrid Gun & Shotgun'),
-(55,1,'Bounce Grenade','- Grenade Ammo Bounce'),
-(56,4,'Moon O2 / H2O','- This need for area moon'),
-(57,1,'Lamp Hammer','- Content 18+'),
-(58,3,'僵尸 Brain','- 任务物品'),
-(59,5,'僵尸 Eye','- Craft Item'),
-(60,5,'Big 僵尸 Eye','- Craft Item'),
-(61,5,'Skelet Bone','- Craft Item'),
-(62,5,'Skelet Fortified Bone','- Craft Item'),
-(63,3,'Skelet Skull','- 任务物品'),
-(64,5,'Nimf Hearth','- Craft Item'),
-(65,5,'Nimf Ears','- Craft Item'),
-(66,3,'Nimf Body','- 任务物品'),
-(67,4,'Clan Exp Bag','- Added for clan 50000 exp'),
-(68,2,'Customized','- This item for custom skin'),
-(69,4,'Reseting Upgrades','- This item used'),
-(70,4,'Reseting Passive Skills','- Reseting only pasive skill'),
-(71,1,'The end Explosion','- This item added end Explosion'),
-(72,10,'Output to the chat','- Settings'),
-(73,10,'Pick Item','- Settings'),
-(74,10,'Skill Walls','- Settings'),
-(75,10,'Skill Heal','- Settings'),
-(76,4,'VIP PACKAGE','- Added more Bonuses'),
-(77,10,'AntiPVP','- Settings'),
-(78,2,'VIP Draw Snap','- VIP Item'),
-(79,12,'Title VIP','- VIP x2 Money & Exp'),
-(80,10,'Skill Sword','- Settings'),
-(81,12,'Title Boss?Die','- Spawn HP +1000'),
-(82,12,'Title Pig Pig','- Price -5%'),
-(83,12,'Title Big Craft','- Not Bonuses'),
-(84,10,'Skill Summer Healing','- Event Skill Healing'),
-(85,5,'Sun Ray','- Event Craft Item'),
-(86,12,'Title Summer','- Title Special Events'),
-(87,4,'Potato','- You got 25 exp'),
-(88,4,'Tomate','- You got 15 exp'),
-(89,4,'Carrot','- You got 10 exp'),
-(90,2,'Jump Impuls','- Impuls jump'),
-(91,10,'Farming Exp','- Farming Exp'),
-(92,4,'Farming Box','- Random Reward'),
-(93,12,'Title Questing System','- 1500 HP | 500 Armor'),
-(94,5,'Wood','- Craft Item'),
-(95,5,'Cooper Ore','- Craft Item'),
-(96,6,'Cooper Pickaxe','- Miner Item'),
-(97,5,'Iron Ore','- Craft Item'),
-(98,6,'Iron Pickaxe','- Miner Item'),
-(99,5,'Gold Ore','- Craft Item'),
-(100,6,'Gold Pickaxe','- Miner Item'),
-(101,5,'Diamond Ore','- Craft Item'),
-(102,6,'Diamond Pickaxe','- Miner Item'),
-(103,10,'Miner Exp','- Miner Exp'),
-(104,5,'Big Wood','- Craft Item'),
-(105,5,'Dragon Ore','- Craft Item'),
-(106,3,'Particle Soul','- Event Back to school'),
-(107,6,'Material','- Work Item'),
-(108,10,'Loader Exp','- Loader Exp'),
-(109,1,'Pizdamet','- 50% -1 mana'),
-(110,15,'Leather body','(Armor +100, Health +100)'),
-(111,16,'Leather feet','- Health +50 Armor +50'),
-(112,17,'Stabilized Clasic','- Damaage +1'),
-(113,15,'Cooper body','- Health Armor +150'),
-(114,16,'Cooper feet','- Health Armor +100'),
-(115,15,'Iron body','- Health Armor +200'),
-(116,16,'Iron feet','- Health Armor +150'),
-(117,15,'Gold body','- Health Armor +250'),
-(118,16,'Gold feet','- Health Armor +150'),
-(119,15,'Diamond body','- Health Armor +300'),
-(120,16,'Diamond feet','- Health Armor +250'),
-(121,15,'Dragon body','- Health Armor +500'),
-(122,16,'Dragon feet','- Health Armor +400'),
-(123,10,'Title Enchanter','- Health Armor +1000');*/
-/*!40000 ALTER TABLE `tw_uItemList` ENABLE KEYS */;
 (1,4,'钱袋','- 随机获取5-20000白银'),
 (2,3,'猪肉','- 任务物品'),
 (3,3,'Kwah 的头','- 任务物品'),
@@ -464,6 +346,7 @@ INSERT INTO `tw_uItemList` VALUES
 (121,15,'龙胸甲','- 生命+500,护甲+500'),
 (122,16,'龙鞋子','- 生命+400,护甲+400'),
 (123,10,'魔法师称号','生命+1000,护甲+1000');
+/*!40000 ALTER TABLE `tw_uItemList` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --

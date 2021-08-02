@@ -135,7 +135,7 @@ bool CCharacter::Spawn(CPlayer *pPlayer, vec2 Pos)
 	
 	if(m_pPlayer->AccData.Jail)
 	{
-		if(m_pPlayer->AccData.IsJailed)
+		if(m_pPlayer->AccData.IsJailed && m_pPlayer->AccData.JailLength > 0)
 		{
 			m_pPlayer->m_JailTick = Server()->TickSpeed()*m_pPlayer->AccData.JailLength;
 		}
@@ -912,13 +912,13 @@ void CCharacter::Tick()
 		{	
 			if(!Server()->GetTopHouse(0))
 			{
-				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), -1, _("这间公会房是空的。."), NULL);
+				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), -1, _("这间房屋还没有公会入驻,暂不开放"), NULL);
 				Die(m_pPlayer->GetCID(), WEAPON_WORLD);	
 			}
 
 			if(!Server()->GetOpenHouse(0) && Server()->GetClanID(m_pPlayer->GetCID()) != Server()->GetTopHouse(0))
 			{
-				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), -1, _("这间公会房不对外开放。"), NULL);
+				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), -1, _("这间公会房不对外开放"), NULL);
 				Die(m_pPlayer->GetCID(), WEAPON_WORLD);	
 			}
 		} 
@@ -926,13 +926,13 @@ void CCharacter::Tick()
 		{	
 			if(!Server()->GetTopHouse(1))
 			{
-				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), -1, _("这间公会房是空的。."), NULL);
+				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), -1, _("这间房屋还没有公会入驻,暂不开放"), NULL);
 				Die(m_pPlayer->GetCID(), WEAPON_WORLD);	
 			}
 
 			if(!Server()->GetOpenHouse(1) && Server()->GetClanID(m_pPlayer->GetCID()) != Server()->GetTopHouse(1))
 			{
-				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), -1, _("这间公会房不对外开放。"), NULL);
+				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), -1, _("这间公会房不对外开放"), NULL);
 				Die(m_pPlayer->GetCID(), WEAPON_WORLD);	
 			}
 		}
@@ -941,13 +941,13 @@ void CCharacter::Tick()
 		{	
 			if(!Server()->GetTopHouse(2))
 			{
-				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), -1, _("这间公会房是空的。."), NULL);
+				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), -1, _("这间房屋还没有公会入驻,暂不开放"), NULL);
 				Die(m_pPlayer->GetCID(), WEAPON_WORLD);	
 			}
 
 			if(!Server()->GetOpenHouse(2) && Server()->GetClanID(m_pPlayer->GetCID()) != Server()->GetTopHouse(2))
 			{
-				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), -1, _("这间公会房不对外开放。"), NULL);
+				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), -1, _("这间公会房不对外开放"), NULL);
 				Die(m_pPlayer->GetCID(), WEAPON_WORLD);	
 			}
 		}
@@ -1087,8 +1087,8 @@ void CCharacter::Tick()
 				}
 				else
 				{
-					Exp = 400; // 白房间的座位
-					Money = 20000;
+					Exp = 15; // 白房间的座位
+					Money = 400;
 
 					LegalExp = m_pPlayer->AccData.Exp + Exp;
 					LegalMoney = m_pPlayer->AccData.Money + Money;
@@ -2462,7 +2462,7 @@ void CCharacter::ClassSpawnAttributes()
 			new CSnapFullProject(GameWorld(), m_Pos, m_pPlayer->GetCID(), 5, 1, true);
 	}
 	
-	Server()->SetMaxAmmo(m_pPlayer->GetCID(), INFWEAPON_HAMMER, 10000);	
+	Server()->SetMaxAmmo(m_pPlayer->GetCID(), INFWEAPON_HAMMER, 1145140000);	
 	if(Server()->GetItemSettings(m_pPlayer->GetCID(), LAMPHAMMER)) Server()->SetFireDelay(m_pPlayer->GetCID(), INFWEAPON_HAMMER, 1200);
 	else Server()->SetFireDelay(m_pPlayer->GetCID(), INFWEAPON_HAMMER, getsp);
 

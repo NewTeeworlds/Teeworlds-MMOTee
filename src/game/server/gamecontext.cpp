@@ -3227,7 +3227,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			AddVote("············", "null", ClientID);
 			AddVote_Localization(ClientID, "null", "  {str:psevdo}", "psevdo", LocalizeText(ClientID, "稀有物品"));
 			CreateNewShop(ClientID, AMULETCLEEVER, 3, 1, 1200);
-			AddVote_Localization(ClientID, "null", "使你在升级时获得两个钱袋");
+			AddVote_Localization(ClientID, "null", "使你在升级时获得20个钱袋");
 			CreateNewShop(ClientID, RINGNOSELFDMG, 3, 1, 1000);
 			AddVote_Localization(ClientID, "null", "不会受到自己的伤害（比如爆炸）");
 			AddVote("", "null", ClientID);

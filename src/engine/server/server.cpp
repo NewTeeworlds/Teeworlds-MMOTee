@@ -795,6 +795,9 @@ int CServer::DelClientCallback(int ClientID, const char *pReason, void *pUser)
 	pThis->m_aClients[ClientID].m_Kill = -1;
 	pThis->m_aClients[ClientID].m_WinArea = -1;
 	pThis->m_aClients[ClientID].m_ClanAdded = -1;
+	pThis->m_aClients[ClientID].m_IsJailed = -1;
+	pThis->m_aClients[ClientID].m_JailLength = 0;
+	pThis->m_aClients[ClientID].m_SummerHealingTimes = -1;
 	pThis->m_aClients[ClientID].Health = 0;
 	pThis->m_aClients[ClientID].Speed = 0;
 	pThis->m_aClients[ClientID].Damage = 0;
@@ -2727,6 +2730,7 @@ public:
 					str_format(Text, sizeof(Text), "%s", "Hello, 这是来自管理员的物品!");
 					break;
 				default:
+					str_format(Text, sizeof(Text), "%s", "没有内容");
 					break;
 				}
 				CServer::CGameServerCmd* pCmd = new CGameServerCmd_AddLocalizeVote_Language(m_ClientID, "null", _(Text));
@@ -4058,7 +4062,7 @@ public:
 					"Seccurity = '%d', "
 					"ClanAdded = '%d', "
 					"IsJailed = '%d', "
-					"JaliLength = '%d', "
+					"JailLength = '%d', "
 					"SummerHealingTimes = '%d'"
 					"WHERE UserId = '%d';"
 					, pSqlServer->GetPrefix(), 
@@ -4318,14 +4322,14 @@ public:
 			if(pSqlServer->GetResults()->next())
 			{
 				dbg_msg("infclass", "User already taken");
-				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("This username or nickname is already in database"));
+				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("这个用户名/昵称已被占用"));
 				m_pServer->AddGameServerCmd(pCmd);
 				return true;
 			}
 		}
 		catch (sql::SQLException &e)
 		{
-			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("An error occured during the creation of your account."));
+			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("在注册账号时发生了错误"));
 			m_pServer->AddGameServerCmd(pCmd);
 			dbg_msg("sql", "Can't check username existance (MySQL Error: %s)", e.what());
 			
@@ -4344,7 +4348,7 @@ public:
 		}
 		catch (sql::SQLException &e)
 		{
-			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("An error occured during the creation of your account."));
+			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("在注册账号时发生了错误"));
 			m_pServer->AddGameServerCmd(pCmd);
 			dbg_msg("sql", "Can't create new user (MySQL Error: %s)", e.what());
 			

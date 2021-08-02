@@ -267,7 +267,7 @@ void CPlayer::BasicAuthedTick()
 		AccUpgrade.SkillPoint += 1;
 		AccUpgrade.Upgrade += 2;
 
-		int GetBag = Server()->GetItemCount(m_ClientID, AMULETCLEEVER) ? 2 : 1;
+		int GetBag = Server()->GetItemCount(m_ClientID, AMULETCLEEVER) ? 20 : 1;
 		GameServer()->GiveItem(m_ClientID, MONEYBAG, GetBag);
 		if(AccData.Level % 10 == 0)
 			GameServer()->SendMail(m_ClientID, 8, RANDOMCRAFTITEM, 3);
@@ -407,7 +407,7 @@ void CPlayer::Tick()
 				m_JailTick = 0;
 				AccData.Jail = false;
 				AccData.IsJailed = false;
-				
+				AccData.JailLength = 0;
 				
 				if(m_pCharacter)
 					m_pCharacter->Die(m_ClientID, WEAPON_WORLD);
