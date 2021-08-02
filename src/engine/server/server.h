@@ -426,7 +426,7 @@ public:
 	virtual void ListInventory(int ClientID, int Type, int GetCount = false);
 	virtual int GetItemCountType(int ClientID, int Type);
 	virtual void InitMailID(int ClientID);
-	virtual void SendMail(int AuthedID, const char* pText, int ItemID, int ItemNum);
+	virtual void SendMail(int AuthedID, int MailType, int ItemID, int ItemNum);
 	virtual void RemMail(int IDMail);
 	//virtual void RemMails(int IDOwner);
 	

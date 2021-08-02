@@ -251,7 +251,7 @@ public:
 	void CreateBot(int ClientID, int BotType, int BotSubType = 0);
 	void CreateLolText(CEntity *pParent, bool Follow, vec2 Pos, vec2 Vel, int Lifespan, const char *pText);
 	const char* LevelString(int max, int value, int step, char ch1, char ch2);
-	void SendMail(int ClientID, const char* pText, int ItemID, int ItemNum);
+	void SendMail(int ClientID, int MailType, int ItemID, int ItemNum);
 
 	// Обновление аккаунта
 	// 升级

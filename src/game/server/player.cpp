@@ -244,10 +244,13 @@ void CPlayer::BasicAuthedTick()
 				SetMoveChar();		
 		}
 	}
-
+	//TODO 修复 bug 
 	if(Server()->GetItemCount(m_ClientID, PIGPORNO) > 1000 && !Server()->GetItemCount(m_ClientID, PIGPIG))
-		GameServer()->SendMail(m_ClientID, "你解锁了一个新的称号!", PIGPIG, 1);
-
+	{
+		GameServer()->SendMail(m_ClientID, 3, PIGPIG, 1);
+		GameServer()->SendChat(m_ClientID, m_Team, "系统已收回100个猪肉");
+		Server()->RemItem(m_ClientID, PIGPORNO, 100, -1);
+	}
 	if(AccData.Money >= 10000)
 	{
 		AccData.Gold += AccData.Money/10000;
@@ -264,10 +267,10 @@ void CPlayer::BasicAuthedTick()
 		AccUpgrade.SkillPoint += 1;
 		AccUpgrade.Upgrade += 2;
 
-		int GetBag = Server()->GetItemCount(m_ClientID, AMULETCLEEVER) ? 2 : 1;
+		int GetBag = Server()->GetItemCount(m_ClientID, AMULETCLEEVER) ? 20 : 1;
 		GameServer()->GiveItem(m_ClientID, MONEYBAG, GetBag);
 		if(AccData.Level % 10 == 0)
-			GameServer()->SendMail(m_ClientID, "每升十级，你就会获得奖金!", RANDOMCRAFTITEM, 3);
+			GameServer()->SendMail(m_ClientID, 8, RANDOMCRAFTITEM, 3);
 		if(AccData.Level == 2)
 			GameServer()->SendChatTarget_Localization(m_ClientID, CHATCATEGORY_DEFAULT, _("你现在可以去做任务了."), NULL);		
 		if(m_pCharacter)
@@ -364,14 +367,15 @@ void CPlayer::Tick()
 						default: Type = EVENTCUSTOMSOUL;
 					}
 
-					GameServer()->SendMail(m_ClientID, "在线奖励[Back to School]!", Type, 1);
-					GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Back to School] 在线奖励:{str:name} 获得了 {str:item}."), "name", Server()->ClientName(m_ClientID), "item", Server()->GetItemName(m_ClientID, Type), NULL);					
+					GameServer()->SendMail(m_ClientID, 9, Type, 1);
+					GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("在线奖励:{str:name} 获得了 {str:item}."), "name", Server()->ClientName(m_ClientID), "item", Server()->GetItemName(m_ClientID, Type), NULL);					
 
 					if(Server()->GetItemCount(m_ClientID, EVENTCUSTOMSOUL) >= 25)
 					{
 						Server()->RemItem(m_ClientID, EVENTCUSTOMSOUL, 25, -1);
-						GameServer()->SendMail(m_ClientID, "你现在获得了Soul automatic, 能够使用自定义皮肤了!", CUSTOMSKIN, 1);
-						GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Back to School] 在线奖励:{str:name} 收集了 25 个灵魂(Soul)并且得到了自定义皮肤的机会."), "name", Server()->ClientName(m_ClientID), NULL);					
+						//TODO
+						GameServer()->SendMail(m_ClientID, 11, CUSTOMSKIN, 1);
+						GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("在线奖励:{str:name} 收集了 25 个灵魂(Soul)并且得到了自定义皮肤的机会."), "name", Server()->ClientName(m_ClientID), NULL);					
 					}
 				}
 			}
@@ -403,7 +407,7 @@ void CPlayer::Tick()
 				m_JailTick = 0;
 				AccData.Jail = false;
 				AccData.IsJailed = false;
-				
+				AccData.JailLength = 0;
 				
 				if(m_pCharacter)
 					m_pCharacter->Die(m_ClientID, WEAPON_WORLD);
