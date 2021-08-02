@@ -302,7 +302,7 @@ void CPickup::MaterFarm(int ClientID, int MaterialID)
 	if(m_Drop >= 100)
 	{
 		Server()->SetMaterials(MaterialID, Server()->GetMaterials(MaterialID)-25);
-		GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("在物品栏对装备附魔吧."), NULL);
+		GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("在物品栏对装备附魔或者卖给商店吧."), NULL);
 		GameServer()->GiveItem(ClientID, MATERIAL, 25+LevelItem*3);
 		GameServer()->GiveItem(ClientID, LOADEREXP, 10);
 

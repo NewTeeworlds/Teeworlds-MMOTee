@@ -1334,8 +1334,8 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					SendChatTarget(ClientID, "------- {Rules} -------");
 					SendChatTarget(ClientID, "禁止使用游戏漏洞!");
 					SendChatTarget(ClientID, "禁止使用辅助性软件!");
-					SendChatTarget(ClientID, "禁止使用dummy!");
-					SendChatTarget(ClientID, "禁止分享一个账号!");
+					SendChatTarget(ClientID, "禁止使用dummy（分身）!");
+					SendChatTarget(ClientID, "禁止分享账号!");
 					SendChatTarget(ClientID, "禁止侮辱玩家!");
 					SendChatTarget(ClientID, "禁止进行线下交易!");
 					SendChatTarget(ClientID, "最好不要干涉别人的游戏过程!");
