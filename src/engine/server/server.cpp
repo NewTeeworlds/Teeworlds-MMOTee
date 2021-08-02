@@ -2910,7 +2910,7 @@ public:
 			str_format(aBuf, sizeof(aBuf), 
 				"INSERT INTO tw_Mail "
 				"(IDOwner, MailType, ItemID, ItemCount) "
-				"VALUES ('%d', '%s', '%d', '%d');"
+				"VALUES ('%d', '%d', '%d', '%d');"
 				, m_AuthedID, m_MailType, m_ItemID, m_ItemNum);	
 			pSqlServer->executeSql(aBuf);
 		}
