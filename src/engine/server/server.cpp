@@ -2692,7 +2692,7 @@ public:
 
 				char aProtocol[16];
 				str_format(aProtocol, sizeof(aProtocol), "reward%d", iscope);
-				str_format(Text, sizeof(Text), "Get Reward %s : %d and Delete Mail", m_pServer->GetItemName(m_ClientID, ItemID, false), ItemNum);	
+				str_format(Text, sizeof(Text), "获得奖励 %s %d 个 并删除此邮件", m_pServer->GetItemName(m_ClientID, ItemID, false), ItemNum);	
 				pCmd = new CGameServerCmd_AddLocalizeVote_Language(m_ClientID, aProtocol, _(Text));
 				m_pServer->AddGameServerCmd(pCmd);
 
