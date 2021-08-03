@@ -2446,6 +2446,18 @@ const char *CServer::GetItemName(int ClientID, int ItemID, bool ntlang)
 		else return m_stInv[ClientID][ItemID].i_name;
 	}
 }
+const char *CServer::GetItemName_en(int ClientID, int ItemID)
+{
+	if(ItemID < 0 || ItemID >= 200)
+	{
+		return "(nope)";
+	}
+	else
+	{
+		dbg_msg("sql",ItemName_en[ClientID][ItemID].i_name);
+		return ItemName_en[ClientID][ItemID].i_name;
+	}
+}
 int CServer::GetItemCountType(int ClientID, int Type)
 {
 	return m_aClients[ClientID].m_ItemCount[Type];
@@ -2464,6 +2476,12 @@ const char *CServer::GetItemDesc(int ClientID, int ItemID)
 	if(ItemID < 0 || ItemID >= 200)
 		return "(invalid)";
 	else return m_stInv[ClientID][ItemID].i_desc;
+}
+const char *CServer::GetItemDesc_en(int ClientID, int ItemID)
+{
+	if(ItemID < 0 || ItemID >= 200)
+		return "(invalid)";
+	else return ItemName_en[ClientID][ItemID].i_desc;
 }
 int CServer::GetItemCount(int ClientID, int ItemID)
 {
@@ -2884,6 +2902,7 @@ int CServer::GetMailCount(int ClientID)
 }
 */
 // Выдача предмета
+// 发邮件
 class CSqlJob_Server_SendMail : public CSqlJob
 {
 private:
@@ -2929,6 +2948,7 @@ void CServer::SendMail(int AuthedID, int MailType, int ItemID, int ItemNum)
 }
 
 // Инициализация Инвентаря по ID
+// 通过 ID 初始化库存
 class CSqlJob_Server_InitInvID : public CSqlJob
 {
 private:
@@ -2959,6 +2979,18 @@ public:
 						m_pServer->m_stInv[i][ItemID].i_type = (int)pSqlServer->GetResults()->getInt("item_type");
 						str_copy(m_pServer->m_stInv[i][ItemID].i_name, pSqlServer->GetResults()->getString("item_name").c_str(), sizeof(m_pServer->m_stInv[i][ItemID].i_name));
 						str_copy(m_pServer->m_stInv[i][ItemID].i_desc, pSqlServer->GetResults()->getString("item_desc").c_str(), sizeof(m_pServer->m_stInv[i][ItemID].i_desc));
+					}
+				}
+				pSqlServer->executeSqlQuery("SELECT * FROM tw_uItemList_en;");
+				while(pSqlServer->GetResults()->next())
+				{
+					for(int i = 0; i < MAX_NOBOT; ++i)
+					{
+						int ItemID = (int)pSqlServer->GetResults()->getInt("il_id");
+						m_pServer->ItemName_en[i][ItemID].i_id = ItemID;
+						m_pServer->ItemName_en[i][ItemID].i_type = (int)pSqlServer->GetResults()->getInt("item_type");
+						str_copy(m_pServer->ItemName_en[i][ItemID].i_name, pSqlServer->GetResults()->getString("item_name").c_str(), sizeof(m_pServer->ItemName_en[i][ItemID].i_name));
+						str_copy(m_pServer->ItemName_en[i][ItemID].i_desc, pSqlServer->GetResults()->getString("item_desc").c_str(), sizeof(m_pServer->ItemName_en[i][ItemID].i_desc));
 					}
 				}
 			}
@@ -4007,7 +4039,7 @@ public:
 		{
 			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, "登录时出现错误。");
 			m_pServer->AddGameServerCmd(pCmd);
-			dbg_msg("sql", "Can't check username/password (MySQL Error: %s)", e.what());
+			dbg_msg("sql", "无法检查用户名/密码 (MySQL 错误: %s)", e.what());
 			return false;
 		}
 		return true;
@@ -4042,7 +4074,7 @@ public:
 
 	virtual bool Job(CSqlServer* pSqlServer)
 	{
-		char aBuf[512];
+		char aBuf[1024];
 		try
 		{
 			if(m_Type == 0)
@@ -4084,7 +4116,7 @@ public:
 					m_pServer->m_aClients[m_ClientID].m_JailLength,
 					m_pServer->m_aClients[m_ClientID].m_SummerHealingTimes,  
 					m_UserID);
-				
+				//dbg_msg("sql",aBuf);
 				pSqlServer->executeSqlQuery(aBuf);
 			}
 			else if(m_Type == 1)
@@ -4124,7 +4156,19 @@ public:
 		}
 		catch (sql::SQLException &e)
 		{
-			dbg_msg("sql", "Can't update (MySQL Error: %s)", e.what());
+			if(m_Type == 0)
+			{
+				dbg_msg("sql", "个人信息更新失败 (MySQL Error: %s)", e.what());
+			}
+			else if(m_Type == 1)
+			{
+				dbg_msg("sql", "玩家升级点信息更新失败 (MySQL Error: %s)", e.what());	
+			}
+			else if(m_Type == 3)
+			{
+				dbg_msg("sql", "玩家公会信息更新失败 (MySQL Error: %s)", e.what());	
+			}
+			
 			return false;
 		}
 		return true;

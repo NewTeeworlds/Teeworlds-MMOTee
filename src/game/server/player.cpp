@@ -118,7 +118,7 @@ void CPlayer::RandomBoxTick()
 				}
 			}
 			if(m_pCharacter)
-				GameServer()->CreateLolText(m_pCharacter, false, vec2(0,-75), vec2 (0,-1), 10, Server()->GetItemName(m_ClientID, getitem, false));
+				GameServer()->CreateLolText(m_pCharacter, false, vec2(0,-75), vec2 (0,-1), 10, Server()->GetItemName_en(m_ClientID, getitem));
 
 			if(m_OpenBox == 30)
 			{
@@ -151,7 +151,7 @@ Event Box 概率：
 			else getitem = RAREEVENTHAMMER;
 
 			if(m_pCharacter)
-				GameServer()->CreateLolText(m_pCharacter, false, vec2(0,-75), vec2 (0,-1), 10, Server()->GetItemName(m_ClientID, getitem, false));
+				GameServer()->CreateLolText(m_pCharacter, false, vec2(0,-75), vec2 (0,-1), 10, Server()->GetItemName_en(m_ClientID, getitem));
 
 			if(m_OpenBox == 30)
 			{
@@ -202,7 +202,7 @@ Farming Box 概率：
 				}
 			}
 			if(m_pCharacter)
-				GameServer()->CreateLolText(m_pCharacter, false, vec2(0,-75), vec2 (0,-1), 10, Server()->GetItemName(m_ClientID, getitem, false));
+				GameServer()->CreateLolText(m_pCharacter, false, vec2(0,-75), vec2 (0,-1), 10, Server()->GetItemName_en(m_ClientID, getitem));
 
 			if(m_OpenBox == 30)
 			{
