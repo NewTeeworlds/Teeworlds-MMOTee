@@ -437,16 +437,16 @@ void CPlayer::Tick()
 			if(GameServer()->m_AreaStartTick)
 			{
 				int Time = GameServer()->m_AreaStartTick/Server()->TickSpeed();
-				GameServer()->SendBroadcast_Localization(m_ClientID, 101, 100, _("Wait start area {int:siska} sec."), "siska", &Time, NULL);						
+				GameServer()->SendBroadcast_Localization(m_ClientID, 101, 100, _("热身时间.{int:siska}秒后开始."), "siska", &Time, NULL);						
 					
 				if(GameServer()->m_AreaStartTick == 100)
-					GameServer()->SendBroadcast_Localization(m_ClientID, 105, 100, _("Fight!!."), NULL);						
+					GameServer()->SendBroadcast_Localization(m_ClientID, 105, 100, _("开打开打"), NULL);						
 			}
 			else if(GameServer()->m_AreaEndGame)
 			{
 				int Time = GameServer()->m_AreaEndGame/Server()->TickSpeed();
 				int couns = GameServer()->GetAreaCount();
-				GameServer()->SendBroadcast_Localization(m_ClientID, 102, 100, _("End area {int:siska} sec. Life {int:num} player's"), "siska", &Time, "num", &couns, NULL);								
+				GameServer()->SendBroadcast_Localization(m_ClientID, 102, 100, _("{int:siska}秒后结束战斗.{int:num}存活."), "siska", &Time, "num", &couns, NULL);								
 			}		
 		}
 		
