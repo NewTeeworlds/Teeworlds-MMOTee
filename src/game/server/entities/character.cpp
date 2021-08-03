@@ -1188,7 +1188,7 @@ void CCharacter::Tick()
 				Die(m_pPlayer->GetCID(), WEAPON_WORLD);
 				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), 200, ("你没有进入白房间的门票，请前往商店购买门票 (White Ticket)!"), NULL);
 			}else{
-				GameServer()->SendBroadcast_Localization(m_pPlayer->GetCID(), 200, 100, _("欢迎来到白房间。"), NULL);
+				GameServer()->SendBroadcast_Localization(m_pPlayer->GetCID(), 200, 100, _("欢迎来到白房间."), NULL);
 			}
 		}
 		
@@ -1382,7 +1382,7 @@ void CCharacter::Tick()
 				if(!Broadcast)
 				{
 					m_pPlayer->m_MapMenuItem = -1;
-					GameServer()->SendBroadcast_Localization(m_pPlayer->GetCID(), BROADCAST_PRIORITY_INTERFACE, BROADCAST_DURATION_REALTIME, _("你需要选择一个职业。"), NULL);
+					GameServer()->SendBroadcast_Localization(m_pPlayer->GetCID(), BROADCAST_PRIORITY_INTERFACE, BROADCAST_DURATION_REALTIME, _("你需要选择一个职业."), NULL);
 				}
 				
 				if(m_Input.m_Fire&1 && m_pPlayer->m_MapMenuItem >= 0)
@@ -1588,7 +1588,7 @@ void CCharacter::Die(int Killer, int Weapon)
 		if(m_pPlayer->GetBotType() == BOT_BOSSSLIME && !GameServer()->m_WinWaitBoss)
 		{
 			int CountWin = GameServer()->GetBossCount();
-			GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("首领 {str:bossn} 被{int:cwin}个玩家击败。"), "bossn", "Slime", "cwin", &CountWin, NULL);			
+			GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("首领 {str:bossn} 被{int:cwin}个玩家击败."), "bossn", "Slime", "cwin", &CountWin, NULL);			
 			
 			GameServer()->m_WinWaitBoss = 1000;
 		}
@@ -1597,7 +1597,7 @@ void CCharacter::Die(int Killer, int Weapon)
 		if(m_pPlayer->m_InBossed)
 		{	
 			m_pPlayer->m_InBossed = false;
-			GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("你被首领{str:name}击败。"), "name", GameServer()->GetBossName(GameServer()->m_BossType), NULL);
+			GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("你被首领{str:name}击败."), "name", GameServer()->GetBossName(GameServer()->m_BossType), NULL);
 		}
 	}
 
@@ -1609,7 +1609,7 @@ void CCharacter::Die(int Killer, int Weapon)
 		if(m_pPlayer->m_InArea)
 		{	
 			m_pPlayer->m_InArea = false;
-			GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("你被击败。"), NULL);
+			GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("你被击败."), NULL);
 		}	
 	}
 
@@ -2400,7 +2400,7 @@ void CCharacter::ClassSpawnAttributes()
 		m_pPlayer->m_AntiPvpSmall = true;
 
 		if(Server()->GetItemSettings(m_pPlayer->GetCID(), SCHAT) != 2)
-			GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("PVP模式 -- 新手保护已开启。"), NULL);	
+			GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("PVP模式 -- 新手保护已开启."), NULL);	
 	}
 	//TODO
 	// книги инфа
