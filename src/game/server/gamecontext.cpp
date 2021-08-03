@@ -4065,7 +4065,7 @@ void CGameContext::StartArea(int WaitTime, int Type)
 		case 2: NameGame = "FNG"; Gets = 5; break;
 	}
 	SendChatTarget(-1, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 小游戏 {str:name} 开启了。"), "name", NameGame, NULL);
+	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 小游戏 {str:name} 开启了."), "name", NameGame, NULL);
 	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 回报: 钱袋, 神器 {int:gets}%"), "gets", &Gets, NULL);
 	SendChatTarget(-1, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 }
@@ -4079,7 +4079,7 @@ void CGameContext::EnterArea(int ClientID)
 		return 	SendBroadcast_Localization(ClientID, 250, 150, _("你被通缉了. 不能进入area room."));
 		
 	if(!m_AreaStartTick)
-		return 	SendBroadcast_Localization(ClientID, 250, 150, _("小游戏未开启。请等待开启。"));
+		return 	SendBroadcast_Localization(ClientID, 250, 150, _("小游戏未开启.请等待开启."));
 			
 	m_apPlayers[ClientID]->m_InArea = true;
 	m_apPlayers[ClientID]->GetCharacter()->Die(ClientID, WEAPON_WORLD);

@@ -1048,7 +1048,7 @@ void CGameContext::OnTick()
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("### Server Information:"), NULL);	
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("注意！新人必须遵守的规则："), NULL);	
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("你只能玩一个服务器，玩了1-250服务器且等级到达要求才能玩250-500服务器"), NULL);	
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("账户若被删除，你的公会会被重组。"), NULL);	
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("账户若被删除，你的公会会被重组."), NULL);	
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("服务器版本： 1.1 stable by Kurosio."), NULL);	
 	}
 
@@ -4026,7 +4026,7 @@ void CGameContext::EnterArea(int ClientID)
 		return 	SendBroadcast_Localization(ClientID, 250, 150, _("You are wanted. No enter in area room."));
 		
 	if(!m_AreaStartTick)
-		return 	SendBroadcast_Localization(ClientID, 250, 150, _("小游戏未开启。请等待开启。"));
+		return 	SendBroadcast_Localization(ClientID, 250, 150, _("小游戏未开启.请等待开启."));
 			
 	m_apPlayers[ClientID]->m_InArea = true;
 	m_apPlayers[ClientID]->GetCharacter()->Die(ClientID, WEAPON_WORLD);
