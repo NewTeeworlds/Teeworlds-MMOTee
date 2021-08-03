@@ -795,6 +795,9 @@ int CServer::DelClientCallback(int ClientID, const char *pReason, void *pUser)
 	pThis->m_aClients[ClientID].m_Kill = -1;
 	pThis->m_aClients[ClientID].m_WinArea = -1;
 	pThis->m_aClients[ClientID].m_ClanAdded = -1;
+	pThis->m_aClients[ClientID].m_IsJailed = -1;
+	pThis->m_aClients[ClientID].m_JailLength = 0;
+	pThis->m_aClients[ClientID].m_SummerHealingTimes = -1;
 	pThis->m_aClients[ClientID].Health = 0;
 	pThis->m_aClients[ClientID].Speed = 0;
 	pThis->m_aClients[ClientID].Damage = 0;
@@ -2682,17 +2685,61 @@ public:
 				int IDMAIL = (int)pSqlServer->GetResults()->getInt("ID");
 				int ItemID = (int)pSqlServer->GetResults()->getInt("ItemID");
 				int ItemNum = (int)pSqlServer->GetResults()->getInt("ItemCount");
+				int MailType = (int)pSqlServer->GetResults()->getInt("MailType");
 				m_pServer->m_aClients[m_ClientID].m_MailID[iscope] = IDMAIL;
 				m_pServer->SetRewardMail(m_ClientID, iscope, ItemID, ItemNum);
 
 				char Text[64];
-				str_format(Text, sizeof(Text), "%s", pSqlServer->GetResults()->getString("TextMail").c_str());
+				//str_format(Text, sizeof(Text), "%s", pSqlServer->GetResults()->getString("TextMail").c_str());
+				switch (MailType)
+				{
+				case 1:
+					str_format(Text, sizeof(Text), "%s", "你获得了奖品，真幸运!");
+					break;
+				case 2:
+					str_format(Text, sizeof(Text), "%s", "Hello, 这是来自任务系统的奖励!");
+					break;
+				case 3:
+					str_format(Text, sizeof(Text), "%s", "Hello, 你解锁了一个新的称号!");
+					break;
+				case 4:
+					str_format(Text, sizeof(Text), "%s", "恭喜你成功升到满级,这是你的奖励!");
+					break;
+				case 5:
+					str_format(Text, sizeof(Text), "%s", "Hello, 你解锁了一项新技能!");
+					break;
+				case 6:
+					str_format(Text, sizeof(Text), "%s", "您购买了VIP，这是你的奖励!");
+					break;
+				case 7:
+					str_format(Text, sizeof(Text), "%s", "Hello, 合成物品成功!");
+					break;
+				case 8:
+					str_format(Text, sizeof(Text), "%s", "每升十级，你就会获得奖品!");
+					break;
+				case 9:
+					str_format(Text, sizeof(Text), "%s", "在线奖励!");
+					break;
+				case 10:
+					str_format(Text, sizeof(Text), "%s", "Hello, 这是你的注册奖励!");
+					break;
+				case 11:
+					str_format(Text, sizeof(Text), "%s", "你现在获得了Soul automatic, 能够使用自定义皮肤了!");
+					break;
+				case 12:
+					str_format(Text, sizeof(Text), "%s", "Hello, 这是来自管理员的物品!");
+					break;
+				default:
+					str_format(Text, sizeof(Text), "%s", "没有内容");
+					break;
+				}
 				CServer::CGameServerCmd* pCmd = new CGameServerCmd_AddLocalizeVote_Language(m_ClientID, "null", _(Text));
 				m_pServer->AddGameServerCmd(pCmd);
 
 				char aProtocol[16];
 				str_format(aProtocol, sizeof(aProtocol), "reward%d", iscope);
-				str_format(Text, sizeof(Text), "获得奖励 %s %d 个 并删除此邮件", m_pServer->GetItemName(m_ClientID, ItemID, false), ItemNum);	
+				str_format(Text, sizeof(Text), "领取 %s : %d 并删除邮件", m_pServer->GetItemName(m_ClientID, ItemID, false), ItemNum);	
+
 				pCmd = new CGameServerCmd_AddLocalizeVote_Language(m_ClientID, aProtocol, _(Text));
 				m_pServer->AddGameServerCmd(pCmd);
 
@@ -2844,16 +2891,16 @@ private:
 	int m_AuthedID;
 	int m_ItemID;
 	int m_ItemNum;
-	CSqlString<64> m_sType;
+	int m_MailType;
 	
 public:
-	CSqlJob_Server_SendMail(CServer* pServer, int AuthedID, const char* pText, int ItemID, int ItemNum)
+	CSqlJob_Server_SendMail(CServer* pServer, int AuthedID, int MailType, int ItemID, int ItemNum)
 	{
 		m_pServer = pServer;
 		m_AuthedID = AuthedID;
 		m_ItemID = ItemID;
 		m_ItemNum = ItemNum;
-		m_sType = CSqlString<64>(pText);
+		m_MailType = MailType;
 	}
 
 	virtual bool Job(CSqlServer* pSqlServer)
@@ -2863,9 +2910,9 @@ public:
 		{
 			str_format(aBuf, sizeof(aBuf), 
 				"INSERT INTO tw_Mail "
-				"(IDOwner, TextMail, ItemID, ItemCount) "
+				"(IDOwner, MailType, ItemID, ItemCount) "
 				"VALUES ('%d', '%s', '%d', '%d');"
-				, m_AuthedID, m_sType.ClrStr(), m_ItemID, m_ItemNum);	
+				, m_AuthedID, m_MailType, m_ItemID, m_ItemNum);	
 			pSqlServer->executeSql(aBuf);
 		}
 		catch (sql::SQLException &e)
@@ -2875,9 +2922,9 @@ public:
 		return true;
 	}
 };
-void CServer::SendMail(int AuthedID, const char* pText, int ItemID, int ItemNum)
+void CServer::SendMail(int AuthedID, int MailType, int ItemID, int ItemNum)
 {
-	CSqlJob* pJob = new CSqlJob_Server_SendMail(this, AuthedID, pText, ItemID, ItemNum);
+	CSqlJob* pJob = new CSqlJob_Server_SendMail(this, AuthedID, MailType, ItemID, ItemNum);
 	pJob->Start();
 }
 
@@ -3887,6 +3934,9 @@ public:
 				m_pServer->m_aClients[m_ClientID].m_Quest = (int)pSqlServer->GetResults()->getInt("Quest");
 				m_pServer->m_aClients[m_ClientID].m_Kill = (int)pSqlServer->GetResults()->getInt("Killing");
 				m_pServer->m_aClients[m_ClientID].m_WinArea = (int)pSqlServer->GetResults()->getInt("WinArea");
+				m_pServer->m_aClients[m_ClientID].m_IsJailed = (int)pSqlServer->GetResults()->getInt("IsJailed");
+				m_pServer->m_aClients[m_ClientID].m_JailLength = (int)pSqlServer->GetResults()->getInt("JailLength");
+				m_pServer->m_aClients[m_ClientID].m_SummerHealingTimes = (int)pSqlServer->GetResults()->getInt("SummerHealingTimes");
 				m_pServer->m_aClients[m_ClientID].m_ClanAdded = m_pServer->m_aClients[m_ClientID].m_ClanID > 0 ? (int)pSqlServer->GetResults()->getInt("ClanAdded") : 0;
 	
 				str_copy(m_pServer->m_aClients[m_ClientID].m_aUsername, pSqlServer->GetResults()->getString("Nick").c_str(), sizeof(m_pServer->m_aClients[m_ClientID].m_aUsername));
@@ -4011,13 +4061,29 @@ public:
 					"Killing = '%d', "
 					"WinArea = '%d', "
 					"Seccurity = '%d', "
-					"ClanAdded = '%d' "
+					"ClanAdded = '%d', "
+					"IsJailed = '%d', "
+					"JailLength = '%d', "
+					"SummerHealingTimes = '%d'"
 					"WHERE UserId = '%d';"
-					, pSqlServer->GetPrefix(), m_pServer->m_aClients[m_ClientID].m_Level, m_pServer->m_aClients[m_ClientID].m_Exp, 
-						m_pServer->m_aClients[m_ClientID].m_Class, m_pServer->m_aClients[m_ClientID].m_Money, m_pServer->m_aClients[m_ClientID].m_Gold, m_pServer->m_aClients[m_ClientID].m_Donate, m_pServer->m_aClients[m_ClientID].m_Rel, 
-						m_pServer->m_aClients[m_ClientID].m_Jail, m_pServer->m_aClients[m_ClientID].m_Quest, m_pServer->m_aClients[m_ClientID].m_Kill,  
-						m_pServer->m_aClients[m_ClientID].m_WinArea, m_pServer->m_aClients[m_ClientID].m_Seccurity, m_pServer->m_aClients[m_ClientID].m_ClanAdded, 
-						m_UserID);
+					, pSqlServer->GetPrefix(), 
+					m_pServer->m_aClients[m_ClientID].m_Level, 
+					m_pServer->m_aClients[m_ClientID].m_Exp, 
+					m_pServer->m_aClients[m_ClientID].m_Class, 
+					m_pServer->m_aClients[m_ClientID].m_Money, 
+					m_pServer->m_aClients[m_ClientID].m_Gold, 
+					m_pServer->m_aClients[m_ClientID].m_Donate, 
+					m_pServer->m_aClients[m_ClientID].m_Rel, 
+					m_pServer->m_aClients[m_ClientID].m_Jail, 
+					m_pServer->m_aClients[m_ClientID].m_Quest, 
+					m_pServer->m_aClients[m_ClientID].m_Kill,  
+					m_pServer->m_aClients[m_ClientID].m_WinArea, 
+					m_pServer->m_aClients[m_ClientID].m_Seccurity, 
+					m_pServer->m_aClients[m_ClientID].m_ClanAdded, 
+					m_pServer->m_aClients[m_ClientID].m_IsJailed, 
+					m_pServer->m_aClients[m_ClientID].m_JailLength,
+					m_pServer->m_aClients[m_ClientID].m_SummerHealingTimes,  
+					m_UserID);
 				
 				pSqlServer->executeSqlQuery(aBuf);
 			}
@@ -4257,14 +4323,14 @@ public:
 			if(pSqlServer->GetResults()->next())
 			{
 				dbg_msg("infclass", "User already taken");
-				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("This username or nickname is already in database"));
+				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("这个用户名/昵称已被占用"));
 				m_pServer->AddGameServerCmd(pCmd);
 				return true;
 			}
 		}
 		catch (sql::SQLException &e)
 		{
-			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("An error occured during the creation of your account."));
+			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("在注册账号时发生了错误"));
 			m_pServer->AddGameServerCmd(pCmd);
 			dbg_msg("sql", "Can't check username existance (MySQL Error: %s)", e.what());
 			
@@ -4283,7 +4349,7 @@ public:
 		}
 		catch (sql::SQLException &e)
 		{
-			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("An error occured during the creation of your account."));
+			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("在注册账号时发生了错误"));
 			m_pServer->AddGameServerCmd(pCmd);
 			dbg_msg("sql", "Can't create new user (MySQL Error: %s)", e.what());
 			
@@ -4597,8 +4663,9 @@ void CServer::ShowTop10Clans(int ClientID, const char* Type, int TypeGet)
 	pJob->Start();
 }
 
-// ********************************************** OZOZOZ ДОМА СОСАТЬ ЛЕЖАТЬ НАХУЙ!!!
+// ********************************************** OZOZOZ ДОМА СОСАТЬ ЛЕЖАТЬ НАХУЙ!!! ——抱怨
 // Получить дома кланов
+// 获得公会房屋
 class CSqlJob_Server_GetTopClanHouse : public CSqlJob
 {
 private:

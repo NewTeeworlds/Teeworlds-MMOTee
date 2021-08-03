@@ -252,7 +252,7 @@ bool CGameControllerMOD::PreSpawn(CPlayer* pPlayer, vec2 *pOutPos)
 		{
 			Type = 15;
 
-			GameServer()->SendMail(pPlayer->GetCID(), "Hello, your bonus register in server!", MONEYBAG, 10);
+			GameServer()->SendMail(pPlayer->GetCID(), 10, MONEYBAG, 10);
 			GameServer()->GiveItem(pPlayer->GetCID(), SCHAT, 1);
 			GameServer()->GiveItem(pPlayer->GetCID(), SDROP, 1);
 		}

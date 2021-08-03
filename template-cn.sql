@@ -1,0 +1,392 @@
+-- MySQL dump 10.17  Distrib 10.3.25-MariaDB, for debian-linux-gnu (x86_64)
+--
+-- Host: 10.66.173.119    Database: mmohard
+-- ------------------------------------------------------
+-- Server version	5.7.18-txsql-log
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `tw_Clans`
+--
+
+DROP TABLE IF EXISTS `tw_Clans`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tw_Clans` (
+  `ClanID` int(11) NOT NULL AUTO_INCREMENT,
+  `Clanname` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT 'NOPE',
+  `LeaderName` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT 'NOPE',
+  `LeaderID` int(11) NOT NULL,
+  `Level` int(11) NOT NULL DEFAULT '1',
+  `Exp` int(11) NOT NULL,
+  `MaxNum` int(11) NOT NULL DEFAULT '2',
+  `Money` int(11) NOT NULL,
+  `Relevance` int(11) NOT NULL DEFAULT '0',
+  `MoneyAdd` int(11) NOT NULL DEFAULT '0',
+  `ExpAdd` int(11) NOT NULL DEFAULT '0',
+  `SpawnHouse` tinyint(4) NOT NULL DEFAULT '0',
+  `ChairHouse` int(11) NOT NULL DEFAULT '0',
+  `CreateDate` date NOT NULL,
+  PRIMARY KEY (`ClanID`) USING BTREE,
+  KEY `ClanID` (`ClanID`) USING BTREE,
+  KEY `Clanname` (`Clanname`) USING BTREE,
+  KEY `Level` (`Level`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tw_Clans`
+--
+
+LOCK TABLES `tw_Clans` WRITE;
+/*!40000 ALTER TABLE `tw_Clans` DISABLE KEYS */;
+INSERT INTO `tw_Clans` VALUES (1,'Star','test',1,4,2595550,20,5001,16164,53,131,0,0,'0000-00-00');
+/*!40000 ALTER TABLE `tw_Clans` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tw_Mail`
+--
+
+DROP TABLE IF EXISTS `tw_Mail`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tw_Mail` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `IDOwner` int(11) NOT NULL,
+  `MailType` int(11) NOT NULL DEFAULT '0',
+  `ItemID` int(11) DEFAULT NULL,
+  `ItemCount` int(11) NOT NULL,
+  PRIMARY KEY (`ID`) USING BTREE,
+  KEY `IDOwner` (`IDOwner`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=71218 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tw_Mail`
+--
+
+LOCK TABLES `tw_Mail` WRITE;
+/*!40000 ALTER TABLE `tw_Mail` DISABLE KEYS */;
+INSERT INTO `tw_Mail` VALUES (1,1,1,1,10);
+/*!40000 ALTER TABLE `tw_Mail` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tw_Materials`
+--
+
+DROP TABLE IF EXISTS `tw_Materials`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tw_Materials` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Materials` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tw_Materials`
+--
+
+LOCK TABLES `tw_Materials` WRITE;
+/*!40000 ALTER TABLE `tw_Materials` DISABLE KEYS */;
+INSERT INTO `tw_Materials` VALUES (1,16956962),
+(2,13580910),
+(3,1156871);
+/*!40000 ALTER TABLE `tw_Materials` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tw_Users`
+--
+
+DROP TABLE IF EXISTS `tw_Users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tw_Users` (
+  `UserId` int(11) NOT NULL AUTO_INCREMENT,
+  `Username` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `Nick` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `Email` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `PasswordHash` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `Level` int(11) NOT NULL DEFAULT '1',
+  `Exp` int(11) NOT NULL DEFAULT '0',
+  `Money` bigint(32) NOT NULL DEFAULT '100',
+  `Gold` bigint(20) NOT NULL DEFAULT '0',
+  `Donate` int(11) NOT NULL DEFAULT '0',
+  `Rel` int(11) NOT NULL DEFAULT '0',
+  `Jail` tinyint(1) NOT NULL DEFAULT '0',
+  `IsJailed` int(11) NOT NULL DEFAULT '0',
+  `JailLength` int(11) NOT NULL DEFAULT '0',
+  `SummerHealingTimes` int(11) NOT NULL DEFAULT '0',
+  `Class` int(11) NOT NULL DEFAULT '0',
+  `ClanAdded` bigint(20) NOT NULL DEFAULT '0',
+  `ClanID` int(11) NOT NULL,
+  `Quest` int(11) NOT NULL DEFAULT '1',
+  `QuestDat` int(11) NOT NULL DEFAULT '0',
+  `Seccurity` tinyint(4) NOT NULL DEFAULT '0',
+  `Killing` int(11) NOT NULL DEFAULT '0',
+  `WinArea` int(11) NOT NULL DEFAULT '0',
+  `SettingsChat` int(11) NOT NULL DEFAULT '0',
+  `SettingsDrop` int(11) NOT NULL DEFAULT '0',
+  `RegisterDate` datetime NOT NULL,
+  `RegisterIp` varchar(64) NOT NULL,
+  PRIMARY KEY (`UserId`) USING BTREE,
+  KEY `UserId` (`UserId`) USING BTREE,
+  KEY `Username` (`Username`) USING BTREE,
+  KEY `UserId_2` (`UserId`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=1530 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tw_Users`
+--
+
+LOCK TABLES `tw_Users` WRITE;
+/*!40000 ALTER TABLE `tw_Users` DISABLE KEYS */;
+INSERT INTO `tw_Users` VALUES (1,'test','天上的星星','null','505a47881334859c582f2731b59fac1e',712,1355885,8203,22959,0,0,0,0,0,0,2,0,1,7,0,1,53301,1,0,0,'2018-06-08 15:30:36','127.0.0.1');
+/*!40000 ALTER TABLE `tw_Users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+-- 密码是978798
+
+--
+-- Table structure for table `tw_uClass`
+--
+
+DROP TABLE IF EXISTS `tw_uClass`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tw_uClass` (
+  `UserID` int(11) NOT NULL,
+  `Username` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `Upgrade` int(11) NOT NULL DEFAULT '0',
+  `SkillPoint` int(11) NOT NULL DEFAULT '0',
+  `Damage` int(11) NOT NULL DEFAULT '0',
+  `Speed` int(11) NOT NULL DEFAULT '0',
+  `Health` int(11) NOT NULL DEFAULT '0',
+  `HPRegen` int(11) NOT NULL DEFAULT '0',
+  `AmmoRegen` int(11) NOT NULL DEFAULT '0',
+  `Ammo` int(11) NOT NULL DEFAULT '0',
+  `Spray` int(11) NOT NULL DEFAULT '0',
+  `Mana` int(11) NOT NULL DEFAULT '0',
+  `HammerRange` int(11) NOT NULL DEFAULT '0',
+  `Pasive2` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`UserID`) USING BTREE,
+  KEY `Username` (`Username`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tw_uClass`
+--
+
+LOCK TABLES `tw_uClass` WRITE;
+/*!40000 ALTER TABLE `tw_uClass` DISABLE KEYS */;
+INSERT INTO `tw_uClass` VALUES (1,'test',600,300,0,0,0,0,0,0,0,0,0,0);
+/*!40000 ALTER TABLE `tw_uClass` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tw_uItemList`
+--
+
+DROP TABLE IF EXISTS `tw_uItemList`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tw_uItemList` (
+  `il_id` int(4) unsigned NOT NULL AUTO_INCREMENT,
+  `item_type` int(11) DEFAULT '0',
+  `item_name` char(50) NOT NULL,
+  `item_desc` char(100) NOT NULL DEFAULT '- No description',
+  PRIMARY KEY (`il_id`) USING BTREE,
+  KEY `item_type` (`item_type`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=124 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tw_uItemList`
+--
+
+LOCK TABLES `tw_uItemList` WRITE;
+/*!40000 ALTER TABLE `tw_uItemList` DISABLE KEYS */;
+INSERT INTO `tw_uItemList` VALUES 
+(1,4,'钱袋','- 随机获取5-20000白银'),
+(2,3,'猪肉','- 任务物品'),
+(3,3,'Kwah 的头','- 任务物品'),
+(4,1,'钩子伤害','- 武器/武器加成'),
+(5,1,'手枪','- 武器'),
+(6,1,'霰弹枪','- 武器'),
+(7,1,'榴弹炮','- 武器'),
+(8,1,'激光枪','- 武器'),
+(9,2,'克里文护身符','每次升级获得20个钱袋'),
+(10,2,'自我免伤戒指','不会受到来自自己的伤害(如爆炸)'),
+(11,5,'表情-快乐模块','表情(自动使用)。集齐所有表情可以合成表情模块。'),
+(12,5,'表情-愤怒模块','表情(自动使用)。集齐所有表情可以合成表情模块。'),
+(13,5,'表情-惊讶模块','表情(自动使用)。集齐所有表情可以合成表情模块。'),
+(14,5,'表情-眨眼模块','表情(自动使用)。集齐所有表情可以合成表情模块。'),
+(15,5,'表情-痛苦模块','表情(自动使用)。集齐所有表情可以合成表情模块。'),
+(16,4,'公会创建票','拥有才可创建公会'),
+(17,2,'表情模块','表情(自动使用)。'),
+(18,4,'α 箱子','注册奖励'),
+(19,4,'技能点箱子','VIP 奖励,包含20升级点+10技能点'),
+(20,2,'皮革','用于合成'),
+(21,2,'特效-生命恢复','神器｜点满生命恢复获得的特效'),
+(22,2,'特效-伤害','神器｜点满伤害获得的特效'),
+(23,2,'特效-射速','神器｜点满射速获得的特效'),
+(24,2,'特效-子弹恢复','神器｜点满子弹恢复获得的特效'),
+(25,2,'神器-Slime 的戒指','神器|在不受自身伤害的情况下让你进行榴弹跳'),
+(26,5,'Slime 的尸体','用于合成'),
+(27,5,'戒指蓝图','用于合成'),
+(28,1,'手枪模块-爆炸','- 让你的子弹爆炸!'),
+(29,1,'霰弹枪模块：爆炸','- 让你的子弹爆炸!'),
+(30,1,'激光枪模块：爆炸','- 让你的激光爆炸!'),
+(31,1,'弹夹','- 所有武器最大子弹上限+5'),
+(32,5,'爆破鬼才的尸体','用于合成'),
+(33,2,'神器-爆破鬼才的戒指','神器 | 生命上限+5%/用于合成'),
+(34,5,'耳环蓝图','用于合成耳环'),
+(35,5,'武器蓝图','用于合成'),
+(36,1,'霰弹枪模块：Slime 的霰弹枪','- 让你的子弹能够反弹!'),
+(37,1,'神器-Kwah的耳环','跳跃段数+1'),
+(38,5,'Kwah 的脚','用于合成'),
+(39,4,'黄金书(10分钟)','黄金获取*2'),
+(40,4,'经验书(10分钟)','经验获取*2'),
+(41,2,'双重联合戒指','神器｜让守卫的愤怒值每秒额外-10'),
+(42,1,'钩子模块：爆炸','- 钩子勾住的敌人会爆炸'),
+(43,1,'锤子/刀模块：自动','- 长按可一直挥动锤子/刀'),
+(44,1,'手枪模块：自动','- 长按手枪可一直射击'),
+(45,1,'手枪模块：穿墙','- 手枪子弹可穿过可勾的墙体'),
+(46,1,'霰弹枪模块：穿墙','- 霰弹枪子弹可穿过可勾的墙体'),
+(47,1,'榴弹模块：穿墙','- 榴弹可穿过可勾的墙体'),
+(48,2,'白房门票','- 用它进入白房'),
+(49,1,'神器-冰冻','- 1%概率冻结敌人1秒(Slime 3秒)'),
+(50,4,'合成用物品盲盒','- 随机获得合成用物品'),
+(51,4,'随机盲盒','随机获得钱袋、神器'),
+(52,1,'神器-随机锤子','- 特效 & 暴击伤害+5'),
+(53,1,'手枪模块：反弹','- 手枪子弹落地可以反弹'),
+(54,1,'超能霰弹枪','- 让你的霰弹枪前后齐发！'),
+(55,1,'榴弹模块：反弹','- 榴弹落地可以反弹'),
+(56,4,'月球 氧气/水','- 用于月球区域'),
+(57,1,'追踪锤','- 锤子可以发射远程追踪攻击'),
+(58,3,'僵尸的脑子','- 任务物品'),
+(59,5,'僵尸的眼睛','- 用于合成'),
+(60,5,'僵尸的大眼睛','- 用于合成'),
+(61,5,'Skelet 的骨头','- 用于合成'),
+(62,5,'Skelet 强化骨','- 用于合成'),
+(63,3,'Skelet 的头骨','- 任务物品'),
+(64,5,'Nimf 的炉子','- 用于合成'),
+(65,5,'Nimf 的耳朵','- 用于合成'),
+(66,3,'Nimf 的尸体','- 任务物品'),
+(67,4,'公会经验包','- 公会经验+50000'),
+(68,2,'灵魂','- 可以使用自定义皮肤'),
+(69,4,'升级点重置','- 重置升级点'),
+(70,4,'技能点重置','- 仅重置技能点'),
+(71,1,'终极爆炸','- 增强爆炸效果'),
+(72,10,'聊天','- 基本设置'),
+(73,10,'捡起物品','- 基本设置'),
+(74,10,'技能-激光墙','- 魔能技能'),
+(75,10,'技能-治疗','- 魔能技能'),
+(76,4,'VIP 包','- 包含钱袋,专属特效等物品'),
+(77,10,'PVP模式','- 基本设置'),
+(78,2,'VIP 特效','- VIP 专属特效'),
+(79,12,'称号 VIP','- 黄金与经验加倍'),
+(80,10,'技能-光剑','- 魔能技能'),
+(81,12,'称号-Boss克星','- 最大生命 +1000'),
+(82,12,'称号-猪猪','- 商店打95折'),
+(83,12,'称号-合成大师','- 无增益'),
+(84,10,'技能-沐浴阳光','- 立即回复大量生命'),
+(85,5,'日曜','- 用于合成 技能-沐浴阳光'),
+(86,12,'称号 阳光','- 活动称号,无加成'),
+(87,4,'土豆','- 获得25经验'),
+(88,4,'番茄','- 获得15经验'),
+(89,4,'胡萝卜','- 获得10经验'),
+(90,2,'超级跳跃','- 第一段跳高度增加'),
+(91,10,'农耕经验','- 农耕经验'),
+(92,4,'农耕盲盒','- 随机获得农耕经验、随机盲盒、超级跳、神器等'),
+(93,12,'称号-任务达人','- +1500生命、500护甲'),
+(94,5,'木材','- 用于合成'),
+(95,5,'铜矿石','- 用于合成'),
+(96,6,'铜镐','- 用于挖矿'),
+(97,5,'铁矿石','- 用于合成'),
+(98,6,'铁镐','- 用于挖矿'),
+(99,5,'金矿石','- 用于合成'),
+(100,6,'金镐','- 用于挖矿'),
+(101,5,'钻石','- 用于合成'),
+(102,6,'钻石镐','- 用于挖矿'),
+(103,10,'挖矿经验','- 挖矿经验'),
+(104,5,'大号木头','- 用于合成'),
+(105,5,'龙矿石','- 用于合成'),
+(106,3,'灵魂碎片','- 在线奖励中随机得到，25个灵魂碎片可以合成1个灵魂'),
+(107,6,'材料','- 用于附魔、商店等'),
+(108,10,'萃取经验','- 萃取经验'),
+(109,1,'爱心榴弹','- 50%几率消耗1魔能'),
+(110,15,'皮革胸甲','生命+100,护甲+100'),
+(111,16,'皮革鞋子','- 生命+50，护甲+50'),
+(112,17,'伤害增强','增加伤害'),
+(113,15,'铜质胸甲','- 生命+150,护甲+150'),
+(114,16,'铜质鞋子','- 生命+100,护甲 +100'),
+(115,15,'铁质胸甲','- 生命+200,护甲 +200'),
+(116,16,'铁质鞋子','- 生命+150,护甲 +150'),
+(117,15,'金质胸甲','- 生命+250,护甲+250'),
+(118,16,'金质鞋子','- 生命+150,护甲+150'),
+(119,15,'钻石胸甲','- 生命+300,护甲+300'),
+(120,16,'钻石鞋子','- 生命+250,护甲+250'),
+(121,15,'龙胸甲','- 生命+500,护甲+500'),
+(122,16,'龙鞋子','- 生命+400,护甲+400'),
+(123,10,'魔法师称号','生命+1000,护甲+1000');
+/*!40000 ALTER TABLE `tw_uItemList` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tw_uItems`
+--
+
+DROP TABLE IF EXISTS `tw_uItems`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tw_uItems` (
+  `it_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `il_id` int(4) unsigned NOT NULL,
+  `item_type` int(11) NOT NULL,
+  `item_owner` bigint(20) NOT NULL DEFAULT '0',
+  `item_settings` smallint(5) NOT NULL DEFAULT '0',
+  `item_count` int(11) NOT NULL DEFAULT '0',
+  `item_enchant` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`it_id`) USING BTREE,
+  KEY `item_owner` (`item_owner`) USING BTREE,
+  KEY `item_type` (`item_type`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=32903 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tw_uItems`
+--
+
+LOCK TABLES `tw_uItems` WRITE;
+/*!40000 ALTER TABLE `tw_uItems` DISABLE KEYS */;
+INSERT INTO `tw_uItems` VALUES (1,1,4,1,0,76,0);
+/*!40000 ALTER TABLE `tw_uItems` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2020-11-08 13:27:23
