@@ -68,6 +68,7 @@ public:
 	int m_ExperienceAdd;
 	int m_OpenBox;
 	int m_OpenBoxType;
+	int m_OpenBoxAmount;
 	bool m_BigBot;
 	int m_InviteClanID;
 	bool m_ActiveChair;

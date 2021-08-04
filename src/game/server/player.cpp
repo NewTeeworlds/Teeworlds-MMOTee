@@ -124,14 +124,15 @@ void CPlayer::RandomBoxTick()
 			{
 				m_OpenBox = 0;
 				m_OpenBoxType = 0;
+				
 
 				if(m_pCharacter)
 					GameServer()->CreateDeath(m_pCharacter->m_Pos, m_ClientID);
 
-				int Get = 1;
-				GameServer()->GiveItem(m_ClientID, getitem, Get);
+				GameServer()->GiveItem(m_ClientID, getitem, m_OpenBoxAmount);
 				GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:used} x{int:num} 而且获得了 {str:get} x{int:num2}"), 
-					"name", Server()->ClientName(m_ClientID), "used", Server()->GetItemName(m_ClientID, RANDOMCRAFTITEM, false), "num", &Get, "get", Server()->GetItemName(m_ClientID, getitem, false), "num2", &Get, NULL);	
+					"name", Server()->ClientName(m_ClientID), "used", Server()->GetItemName(m_ClientID, RANDOMCRAFTITEM, false), "num", &m_OpenBoxAmount, "get", Server()->GetItemName(m_ClientID, getitem, false), "num2", &m_OpenBoxAmount, NULL);
+				m_OpenBoxAmount = 0;	
 			
 			}
 		}	
@@ -161,10 +162,10 @@ Event Box 概率：
 				if(m_pCharacter)
 					GameServer()->CreateDeath(m_pCharacter->m_Pos, m_ClientID);
 
-				int Get = 1;
-				GameServer()->GiveItem(m_ClientID, getitem, Get);
+				GameServer()->GiveItem(m_ClientID, getitem, m_OpenBoxAmount);
 				GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:used} x{int:num} 而且获得了 {str:get} x{int:num2}"), 
-					"name", Server()->ClientName(m_ClientID), "used", Server()->GetItemName(m_ClientID, EVENTBOX, false), "num", &Get, "get", Server()->GetItemName(m_ClientID, getitem, false), "num2", &Get, NULL);	
+					"name", Server()->ClientName(m_ClientID), "used", Server()->GetItemName(m_ClientID, EVENTBOX, false), "num", &m_OpenBoxAmount, "get", Server()->GetItemName(m_ClientID, getitem, false), "num2", &m_OpenBoxAmount, NULL);
+				m_OpenBoxAmount = 0;	
 			
 			}
 		}	
@@ -186,9 +187,9 @@ Farming Box 概率：
 				int RandItem = rand()%3;
 				switch(RandItem)
 				{
-					default: getitem = FARMLEVEL, Get = 5; break;
-					case 1: getitem = MONEYBAG, Get = 2; break;
-					case 2: getitem = EVENTBOX, Get = 5; break;
+					default: getitem = FARMLEVEL, Get = 5 * m_OpenBoxAmount; break;
+					case 1: getitem = MONEYBAG, Get = 2 * m_OpenBoxAmount; break;
+					case 2: getitem = EVENTBOX, Get = 5 * m_OpenBoxAmount; break;
 				}
 			}
 			else
@@ -200,6 +201,7 @@ Farming Box 概率：
 					case 1: getitem = FREEAZER; break;
 					case 3: getitem = RARESLIMEDIRT; break;
 				}
+				Get = m_OpenBoxAmount;
 			}
 			if(m_pCharacter)
 				GameServer()->CreateLolText(m_pCharacter, false, vec2(0,-75), vec2 (0,-1), 10, Server()->GetItemName_en(m_ClientID, getitem));
@@ -208,13 +210,15 @@ Farming Box 概率：
 			{
 				m_OpenBox = 0;
 				m_OpenBoxType = 0;
+			
 
 				if(m_pCharacter)
 					GameServer()->CreateDeath(m_pCharacter->m_Pos, m_ClientID);
 
 				GameServer()->GiveItem(m_ClientID, getitem, Get);
-				GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:used} x1 而且获得了 {str:get} x{int:num2}"), 
-					"name", Server()->ClientName(m_ClientID), "used", Server()->GetItemName(m_ClientID, FARMBOX, false), "get", Server()->GetItemName(m_ClientID, getitem, false), "num2", &Get, NULL);	
+				GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:used} x{int:num} 而且获得了 {str:get} x{int:num2}"), 
+					"name", Server()->ClientName(m_ClientID), "used", Server()->GetItemName(m_ClientID, FARMBOX, false), "num", &m_OpenBoxAmount, "get", Server()->GetItemName(m_ClientID, getitem, false), "num2", &Get, NULL);
+				m_OpenBoxAmount = 0;	
 			
 			}
 		}	

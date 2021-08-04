@@ -2093,8 +2093,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					int SelectItem = m_apPlayers[ClientID]->m_SelectItem;
 					
 					int Get = chartoint(pReason, MAX_COUNT );
-					if(SelectItem == RANDOMCRAFTITEM || SelectItem == EVENTBOX || SelectItem == FARMBOX ||
-						SelectItem == RESETINGUPGRADE || SelectItem == RESETINGSKILL || SelectItem == VIPPACKAGE)
+					if(SelectItem == RESETINGUPGRADE || SelectItem == RESETINGSKILL || SelectItem == VIPPACKAGE)
 						Get = 1;
 					
 					Server()->RemItem(ClientID, SelectItem, Get, USEDUSE);
@@ -4769,9 +4768,9 @@ void CGameContext::UseItem(int ClientID, int ItemID, int Count, int Type)
 			}
 			else if(ItemID == RANDOMCRAFTITEM || ItemID == EVENTBOX || ItemID == FARMBOX)
 			{
-				Count = 1;
 				m_apPlayers[ClientID]->m_OpenBox = 210;
 				m_apPlayers[ClientID]->m_OpenBoxType = ItemID;
+				m_apPlayers[ClientID]->m_OpenBoxAmount = Count;
 				break;
 			}
 			else 
