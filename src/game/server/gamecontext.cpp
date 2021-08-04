@@ -1088,11 +1088,11 @@ void CGameContext::OnTick()
 
 	if(Server()->Tick() % (1 * Server()->TickSpeed() * 270) == 0)
 	{
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("制作者名单："), NULL)
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("原作者：kueosio", NULL)
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("制作者/管理："), NULL)
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("汉化：MC_TYH、Ninecloud2077及MMOTEE全体国服玩家"), NULL)
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("地图制作：天际tx"),NULL)
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("制作者名单："), NULL);
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("原作者：kueosio", NULL);
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("制作者/管理："), NULL);
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("汉化：MC_TYH、Ninecloud2077及MMOTEE全体国服玩家"), NULL);
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("地图制作：天际tx"),NULL);
 	}
 
 	AreaTick();
