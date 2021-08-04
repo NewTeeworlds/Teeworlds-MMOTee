@@ -1050,11 +1050,11 @@ void CGameContext::OnTick()
 
 	if(Server()->Tick() % (1 * Server()->TickSpeed() * 610) == 0)
 	{
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("### 服务器信息:"), NULL);	
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("大家注意了!! 新人必须遵守的规则:"), NULL);	
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("只能玩一个服务器, 如果玩了 1-250 的服务器之后才能玩 250-500 的服务器"), NULL);	
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("你的账户如果被删除,你创建的公会会重组(reform)."), NULL);	
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("服务器版本: 2.0（测试）作者/管理：天上的星星,中文翻译:MC_TYH以及全体MMOTEE国服玩家."), NULL);
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, ("### 服务器信息:"), NULL);	
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, ("大家注意了!! 新人必须遵守的规则:"), NULL);	
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, ("只能玩一个服务器, 如果玩了 1-250 的服务器之后才能玩 250-500 的服务器"), NULL);	
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, ("你的账户如果被删除,你创建的公会会重组(reform)."), NULL);	
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, ("服务器版本: 2.0（测试）作者/管理：天上的星星,中文翻译:MC_TYH以及全体MMOTEE国服玩家."), NULL);
 	}
 
 	// вывод топ листа раз в 5 минут
@@ -1088,11 +1088,11 @@ void CGameContext::OnTick()
 
 	if(Server()->Tick() % (1 * Server()->TickSpeed() * 270) == 0)
 	{
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("制作者名单："), NULL);
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("原作者：kueosio", NULL);
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("制作者/管理："), NULL);
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("汉化：MC_TYH、Ninecloud2077及MMOTEE全体国服玩家"), NULL);
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("地图制作：天际tx"),NULL);
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, ("制作者名单："), NULL);
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, ("原作者：kueosio", NULL);
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, ("制作者/管理："), NULL);
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, ("汉化：MC_TYH、Ninecloud2077及MMOTEE全体国服玩家"), NULL);
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, ("地图制作：天际tx"),NULL);
 	}
 
 	AreaTick();
@@ -3449,7 +3449,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		{
 			AddVote_Localization(ClientID, "ushammerrange", "☞ ({int:need}技能点) 生命值 +4% ({str:act}) ({int:sum})", "need", &Need, "act", 
 				m_apPlayers[ClientID]->AccUpgrade.HammerRange ? "✔" : "x", "sum", &m_apPlayers[ClientID]->AccUpgrade.HammerRange);		
-			AddVote_Localization(ClientID, "upasive2", "☞ ({int:need}技能点) 抵抗伤害 +2% ({str:act}) ({int:sum})", "need", &Need, "act", 
+			AddVote_Localization(ClientID, "upasive2", "☞ ({int:need}技能点) 伤害减免 +2% ({str:act}) ({int:sum})", "need", &Need, "act", 
 				m_apPlayers[ClientID]->AccUpgrade.Pasive2 ? "✔" : "x", "sum", &m_apPlayers[ClientID]->AccUpgrade.Pasive2);			
 		}
 		else if(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_ASSASINS)
@@ -3468,7 +3468,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		}
 		AddVote("············", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "☭ {str:psevdo}", "psevdo", LocalizeText(ClientID, "Active Skills"));
-		AddVote_Localization(ClientID, "uskillwall", "☞ (70技能点) 魔能-光墙 ({str:act})", "act", Server()->GetItemCount(ClientID, SKWALL) ? "30 Mana ✔" : "x");	
+		AddVote_Localization(ClientID, "uskillwall", "☞ (70技能点) 魔能-激光墙 ({str:act})", "act", Server()->GetItemCount(ClientID, SKWALL) ? "30 Mana ✔" : "x");	
 		SkillSettings(ClientID, SKWALL, "sskillwall");
 		AddVote_Localization(ClientID, "uskillheal", "☞ (60技能点) 魔能-治疗器 ({str:act})", "act", Server()->GetItemCount(ClientID, SKHEAL) ? "50 Mana ✔" : "x");	
 		SkillSettings(ClientID, SKHEAL, "sskillheal");
