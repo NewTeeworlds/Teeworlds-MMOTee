@@ -1054,7 +1054,7 @@ void CGameContext::OnTick()
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("大家注意了!! 新人必须遵守的规则:"), NULL);	
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("只能玩一个服务器, 如果玩了 1-250 的服务器之后才能玩 250-500 的服务器"), NULL);	
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("你的账户如果被删除,你创建的公会会重组(reform)."), NULL);	
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("服务器版本: 1.1 Kurosio测试通过,中文翻译:MC_TYH以及全体MMOTEE国服玩家."), NULL);	
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("服务器版本: 2.0（测试）作者/管理：天上的星星,中文翻译:MC_TYH以及全体MMOTEE国服玩家."), NULL);
 	}
 
 	// вывод топ листа раз в 5 минут
@@ -1084,6 +1084,15 @@ void CGameContext::OnTick()
 				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("(* ^ ω ^) 公会排行榜前五名:{str:name}:"), "name", "黄金", NULL);	
 				Server()->ShowTop10Clans(25, "Money", 2); break;
 		}
+	}
+
+	if(Server()->Tick() % (1 * Server()->TickSpeed() * 270) == 0)
+	{
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("制作者名单："), NULL)
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("原作者：kueosio", NULL)
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("制作者/管理："), NULL)
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("汉化：MC_TYH、Ninecloud2077及MMOTEE全体国服玩家"), NULL)
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("地图制作：天际tx"),NULL)
 	}
 
 	AreaTick();
