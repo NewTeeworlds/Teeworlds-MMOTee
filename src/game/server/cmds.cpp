@@ -80,7 +80,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		LastChat();
 		int id = 0, itemid = 0, citem = 0, enchant = 0;
 		if ((sscanf(Msg->m_pMessage, "/giveitem %d %d %d %d", &id, &itemid, &citem, &enchant)) < 3)
-			return GameServer()->SendChatTarget(ClientID, "Use: /giveitem <id> <itemid> <itemcount> (enchant)");
+			return GameServer()->SendChatTarget(ClientID, "命令方法: /giveitem <玩家id> <物品id> <物品数量> (附魔等级)");
 
 		if(GameServer()->m_apPlayers[id] && GameServer()->Server()->IsClientLogged(id) && itemid > 0 && itemid < 500 && citem > 0)
 			GameServer()->GiveItem(id, itemid, citem, enchant);	
@@ -92,7 +92,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		LastChat();
 		int id = 0, itemid = 0, citem = 0;
 		if ((sscanf(Msg->m_pMessage, "/remitem %d %d %d", &id, &itemid, &citem)) != 3)
-			return GameServer()->SendChatTarget(ClientID, "Use: /giveitem <id> <itemid> <itemcount>");
+			return GameServer()->SendChatTarget(ClientID, "命令方法: /giveitem <玩家id> <物品id> <物品数量>");
 
 		if(GameServer()->m_apPlayers[id] && GameServer()->Server()->IsClientLogged(id) && itemid > 0 && itemid < 500 && citem > 0)
 			GameServer()->RemItem(id,itemid,citem);
@@ -104,7 +104,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		LastChat();
 		int id = 0, itemid = 0, citem = 0;
 		if ((sscanf(Msg->m_pMessage, "/sendmail %d %d %d", &id, &itemid, &citem)) != 3)
-			return GameServer()->SendChatTarget(ClientID, "Use: /sendmail <id> <itemid> <itemcount>");
+			return GameServer()->SendChatTarget(ClientID, "命令方法: /sendmail <玩家id> <物品id> <物品数量>");
 
 		if(GameServer()->m_apPlayers[id] && GameServer()->Server()->IsClientLogged(id) && itemid > 0 && itemid < 500 && citem > 0)
 			GameServer()->SendMail(id, 12, itemid, citem);
@@ -116,7 +116,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		LastChat();
 		int id = 0, citem = 0;
 		if ((sscanf(Msg->m_pMessage, "/givedonate %d %d", &id, &citem)) != 2)
-			return GameServer()->SendChatTarget(ClientID, "Use: /givedonate <id> <money>");
+			return GameServer()->SendChatTarget(ClientID, "Use: /givedonate <玩家id> <黄金>");
 
 		if(GameServer()->m_apPlayers[id] && GameServer()->Server()->IsClientLogged(id))
 		{
@@ -133,7 +133,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		LastChat();
 		int size = 0;
 		if ((sscanf(Msg->m_pMessage, "/sd %d", &size)) != 1)
-			return GameServer()->SendChatTarget(ClientID, "Please use: /sd <idsound>");
+			return GameServer()->SendChatTarget(ClientID, "Please use: /sd <音效id>");
 
 		int soundid = clamp(size, 0, 40);
 		if (GameServer()->GetPlayerChar(ClientID))
@@ -193,7 +193,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 			if(str_length(Reformat) > 12 || str_length(Reformat) < 1)
 				return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("公会名称长度必须在 1~12 个字符之间"), NULL);
 
-			GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("Ticket Create Clan 已使用"), NULL);
+			GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("公会创建票已使用"), NULL);
 			GameServer()->Server()->NewClan(ClientID, Reformat);
 			m_pPlayer->m_LoginSync = 150;
 		}
@@ -203,7 +203,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 	else if(!strncmp(Msg->m_pMessage, "/invite", 7))
 	{
 		if(!GameServer()->Server()->GetLeader(ClientID, GameServer()->Server()->GetClanID(ClientID)))
-			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# 你不是公会首领!"), NULL);
+			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# 你不是公会会长!"), NULL);
 
 		if(GameServer()->Server()->GetClan(DCOUNTUCLAN, GameServer()->Server()->GetClanID(ClientID)) >= GameServer()->Server()->GetClan(DMAXCOUNTUCLAN, GameServer()->Server()->GetClanID(ClientID)))
 			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("公会人数已达到上限"), NULL);

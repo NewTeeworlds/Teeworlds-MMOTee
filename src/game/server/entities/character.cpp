@@ -1183,12 +1183,21 @@ void CCharacter::Tick()
 		
 		if(IndexShit == ZONE_WHITEROOM) 
 		{
+			int IsInRoom=0;
 			if(!Server()->GetItemCount(m_pPlayer->GetCID(), WHITETICKET))
 			{
 				Die(m_pPlayer->GetCID(), WEAPON_WORLD);
 				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), 200, ("你没有进入白房间的门票，请前往商店购买门票 (White Ticket)!"), NULL);
 			}else{
-				GameServer()->SendBroadcast_Localization(m_pPlayer->GetCID(), 200, 100, _("欢迎来到白房间."), NULL);
+				if(IsInRoom)
+				{
+					IsInRoom=0;
+				}
+				else{
+					GameServer()->SendBroadcast_Localization(m_pPlayer->GetCID(), 200, 100, _("欢迎来到白房间."), NULL);
+					IsInRoom=1;
+				}
+
 			}
 		}
 		

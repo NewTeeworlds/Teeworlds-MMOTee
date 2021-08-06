@@ -882,7 +882,7 @@ void CGameContext::AreaTick()
 			else
 			{
 				m_AreaEndGame = 120*Server()->TickSpeed();
-				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 事件开始了, 一共有 {int:num} 名玩家参加"), "num", &count, NULL);
+				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 游戏开始了, 一共有 {int:num} 名玩家参加"), "num", &count, NULL);
 			}	
 		}
 	}
@@ -905,7 +905,7 @@ void CGameContext::AreaTick()
 						m_apPlayers[i]->GetCharacter()->Die(i, WEAPON_WORLD);
 				}
 			}		
-			SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 事件结束了. 没有获胜的玩家"), NULL);		
+			SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 游戏结束. 没有玩家获胜"), NULL);		
 		}
 
 		if(GetAreaCount() == 1)
@@ -942,7 +942,7 @@ void CGameContext::AreaTick()
 					}
 				}
 			}
-			SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 最终赢家是:{str:name}:"), "name", Server()->ClientName(is), NULL);	
+			SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 游戏结束.最终赢家是:{str:name}:"), "name", Server()->ClientName(is), NULL);	
 			m_AreaEndGame = 0;
 		}
 	}
@@ -1069,7 +1069,7 @@ void CGameContext::OnTick()
 				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("(* ^ ω ^) 玩家排行榜前五名:{str:name}:"), "name", "黄金", NULL);	
 				Server()->ShowTop10(25, "Gold", 2); break;
 			case 2:
-				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("(* ^ ω ^) 玩家排行榜前五名:{str:name}:"), "name", "Win Area", NULL);	
+				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("(* ^ ω ^) 玩家排行榜前五名:{str:name}:"), "name", "小游戏胜场", NULL);	
 				Server()->ShowTop10(25, "WinArea", 2); break;		
 			case 3:
 				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("(* ^ ω ^) 玩家排行榜前五名:{str:name}:"), "name", "击杀", NULL);	
@@ -1086,7 +1086,7 @@ void CGameContext::OnTick()
 		}
 	}
 
-	if(Server()->Tick() % (1 * Server()->TickSpeed() * 270) == 0)
+	if(Server()->Tick() % (1 * Server()->TickSpeed() * 255) == 0)
 	{
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, ("制作者名单："), NULL);
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, ("原作者：kueosio", NULL);
@@ -1343,7 +1343,8 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					SendChatTarget(ClientID, "------- {Rules} -------");
 					SendChatTarget(ClientID, "禁止使用游戏漏洞!");
 					SendChatTarget(ClientID, "禁止使用辅助性软件!");
-					SendChatTarget(ClientID, "禁止使用dummy（分身）!");
+					SendChatTarget(ClientID, "禁止使用分身!");
+					SendChatTarget(ClientID, "禁止同时在两个服务器登录账号!");
 					SendChatTarget(ClientID, "禁止分享账号!");
 					SendChatTarget(ClientID, "禁止侮辱玩家!");
 					SendChatTarget(ClientID, "禁止进行线下交易!");
@@ -1648,7 +1649,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					
 					m_apPlayers[ClientID]->AccUpgrade.Health += Get;
 					m_apPlayers[ClientID]->AccUpgrade.Upgrade -= Get;
-					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你成功地升了 {int:lv} 级"), "lv", &Get, NULL);							
+					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你的技能成功提升 {int:lv} 级"), "lv", &Get, NULL);							
 					
 					if(m_apPlayers[ClientID]->GetCharacter())
 					{
@@ -1693,11 +1694,11 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					if((m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_BERSERK && m_apPlayers[ClientID]->AccUpgrade.Damage >= BMAXDAMAGE) ||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER && m_apPlayers[ClientID]->AccUpgrade.Damage >= HMAXDAMAGE) ||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_ASSASINS && m_apPlayers[ClientID]->AccUpgrade.Damage >= AMAXDAMAGE))
-						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你已经升到满级了"), NULL);	
+						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("技能已满级"), NULL);	
 				
 					m_apPlayers[ClientID]->AccUpgrade.Damage += Get;
 					m_apPlayers[ClientID]->AccUpgrade.Upgrade -= Get;
-					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你成功地升了 {int:lv} 级"), "lv", &Get, NULL);							
+					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你的技能成功提升 {int:lv} 级"), "lv", &Get, NULL);							
 					
 					if((m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_BERSERK && m_apPlayers[ClientID]->AccUpgrade.Damage > BMAXDAMAGE-1)||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER && m_apPlayers[ClientID]->AccUpgrade.Damage > HMAXDAMAGE-1)||
@@ -1720,7 +1721,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					if((m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_BERSERK && m_apPlayers[ClientID]->AccUpgrade.Ammo >= BMAXAMMO) ||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER && m_apPlayers[ClientID]->AccUpgrade.Ammo >= HMAXAMMO) ||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_ASSASINS && m_apPlayers[ClientID]->AccUpgrade.Ammo >= AMAXAMMO))
-						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你已经升到满级了"), NULL);	
+						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("技能已满级"), NULL);	
 									
 					m_apPlayers[ClientID]->AccUpgrade.Ammo++;
 					m_apPlayers[ClientID]->AccUpgrade.Upgrade -= 5;
@@ -1765,11 +1766,11 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					if((m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_BERSERK && m_apPlayers[ClientID]->AccUpgrade.AmmoRegen >= BMAXAREGEN) ||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER && m_apPlayers[ClientID]->AccUpgrade.AmmoRegen >= HMAXAREGEN) ||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_ASSASINS && m_apPlayers[ClientID]->AccUpgrade.AmmoRegen >= AMAXAREGEN))
-						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你已经升到满级了"), NULL);	
+						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("技能已满级"), NULL);	
 									
 					m_apPlayers[ClientID]->AccUpgrade.AmmoRegen += Get;
 					m_apPlayers[ClientID]->AccUpgrade.Upgrade -= Get;
-					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你成功地升了 {int:lv} 级"), "lv", &Get, NULL);							
+					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你的技能成功提升 {int:lv} 级"), "lv", &Get, NULL);							
 					
 					if((m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_BERSERK && m_apPlayers[ClientID]->AccUpgrade.AmmoRegen > BMAXAREGEN-1)||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER && m_apPlayers[ClientID]->AccUpgrade.AmmoRegen > HMAXAREGEN-1)||
@@ -1815,11 +1816,11 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					if((m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_BERSERK && m_apPlayers[ClientID]->AccUpgrade.Speed >= BMAXHANDLE) ||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER && m_apPlayers[ClientID]->AccUpgrade.Speed >= HMAXHANDLE) ||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_ASSASINS && m_apPlayers[ClientID]->AccUpgrade.Speed >= AMAXHANDLE))
-						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你已经升到满级了"), NULL);	
+						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("技能已满级"), NULL);	
 					
 					m_apPlayers[ClientID]->AccUpgrade.Speed += Get;
 					m_apPlayers[ClientID]->AccUpgrade.Upgrade -= Get;
-					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你成功地升了 {int:lv} 级"), "lv", &Get, NULL);							
+					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你的技能成功提升 {int:lv} 级"), "lv", &Get, NULL);							
 					
 					if((m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_BERSERK && m_apPlayers[ClientID]->AccUpgrade.Speed > BMAXHANDLE-1)||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER && m_apPlayers[ClientID]->AccUpgrade.Speed > HMAXHANDLE-1)||
@@ -1873,11 +1874,11 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					if((m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_BERSERK && m_apPlayers[ClientID]->AccUpgrade.Spray >= BMAXSPREED) ||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER && m_apPlayers[ClientID]->AccUpgrade.Spray >= HMAXSPREED) ||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_ASSASINS && m_apPlayers[ClientID]->AccUpgrade.Spray >= AMAXSPREED))
-						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你已经升到满级了"), NULL);	
+						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("技能已满级"), NULL);	
 					
 					m_apPlayers[ClientID]->AccUpgrade.Spray++;
 					m_apPlayers[ClientID]->AccUpgrade.Upgrade -= 10;
-					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你成功地获得了升级"), NULL);							
+					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你的技能成功提升 {int:lv} 级"), NULL);							
 					
 					UpdateUpgrades(ClientID);
 					ResetVotes(ClientID, CLMENU);	
@@ -1913,11 +1914,11 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					if((m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_BERSERK && m_apPlayers[ClientID]->AccUpgrade.HPRegen >= BMAXHPREGEN) ||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER && m_apPlayers[ClientID]->AccUpgrade.HPRegen >= HMAXHPREGEN) ||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_ASSASINS && m_apPlayers[ClientID]->AccUpgrade.HPRegen >= AMAXHPREGEN))
-						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你已经升到满级了"), NULL);	
+						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("技能已满级"), NULL);	
 							
 					m_apPlayers[ClientID]->AccUpgrade.HPRegen += Get;
 					m_apPlayers[ClientID]->AccUpgrade.Upgrade -= Get;
-					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你成功地升了 {int:lv} 级"), "lv", &Get, NULL);							
+					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你的技能成功提升 {int:lv} 级"), "lv", &Get, NULL);							
 					
 					UpdateUpgrades(ClientID);	
 					ResetVotes(ClientID, CLMENU);	
@@ -1932,7 +1933,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					if((m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_BERSERK && m_apPlayers[ClientID]->AccUpgrade.HammerRange > 4) ||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER && m_apPlayers[ClientID]->AccUpgrade.HammerRange > 5) ||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_ASSASINS && m_apPlayers[ClientID]->AccUpgrade.HammerRange > 7))
-						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你已经升到满级了"), NULL);	
+						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("技能已满级"), NULL);	
 
 					m_apPlayers[ClientID]->AccUpgrade.HammerRange++;
 					m_apPlayers[ClientID]->AccUpgrade.SkillPoint -= HAMMERRANGE;
@@ -1951,7 +1952,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					if((m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_BERSERK && m_apPlayers[ClientID]->AccUpgrade.Pasive2 > 4) ||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER && m_apPlayers[ClientID]->AccUpgrade.Pasive2 > 10) ||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_ASSASINS && m_apPlayers[ClientID]->AccUpgrade.Pasive2 > 7))
-						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你已经升到满级了"), NULL);	
+						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("技能已满级"), NULL);	
 					
 					m_apPlayers[ClientID]->AccUpgrade.Pasive2++;
 					m_apPlayers[ClientID]->AccUpgrade.SkillPoint -= HAMMERRANGE;
