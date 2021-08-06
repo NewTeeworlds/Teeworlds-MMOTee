@@ -8,16 +8,16 @@
  * 升级与物品捡拾 
   * 击杀怪物 
    * 出生点左侧有打怪区域，里面有 5-10+ 级不等的猪，杀死他们会得到经验和钱（需要捡拾掉落的红心和盾牌），还会得到一些以锤子标记的物品，这些物品有归属，只可以捡拾属于自己的物品。锤子标记的物品默认通过锤子捡拾，可以在投票界面中的设置更改为 f3。
-   ![pigs](docs/images/pigs.png)
+   ![pigs](./docs/images/pigs.png)
    * 更深入一些到达更高级的区域会有等级更高的 kwah 和 boom 出现，前者大多在 100 级左右，后者一般在 200 级左右。注意：由出生点右侧通道下去深入会直接到达 boom 所在的区域，而且 boom 会在较大范围内游荡，如果等级较低会很危险。
 
-![kwahs](docs/images/kwahs.png)
-![boomers](docs/images/boomers.png)
+![kwahs](./docs/images/kwahs.png)
+![boomers](./docs/images/boomers.png)
 
-在 kwah 区域游荡的 boom: [](docs/images/boomer_in_kwah_area.png)
+在 kwah 区域游荡的 boom: [](./docs/images/boomer_in_kwah_area.png)
 
  * 座椅挂机 
-  * 除打怪升级外，地图各处还会有一些座椅，坐在上面会每隔一定时间内加经验和钱，但加的经验和钱都是固定的，在后期便会显得很慢。![spawn_point](docs/images/spawn_point.png)
+  * 除打怪升级外，地图各处还会有一些座椅，坐在上面会每隔一定时间内加经验和钱，但加的经验和钱都是固定的，在后期便会显得很慢。![spawn_point](./docs/images/spawn_point.png)
 
  * 耕地 
   * 吃作物可以增加经验，在地图的一些特定位置会有农田，耕作会得到胡萝卜，番茄，土豆等作物，在物品栏中使用它们可以获得根据作物种类不等的经验。耕作收获一定物品后耕作等级会升级，耕作等级越高，每次收获的作物就越多，在后期也能够获得较高的升级效率。
@@ -31,25 +31,25 @@
  * 每次升级之后需要在“升级与职业”界面自己决定属性的增加与技能点的使用。
 
 2.投票菜单 
-![menu](docs/images/menu.png)
+![menu](./docs/images/menu.png)
  * 查看背包 
   * 这个模式很多操作都需要在 esc-投票界面完成，包括背包查看。双击物品栏/背包界面即可查看背包，背包中对物品进行了分类，需要在对应的界面查看物品。
 
  * 接受任务 
   * 在出生点左上角是任务大厅，在该位置才能够打开任务界面，完成任务进度的查看与提交等。
-  ![quest_hall](docs/images/quest_hall.png)
+  ![quest_hall](./docs/images/quest_hall.png)
 
  * 购买物品 
   * 出生点右侧是商店，在该位置投票界面会自动展示商店出售的物品，选择对应的物品双击即可购买（注意等级与金钱的要求）。部分物品（比如武器的模块）购买之后不会立即生效，需要手动在“设置与安全”界面中勾选对应的方框才可以生效。
-  [shop](docs/images/shop.png)
+  [shop](./docs/images/shop.png)
 
  * 合成 
   * 出生点右下角是合成大厅，在该位置才能够打开合成栏，进行物品的合成，例如不能购买的护甲和镐子，可以在合成大厅合成。合成成功后左下角会出现提示，在邮箱界面可以领取合成的物品。
-  [craft_room](docs/images/craft_room.png)
+  [craft_room](./docs/images/craft_room.png)
 
  * 出售 
   * 在出生点右侧通道下去之后能看到出售处的店铺，在那里可以出售矿石等物品获得黄金。
-  [sell_room](docs/images/sell_room.png)
+  [sell_room](./docs/images/sell_room.png)
 
  * 邮箱，护甲及其他 
   * 在线一定时间后邮箱会收到系统的登录奖励，会奖励一些矿石，铜镐和一些盒子之类的物品。

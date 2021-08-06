@@ -192,12 +192,14 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 			remove_spaces(Reformat);
 			if(str_length(Reformat) > 12 || str_length(Reformat) < 1)
 				return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("公会名称长度必须在 1~12 个字符之间"), NULL);
-
-			GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("Ticket Create Clan 已使用"), NULL);
 			GameServer()->Server()->NewClan(ClientID, Reformat);
 			m_pPlayer->m_LoginSync = 150;
+			return;
 		}
-		return;
+		else 
+		{
+			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你没有公会票,请前往商店购买"), NULL);
+		}
 	}
 
 	else if(!strncmp(Msg->m_pMessage, "/invite", 7))
@@ -321,6 +323,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		m_pPlayer->AccData.JailLength = JailLength;*/
 		GameServer()->m_apPlayers[id]->AccData.IsJailed = true;
 		GameServer()->m_apPlayers[id]->AccData.Jail = true;
+		GameServer()->m_apPlayers[id]->AccData.Rel = 0;
 		GameServer()->m_apPlayers[id]->AccData.JailLength = JailLength;
 		GameServer()->m_apPlayers[id]->GetCharacter()->Die(id, WEAPON_WORLD);
 		GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, ("成功将 {str:name} 关进监狱"), "name", GameServer()->Server()->ClientName(id), NULL);	
@@ -337,6 +340,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		m_pPlayer->AccData.JailLength = 0;*/
 		GameServer()->m_apPlayers[id]->AccData.IsJailed = false;
 		GameServer()->m_apPlayers[id]->AccData.Jail = false;
+		GameServer()->m_apPlayers[id]->AccData.Rel = 0;
 		GameServer()->m_apPlayers[id]->AccData.JailLength = 0;
 		GameServer()->m_apPlayers[id]->GetCharacter()->Die(id, WEAPON_WORLD);
 		GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, ("成功将 {str:name} 放出监狱"), "name", GameServer()->Server()->ClientName(id), NULL);	

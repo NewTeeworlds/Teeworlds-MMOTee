@@ -28,9 +28,9 @@ CREATE TABLE `tw_Clans` (
   `LeaderName` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT 'NOPE',
   `LeaderID` int(11) NOT NULL,
   `Level` int(11) NOT NULL DEFAULT '1',
-  `Exp` int(11) NOT NULL,
+  `Exp` int(11) NOT NULL DEFAULT '0',
   `MaxNum` int(11) NOT NULL DEFAULT '2',
-  `Money` int(11) NOT NULL,
+  `Money` int(11) NOT NULL DEFAULT '0',
   `Relevance` int(11) NOT NULL DEFAULT '0',
   `MoneyAdd` int(11) NOT NULL DEFAULT '0',
   `ExpAdd` int(11) NOT NULL DEFAULT '0',
@@ -265,8 +265,8 @@ INSERT INTO `tw_uItemList` VALUES
 (40,4,'经验书(10分钟)','经验获取*2'),
 (41,2,'双重联合戒指','神器｜让守卫的愤怒值每秒额外-10'),
 (42,1,'钩子模块：爆炸','- 钩子勾住的敌人会爆炸'),
-(43,1,'锤子/刀模块：自动','- 长按可一直挥动锤子/刀'),
-(44,1,'手枪模块：自动','- 长按手枪可一直射击'),
+(43,1,'自动锤子/刀模块','- 长按可一直挥动锤子/刀'),
+(44,1,'自动手枪','- 长按手枪可一直射击'),
 (45,1,'手枪模块：穿墙','- 手枪子弹可穿过可勾的墙体'),
 (46,1,'霰弹枪模块：穿墙','- 霰弹枪子弹可穿过可勾的墙体'),
 (47,1,'榴弹模块：穿墙','- 榴弹可穿过可勾的墙体'),
@@ -345,7 +345,9 @@ INSERT INTO `tw_uItemList` VALUES
 (120,16,'钻石鞋子','- 生命+250,护甲+250'),
 (121,15,'龙胸甲','- 生命+500,护甲+500'),
 (122,16,'龙鞋子','- 生命+400,护甲+400'),
-(123,10,'魔法师称号','生命+1000,护甲+1000');
+(123,10,'魔法师称号','生命+1000,护甲+1000')
+(124,6,'龙斧','砍树速度加倍');
+(125,6,'龙锄头','种地速度提升');
 /*!40000 ALTER TABLE `tw_uItemList` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -496,7 +498,9 @@ INSERT INTO `tw_uItemList_en` VALUES
 (120,16,'Diamond feet','- Health Armor +250'),
 (121,15,'Dragon body','- Health Armor +500'),
 (122,16,'Dragon feet','- Health Armor +400'),
-(123,10,'Title Enchanter','- Health Armor +1000');
+(123,10,'Title Enchanter','- Health Armor +1000')
+(124,6,'Dragon Axe','Cutting wood faster');
+(125,6,'Dragon Hoe','Farming faster');
 /*!40000 ALTER TABLE `tw_uItemList_en` ENABLE KEYS */;
 UNLOCK TABLES;
 

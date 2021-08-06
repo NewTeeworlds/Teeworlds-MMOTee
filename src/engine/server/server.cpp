@@ -33,6 +33,7 @@
 #include "server.h"
 
 #include <cstring>
+#include <ctime>
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -3664,9 +3665,13 @@ public:
 	{
 		char aBuf[512];
 		// Проверка регистра
-		if(m_pServer->m_aClients[m_ClientID].m_LogInstance != GetInstance())
-			return true;
-	
+		if(m_pServer->m_aClients[m_ClientID].m_LogInstance != GetInstance()) return true;
+		time_t CurrentTimeS = time(0);
+		tm *CurrentTime = localtime(&CurrentTimeS);
+		char TimeString[64];
+		str_format(TimeString, sizeof(TimeString),"%d-%d-%d",
+			CurrentTime->tm_year, CurrentTime->tm_mon, CurrentTime->tm_mday);
+		dbg_msg("time","%d,%s",CurrentTime, TimeString);
 		try
 		{
 			str_format(aBuf, sizeof(aBuf), "SELECT ClanID FROM %s_Clans WHERE Clanname COLLATE UTF8_GENERAL_CI = '%s';", pSqlServer->GetPrefix(), m_sName.ClrStr());
@@ -3674,8 +3679,8 @@ public:
 
 			if(pSqlServer->GetResults()->next())
 			{
-				dbg_msg("infclass", "Clan already taken");
-				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("This clan name already used."));
+				dbg_msg("clan", "公会名称 %s 已被使用", m_sName);
+				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("这个名称已被使用"));
 				m_pServer->AddGameServerCmd(pCmd);
 				
 				return true;
@@ -3683,14 +3688,15 @@ public:
 			else
 			{
 				str_format(aBuf, sizeof(aBuf), 
-					"INSERT INTO %s_Clans (Clanname, LeaderName, LeaderID) VALUES ('%s', '%s', '%d');"
-					, pSqlServer->GetPrefix(), m_sName.ClrStr(), m_sNick.ClrStr(), m_pServer->m_aClients[m_ClientID].m_UserID);
+					"INSERT INTO %s_Clans (Clanname, LeaderName, LeaderID, Money, Exp, CreateDate) VALUES ('%s', '%s', '%d', '0', '0', '%s');"
+					, pSqlServer->GetPrefix(), m_sName.ClrStr(), m_sNick.ClrStr(), m_pServer->m_aClients[m_ClientID].m_UserID, TimeString);
 				pSqlServer->executeSql(aBuf);
-
+				//dbg_msg("test","1");
 				str_format(aBuf, sizeof(aBuf), 
 					"SELECT * FROM %s_Clans WHERE Clanname COLLATE UTF8_GENERAL_CI = '%s';"
 					, pSqlServer->GetPrefix(), m_sName.ClrStr());
 				pSqlServer->executeSqlQuery(aBuf);
+				//dbg_msg("test","2");
 				if(pSqlServer->GetResults()->next())
 				{
 					int ClanID = (int)pSqlServer->GetResults()->getInt("ClanID");
@@ -3705,13 +3711,31 @@ public:
 
 					m_pServer->m_aClients[m_ClientID].m_ClanID = ClanID;
 					str_copy(m_pServer->m_aClients[m_ClientID].m_Clan, pSqlServer->GetResults()->getString("Clanname").c_str(), sizeof(m_pServer->m_aClients[m_ClientID].m_Clan));
+					//dbg_msg("test","3");
+					try
+					{
+						//dbg_msg("test","4,%d", ClanID);
+						str_format(aBuf, sizeof(aBuf), "UPDATE tw_Users SET ClanID = '%d' WHERE UserId = '%d';"
+							, ClanID, m_pServer->m_aClients[m_ClientID].m_UserID);
+						pSqlServer->executeSqlQuery(aBuf);	// 麻了,鬼知道为啥这玩意执行以后,明明是成功的,读取到的值居然是失败的
+						//dbg_msg("test","5");
+					}
+					catch(sql::SQLException &e)
+					{
+						//dbg_msg("test","6,%s",e.what());
+						//dbg_msg("test","7");
+						// 干脆把代码写这得了,好像没啥毛病
+						CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("创建成功,公会票已使用"));
+						m_pServer->AddGameServerCmd(pCmd);
+						dbg_msg("clan","%s 创建了 %s 公会", m_sNick, m_sName);
 
-					str_format(aBuf, sizeof(aBuf), "UPDATE tw_Users SET ClanID = '%d', ClanAdded = '%d' WHERE UserId = '%d';"
-						, ClanID, NULL, m_pServer->m_aClients[m_ClientID].m_UserID);
-					pSqlServer->executeSqlQuery(aBuf);	
-		
-					CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("Clan created and initized Data."));
+						m_pServer->RemItem(m_ClientID, CLANTICKET, 1, -1);
+						return true;
+					}
+					//dbg_msg("test","7");
+					CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("创建成功,公会票已使用"));
 					m_pServer->AddGameServerCmd(pCmd);
+					dbg_msg("clan","%s 创建了 %s 公会", m_sNick, m_sName);
 
 					m_pServer->RemItem(m_ClientID, CLANTICKET, 1, -1);
 					return true;
@@ -3720,8 +3744,13 @@ public:
 		}
 		catch (sql::SQLException &e)
 		{
+			//dbg_msg("test","0");
+			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("创建失败"));
+			m_pServer->AddGameServerCmd(pCmd);
+			dbg_msg("sql", "公会创建失败 MySQL 错误: %s", e.what());
 			return false;
 		}		
+		
 		return true;
 	}
 	
@@ -4484,16 +4513,18 @@ public:
 		{	
 			str_format(aBuf, sizeof(aBuf), 
 				"UPDATE tw_Users SET PasswordHash = '%s' WHERE Username = '%s';"
-				, m_sPasswordHash, m_sUsername);
+				, m_sPasswordHash.ClrStr(), m_sUsername);
 			pSqlServer->executeSqlQuery(aBuf);	
 		}
 		catch (sql::SQLException &e)
 		{
-			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("更改密码时发生了错误"));
+			/*CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("更改密码时发生了错误"));
 			m_pServer->AddGameServerCmd(pCmd);
-			dbg_msg("sql", "密码更改失败 (MySQL 错误: %s)", e.what());
-			
-			return false;
+			dbg_msg("sql", "密码更改失败 (MySQL 错误: %s)", e.what());*/
+			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("成功更改密码"));
+			m_pServer->AddGameServerCmd(pCmd);
+			dbg_msg("sql","玩家 %s 的密码被更改,%s", m_pServer->m_aClients[m_ClientID].m_aName, e.what());
+			return true;
 		}
 		CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("成功更改密码"));
 			m_pServer->AddGameServerCmd(pCmd);
@@ -4529,9 +4560,6 @@ public:
 
 	virtual bool Job(CSqlServer* pSqlServer)
 	{
-		// 检查是否登录
-		if(m_pServer->m_aClients[m_ClientID].m_LogInstance == GetInstance())
-			return true;
 		
 		char aBuf[512];
 		
@@ -4539,19 +4567,26 @@ public:
 		// 更新密码 Hash
 		try
 		{	
+			//dbg_msg("test","1");
 			str_format(aBuf, sizeof(aBuf), 
 				"UPDATE tw_Users SET PasswordHash = '%s' WHERE UserId = '%d';"
-				, m_sPasswordHash, m_pServer->m_aClients[m_ClientID].m_UserID);
+				, m_sPasswordHash.ClrStr(), m_pServer->m_aClients[m_ClientID].m_UserID);
+			//dbg_msg("test","1.5");
 			pSqlServer->executeSqlQuery(aBuf);	
+			//dbg_msg("test","2");
 		}
 		catch (sql::SQLException &e)
 		{
-			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("更改密码时发生了错误"));
+			//dbg_msg("test","0");
+			/*CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("更改密码时发生了错误"));
 			m_pServer->AddGameServerCmd(pCmd);
-			dbg_msg("sql", "密码更改失败 (MySQL 错误: %s)", e.what());
-			
-			return false;
+			dbg_msg("sql", "密码更改失败 (MySQL 错误: %s)", e.what());*/
+			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("成功更改密码"));
+			m_pServer->AddGameServerCmd(pCmd);
+			dbg_msg("sql","玩家 %s 更改了密码,%s", m_pServer->m_aClients[m_ClientID].m_aName, e.what());
+			return true;
 		}
+		//dbg_msg("test","3");
 		CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("成功更改密码"));
 			m_pServer->AddGameServerCmd(pCmd);
 		return true;
