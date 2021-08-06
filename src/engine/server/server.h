@@ -240,8 +240,24 @@ public:
 	};
 	_m_stInv m_stInv[MAX_CLIENTS][200];
 	
+	struct _ItemName_en
+	{
+		int i_id;
+		char i_name [32];
+		char i_desc [50];
+		int i_count;
+		int i_settings;
+		int i_type;
+		int i_nlevel;
+		int i_nprice;
+		int i_enchant;
+	};
+	_ItemName_en ItemName_en[MAX_CLIENTS][200];
+
 	virtual const char *GetItemName(int ClientID, int ItemID, bool tlang = true);
+	virtual const char *GetItemName_en(int ClientID, int ItemID);
 	virtual const char *GetItemDesc(int ClientID, int ItemID);
+	virtual const char *GetItemDesc_en(int ClientID, int ItemID);
 	virtual int GetItemCount(int ClientID, int ItemID);
 	virtual int GetItemSettings(int ClientID, int ItemID);
 	virtual int GetItemType(int ClientID, int ItemID);

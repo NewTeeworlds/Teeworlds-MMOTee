@@ -221,6 +221,8 @@ enum
 	DRAGONBODY,
 	DRAGONFEET,
 	TITLEENCHANT,
+	//DRAGONAXE,
+	//DRAGONHOE,
 	MAX_ITEM,
 	// 1 - Weapon Upgradins, 2 - Rare Artifacts, 3 - Quest Item's, 4 - Useds Items, 5 - Crafted Item
 	// Sufix S - SettingsItem
@@ -331,7 +333,9 @@ public:
 	int TickSpeed() const { return m_TickSpeed; }
 
 	virtual const char *GetItemName(int ClientID, int ItemID, bool tlang = true) = 0;
+	virtual const char *GetItemName_en(int ClientID, int ItemID) = 0;
 	virtual const char *GetItemDesc(int ClientID, int ItemID) = 0;
+	virtual const char *GetItemDesc_en(int ClientID, int ItemID) = 0;
 	virtual int GetItemCount(int ClientID, int ItemID) = 0;
 	virtual int GetItemSettings(int ClientID, int ItemID) = 0;
 	virtual int GetItemType(int ClientID, int ItemID) = 0;

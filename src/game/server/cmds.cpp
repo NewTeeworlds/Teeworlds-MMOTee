@@ -192,12 +192,14 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 			remove_spaces(Reformat);
 			if(str_length(Reformat) > 12 || str_length(Reformat) < 1)
 				return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("公会名称长度必须在 1~12 个字符之间"), NULL);
-
-			GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("公会创建票已使用"), NULL);
 			GameServer()->Server()->NewClan(ClientID, Reformat);
 			m_pPlayer->m_LoginSync = 150;
+			return;
 		}
-		return;
+		else 
+		{
+			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你没有公会票,请前往商店购买"), NULL);
+		}
 	}
 
 	else if(!strncmp(Msg->m_pMessage, "/invite", 7))
@@ -254,9 +256,9 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 	else if(!strncmp(Msg->m_pMessage, "/cmdlist", 8))
 	{	
 		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "? ---- 命令列表");
-		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/invite ?<玩家昵称>, /createboss, /cmdlist, /lang <语言>");
-		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/login ?<用户名> <密码>, /register <用户名> <密码>");
-		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/newclan <公会名称>");
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/invite <玩家昵称>, /createboss, /cmdlist, /lang <语言>");
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/login (用户名) <密码>, /register <用户名> <密码>");
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/newclan <公会名称> /password <密码> <重复密码>");
 		return;
 	}
 
@@ -321,13 +323,15 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		m_pPlayer->AccData.JailLength = JailLength;*/
 		GameServer()->m_apPlayers[id]->AccData.IsJailed = true;
 		GameServer()->m_apPlayers[id]->AccData.Jail = true;
+		GameServer()->m_apPlayers[id]->AccData.Rel = 0;
 		GameServer()->m_apPlayers[id]->AccData.JailLength = JailLength;
-		GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, ("成功将 {str:name} 关进监狱"), "name", GameServer()->GetPlayerChar(id), NULL);	
+		GameServer()->m_apPlayers[id]->GetCharacter()->Die(id, WEAPON_WORLD);
+		GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, ("成功将 {str:name} 关进监狱"), "name", GameServer()->Server()->ClientName(id), NULL);	
 	}
 	else if (!strncmp(Msg->m_pMessage, "/unjail", 7) && GameServer()->Server()->IsAuthed(ClientID))
 	{
 		int id = 0;
-		if ((sscanf(Msg->m_pMessage, "/jail %d", &id)) != 1)
+		if ((sscanf(Msg->m_pMessage, "/unjail %d", &id)) != 1)
 		{
 			return GameServer()->SendChatTarget(ClientID, "Use: /unjail <id>");
 		}
@@ -336,8 +340,10 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		m_pPlayer->AccData.JailLength = 0;*/
 		GameServer()->m_apPlayers[id]->AccData.IsJailed = false;
 		GameServer()->m_apPlayers[id]->AccData.Jail = false;
+		GameServer()->m_apPlayers[id]->AccData.Rel = 0;
 		GameServer()->m_apPlayers[id]->AccData.JailLength = 0;
-		GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, ("成功将 {str:name} 放出监狱"), "name", GameServer()->GetPlayerChar(id), NULL);	
+		GameServer()->m_apPlayers[id]->GetCharacter()->Die(id, WEAPON_WORLD);
+		GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, ("成功将 {str:name} 放出监狱"), "name", GameServer()->Server()->ClientName(id), NULL);	
 	}
 	// 密码修改
 	else if(!strncmp(Msg->m_pMessage, "/password", 9))
@@ -346,22 +352,23 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		if(!GameServer()->Server()->IsClientLogged(ClientID))
 			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# 请先登录"), NULL);
 		char Password[256];
-		/*
-		char RepeatPassword[256]
+		
+		char RepeatPassword[256];
 		if(sscanf(Msg->m_pMessage, "/password %s %s", Password, RepeatPassword) != 2) 
 		{
 			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("修改密码: /password <密码> <重复密码>"), NULL);
 		}
 		
-		if(Password != RepeatPassword)
+		if(str_comp(Password, RepeatPassword) != 0)
 		{
 			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("两次密码不一致"), NULL);
 		}
-		*/
-		if(sscanf(Msg->m_pMessage, "/password %s", Password) != 1) 
+		
+		/*if(sscanf(Msg->m_pMessage, "/password %s", Password) != 1) 
 			{
 				return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("修改密码: /password <密码>"), NULL);
 			}
+		*/
 		if( str_length(Password) > 15 || str_length(Password) < 2)
 			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("密码必须包含 2~15 个字符"), NULL);
 

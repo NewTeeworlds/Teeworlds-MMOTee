@@ -2324,7 +2324,7 @@ void CCharacter::ClassSpawnAttributes()
 		if(GameServer()->m_AreaType == 2)
 		{
 			m_aWeapons[WEAPON_HAMMER].m_Got = true;
-			Server()->SetMaxAmmo(m_pPlayer->GetCID(), INFWEAPON_HAMMER, 114514000);// 我讨厌卡锤
+			Server()->SetMaxAmmo(m_pPlayer->GetCID(), INFWEAPON_HAMMER, 1145140000);// 我讨厌卡锤
 			Server()->SetFireDelay(m_pPlayer->GetCID(), INFWEAPON_HAMMER, 1000);
 			Server()->SetAmmoRegenTime(m_pPlayer->GetCID(), INFWEAPON_HAMMER, 0);
 		}
@@ -2423,7 +2423,7 @@ void CCharacter::ClassSpawnAttributes()
 
 	// 佩戴 Ring Boomer 生命值增加 5%
 	if(Server()->GetItemCount(m_pPlayer->GetCID(), RINGBOOMER))
-		m_Health += (m_Health/100)*5;		
+		m_Health += (m_Health/100)*5*Server()->GetItemCount(m_pPlayer->GetCID(), RINGBOOMER);		
 
 	// 武器属性设置
 	int geta = (int)(5+m_pPlayer->AccUpgrade.Ammo);// 弹药数量
