@@ -2203,7 +2203,10 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 				//// 只领取在线奖励,不领取神器 & 升级奖励			
 				else if(str_comp(aCmd, "cleanmail") == 0)
 				{
-				
+					if(m_apPlayers[ClientID]->m_LastChangeInfo && m_apPlayers[ClientID]->m_LastChangeInfo+Server()->TickSpeed()*4 > Server()->Tick())
+						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("请等待..."), NULL);
+
+					m_apPlayers[ClientID]->m_LastChangeInfo = Server()->Tick();
 					for(int i = 0; i < 20; i++)
 					{
 						Server()->RemMail(Server()->GetMailRewardDell(ClientID, i));
