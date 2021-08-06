@@ -485,7 +485,7 @@ void CGameContext::SendGuide(int ClientID, int BossType)
 		return;
 	
 	int arghealth = 0;
-	const char* argtext = "null";
+	//const char* argtext = "null";
 	const char* pLanguage = m_apPlayers[ClientID]->GetLanguage();
 	
 	dynamic_string Buffer;		
@@ -494,19 +494,19 @@ void CGameContext::SendGuide(int ClientID, int BossType)
 		if(!g_Config.m_SvCityStart)
 		{
 			arghealth = 500;
-			argtext = "Healer";
-			Server()->Localization()->Format_L(Buffer, pLanguage, _("Weapon: Shotgun / Speed: Normal+\nRank Boss D\n\nHeadshot's: if you are near!\n\nReward:\n- Money bag x3-8\n- 5% - craft item\n- 20% - Random Craft Box"), NULL);
+			//argtext = "Healer";
+			Server()->Localization()->Format_L(Buffer, pLanguage, _("武器:霰弹枪&火箭炮 射速:一般\n奖励:\n- 钱袋 x100-300\n- 5% - 合成用物品\n- 20% - 合成用物品盒子"), NULL);
 		}
 		else if(g_Config.m_SvCityStart == 1)
 		{
 			arghealth = 1000;
-			argtext = "All";
-			Server()->Localization()->Format_L(Buffer, pLanguage, _("Weapon: Shotgun / Speed: Fast+\nRank Boss B\n\nHeadshot's: if you are near!\n\nReward:\n- Money bag x40-80\n- 5% - craft item\n- 20% - Random Craft Box"), NULL);
+			//argtext = "All";
+			Server()->Localization()->Format_L(Buffer, pLanguage, _("武器:霰弹枪&火箭炮 射速:快\n奖励:\n- 钱袋 x300-500\n- 5% - 合成用物品\n- 20% - 合成用物品盒子"), NULL);
 		}
 	}
 	int Time = m_BossStartTick/Server()->TickSpeed();
-	SendMOTD_Localization(ClientID, "Guide / Boss: {str:name}\n生命值加上等级*{int:hp}\nRecomended class: {str:rclass}\n\n{str:guide}\n\n\n等待玩家进入Boss战，还剩下 {int:siska} 秒.", 
-		"name", GetBossName(m_BossType), "hp", &arghealth, "rclass", argtext, "guide", Buffer.buffer(), "siska", &Time);
+	SendMOTD_Localization(ClientID, "Boss:{str:name}\n生命值:玩家等级*{int:hp}\n{str:guide}\n\n等待玩家进入Boss战，还剩下 {int:siska} 秒.", 
+		"name", GetBossName(m_BossType), "hp", &arghealth, "guide", Buffer.buffer(), "siska", &Time);
 		
 	Buffer.clear();
 }
@@ -635,10 +635,12 @@ void CGameContext::SendBroadcast_LStat(int To, int Priority, int LifeSpan, int T
 		default: Buffer.clear();
 	}
 		
+	if(Server()->Tick() % (1 * Server()->TickSpeed() * 2) == 0)
+	{
 	SendBroadcast_Localization(To, Priority, LifeSpan, " \n\n等级: {int:lvl} | 经验: {int:exp}/{int:expl}\n----------------------\n{str:sdata} {int:getl}%\n{str:dataang} 怒气\n----------------------\n{str:mana} 魔能\n生命值: {int:hp}/{int:hpstart}\n\n\n\n\n\n\n\n\n\n\n\n{str:buff}{str:emp}", 
 		"lvl", &m_apPlayers[To]->AccData.Level, "exp", &m_apPlayers[To]->AccData.Exp, "expl", &Optmem, "sdata", Level, "getl", &getl, "dataang", Angry, "mana", Mana, "hp", &m_apPlayers[To]->m_Health, "hpstart", &m_apPlayers[To]->m_HealthStart, "buff", Buffer.buffer(),
 		"emp", "                                                                                                                                                                    ");
-
+	}
 	delete Level;
 	delete Angry;
 	delete Mana;
@@ -1048,17 +1050,17 @@ void CGameContext::OnTick()
 		Server()->GetTopClanHouse();
 	}
 
-	if(Server()->Tick() % (1 * Server()->TickSpeed() * 610) == 0)
+	/*if(Server()->Tick() % (1 * Server()->TickSpeed() * 610) == 0)
 	{
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("### 服务器信息:"), NULL);	
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("大家注意了!! 新人必须遵守的规则:"), NULL);	
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("只能玩一个服务器, 如果玩了 1-250 的服务器之后才能玩 250-500 的服务器"), NULL);	
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("你的账户如果被删除,你创建的公会会重组(reform)."), NULL);	
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("服务器版本: 1.1 Kurosio测试通过,中文翻译:MC_TYH以及全体MMOTEE国服玩家."), NULL);	
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, ("### 服务器信息:"), NULL);	
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, ("大家注意了!! 新人必须遵守的规则:"), NULL);	
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, ("只能玩一个服务器"), NULL);	
+		//SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, ("你的账户如果被删除,你创建的公会会重组(reform)."), NULL);	
+		//SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, ("服务器版本: 2.0（测试）作者/管理：天上的星星,中文翻译:MC_TYH以及全体MMOTEE国服玩家."), NULL);
 	}
-
+	*/
 	// вывод топ листа раз в 5 минут
-	if(Server()->Tick() % (1 * Server()->TickSpeed() * 440) == 0)
+	/*if(Server()->Tick() % (1 * Server()->TickSpeed() * 440) == 0)
 	{
 		switch(rand()%7)
 		{
@@ -1069,7 +1071,7 @@ void CGameContext::OnTick()
 				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("(* ^ ω ^) 玩家排行榜前五名:{str:name}:"), "name", "黄金", NULL);	
 				Server()->ShowTop10(25, "Gold", 2); break;
 			case 2:
-				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("(* ^ ω ^) 玩家排行榜前五名:{str:name}:"), "name", "Win Area", NULL);	
+				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("(* ^ ω ^) 玩家排行榜前五名:{str:name}:"), "name", "竞技", NULL);	
 				Server()->ShowTop10(25, "WinArea", 2); break;		
 			case 3:
 				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("(* ^ ω ^) 玩家排行榜前五名:{str:name}:"), "name", "击杀", NULL);	
@@ -1084,6 +1086,15 @@ void CGameContext::OnTick()
 				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("(* ^ ω ^) 公会排行榜前五名:{str:name}:"), "name", "黄金", NULL);	
 				Server()->ShowTop10Clans(25, "Money", 2); break;
 		}
+	}
+	*/
+	if(Server()->Tick() % (1 * Server()->TickSpeed() * 600) == 0)
+	{
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "制作者名单:", NULL);
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "原作者:Kurosio", NULL);
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "制作者/管理：天上的星星", NULL);
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "汉化：MC_TYH、Ninecloud2077及MMOTEE全体国服玩家", NULL);
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "地图制作：天际tx",NULL);
 	}
 
 	AreaTick();
@@ -3439,7 +3450,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		{
 			AddVote_Localization(ClientID, "ushammerrange", "☞ ({int:need}技能点) 生命值 +4% ({str:act}) ({int:sum})", "need", &Need, "act", 
 				m_apPlayers[ClientID]->AccUpgrade.HammerRange ? "✔" : "x", "sum", &m_apPlayers[ClientID]->AccUpgrade.HammerRange);		
-			AddVote_Localization(ClientID, "upasive2", "☞ ({int:need}技能点) 抵抗伤害 +2% ({str:act}) ({int:sum})", "need", &Need, "act", 
+			AddVote_Localization(ClientID, "upasive2", "☞ ({int:need}技能点) 伤害减免 +2% ({str:act}) ({int:sum})", "need", &Need, "act", 
 				m_apPlayers[ClientID]->AccUpgrade.Pasive2 ? "✔" : "x", "sum", &m_apPlayers[ClientID]->AccUpgrade.Pasive2);			
 		}
 		else if(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_ASSASINS)
@@ -3458,9 +3469,9 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		}
 		AddVote("············", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "☭ {str:psevdo}", "psevdo", LocalizeText(ClientID, "Active Skills"));
-		AddVote_Localization(ClientID, "uskillwall", "☞ (70技能点) 魔能-光墙 ({str:act})", "act", Server()->GetItemCount(ClientID, SKWALL) ? "30 Mana ✔" : "x");	
+		AddVote_Localization(ClientID, "uskillwall", "☞ (70技能点) 魔能-激光墙 ({str:act})", "act", Server()->GetItemCount(ClientID, SKWALL) ? "30 Mana ✔" : "x");	
 		SkillSettings(ClientID, SKWALL, "sskillwall");
-		AddVote_Localization(ClientID, "uskillheal", "☞ (60技能点) 魔能-治疗器 ({str:act})", "act", Server()->GetItemCount(ClientID, SKHEAL) ? "50 Mana ✔" : "x");	
+		AddVote_Localization(ClientID, "uskillheal", "☞ (60技能点) 魔能-治疗 ({str:act})", "act", Server()->GetItemCount(ClientID, SKHEAL) ? "50 Mana ✔" : "x");	
 		SkillSettings(ClientID, SKHEAL, "sskillheal");
 		AddVote_Localization(ClientID, "uskillsword", "☞ (20技能点) 魔能-光剑 ({str:act})", "act", Server()->GetItemCount(ClientID, SSWORD) ? "1 Mana ✔" : "x");	
 		SkillSettings(ClientID, SSWORD, "sskillsword");

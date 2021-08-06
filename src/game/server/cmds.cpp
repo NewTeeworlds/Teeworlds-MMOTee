@@ -256,9 +256,9 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 	else if(!strncmp(Msg->m_pMessage, "/cmdlist", 8))
 	{	
 		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "? ---- 命令列表");
-		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/invite ?<玩家昵称>, /createboss, /cmdlist, /lang <语言>");
-		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/login ?<用户名> <密码>, /register <用户名> <密码>");
-		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/newclan <公会名称>");
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/invite <玩家昵称>, /createboss, /cmdlist, /lang <语言>");
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/login (用户名) <密码>, /register <用户名> <密码>");
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/newclan <公会名称> /password <密码> <重复密码>");
 		return;
 	}
 

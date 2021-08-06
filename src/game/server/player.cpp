@@ -379,7 +379,7 @@ void CPlayer::Tick()
 						Server()->RemItem(m_ClientID, EVENTCUSTOMSOUL, 25, -1);
 						//TODO
 						GameServer()->SendMail(m_ClientID, 11, CUSTOMSKIN, 1);
-						GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("在线奖励:{str:name} 收集了 25 个灵魂(Soul)并且得到了自定义皮肤的机会."), "name", Server()->ClientName(m_ClientID), NULL);					
+						GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("在线奖励:{str:name} 收集了 25 个灵魂碎片并且得到了自定义皮肤的机会."), "name", Server()->ClientName(m_ClientID), NULL);					
 					}
 				}
 			}
@@ -399,11 +399,11 @@ void CPlayer::Tick()
 			int Time = m_JailTick/Server()->TickSpeed();
 			if(!AccData.IsJailed)
 			{
-				GameServer()->SendBroadcast_Localization(m_ClientID, 100, 100, _("你不小心进了监狱, 刑期:{sec:siska}."), "siska", &Time, NULL);		
+				GameServer()->SendBroadcast_Localization(m_ClientID, 100, 100, _("你进了监狱, 刑期:{sec:siska}."), "siska", &Time, NULL);		
 			}
 			else
 			{
-				GameServer()->SendBroadcast_Localization(m_ClientID, 100, 100, _("你被管理员关进了监狱, 刑期:{sec:siska}."), "siska", &Time, NULL);	
+				GameServer()->SendBroadcast_Localization(m_ClientID, 100, 100, _("你因得罪皇上（管理员）被打入大牢, 刑期:{sec:siska}."), "siska", &Time, NULL);	
 			}
 			m_JailTick--;
 			if(!m_JailTick)

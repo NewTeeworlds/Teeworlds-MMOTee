@@ -3671,7 +3671,7 @@ public:
 		char TimeString[64];
 		str_format(TimeString, sizeof(TimeString),"%d-%d-%d",
 			CurrentTime->tm_year, CurrentTime->tm_mon, CurrentTime->tm_mday);
-		dbg_msg("time","%d,%s",CurrentTime, TimeString);
+		//dbg_msg("time","%d,%s",CurrentTime, TimeString);
 		try
 		{
 			str_format(aBuf, sizeof(aBuf), "SELECT ClanID FROM %s_Clans WHERE Clanname COLLATE UTF8_GENERAL_CI = '%s';", pSqlServer->GetPrefix(), m_sName.ClrStr());
@@ -3712,30 +3712,30 @@ public:
 					m_pServer->m_aClients[m_ClientID].m_ClanID = ClanID;
 					str_copy(m_pServer->m_aClients[m_ClientID].m_Clan, pSqlServer->GetResults()->getString("Clanname").c_str(), sizeof(m_pServer->m_aClients[m_ClientID].m_Clan));
 					//dbg_msg("test","3");
-					try
-					{
+					//try
+					//{
 						//dbg_msg("test","4,%d", ClanID);
 						str_format(aBuf, sizeof(aBuf), "UPDATE tw_Users SET ClanID = '%d' WHERE UserId = '%d';"
 							, ClanID, m_pServer->m_aClients[m_ClientID].m_UserID);
-						pSqlServer->executeSqlQuery(aBuf);	// 麻了,鬼知道为啥这玩意执行以后,明明是成功的,读取到的值居然是失败的
+						pSqlServer->executeSql(aBuf);	// 麻了,鬼知道为啥这玩意执行以后,明明是成功的,读取到的值居然是失败的
 						//dbg_msg("test","5");
-					}
+					/*}
 					catch(sql::SQLException &e)
-					{
-						//dbg_msg("test","6,%s",e.what());
+					{*/
+						//dbg_msg("test","6");
 						//dbg_msg("test","7");
 						// 干脆把代码写这得了,好像没啥毛病
-						CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("创建成功,公会票已使用"));
-						m_pServer->AddGameServerCmd(pCmd);
-						dbg_msg("clan","%s 创建了 %s 公会", m_sNick, m_sName);
+						//CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, ("创建成功,公会票已使用"));
+						//m_pServer->AddGameServerCmd(pCmd);
+						//dbg_msg("clan","%s 创建了 %s 公会", m_sNick, m_sName);
 
-						m_pServer->RemItem(m_ClientID, CLANTICKET, 1, -1);
-						return true;
-					}
+						//m_pServer->RemItem(m_ClientID, CLANTICKET, 1, -1);
+						//return true;
+					//}
 					//dbg_msg("test","7");
 					CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("创建成功,公会票已使用"));
 					m_pServer->AddGameServerCmd(pCmd);
-					dbg_msg("clan","%s 创建了 %s 公会", m_sNick, m_sName);
+					//dbg_msg("clan","%s 创建了 %s 公会", m_sNick, m_sName);
 
 					m_pServer->RemItem(m_ClientID, CLANTICKET, 1, -1);
 					return true;
