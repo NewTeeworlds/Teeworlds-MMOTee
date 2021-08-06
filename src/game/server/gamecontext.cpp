@@ -485,7 +485,7 @@ void CGameContext::SendGuide(int ClientID, int BossType)
 		return;
 	
 	int arghealth = 0;
-	const char* argtext = "null";
+	//const char* argtext = "null";
 	const char* pLanguage = m_apPlayers[ClientID]->GetLanguage();
 	
 	dynamic_string Buffer;		
@@ -494,19 +494,19 @@ void CGameContext::SendGuide(int ClientID, int BossType)
 		if(!g_Config.m_SvCityStart)
 		{
 			arghealth = 500;
-			argtext = "Healer";
-			Server()->Localization()->Format_L(Buffer, pLanguage, _("Weapon: Shotgun / Speed: Normal+\nRank Boss D\n\nHeadshot's: if you are near!\n\nReward:\n- Money bag x3-8\n- 5% - craft item\n- 20% - Random Craft Box"), NULL);
+			//argtext = "Healer";
+			Server()->Localization()->Format_L(Buffer, pLanguage, _("武器:霰弹枪&火箭炮 射速:一般\n奖励:\n- 钱袋 x100-300\n- 5% - 合成用物品\n- 20% - 合成用物品盒子"), NULL);
 		}
 		else if(g_Config.m_SvCityStart == 1)
 		{
 			arghealth = 1000;
-			argtext = "All";
-			Server()->Localization()->Format_L(Buffer, pLanguage, _("Weapon: Shotgun / Speed: Fast+\nRank Boss B\n\nHeadshot's: if you are near!\n\nReward:\n- Money bag x40-80\n- 5% - craft item\n- 20% - Random Craft Box"), NULL);
+			//argtext = "All";
+			Server()->Localization()->Format_L(Buffer, pLanguage, _("武器:霰弹枪&火箭炮 射速:快\n奖励:\n- 钱袋 x300-500\n- 5% - 合成用物品\n- 20% - 合成用物品盒子"), NULL);
 		}
 	}
 	int Time = m_BossStartTick/Server()->TickSpeed();
-	SendMOTD_Localization(ClientID, "Guide / Boss: {str:name}\n生命值加上等级*{int:hp}\nRecomended class: {str:rclass}\n\n{str:guide}\n\n\n等待玩家进入Boss战，还剩下 {int:siska} 秒.", 
-		"name", GetBossName(m_BossType), "hp", &arghealth, "rclass", argtext, "guide", Buffer.buffer(), "siska", &Time);
+	SendMOTD_Localization(ClientID, "Boss:{str:name}\n生命值:玩家等级*{int:hp}\n{str:guide}\n\n等待玩家进入Boss战，还剩下 {int:siska} 秒.", 
+		"name", GetBossName(m_BossType), "hp", &arghealth, "guide", Buffer.buffer(), "siska", &Time);
 		
 	Buffer.clear();
 }
@@ -635,10 +635,12 @@ void CGameContext::SendBroadcast_LStat(int To, int Priority, int LifeSpan, int T
 		default: Buffer.clear();
 	}
 		
+	if(Server()->Tick() % (1 * Server()->TickSpeed() * 2) == 0)
+	{
 	SendBroadcast_Localization(To, Priority, LifeSpan, " \n\n等级: {int:lvl} | 经验: {int:exp}/{int:expl}\n----------------------\n{str:sdata} {int:getl}%\n{str:dataang} 怒气\n----------------------\n{str:mana} 魔能\n生命值: {int:hp}/{int:hpstart}\n\n\n\n\n\n\n\n\n\n\n\n{str:buff}{str:emp}", 
 		"lvl", &m_apPlayers[To]->AccData.Level, "exp", &m_apPlayers[To]->AccData.Exp, "expl", &Optmem, "sdata", Level, "getl", &getl, "dataang", Angry, "mana", Mana, "hp", &m_apPlayers[To]->m_Health, "hpstart", &m_apPlayers[To]->m_HealthStart, "buff", Buffer.buffer(),
 		"emp", "                                                                                                                                                                    ");
-
+	}
 	delete Level;
 	delete Angry;
 	delete Mana;
