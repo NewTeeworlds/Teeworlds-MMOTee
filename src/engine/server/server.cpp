@@ -4036,7 +4036,7 @@ public:
 		{
 			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("Error initilized clan say administrator."));
 			m_pServer->AddGameServerCmd(pCmd);
-			dbg_msg("sql", "Can't init new clan (MySQL Error: %s)", e.what());
+			dbg_msg("sql", "用户数据初始化失败 (MySQL 错误: %s)", e.what());
 			
 			return false;
 		}
@@ -4061,7 +4061,7 @@ public:
 		{
 			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, "登录时出现错误.");
 			m_pServer->AddGameServerCmd(pCmd);
-			dbg_msg("sql", "Can't init inventory (MySQL Error: %s)", e.what());
+			dbg_msg("sql", "用户数据初始化失败 (MySQL 错误: %s)", e.what());
 			
 			return false;
 		}
@@ -4096,7 +4096,7 @@ public:
 		{
 			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, "登录时出现错误.");
 			m_pServer->AddGameServerCmd(pCmd);
-			dbg_msg("sql", "无法检查用户名/密码 (MySQL 错误: %s)", e.what());
+			dbg_msg("sql", "用户数据初始化失败 (MySQL 错误: %s)", e.what());
 			return false;
 		}
 		return true;
@@ -4294,6 +4294,11 @@ public:
 				}
 				m_pServer->m_aClients[m_ClientID].m_UserID = (int)pSqlServer->GetResults()->getInt("UserId");
 				m_pServer->InitClientDB(m_ClientID);
+				while (m_pServer->m_aClients[m_ClientID].m_Level <= 0)
+				{
+					m_pServer->InitClientDB(m_ClientID);
+				}
+				
 				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("登录成功.按下esc界面中的“开始游戏”进入."));
 				m_pServer->AddGameServerCmd(pCmd);	
 			}
