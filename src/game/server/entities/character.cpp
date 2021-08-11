@@ -1850,7 +1850,7 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 			if(m_pPlayer->GetBotType() == BOT_NPC)
 			{
 				pFrom->AccData.Rel += 10;
-				GameServer()->SendChatTarget_Localization(From, CHATCATEGORY_DEFAULT, _("交际愤怒值： {int:rel}"), "rel", &pFrom->AccData.Rel, NULL);
+				GameServer()->SendChatTarget_Localization(From, CHATCATEGORY_DEFAULT, _("交际愤怒值: {int:rel}"), "rel", &pFrom->AccData.Rel, NULL);
 			}
 		}
 		// Арена

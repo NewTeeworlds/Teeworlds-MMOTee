@@ -3447,7 +3447,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote_Localization(ClientID, "umana", "☞ [{int:sum}] 魔能 +1(1升级点 {str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.Mana, "bonus", "C+0");
 		AddVote_Localization(ClientID, "uspray", "☞ [{int:sum}] 子弹散射 +1(10升级点 {str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.Spray, "bonus", "C+0");
 		AddVote("············", "null", ClientID);
-		AddVote_Localization(ClientID, "null", "♞ {str:psevdo}", "psevdo", LocalizeText(ClientID, "Passive Skills"));
+		AddVote_Localization(ClientID, "null", "♞ {str:psevdo}", "psevdo", LocalizeText(ClientID, "职业被动技"));
 		
 		int Need = HAMMERRANGE;
 		if(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER)
@@ -3472,7 +3472,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 				m_apPlayers[ClientID]->AccUpgrade.Pasive2 ? "✔" : "x", "sum", &m_apPlayers[ClientID]->AccUpgrade.Pasive2);			
 		}
 		AddVote("············", "null", ClientID);
-		AddVote_Localization(ClientID, "null", "☭ {str:psevdo}", "psevdo", LocalizeText(ClientID, "Active Skills"));
+		AddVote_Localization(ClientID, "null", "☭ {str:psevdo}", "psevdo", LocalizeText(ClientID, "主动技能"));
 		AddVote_Localization(ClientID, "uskillwall", "☞ (70技能点) 魔能-激光墙 ({str:act})", "act", Server()->GetItemCount(ClientID, SKWALL) ? "30 Mana ✔" : "x");	
 		SkillSettings(ClientID, SKWALL, "sskillwall");
 		AddVote_Localization(ClientID, "uskillheal", "☞ (60技能点) 魔能-治疗 ({str:act})", "act", Server()->GetItemCount(ClientID, SKHEAL) ? "50 Mana ✔" : "x");	
