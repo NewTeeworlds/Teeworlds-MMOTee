@@ -157,7 +157,7 @@ CREATE TABLE `tw_Users` (
 LOCK TABLES `tw_Users` WRITE;
 /*!40000 ALTER TABLE `tw_Users` DISABLE KEYS */;
 INSERT INTO `tw_Users` VALUES 
-(1,'test','天上的星星','null','505a47881334859c582f2731b59fac1e',712,1355885,8203,22959,0,0,0,0,0,0,2,0,1,7,0,1,53301,1,0,0,'2018-06-08 15:30:36','127.0.0.1'),
+(1,'test','天上的星星','null','505a47881334859c582f2731b59fac1e',712,1355885,8203,22959,0,0,0,0,0,0,2,0,1,7,0,1,53301,1,0,0,'2018-06-08 15:30:36','127.0.0.1');
 /*!40000 ALTER TABLE `tw_Users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -346,8 +346,8 @@ INSERT INTO `tw_uItemList` VALUES
 (120,16,'钻石鞋子','- 生命+250,护甲+250'),
 (121,15,'龙胸甲','- 生命+500,护甲+500'),
 (122,16,'龙鞋子','- 生命+400,护甲+400'),
-(123,10,'魔法师称号','生命+1000,护甲+1000')
-(124,6,'龙斧','砍树速度加倍');
+(123,10,'魔法师称号','生命+1000,护甲+1000'),
+(124,6,'龙斧','砍树速度加倍'),
 (125,6,'龙锄头','种地速度提升');
 /*!40000 ALTER TABLE `tw_uItemList` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -386,7 +386,7 @@ INSERT INTO `tw_uItemList_en` VALUES
 (7,1,'Grenade','- Weapon / Upgrading'),
 (8,1,'Laser','- Weapon / Upgrading'),
 (9,2,'Amulet Cleever','This for got x2 money bag in level up'),
-(10,2,'Ring Selfine','This for don\'t get self damage'),
+(10,2,'Ring Selfine','This for don not get self damage'),
 (11,5,'Module Happy','Emote module if all modules + bonus'),
 (12,5,'Module Evil','Emote module if all modules + bonus'),
 (13,5,'Module Surprise','Emote module if all modules + bonus'),
@@ -403,21 +403,21 @@ INSERT INTO `tw_uItemList_en` VALUES
 (24,2,'Rare Draw Ammo Regen','Rare | This drawing item'),
 (25,2,'Rare Ring Slime','Rare | Not self damage and jump'),
 (26,5,'Slime Dirt','Item for craft'),
-(27,5,'Formula Ring\'s','Item for craft'),
+(27,5,'Formula Ring','Item for craft'),
 (28,1,'Module Explode Gun','- Weapon / Upgrading'),
 (29,1,'Module Explode Shotgun','- Weapon / Upgrading'),
 (30,1,'Module Explode Laser','- Weapon / Upgrading'),
 (31,1,'Weapon Pressed','- All Weapon +5 ammo'),
 (32,5,'Body Boomer','Item for craft'),
 (33,2,'Rare Ring Boomer','Rare | Health +5% and item for craft'),
-(34,5,'Formula Earring\'s','Item for craft'),
-(35,5,'Formula Weapon\'s','Item for craft'),
+(34,5,'Formula Earring','Item for craft'),
+(35,5,'Formula Weapon','Item for craft'),
 (36,1,'Module Shotgun Slime','- Weapon / Upgrading'),
 (37,1,'Rare Earrings Kwah','Item added +1 jump mabe stack'),
 (38,5,'Foot Kwah','Item for craft'),
-(39,4,'Book Money x2 (10min)','Book item\'s for added bonus'),
-(40,4,'Book Experince x2 (10min)','Book item\'s for added bonus'),
-(41,2,'Jioc Dual Ring\'s','Rare | Relation get -10'),
+(39,4,'Book Money x2 (10min)','Book item for added bonus'),
+(40,4,'Book Experince x2 (10min)','Book item for added bonus'),
+(41,2,'Jioc Dual Ring','Rare | Relation get -10'),
 (42,1,'Module Hook Explode','- Module hook damage in explode'),
 (43,1,'Auto Hammer','- Auto Fire Hammer'),
 (44,1,'Auto Gun','- Auto Fire Gun'),
@@ -499,8 +499,8 @@ INSERT INTO `tw_uItemList_en` VALUES
 (120,16,'Diamond feet','- Health Armor +250'),
 (121,15,'Dragon body','- Health Armor +500'),
 (122,16,'Dragon feet','- Health Armor +400'),
-(123,10,'Title Enchanter','- Health Armor +1000')
-(124,6,'Dragon Axe','Cutting wood faster');
+(123,10,'Title Enchanter','- Health Armor +1000'),
+(124,6,'Dragon Axe','Cutting wood faster'),
 (125,6,'Dragon Hoe','Farming faster');
 /*!40000 ALTER TABLE `tw_uItemList_en` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -518,13 +518,13 @@ CREATE TABLE `tw_uItems` (
   `il_id` int(4) unsigned NOT NULL,
   `item_type` int(11) NOT NULL,
   `item_owner` bigint(20) NOT NULL DEFAULT '0',
-  `item_settings` smallint(5) NOT NULL DEFAULT '0',
+  `item_settings` bigint(20) NOT NULL DEFAULT '0',
   `item_count` int(11) NOT NULL DEFAULT '0',
   `item_enchant` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`it_id`) USING BTREE,
   KEY `item_owner` (`item_owner`) USING BTREE,
   KEY `item_type` (`item_type`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=32903 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -536,6 +536,36 @@ LOCK TABLES `tw_uItems` WRITE;
 INSERT INTO `tw_uItems` VALUES (1,1,4,1,0,76,0);
 /*!40000 ALTER TABLE `tw_uItems` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `tw_UserStatus`
+--
+
+DROP TABLE IF EXISTS `tw_UserStatus`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tw_UserStatus` (
+  `ID` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `date` DATETIME NOT NULL DEFAULT NOW(),
+  `IP` varchar(64) NOT NULL,
+  `Nick` varchar(32) NOT NULL,
+  `ban` tinyint NOT NULL DEFAULT '0',
+  `banreason` char(32) DEFAULT '',
+  `banlength` int(11) NOT NULL DEFAULT '0',
+  `online` tinyint NOT NULL DEFAULT '0',
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tw_UserStatus`
+--
+
+LOCK TABLES `tw_UserStatus` WRITE;
+/*!40000 ALTER TABLE `tw_UserStatus` DISABLE KEYS */;
+INSERT INTO `tw_UserStatus` VALUES (1,'2021-01-01 09:05:32','127.0.0.1','天上的星星',0,'没有提供原因',0,0);
+/*!40000 ALTER TABLE `tw_UserStatus` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -546,4 +576,3 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-11-08 13:27:23
