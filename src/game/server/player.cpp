@@ -372,14 +372,14 @@ void CPlayer::Tick()
 					}
 
 					GameServer()->SendMail(m_ClientID, 9, Type, 1);
-					GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("在线奖励:{str:name} 获得了 {str:item}."), "name", Server()->ClientName(m_ClientID), "item", Server()->GetItemName(m_ClientID, Type), NULL);					
+					GameServer()->SendChatTarget_Localization(m_ClientID, CHATCATEGORY_DEFAULT, _("在线奖励:{str:name} 获得了 {str:item}."), "name", Server()->ClientName(m_ClientID), "item", Server()->GetItemName(m_ClientID, Type), NULL);					
 
 					if(Server()->GetItemCount(m_ClientID, EVENTCUSTOMSOUL) >= 25)
 					{
 						Server()->RemItem(m_ClientID, EVENTCUSTOMSOUL, 25, -1);
 						//TODO
 						GameServer()->SendMail(m_ClientID, 11, CUSTOMSKIN, 1);
-						GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("在线奖励:{str:name} 收集了 25 个灵魂碎片并且得到了自定义皮肤的机会."), "name", Server()->ClientName(m_ClientID), NULL);					
+						GameServer()->SendChatTarget_Localization(m_ClientID, CHATCATEGORY_DEFAULT, _("在线奖励:你收集了 25 个灵魂碎片并且得到了自定义皮肤的机会."), NULL);					
 					}
 				}
 			}
@@ -444,7 +444,7 @@ void CPlayer::Tick()
 				GameServer()->SendBroadcast_Localization(m_ClientID, 101, 100, _("热身时间.{int:siska}秒后开始."), "siska", &Time, NULL);						
 					
 				if(GameServer()->m_AreaStartTick == 100)
-					GameServer()->SendBroadcast_Localization(m_ClientID, 105, 100, _("开打开打"), NULL);						
+					GameServer()->SendBroadcast_Localization(m_ClientID, 105, 100, _("开战吧!!!"), NULL);						
 			}
 			else if(GameServer()->m_AreaEndGame)
 			{
@@ -794,9 +794,9 @@ void CPlayer::OnDisconnect(const char *pReason)
 {
 	GameServer()->ClearVotes(m_ClientID);
 	KillCharacter();
-
+	//Server()->SyncOffline(m_ClientID);
 	if(Server()->ClientIngame(m_ClientID))	
-		GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:PlayerName} has left the game {str:Reason}"), "PlayerName", Server()->ClientName(m_ClientID), NULL);
+		GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:PlayerName} 离开了游戏"), "PlayerName", Server()->ClientName(m_ClientID), NULL);
 }
 
 void CPlayer::OnPredictedInput(CNetObj_PlayerInput *NewInput)

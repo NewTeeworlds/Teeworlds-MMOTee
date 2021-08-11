@@ -393,6 +393,32 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		GameServer()->Server()->ChangePassword_Admin(ClientID, Username, Password);
 		return;
 	}
+	else if(!strncmp(Msg->m_pMessage, "/ban", 4) && GameServer()->Server()->IsAuthed(ClientID))
+	{
+		LastChat();
+		int ClientID_Ban;
+		char Reason[256];
+		if(sscanf(Msg->m_pMessage, "/ban %d %s", &ClientID_Ban, Reason) != 2) 
+		{
+			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("封禁用户(管理员): /ban <客户端ID> <原因> "), NULL);
+		}
+		
+		GameServer()->Server()->Ban_DB(ClientID, ClientID_Ban, Reason);
+
+		return;
+	}
+	else if(!strncmp(Msg->m_pMessage, "/unban", 6) && GameServer()->Server()->IsAuthed(ClientID))
+	{
+		LastChat();
+		char Nick[512];
+		if(sscanf(Msg->m_pMessage, "/unban %s", Nick) != 1) 
+		{
+			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("解封用户(管理员): /unban <昵称>"), NULL);
+		}
+		
+		GameServer()->Server()->Unban_DB(ClientID, Nick);
+		return;
+	}
 	if(!strncmp(Msg->m_pMessage, "/", 1))
 	{
 		LastChat();

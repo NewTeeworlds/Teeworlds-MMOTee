@@ -560,7 +560,11 @@ public:
 	virtual void Register(int ClientID, const char* pUsername, const char* pPassword, const char* pEmail) = 0;
 	virtual void ChangePassword(int ClientID,  const char* pPassword) = 0;
 	virtual void ChangePassword_Admin(int ClientID, const char* pUSername, const char* pPassword) = 0;
-	
+	virtual void SyncOnline(int ClientID) = 0;
+	virtual void SyncOffline(int ClientID) = 0;
+	virtual void Ban_DB(int ClientID, int ClientID_Ban, const char* Reason) = 0;
+	virtual void Unban_DB(int ClientID, const char* Nick) = 0;
+
 	// Инициализация сохранения
 	virtual void InitClientDB(int ClientID) = 0;
 	virtual void UpdateStats(int ClientID, int Type = 0) = 0;

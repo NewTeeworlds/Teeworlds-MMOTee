@@ -142,6 +142,7 @@ public:
 		//Login
 		int m_LogInstance;
 		int m_UserID;
+		int m_UserStatusID;
 		int m_ClanID;
 		int m_Level;
 		int m_Exp;
@@ -161,6 +162,7 @@ public:
 		bool m_IsJailed;
 		int m_JailLength;
 		int m_SummerHealingTimes;
+		int m_LoginID;
 
 		int m_ItemCount[7];
 
@@ -429,8 +431,11 @@ public:
 
 	virtual void Register(int ClientID, const char* pUsername, const char* pPassword, const char* pEmail);
 	virtual void ChangePassword(int ClientID, const char* pPassword);
-	virtual void ChangePassword_Admin(int ClientID, const char* pUSername, const char* pPassword);
-
+	virtual void ChangePassword_Admin(int ClientID, const char* pUsername, const char* pPassword);
+	virtual void SyncOnline(int ClientID);
+	virtual void SyncOffline(int ClientID);
+	virtual void Ban_DB(int ClientID, int ClientID_Ban, const char* Reason);
+	virtual void Unban_DB(int ClientID, const char* Nick);
 	// Инициализация сохранение загрузка
 	virtual void UpdateStats(int ClientID, int Type = 0);
 	virtual void InitClientDB(int ClientID);
