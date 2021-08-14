@@ -2161,18 +2161,24 @@ void CCharacter::Snap(int SnappingClient)
 	if(m_pPlayer && m_pPlayer->GetBotType() <= 0)
 	{
 		EmoteNormal = EMOTE_NORMAL;
-		if(m_pPlayer->m_ActiveChair) EmoteNormal = EMOTE_HAPPY;
-		if(Server()->GetItemCount(m_pPlayer->GetCID(), AHAPPY))
-			EmoteNormal = EMOTE_HAPPY;
-		else if(Server()->GetItemCount(m_pPlayer->GetCID(), APAIN))
-			EmoteNormal = EMOTE_PAIN;
-		else if(Server()->GetItemCount(m_pPlayer->GetCID(), ASUPRRISE))
-			EmoteNormal = EMOTE_SURPRISE;
-		else if(Server()->GetItemCount(m_pPlayer->GetCID(), ABLINK))
-			EmoteNormal = EMOTE_BLINK;
-		else if(Server()->GetItemCount(m_pPlayer->GetCID(), AEVIL))
-			EmoteNormal = EMOTE_ANGRY;
-
+		if(Server()->GetItemCount(m_pPlayer->GetCID(), MODULEEMOTE))
+		{
+			EmoteNormal = Server()->GetItemSettings(m_pPlayer->GetCID(), MODULEEMOTE);
+		}
+		else
+		{
+			if(m_pPlayer->m_ActiveChair) EmoteNormal = EMOTE_HAPPY;
+			if(Server()->GetItemCount(m_pPlayer->GetCID(), AHAPPY))
+				EmoteNormal = EMOTE_HAPPY;
+			else if(Server()->GetItemCount(m_pPlayer->GetCID(), APAIN))
+				EmoteNormal = EMOTE_PAIN;
+			else if(Server()->GetItemCount(m_pPlayer->GetCID(), ASUPRRISE))
+				EmoteNormal = EMOTE_SURPRISE;
+			else if(Server()->GetItemCount(m_pPlayer->GetCID(), ABLINK))
+				EmoteNormal = EMOTE_BLINK;
+			else if(Server()->GetItemCount(m_pPlayer->GetCID(), AEVIL))
+				EmoteNormal = EMOTE_ANGRY;
+		}
 		if(m_InWater)
 			EmoteNormal = EMOTE_BLINK;
 	}

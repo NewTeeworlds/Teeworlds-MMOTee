@@ -4294,10 +4294,10 @@ public:
 				}
 				m_pServer->m_aClients[m_ClientID].m_UserID = (int)pSqlServer->GetResults()->getInt("UserId");
 				m_pServer->InitClientDB(m_ClientID);
-				while (m_pServer->m_aClients[m_ClientID].m_Level <= 0)
+				/* if(m_pServer->m_aClients[m_ClientID].m_Level <= 0)
 				{
 					m_pServer->InitClientDB(m_ClientID);
-				}
+				}*/
 				
 				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("登录成功.按下esc界面中的“开始游戏”进入."));
 				m_pServer->AddGameServerCmd(pCmd);	

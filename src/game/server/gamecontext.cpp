@@ -2080,6 +2080,16 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					ResetVotes(ClientID, CLMENU);	
 					return;
 				}	
+				else if(str_comp(aCmd, "semote") == 0)
+				{
+					int Get = Server()->GetItemSettings(ClientID, MODULEEMOTE)+1;
+					if(Get > 5) Server()->SetItemSettingsCount(ClientID, MODULEEMOTE, 0);
+					else Server()->SetItemSettingsCount(ClientID, MODULEEMOTE, Get);
+						
+					UpdateStats(ClientID);
+					ResetVotes(ClientID, SETTINGS);	
+					return;
+				}	
 				else if(str_comp(aCmd, "ssantipvp") == 0)
 				{
 					Server()->SetItemSettings(ClientID, SANTIPVP);
@@ -3109,14 +3119,32 @@ void CGameContext::SkillSettings(int ClientID, int ItemType, const char *Msg)
 		switch(Server()->GetItemSettings(ClientID, ItemType))
 		{
 			case 1: Data = "F3"; break;
-			case 2: Data = "EMOTE HEARTH"; break;
-			case 3: Data = "EMOTE PAIN"; break;
-			case 4: Data = "EMOTE ..."; break;
-			case 5: Data = "EMOTE MUSIC"; break;
-			case 6: Data = "EMOTE SORRY"; break;
-			case 7: Data = "EMOTE GHOST"; break;
+			case 2: Data = "表情-比心"; break;
+			case 3: Data = "表情-Oops"; break;
+			case 4: Data = "表情-..."; break;
+			case 5: Data = "表情-哼歌"; break;
+			case 6: Data = "表情-Sorry"; break;
+			case 7: Data = "表情-鬼"; break;
 		}
-		AddVote_Localization(ClientID, Msg, "Settings {str:stat} {str:name}", "stat", Data, "name", Server()->GetItemName(ClientID, ItemType));
+		AddVote_Localization(ClientID, Msg, "设置 {str:stat} {str:name}", "stat", Data, "name", Server()->GetItemName(ClientID, ItemType));
+	}
+}
+
+void CGameContext::EyeEmoteSettings(int ClientID, int ItemType, const char *Msg)
+{
+	if(Server()->GetItemCount(ClientID, ItemType))
+	{
+		const char *Data = "正常"; 
+		switch(Server()->GetItemSettings(ClientID, ItemType))
+		{
+			default: Data = "正常"; break;
+			case 1: Data = "痛苦"; break;
+			case 2: Data = "高兴"; break;
+			case 3: Data = "惊讶"; break;
+			case 4: Data = "愤怒"; break;
+			case 5: Data = "眯眼"; break;
+		}
+		AddVote_Localization(ClientID, Msg, "设置 {str:stat} {str:name}", "stat", Data, "name", Server()->GetItemName(ClientID, ItemType));
 	}
 }
 
@@ -3237,10 +3265,11 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			CreateNewShop(ClientID, LAMPHAMMER, 3, 160, 50000);
 
 			// #################### СКИЛЫ
+			/*
 			AddVote("············", "null", ClientID);
 			AddVote_Localization(ClientID, "null", "ღ  {str:psevdo}", "psevdo", LocalizeText(ClientID, "技巧"));
 			AddVote_Localization(ClientID, "null", "暂时没有物品");
-			
+			*/
 			// #################### ПЕРСОНАЛЬНО
 			
 			AddVote("············", "null", ClientID);
@@ -3260,6 +3289,8 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			AddVote_Localization(ClientID, "null", "使你在升级时获得20个钱袋");
 			CreateNewShop(ClientID, RINGNOSELFDMG, 3, 1, 1000);
 			AddVote_Localization(ClientID, "null", "不会受到自己的伤害（比如爆炸）");
+			CreateNewShop(ClientID, CUSTOMCOLOR, 3, 100, 20000);
+			AddVote_Localization(ClientID, "null", "让你使用自己的皮肤颜色!");
 			AddVote("", "null", ClientID);
 		}
 
@@ -3392,6 +3423,8 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		CreateNewShop(ClientID, HOOKDAMAGE, 1, 0, 0);
 		CreateNewShop(ClientID, MODULEHOOKEXPLODE, 1, 0, 0);
 		CreateNewShop(ClientID, RINGNOSELFDMG, 1, 0, 0);
+		CreateNewShop(ClientID, CUSTOMCOLOR, 1, 0, 0);
+		EyeEmoteSettings(ClientID, MODULEEMOTE, "semote");
 		AddVote("", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "☪ {str:psevdo}", "psevdo", LocalizeText(ClientID, "锤子"));
 		CreateNewShop(ClientID, HAMMERAUTO, 1, 0, 0);
@@ -3428,12 +3461,12 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		Data = Server()->GetItemSettings(ClientID, SANTIPVP) ? "☑" : "☐";
 		AddVote_Localization(ClientID, "ssantipvp", "☞ VIP特权: 禁止PVP {str:stat}", "stat", Data);
 
-		Data = "FULL";
-		if(Server()->GetItemSettings(ClientID, SCHAT) == 1) Data = "NORMAL";
-		else if(Server()->GetItemSettings(ClientID, SCHAT) == 2) Data = "MINIMAL";
+		Data = "全部";
+		if(Server()->GetItemSettings(ClientID, SCHAT) == 1) Data = "正常";
+		else if(Server()->GetItemSettings(ClientID, SCHAT) == 2) Data = "最少";
 		AddVote_Localization(ClientID, "sssetingschat", "☞ 聊天栏输出 ({str:stat})", "stat", Data);
 
-		Data = "HAMMER";
+		Data = "锤子";
 		if(Server()->GetItemSettings(ClientID, SDROP)) Data = "F3";
 		AddVote_Localization(ClientID, "sssetingsdrop", "☞ 拾取物品方法 ({str:stat})", "stat", Data);
 
@@ -3489,11 +3522,11 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		}
 		AddVote("············", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "☭ {str:psevdo}", "psevdo", LocalizeText(ClientID, "Active Skills"));
-		AddVote_Localization(ClientID, "uskillwall", "☞ (70技能点) 魔能-激光墙 ({str:act})", "act", Server()->GetItemCount(ClientID, SKWALL) ? "30 Mana ✔" : "x");	
+		AddVote_Localization(ClientID, "uskillwall", "☞ (70技能点) 激光墙 ({str:act})", "act", Server()->GetItemCount(ClientID, SKWALL) ? "30 魔能 ✔" : "x");	
 		SkillSettings(ClientID, SKWALL, "sskillwall");
-		AddVote_Localization(ClientID, "uskillheal", "☞ (60技能点) 魔能-治疗 ({str:act})", "act", Server()->GetItemCount(ClientID, SKHEAL) ? "50 Mana ✔" : "x");	
+		AddVote_Localization(ClientID, "uskillheal", "☞ (60技能点) 治疗 ({str:act})", "act", Server()->GetItemCount(ClientID, SKHEAL) ? "50 魔能 ✔" : "x");	
 		SkillSettings(ClientID, SKHEAL, "sskillheal");
-		AddVote_Localization(ClientID, "uskillsword", "☞ (20技能点) 魔能-光剑 ({str:act})", "act", Server()->GetItemCount(ClientID, SSWORD) ? "1 Mana ✔" : "x");	
+		AddVote_Localization(ClientID, "uskillsword", "☞ (20技能点) 光剑 ({str:act})", "act", Server()->GetItemCount(ClientID, SSWORD) ? "1 魔能(持续消耗) ✔" : "x");	
 		SkillSettings(ClientID, SSWORD, "sskillsword");
 		SkillSettings(ClientID, SHEALSUMMER, "sskillsummer");
 		AddBack(ClientID);
@@ -3599,7 +3632,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			found = true;
 			AddVote_Localization(ClientID, "null", "在线奖励(Back to School):");
 			AddVote_Localization(ClientID, "null", "每10分钟你会得到一次在线奖励");
-			AddVote_Localization(ClientID, "null", "如果你收集了 25个灵魂（soul patricle）");
+			AddVote_Localization(ClientID, "null", "如果你收集了 25个灵魂碎片");
 			AddVote_Localization(ClientID, "null", "你将会在下次在线奖励中得到自定义皮肤道具");
 		}
 		if(!found)
@@ -3723,7 +3756,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote_Localization(ClientID, "sort2", "☞ 黄金排名");
 		AddVote_Localization(ClientID, "sort3", "☞ 任务排名");
 		AddVote_Localization(ClientID, "sort6", "☞ 击杀排名");
-		AddVote_Localization(ClientID, "sort7", "☞ Win Area排名");
+		AddVote_Localization(ClientID, "sort7", "☞ 竞技场胜利次数排名");
 		AddVote("", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "★ 公会 - {str:psevdo}", "psevdo", LocalizeText(ClientID, "Clans"));		
 		AddVote_Localization(ClientID, "sort4", "☞ 等级排名");
@@ -3798,14 +3831,14 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		m_apPlayers[ClientID]->m_LastVotelist = AUTH;	
 		AddVote_Localization(ClientID, "null", "☪ 信息 ( ′ ω ` )?:");
 		AddVote_Localization(ClientID, "null", "充钱与特权");
-		AddVote_Localization(ClientID, "null", "1 欧元 - 100 点券(donate coin)");
+		//AddVote_Localization(ClientID, "null", "1 欧元 - 100 点券(donate coin)");
 		AddVote_Localization(ClientID, "null", "向管理员 天上的星星 捐赠(打钱)");// 这边以后肯定要改 :)
 		AddVote("", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "$ 你充了 {int:don}", "don", &m_apPlayers[ClientID]->AccData.Donate);
 		AddVote_Localization(ClientID, "bvip", "☞ VIP 包 [1000]");
 		AddVote_Localization(ClientID, "null", "物品 禁止PVP, 技能点(SP)盒子, 10,000 钱袋");
-		AddVote_Localization(ClientID, "null", "X2 - 若干钱与经验 + 特殊物品 Snap Draw");
-		AddVote_Localization(ClientID, "bsp", "☞ 技能点盒子(SP) [200]");
+		AddVote_Localization(ClientID, "null", "VIP 称号(吃菜经验/打怪掉落X2) + 专属特效");
+		AddVote_Localization(ClientID, "bsp", "☞ 技能点盒子 [200]");
 		AddVote_Localization(ClientID, "null", "获得 20 升级点 + 10 技能点");
 		AddVote_Localization(ClientID, "bantipvp", "☞ 物品 禁止PVP [200]");
 		AddVote_Localization(ClientID, "null", "你将会获得禁止PVP设置");
@@ -3938,8 +3971,8 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote_Localization(ClientID, "null", "合成菜单");
 		AddVote("", "null", ClientID);
 		AddVote_Localization(ClientID, "scr1", "▹ 基础物品");
-		AddVote_Localization(ClientID, "scr2", "▹ 神器(Artifacts)");
-		AddVote_Localization(ClientID, "scr3", "▹ 配件(Modules)与武器");
+		AddVote_Localization(ClientID, "scr2", "▹ 神器");
+		AddVote_Localization(ClientID, "scr3", "▹ 配件与武器");
 		AddVote_Localization(ClientID, "scr4", "▹ 增益与食物");
 		AddVote_Localization(ClientID, "scr5", "▹ 工作专长相关");
 		AddVote_Localization(ClientID, "scr6", "▹ 装备");
@@ -3963,12 +3996,12 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 				if(g_Config.m_SvEventSummer)
 				{
 					AddVote_Localization(ClientID, "null", "注意:合成成功率4%,15次失败后必定合成成功");
-					AddNewCraftVote(ClientID, "日耀(Sun Ray)x20", SHEALSUMMER);	
+					AddNewCraftVote(ClientID, "日耀x20", SHEALSUMMER);	
 			
 				}
-				AddNewCraftVote(ClientID, "戒指蓝图x1, Slime Dirtx1", RARERINGSLIME);	
-				AddNewCraftVote(ClientID, "戒指蓝图x1, body boomerx100", RINGBOOMER);	
-				AddNewCraftVote(ClientID, "耳环蓝图x1, foot kwahx100", EARRINGSKWAH);	
+				AddNewCraftVote(ClientID, "戒指蓝图x1, Slime的尸体x1", RARERINGSLIME);	
+				AddNewCraftVote(ClientID, "戒指蓝图x1, Boomer的尸体x100", RINGBOOMER);	
+				AddNewCraftVote(ClientID, "耳环蓝图x1, Kwah的脚x100", EARRINGSKWAH);	
 				AddNewCraftVote(ClientID, "僵尸大眼睛x30,骷髅强化骨x30", CUSTOMSKIN);	
 				AddNewCraftVote(ClientID, "土豆x60,番茄x60,萝卜x60", JUMPIMPULS);		
 			}
@@ -3976,8 +4009,8 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			{
 				AddNewCraftVote(ClientID, "眼睛表情 (happy, evil, surprise, blink, pain)", MODULEEMOTE);	
 				AddNewCraftVote(ClientID, "手枪x1, 散弹枪x1, 榴弹炮x1, 激光枪x1", WEAPONPRESSED);	
-				AddNewCraftVote(ClientID, "武器蓝图x1, 爆破鬼才的戒指(ring boomer)x1", MODULESHOTGUNSLIME);	
-				AddNewCraftVote(ClientID, "武器蓝图(formula weapons)x25", ENDEXPLOSION);	
+				AddNewCraftVote(ClientID, "武器蓝图x1, Boomer的戒指x1", MODULESHOTGUNSLIME);	
+				AddNewCraftVote(ClientID, "武器蓝图x25", ENDEXPLOSION);	
 			}
 			else if(m_apPlayers[ClientID]->m_SortedSelectCraft == 4)
 			{
@@ -4091,7 +4124,7 @@ void CGameContext::StartArea(int WaitTime, int Type)
 	int Gets = 0;
 	switch(m_AreaType)
 	{
-		case 1: NameGame = "Insta"; Gets = 50; break;
+		case 1: NameGame = "激光瞬杀"; Gets = 50; break;
 		case 2: NameGame = "FNG"; Gets = 5; break;
 	}
 	SendChatTarget(-1, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~");

@@ -41,7 +41,7 @@ CREATE TABLE `tw_Clans` (
   KEY `ClanID` (`ClanID`) USING BTREE,
   KEY `Clanname` (`Clanname`) USING BTREE,
   KEY `Level` (`Level`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -69,7 +69,7 @@ CREATE TABLE `tw_Mail` (
   `ItemCount` int(11) NOT NULL,
   PRIMARY KEY (`ID`) USING BTREE,
   KEY `IDOwner` (`IDOwner`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=71218 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -147,7 +147,7 @@ CREATE TABLE `tw_Users` (
   KEY `UserId` (`UserId`) USING BTREE,
   KEY `Username` (`Username`) USING BTREE,
   KEY `UserId_2` (`UserId`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1530 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -214,7 +214,7 @@ CREATE TABLE `tw_uItemList` (
   `item_desc` char(100) NOT NULL DEFAULT '- 无描述',
   PRIMARY KEY (`il_id`) USING BTREE,
   KEY `item_type` (`item_type`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=124 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=126 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -255,8 +255,8 @@ INSERT INTO `tw_uItemList` VALUES
 (29,1,'霰弹枪模块：爆炸','- 让你的子弹爆炸!'),
 (30,1,'激光枪模块：爆炸','- 让你的激光爆炸!'),
 (31,1,'弹夹','- 所有武器最大子弹上限+5'),
-(32,5,'爆破鬼才的尸体','用于合成'),
-(33,2,'神器-爆破鬼才的戒指','神器 | 生命上限+5%/用于合成'),
+(32,5,'Boomer 的尸体','用于合成'),
+(33,2,'神器-Boomer的戒指','神器 | 生命上限+5%/用于合成'),
 (34,5,'耳环蓝图','用于合成耳环'),
 (35,5,'武器蓝图','用于合成'),
 (36,1,'模块：Slime 的霰弹枪','- 让你的子弹能够反弹!'),
@@ -348,7 +348,8 @@ INSERT INTO `tw_uItemList` VALUES
 (122,16,'龙鞋子','- 生命+400,护甲+400'),
 (123,10,'魔法师称号','生命+1000,护甲+1000'),
 (124,6,'龙斧','砍树速度加倍'),
-(125,6,'龙锄头','种地速度提升');
+(125,6,'龙锄头','种地速度提升'),
+(126,2,'自定义颜色','让你使用自己的皮肤颜色');
 /*!40000 ALTER TABLE `tw_uItemList` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -366,7 +367,7 @@ CREATE TABLE `tw_uItemList_en` (
   `item_desc` char(100) NOT NULL DEFAULT '- No description',
   PRIMARY KEY (`il_id`) USING BTREE,
   KEY `item_type` (`item_type`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=124 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=126 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 
@@ -501,7 +502,8 @@ INSERT INTO `tw_uItemList_en` VALUES
 (122,16,'Dragon feet','- Health Armor +400'),
 (123,10,'Title Enchanter','- Health Armor +1000'),
 (124,6,'Dragon Axe','Cutting wood faster'),
-(125,6,'Dragon Hoe','Farming faster');
+(125,6,'Dragon Hoe','Farming faster'),
+(126,2,'Custom Color','Use customized tee color');
 /*!40000 ALTER TABLE `tw_uItemList_en` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -524,7 +526,7 @@ CREATE TABLE `tw_uItems` (
   PRIMARY KEY (`it_id`) USING BTREE,
   KEY `item_owner` (`item_owner`) USING BTREE,
   KEY `item_type` (`item_type`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -554,7 +556,7 @@ CREATE TABLE `tw_UserStatus` (
   `banlength` int(11) NOT NULL DEFAULT '0',
   `online` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
