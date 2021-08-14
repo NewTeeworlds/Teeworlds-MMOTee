@@ -4725,6 +4725,17 @@ void CGameContext::UseItem(int ClientID, int ItemID, int Count, int Type)
 					pPlayer->ExpAdd(PackOne, false);
 				}
 			}
+			else if(ItemID == CABBAGE)
+			{
+				PackOne += 35;
+				if(i == Count-1)
+				{
+					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:used} x{int:num} ,获得了 {int:pvars} 经验"), 
+						"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvars", &PackOne , NULL);	
+				
+					pPlayer->ExpAdd(PackOne, false);
+				}
+			}
 			else if(ItemID == CLANBOXEXP)
 			{
 				if(!Server()->GetClanID(ClientID)) break;
