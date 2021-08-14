@@ -1094,7 +1094,7 @@ void CGameContext::OnTick()
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "原作者:Kurosio", NULL);
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "制作者/管理：天上的星星", NULL);
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "汉化：MC_TYH、Ninecloud2077及MMOTEE全体国服玩家", NULL);
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "地图制作：天际tx",NULL);
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "地图制作：天际",NULL);
 	}
 
 	AreaTick();
@@ -3515,6 +3515,9 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVoteMenu_Localization(ClientID, CHOUSE, MENUONLY, "- 房屋菜单与升级");
 
 		AddVoteMenu_Localization(ClientID, CLANLIST, MENUONLY, "- 公会列表");
+
+		AddVote_Localization(ClientID, 'null',"- 公会战（敬请期待）");
+
 		AddVote_Localization(ClientID, "cexit", "- 退出公会!");
 		AddBack(ClientID);
 		return;

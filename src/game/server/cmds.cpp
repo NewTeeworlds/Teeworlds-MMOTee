@@ -116,7 +116,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		LastChat();
 		int id = 0, citem = 0;
 		if ((sscanf(Msg->m_pMessage, "/givedonate %d %d", &id, &citem)) != 2)
-			return GameServer()->SendChatTarget(ClientID, "Use: /givedonate <玩家id> <黄金>");
+			return GameServer()->SendChatTarget(ClientID, "命令方法: /givedonate <玩家id> <点券>");
 
 		if(GameServer()->m_apPlayers[id] && GameServer()->Server()->IsClientLogged(id))
 		{
@@ -133,32 +133,11 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		LastChat();
 		int size = 0;
 		if ((sscanf(Msg->m_pMessage, "/sd %d", &size)) != 1)
-			return GameServer()->SendChatTarget(ClientID, "Please use: /sd <音效id>");
+			return GameServer()->SendChatTarget(ClientID, "命令方法: /sd <音效id>");
 
 		int soundid = clamp(size, 0, 40);
 		if (GameServer()->GetPlayerChar(ClientID))
 			GameServer()->CreateSound(m_pPlayer->GetCharacter()->m_Pos, soundid);
-		return;
-	}
-	else if (!strncmp(Msg->m_pMessage, "/trah", 5) && GameServer()->Server()->IsAuthed(ClientID))
-	{
-		LastChat();
-		int size = 0;
-		if ((sscanf(Msg->m_pMessage, "/trah %d", &size)) != 1)
-			return GameServer()->SendChatTarget(ClientID, "Please use: /trah <id>");
-
-		if(GameServer()->m_apPlayers[size] && GameServer()->m_apPlayers[size]->GetCharacter() 
-			&& GameServer()->Server()->IsClientLogged(size))
-		{
-			GameServer()->SendChatTarget_Localization(-1, -1, _("[{str:name}] inserts fuck in [{str:name2}]"), "name", GameServer()->Server()->ClientName(ClientID), "name2", GameServer()->Server()->ClientName(size));
-			GameServer()->SendChatTarget_Localization(-1, -1, _("[{str:name}] ah ah insert me please, moaned"), "name", GameServer()->Server()->ClientName(size));
-			GameServer()->SendChatTarget_Localization(-1, -1, _("[{str:name}] cum in vagina [{str:name2}]"), "name", GameServer()->Server()->ClientName(ClientID), "name2", GameServer()->Server()->ClientName(size));
-			GameServer()->SendChatTarget_Localization(-1, -1, _("[{str:name}] i love you! [{str:name2}]"), "name", GameServer()->Server()->ClientName(ClientID), "name2", GameServer()->Server()->ClientName(size));
-			GameServer()->SendChatTarget_Localization(-1, -1, _("[{str:name}] i love you! [{str:name2}]"), "name", GameServer()->Server()->ClientName(size), "name2", GameServer()->Server()->ClientName(ClientID));
-			
-			for(int i = 0; i < 40; ++i)
-				GameServer()->CreateSoundGlobal(20);
-		}
 		return;
 	}
 
