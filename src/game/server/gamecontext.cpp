@@ -3833,6 +3833,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote_Localization(ClientID, "null", "充钱与特权");
 		//AddVote_Localization(ClientID, "null", "1 欧元 - 100 点券(donate coin)");
 		AddVote_Localization(ClientID, "null", "向管理员 天上的星星 捐赠(打钱)");// 这边以后肯定要改 :)
+		if(!g_Config.m_SvDonate) AddVote_Localization(ClientID, "null", "服务器目前资金足够,暂时不需要充值");
 		AddVote("", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "$ 你充了 {int:don}", "don", &m_apPlayers[ClientID]->AccData.Donate);
 		AddVote_Localization(ClientID, "bvip", "☞ VIP 包 [1000]");
