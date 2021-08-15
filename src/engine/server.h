@@ -360,6 +360,7 @@ public:
 	virtual const char *GetSelectName(int ClientID, int SelID) = 0;
 
 	virtual bool GetLeader(int ClientID, int ClanID) = 0;
+	virtual bool GetAdmin(int ClientID, int ClanID) = 0;
 	virtual int ClientCountry(int ClientID) = 0;
 	virtual bool ClientIngame(int ClientID) = 0;
 	virtual int GetClientInfo(int ClientID, CClientInfo *pInfo) = 0;
@@ -540,7 +541,7 @@ public:
 	virtual void ListClan(int ClientID, int ClanID) = 0;
 	virtual void ExitClanOff(int ClientID, const char* pName) = 0;
 	virtual void ChangeLeader(int ClanID, const char* pName) = 0;
-	
+	virtual void ChangeAdmin(int ClanID, const char* pName) = 0;
 	// Инициализция сохранения
 	virtual void InitClan() = 0;
 	virtual void InitClanID(int ClanID, bool Need, const char* SubType, int Price, bool Save) = 0;
@@ -576,6 +577,7 @@ public:
 public:
 	virtual int GetClan(int Type, int ClanID) = 0;
 	virtual const char *LeaderName(int ClanID) = 0;
+	virtual const char *AdminName(int ClientID) = 0;
 	virtual const char *GetClanName(int ClanID) = 0;
 
 	virtual void ResetBotInfo(int ClientID, int BotType, int BotSubType) = 0;

@@ -2094,6 +2094,13 @@ const char *CServer::LeaderName(int ClanID)
 		return "";
 }
 
+const char *CServer::AdminName(int ClanID)
+{
+	if(ClanID > 0) return m_stClan[ClanID].f_admin;
+	else
+		return "";
+}
+
 const char *CServer::GetClanName(int ClanID)
 {
 	if(ClanID > 0) return m_stClan[ClanID].f_name;
@@ -3450,6 +3457,17 @@ bool CServer::GetLeader(int ClientID, int ClanID)
 		return false;
 }
 
+bool CServer::GetAdmin(int ClientID, int ClanID)
+{
+	if(m_aClients[ClientID].m_ClanID < 1)
+		return false;
+	
+	if(str_comp_nocase(m_stClan[ClanID].f_admin, ClientName(ClientID)) == 0)
+		return true;
+	else 
+		return false;
+}
+
 // Инициализация кланов
 class CSqlJob_Server_InitClan : public CSqlJob
 {
@@ -3484,6 +3502,7 @@ public:
 				m_pServer->m_stClan[ClanID].f_chairupgr = (int)pSqlServer->GetResults()->getInt("ChairHouse");
 				str_copy(m_pServer->m_stClan[ClanID].f_name, pSqlServer->GetResults()->getString("Clanname").c_str(), sizeof(m_pServer->m_stClan[ClanID].f_name));
 				str_copy(m_pServer->m_stClan[ClanID].f_creator, pSqlServer->GetResults()->getString("LeaderName").c_str(), sizeof(m_pServer->m_stClan[ClanID].f_creator));
+				str_copy(m_pServer->m_stClan[ClanID].f_admin, pSqlServer->GetResults()->getString("AdminName").c_str(), sizeof(m_pServer->m_stClan[ClanID].f_admin));
 				
 				
 				m_pServer->UpdClanCount(ClanID);
@@ -3546,6 +3565,16 @@ public:
 				return true;
 			}
 
+			if(str_comp(m_sType.ClrStr(), "Admin") == 0)
+			{
+				m_sType = CSqlString<64>(m_pServer->m_stClan[m_ClanID].f_admin);
+				str_format(aBuf, sizeof(aBuf), 
+					"UPDATE tw_Clans SET AdminName = '%s' WHERE ClanID = '%d';",
+					m_sType.ClrStr(), m_ClanID);
+				pSqlServer->executeSqlQuery(aBuf);
+				return true;
+			}
+
 			if(str_comp(m_sType.ClrStr(), "Init") == 0)
 			{
 				str_format(aBuf, sizeof(aBuf), "SELECT * FROM tw_Clans WHERE ClanID = '%d';", m_ClanID);
@@ -3562,6 +3591,7 @@ public:
 					m_pServer->m_stClan[m_ClanID].f_exp = (int)pSqlServer->GetResults()->getInt("Exp");
 					m_pServer->m_stClan[m_ClanID].f_money = (int)pSqlServer->GetResults()->getInt("Money");
 					str_copy(m_pServer->m_stClan[m_ClanID].f_creator, pSqlServer->GetResults()->getString("LeaderName").c_str(), sizeof(m_pServer->m_stClan[m_ClanID].f_creator));
+					str_copy(m_pServer->m_stClan[m_ClanID].f_admin, pSqlServer->GetResults()->getString("AdminName").c_str(), sizeof(m_pServer->m_stClan[m_ClanID].f_admin));
 				}
 				return true;
 			}
@@ -3837,11 +3867,11 @@ public:
 				int ClanAdded = (int)pSqlServer->GetResults()->getInt("ClanAdded");
 				
 				str_format(aBufCs, sizeof(aBufCs), "cs%d", Num);
-				str_format(aBufW, sizeof(aBufW), "▹ Level %d:%s(ID:%d)", Level, aReform, UserID);
+				str_format(aBufW, sizeof(aBufW), "▹ 等级 %d:%s(ID:%d)", Level, aReform, UserID);
 				CServer::CGameServerCmd* pCmd = new CGameServerCmd_AddLocalizeVote_Language(m_ClientID, aBufCs, _(aBufW));
 				m_pServer->AddGameServerCmd(pCmd);
 
-				str_format(aBufW, sizeof(aBufW), "Added %d money", ClanAdded);
+				str_format(aBufW, sizeof(aBufW), "为公会贡献了 %d 黄金", ClanAdded);
 				pCmd = new CGameServerCmd_AddLocalizeVote_Language(m_ClientID, aBufCs, _(aBufW));
 				m_pServer->AddGameServerCmd(pCmd);
 				
@@ -3936,6 +3966,12 @@ void CServer::ChangeLeader(int ClanID, const char* pName)
 {
 	str_copy(m_stClan[ClanID].f_creator, pName, sizeof(m_stClan[ClanID].f_creator));
 	InitClanID(ClanID, PLUS, "Leader", 0, false);
+}
+
+void CServer::ChangeAdmin(int ClanID, const char* pName)
+{
+	str_copy(m_stClan[ClanID].f_admin, pName, sizeof(m_stClan[ClanID].f_admin));
+	InitClanID(ClanID, PLUS, "Admin", 0, false);
 }
 
 // Выход с клана
@@ -4087,9 +4123,21 @@ public:
 				m_pServer->m_aClients[m_ClientID].Mana = (int)pSqlServer->GetResults()->getInt("Mana");
 				m_pServer->m_aClients[m_ClientID].m_HammerRange = (int)pSqlServer->GetResults()->getInt("HammerRange");
 				m_pServer->m_aClients[m_ClientID].m_Pasive2 = (int)pSqlServer->GetResults()->getInt("Pasive2");
-				
-				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("你已登录.欢迎."));
-				m_pServer->AddGameServerCmd(pCmd);			
+				if(m_pServer->m_aClients[m_ClientID].m_Level <= 0)
+				{
+					CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, "登录时发生错误.");
+					m_pServer->AddGameServerCmd(pCmd);
+					return false;
+				}
+				else
+				{
+					CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("你已登录.欢迎."));
+					m_pServer->AddGameServerCmd(pCmd);	
+
+					CServer::CGameServerCmd* pCmd1 = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("登录成功.按下esc界面中的“开始游戏”进入."));
+					m_pServer->AddGameServerCmd(pCmd1);	
+				}
+						
 			}					
 		}
 		catch (sql::SQLException &e)
@@ -4294,13 +4342,8 @@ public:
 				}
 				m_pServer->m_aClients[m_ClientID].m_UserID = (int)pSqlServer->GetResults()->getInt("UserId");
 				m_pServer->InitClientDB(m_ClientID);
-				/* if(m_pServer->m_aClients[m_ClientID].m_Level <= 0)
-				{
-					m_pServer->InitClientDB(m_ClientID);
-				}*/
 				
-				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("登录成功.按下esc界面中的“开始游戏”进入."));
-				m_pServer->AddGameServerCmd(pCmd);	
+				
 			}
 			else
 			{

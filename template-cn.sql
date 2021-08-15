@@ -27,6 +27,7 @@ CREATE TABLE `tw_Clans` (
   `Clanname` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT 'NOPE',
   `LeaderName` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT 'NOPE',
   `LeaderID` int(11) NOT NULL,
+  `AdminName` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT 'NOPE',
   `Level` int(11) NOT NULL DEFAULT '1',
   `Exp` int(11) NOT NULL DEFAULT '0',
   `MaxNum` int(11) NOT NULL DEFAULT '2',
@@ -36,7 +37,7 @@ CREATE TABLE `tw_Clans` (
   `ExpAdd` int(11) NOT NULL DEFAULT '0',
   `SpawnHouse` tinyint(4) NOT NULL DEFAULT '0',
   `ChairHouse` int(11) NOT NULL DEFAULT '0',
-  `CreateDate` date NOT NULL,
+  `CreateDate` date NOT NULL ,
   PRIMARY KEY (`ClanID`) USING BTREE,
   KEY `ClanID` (`ClanID`) USING BTREE,
   KEY `Clanname` (`Clanname`) USING BTREE,
@@ -50,7 +51,7 @@ CREATE TABLE `tw_Clans` (
 
 LOCK TABLES `tw_Clans` WRITE;
 /*!40000 ALTER TABLE `tw_Clans` DISABLE KEYS */;
-INSERT INTO `tw_Clans` VALUES (1,'Star','test',1,4,2595550,20,5001,16164,53,131,0,0,'0000-00-00');
+INSERT INTO `tw_Clans` VALUES (1,'Star','test',1,'Nope','0',4,2595550,20,5001,16164,53,131,0,0,'0000-00-00');
 /*!40000 ALTER TABLE `tw_Clans` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -196,7 +197,7 @@ CREATE TABLE `tw_uClass` (
 
 LOCK TABLES `tw_uClass` WRITE;
 /*!40000 ALTER TABLE `tw_uClass` DISABLE KEYS */;
-INSERT INTO `tw_uClass` VALUES (1,'test',600,300,0,0,0,0,0,0,0,0,0,0);
+INSERT INTO `tw_uClass` VALUES (1,'test',600,300,1000,400,1000,400,400,500,30,200,8,8);
 /*!40000 ALTER TABLE `tw_uClass` ENABLE KEYS */;
 UNLOCK TABLES;
 

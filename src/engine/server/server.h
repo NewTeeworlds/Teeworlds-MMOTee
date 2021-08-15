@@ -193,6 +193,7 @@ public:
 		int f_id;
 		char f_name [32];
 		char f_creator [MAX_NAME_LENGTH];
+		char f_admin [MAX_NAME_LENGTH];
 		int f_level;
 		int f_exp;
 		int f_money;
@@ -208,7 +209,9 @@ public:
 
 	virtual int GetClan(int Type, int ClanID);
 	virtual bool GetLeader(int ClientID, int ClanID);
+	virtual bool GetAdmin(int ClientID, int ClanID);
 	const char *LeaderName(int ClientID);
+	const char *AdminName(int ClientID);
 	const char *GetClanName(int ClanID);
 
 	virtual int GetUserID(int ClientID);
@@ -459,7 +462,8 @@ public:
 	virtual void NewClan(int ClientID, const char* pName);
 	virtual void EnterClan(int ClientID, int ClanID);
 	virtual void ChangeLeader(int ClanID, const char* pName);
-	
+	virtual void ChangeAdmin(int ClanID, const char* pName);
+
 	// Инициализация сохранение загрузка
 	virtual void InitClan();
 	virtual void InitClanID(int ClanID, bool Need, const char* SubType, int Price, bool Save);

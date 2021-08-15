@@ -1386,9 +1386,9 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 				// КЛАН ФУНКЦИИ
 				else if(str_comp(aCmd, "houseopen") == 0)
 				{
-					if(!Server()->GetLeader(ClientID, Server()->GetClanID(ClientID)))
+					if(!Server()->GetLeader(ClientID, Server()->GetClanID(ClientID)) || Server()->GetAdmin(ClientID, Server()->GetClanID(ClientID)))
 					{
-						SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# 你不是该公会的会长"), NULL);
+						SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# 你不是该公会的会长或者管理员"), NULL);
 						return;
 					}
 					if(Server()->SetOpenHouse(Server()->GetOwnHouse(ClientID)))
@@ -1402,11 +1402,16 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 
 				else if(str_comp(aCmd, "ckickoff") == 0)
 				{
-					if(Server()->GetLeader(ClientID, Server()->GetClanID(ClientID)))
+					if(Server()->GetLeader(ClientID, Server()->GetClanID(ClientID)) || Server()->GetAdmin(ClientID, Server()->GetClanID(ClientID)))
 					{	
 						if(str_comp_nocase(m_apPlayers[ClientID]->m_SelectPlayer, Server()->ClientName(ClientID)) == 0)
 							return;
-						
+						if(str_comp_nocase(m_apPlayers[ClientID]->m_SelectPlayer, Server()->LeaderName(Server()->GetClanID(ClientID))) 
+							|| str_comp_nocase(m_apPlayers[ClientID]->m_SelectPlayer, Server()->AdminName(Server()->GetClanID(ClientID))))
+						{
+							SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# 你不能把该公会的会长或者管理员踢出公会"), NULL);
+							return;
+						}
 						bool Type = false;
 						for(int i = 0; i < MAX_NOBOT; ++i)
 						{
@@ -1424,7 +1429,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 						ResetVotes(ClientID, CLANLIST);
 					}
 					else
-						SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# 你不是该公会的会长"), NULL);
+						SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# 你不是该公会的会长或者管理员"), NULL);
 												
 					return;
 				}	
@@ -1436,20 +1441,84 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 						if(str_comp_nocase(m_apPlayers[ClientID]->m_SelectPlayer, Server()->ClientName(ClientID)) == 0)
 							return;
 						
-						bool heh = false;
+						bool found = false;
 						for(int i = 0; i < MAX_NOBOT; ++i){
 							if(m_apPlayers[i]){
 								if(Server()->GetClanID(i) == Server()->GetClanID(ClientID)){
 										
-									heh = true;
+									found = true;
 									SendChatTarget_Localization(i, CHATCATEGORY_DEFAULT, _("公会新的会长:{str:name}"), "name", m_apPlayers[ClientID]->m_SelectPlayer, NULL);	
 								}
 							}
 						}
 						
-						if(heh)
+						if(found)
 						{
 							Server()->ChangeLeader(Server()->GetClanID(ClientID), m_apPlayers[ClientID]->m_SelectPlayer); 
+							ResetVotes(ClientID, CLANLIST);
+							
+						}
+					}
+					else
+						SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# 你不是该公会的会长"), NULL);
+												
+					return;
+				}	
+
+				else if(str_comp(aCmd, "cgetadmin") == 0)
+				{
+					if(Server()->GetLeader(ClientID, Server()->GetClanID(ClientID)))
+					{	
+						if(str_comp_nocase(m_apPlayers[ClientID]->m_SelectPlayer, Server()->ClientName(ClientID)) == 0)
+							return;
+						
+						bool found = false;
+						for(int i = 0; i < MAX_NOBOT; ++i){
+							if(m_apPlayers[i])
+							{
+								if(Server()->GetClanID(i) == Server()->GetClanID(ClientID)){
+										
+									found = true;
+									SendChatTarget_Localization(i, CHATCATEGORY_DEFAULT, _("公会新的管理员:{str:name}"), "name", m_apPlayers[ClientID]->m_SelectPlayer, NULL);	
+								}
+							}
+						}
+						
+						if(found)
+						{
+							Server()->ChangeAdmin(Server()->GetClanID(ClientID), m_apPlayers[ClientID]->m_SelectPlayer); 
+							ResetVotes(ClientID, CLANLIST);
+							
+						}
+					}
+					else
+						SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# 你不是该公会的会长"), NULL);
+												
+					return;
+				}	
+
+				else if(str_comp(aCmd, "cremadmin") == 0)
+				{
+					if(Server()->GetLeader(ClientID, Server()->GetClanID(ClientID)))
+					{	
+						if(str_comp_nocase(m_apPlayers[ClientID]->m_SelectPlayer, Server()->ClientName(ClientID)) == 0)
+							return;
+						
+						bool found = false;
+						for(int i = 0; i < MAX_NOBOT; ++i){
+							if(m_apPlayers[i])
+							{
+								if(Server()->GetClanID(i) == Server()->GetClanID(ClientID)){
+										
+									found = true;
+									SendChatTarget_Localization(i, CHATCATEGORY_DEFAULT, _("公会原管理员 {str:name} 被罢免了!"), "name", m_apPlayers[ClientID]->m_SelectPlayer, NULL);	
+								}
+							}
+						}
+						
+						if(found)
+						{
+							Server()->ChangeAdmin(Server()->GetClanID(ClientID), "Nope"); 
 							ResetVotes(ClientID, CLANLIST);
 							
 						}
@@ -2579,7 +2648,7 @@ void CGameContext::BuyUpgradeClan(int ClientID, int Money, int Type, const char*
 	if(!m_apPlayers[ClientID] || !m_apPlayers[ClientID]->GetCharacter())
 		return;
 	
-	if(Server()->GetLeader(ClientID, Server()->GetClanID(ClientID)) 
+	if((Server()->GetLeader(ClientID, Server()->GetClanID(ClientID)) || Server()->GetAdmin(ClientID, Server()->GetClanID(ClientID))) 
 		&& Server()->GetClan(DMONEY, Server()->GetClanID(ClientID)) >= Money)
 	{
 		Server()->InitClanID(Server()->GetClanID(ClientID), MINUS, "Money", Money, true);
@@ -3548,6 +3617,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote_Localization(ClientID, "null", "公会名称: {str:name}(ID:{int:id})", "name", Server()->ClientClan(ClientID), "id", &ID);
 		AddVote_Localization(ClientID, "null", "黄金储量: {int:bank}" , "bank", &Bank);
 		AddVote_Localization(ClientID, "null", "会长: {str:leader}", "leader", Server()->LeaderName(Server()->GetClanID(ClientID)));
+		AddVote_Localization(ClientID, "null", "管理员: {str:admin}", "admin", Server()->AdminName(Server()->GetClanID(ClientID)));
 		AddVote_Localization(ClientID, "null", "关联: {int:revl}", "revl", &Relevante);
 		AddVote_Localization(ClientID, "null", "公会人数: {int:count}/{int:maxcount}", "count", &Count , "maxcount", &MaxCount);
 
@@ -3580,7 +3650,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		{
 			AddVote("", "null", ClientID);
 			AddVote_Localization(ClientID, "null", "房屋设置");
-			AddVote_Localization(ClientID, "houseopen", "房屋的门 [{str:stat}]", "stat", Server()->GetOpenHouse(Server()->GetOwnHouse(ClientID)) ? "OPEN" : "CLOSE");
+			AddVote_Localization(ClientID, "houseopen", "房屋的门 [{str:stat}]", "stat", Server()->GetOpenHouse(Server()->GetOwnHouse(ClientID)) ? "打开" : "关闭");
 			AddVote("", "null", ClientID);
 			AddVote_Localization(ClientID, "null", "公会成员的房屋升级");
 
@@ -3602,45 +3672,6 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		return;
 	}
 
-	// ############################### Инвент лист
-	else if(Type == EVENTLIST)
-	{
-		m_apPlayers[ClientID]->m_LastVotelist = AUTH;	
-		AddVote_Localization(ClientID, "null", "☪ 信息 ( ′ ω ` )?:");
-		AddVote_Localization(ClientID, "null", "事件列表");
-		AddVote("", "null", ClientID);
-
-		bool found = false;
-		if(g_Config.m_SvEventSummer)
-		{
-			found = true;
-			AddVote_Localization(ClientID, "null", "事件汇总(summer):");
-			AddVote_Localization(ClientID, "null", "杀死怪物时随机获得合成物品");			
-			AddVote_Localization(ClientID, "null", "如果成功的话将会随机合成");
-			AddVote_Localization(ClientID, "null", "你将得到称号与技能汇总(summer)"); 
-			AddVote("", "null", ClientID);
-		}
-		if(g_Config.m_SvEventHammer)
-		{
-			found = true;
-			AddVote_Localization(ClientID, "null", "事件物品(地上掉的锤子):");
-			AddVote_Localization(ClientID, "null", "当杀死怪物时随机获得一种盒子");
-			AddVote("", "null", ClientID);
-		}
-		if(g_Config.m_SvEventSchool)
-		{
-			found = true;
-			AddVote_Localization(ClientID, "null", "在线奖励(Back to School):");
-			AddVote_Localization(ClientID, "null", "每10分钟你会得到一次在线奖励");
-			AddVote_Localization(ClientID, "null", "如果你收集了 25个灵魂碎片");
-			AddVote_Localization(ClientID, "null", "你将会在下次在线奖励中得到自定义皮肤道具");
-		}
-		if(!found)
-			AddVote_Localization(ClientID, "null", "肥肠豹潜! 现在没有活动的事件.");// az ——翻译员
-
-		AddBack(ClientID);
-		return;
-	}
 
 	// ############################### Лист клана
 	else if(Type == CLANLIST)
@@ -3648,7 +3679,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		m_apPlayers[ClientID]->m_LastVotelist = CLAN;	
 		AddVote_Localization(ClientID, "null", "☪ 信息 ( ′ ω ` )?:");
 		AddVote_Localization(ClientID, "null", "这是会长处置玩家的菜单");
-		AddVote_Localization(ClientID, "null", "For open player settings");
+		//AddVote_Localization(ClientID, "null", "For open player settings");
 		Server()->ListClan(ClientID, Server()->GetClanID(ClientID));
 		AddBack(ClientID);
 		AddVote("", "null", ClientID);
@@ -3662,6 +3693,23 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		
 		AddVote_Localization(ClientID, "null", "▶ 选择了玩家 {str:name}", "name", m_apPlayers[ClientID]->m_SelectPlayer);
 		AddVote_Localization(ClientID, "cgetleader", "▹ 转让公会");
+		bool IsAdmin;
+		for(int i = 0; i < MAX_NOBOT; ++i)
+		{
+			if(m_apPlayers[i])
+			{
+				if(str_comp_nocase(m_apPlayers[ClientID]->m_SelectPlayer, Server()->ClientName(i)) == 0)
+					IsAdmin = true;
+			}
+		}
+		if(!IsAdmin)
+		{
+			AddVote_Localization(ClientID, "cgetadmin", "▹ 授予公会管理员");
+		}
+		else
+		{
+			AddVote_Localization(ClientID, "cremadmin", "▹ 移除公会管理员");
+		}
 		AddVote_Localization(ClientID, "ckickoff", "▹ 踢出公会");
 
 		AddBack(ClientID);
@@ -3710,7 +3758,45 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddBack(ClientID);
 		return;
 	}
-	
+	// ############################### Инвент лист
+	else if(Type == EVENTLIST)
+	{
+		m_apPlayers[ClientID]->m_LastVotelist = AUTH;	
+		AddVote_Localization(ClientID, "null", "☪ 信息 ( ′ ω ` )?:");
+		AddVote_Localization(ClientID, "null", "事件列表");
+		AddVote("", "null", ClientID);
+
+		bool found = false;
+		if(g_Config.m_SvEventSummer)
+		{
+			found = true;
+			AddVote_Localization(ClientID, "null", "事件汇总(summer):");
+			AddVote_Localization(ClientID, "null", "杀死怪物时随机获得合成物品");			
+			AddVote_Localization(ClientID, "null", "如果成功的话将会随机合成");
+			AddVote_Localization(ClientID, "null", "你将得到称号与技能汇总(summer)"); 
+			AddVote("", "null", ClientID);
+		}
+		if(g_Config.m_SvEventHammer)
+		{
+			found = true;
+			AddVote_Localization(ClientID, "null", "事件物品(地上掉的锤子):");
+			AddVote_Localization(ClientID, "null", "当杀死怪物时随机获得一种盒子");
+			AddVote("", "null", ClientID);
+		}
+		if(g_Config.m_SvEventSchool)
+		{
+			found = true;
+			AddVote_Localization(ClientID, "null", "在线奖励(Back to School):");
+			AddVote_Localization(ClientID, "null", "每10分钟你会得到一次在线奖励");
+			AddVote_Localization(ClientID, "null", "如果你收集了 25个灵魂碎片");
+			AddVote_Localization(ClientID, "null", "你将会在下次在线奖励中得到自定义皮肤道具");
+		}
+		if(!found)
+			AddVote_Localization(ClientID, "null", "肥肠豹潜! 现在没有活动的事件.");// az ——翻译员
+
+		AddBack(ClientID);
+		return;
+	}
 	// ############################### Лист разыскиваемых
 	else if(Type == RESLIST)
 	{
