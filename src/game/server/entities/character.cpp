@@ -1183,12 +1183,21 @@ void CCharacter::Tick()
 		
 		if(IndexShit == ZONE_WHITEROOM) 
 		{
+			int IsInRoom=0;
 			if(!Server()->GetItemCount(m_pPlayer->GetCID(), WHITETICKET))
 			{
 				Die(m_pPlayer->GetCID(), WEAPON_WORLD);
 				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), 200, ("你没有进入白房间的门票，请前往商店购买门票 (White Ticket)!"), NULL);
 			}else{
-				GameServer()->SendBroadcast_Localization(m_pPlayer->GetCID(), 200, 100, _("欢迎来到白房间."), NULL);
+				if(IsInRoom)
+				{
+					IsInRoom=0;
+				}
+				else{
+					GameServer()->SendBroadcast_Localization(m_pPlayer->GetCID(), 200, 100, _("欢迎来到白房间."), NULL);
+					IsInRoom=1;
+				}
+
 			}
 		}
 		
@@ -1841,7 +1850,7 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 			if(m_pPlayer->GetBotType() == BOT_NPC)
 			{
 				pFrom->AccData.Rel += 10;
-				GameServer()->SendChatTarget_Localization(From, CHATCATEGORY_DEFAULT, _("交际愤怒值： {int:rel}"), "rel", &pFrom->AccData.Rel, NULL);
+				GameServer()->SendChatTarget_Localization(From, CHATCATEGORY_DEFAULT, _("交际愤怒值: {int:rel}"), "rel", &pFrom->AccData.Rel, NULL);
 			}
 		}
 		// Арена
@@ -2665,7 +2674,7 @@ void CCharacter::ParseEmoticionButton(int ClientID, int Emtion)
 	if(Server()->GetItemCount(ClientID, SKWALL) && Server()->GetItemSettings(ClientID, SKWALL) == Emtion)
 	{
 		if(m_pPlayer->m_Mana < 30)
-			return GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("Your Mana Empty."), NULL);
+			return GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("你的魔能不足."), NULL);
 
 		vec2 Direction = normalize(vec2(m_LatestInput.m_TargetX, m_LatestInput.m_TargetY));		
 		vec2 To = m_Pos + Direction*1600.0f;
@@ -2680,13 +2689,13 @@ void CCharacter::ParseEmoticionButton(int ClientID, int Emtion)
 					NumMines++;
 			}
 			if(NumMines < 5) new CBiologistMine(GameWorld(), m_Pos, To, m_pPlayer->GetCID(), 280);
-			else GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("You install max Wall's mine."), NULL);
+			else GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("光墙已达最大数量."), NULL);
 		}
 	}
 	else if(Server()->GetItemCount(ClientID, SKHEAL) && Server()->GetItemSettings(ClientID, SKHEAL) == Emtion)
 	{
 		if(m_pPlayer->m_Mana < 50)
-			return GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("Your Mana Empty."), NULL);
+			return GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("你的魔能不足."), NULL);
 
 		m_pPlayer->m_Mana -= 50;
 		m_ReloadTimer = Server()->TickSpeed()/3;
@@ -2704,7 +2713,7 @@ void CCharacter::ParseEmoticionButton(int ClientID, int Emtion)
 			if(pSword->m_Owner == m_pPlayer->GetCID())
 			{
 				pSword->Reset();
-				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("Sword closed."), NULL);
+				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("光剑已关闭."), NULL);
 				return;
 			}
 		}
@@ -2713,7 +2722,7 @@ void CCharacter::ParseEmoticionButton(int ClientID, int Emtion)
 	else if(Server()->GetItemCount(ClientID, SHEALSUMMER) && Server()->GetItemSettings(ClientID, SHEALSUMMER) == Emtion)
 	{
 		if(m_pPlayer->m_Mana < 150)
-			return GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("Your Mana Empty. Need 150"), NULL);
+			return GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("你的魔能不足,需要150."), NULL);
 
 		m_pPlayer->m_Mana -= 150;
 		for(int i = 0; i < 40; ++i)

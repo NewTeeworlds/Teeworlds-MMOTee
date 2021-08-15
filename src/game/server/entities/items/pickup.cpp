@@ -105,6 +105,8 @@ void CPickup::StartFarm(int ClientID)
 	if(!m_SubType) // ########################### FARMING
 	{
 		m_Drop += 20;
+		if(Server()->GetItemCount(ClientID, DRAGONHOE)>=1)
+			m_Drop += 5;		
 		GameServer()->CreateSound(m_Pos, 20); 
 
 		int LevelItem = 1+Server()->GetItemCount(ClientID, FARMLEVEL)/g_Config.m_SvFarmExp;
@@ -113,7 +115,7 @@ void CPickup::StartFarm(int ClientID)
 
 		float getlv = (m_Drop*100.0)/100;
 		const char *Pick = GameServer()->LevelString(100, (int)getlv, 10, ':', ' ');
-		GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("专长 - 种地: {int:lvl}级: {int:exp}/{int:expneed}经验\n奖励: 1+{int:bonus} 物品 : 采集进度: {str:got} / {int:gotp}%"), 
+		GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("专长 - 种地: {int:lvl}级: {int:exp}/{int:expneed}经验\n奖励: {int:bonus} 物品 : 采集进度: {str:got} / {int:gotp}%"), 
 			"lvl", &LevelItem, "exp", &Exp, "expneed", &NeedExp, "bonus", &LevelItem, "got", Pick, "gotp", &m_Drop, NULL);
 		delete Pick;
 
@@ -125,11 +127,12 @@ void CPickup::StartFarm(int ClientID)
 			{
 				case 0:	GameServer()->GiveItem(ClientID, TOMATE, LevelItem); break; 
 				case 1: GameServer()->GiveItem(ClientID, POTATO, LevelItem); break;
+				case 2: GameServer()->GiveItem(ClientID, CABBAGE, LevelItem); break;
 				default: GameServer()->GiveItem(ClientID, CARROT, LevelItem); break;
 			}
 			if(Server()->GetItemCount(ClientID, FARMLEVEL) % g_Config.m_SvFarmExp == 0)
 			{
-				GameServer()->SendChatTarget_Localization(ClientID, -1, _("~ 种地等级 +1 获得了农耕用品(生产资料)"), NULL);
+				GameServer()->SendChatTarget_Localization(ClientID, -1, _("~ 种地等级提升~ 获得了农耕盲盒"), NULL);
 				GameServer()->GiveItem(ClientID, FARMBOX, 1);
 			}
 			if(rand()%120 == 0)
@@ -152,7 +155,7 @@ void CPickup::StartFarm(int ClientID)
 			if(Dropable <= 0)
 			{
 				Server()->RemItem(ClientID, DIAMONDPIX, Server()->GetItemCount(ClientID, DIAMONDPIX), -1);
-				GameServer()->SendChatTarget_Localization(ClientID, -1, _("~ 矿具: {str:name} 坏了, 不能用了"), "name", Server()->GetItemName(ClientID, DIAMONDPIX), NULL);
+				GameServer()->SendChatTarget_Localization(ClientID, -1, _("~ 矿具: {str:name} 已损毁, 不能用了"), "name", Server()->GetItemName(ClientID, DIAMONDPIX), NULL);
 			}
 			Server()->SetItemSettingsCount(ClientID, DIAMONDPIX, Dropable-1);
 			ItemName = Server()->GetItemName(ClientID, DIAMONDPIX);
@@ -166,7 +169,7 @@ void CPickup::StartFarm(int ClientID)
 			if(Dropable <= 0)
 			{
 				Server()->RemItem(ClientID, GOLDPIX, Server()->GetItemCount(ClientID, GOLDPIX), -1);
-				GameServer()->SendChatTarget_Localization(ClientID, -1, _("~ 矿具: {str:name} 坏了, 不能用了"), "name", Server()->GetItemName(ClientID, GOLDPIX), NULL);
+				GameServer()->SendChatTarget_Localization(ClientID, -1, _("~ 矿具: {str:name} 已损毁, 不能用了"), "name", Server()->GetItemName(ClientID, GOLDPIX), NULL);
 			}
 			Server()->SetItemSettingsCount(ClientID, GOLDPIX, Dropable-1);
 			ItemName = Server()->GetItemName(ClientID, GOLDPIX);
@@ -180,7 +183,7 @@ void CPickup::StartFarm(int ClientID)
 			if(Dropable <= 0)
 			{
 				Server()->RemItem(ClientID, IRONPIX, Server()->GetItemCount(ClientID, IRONPIX), -1);
-				GameServer()->SendChatTarget_Localization(ClientID, -1, _("~ 矿具: {str:name} 坏了, 不能用了"), "name", Server()->GetItemName(ClientID, IRONPIX), NULL);
+				GameServer()->SendChatTarget_Localization(ClientID, -1, _("~ 矿具: {str:name} 已损毁, 不能用了"), "name", Server()->GetItemName(ClientID, IRONPIX), NULL);
 			}
 			Server()->SetItemSettingsCount(ClientID, IRONPIX, Dropable-1);
 			ItemName = Server()->GetItemName(ClientID, IRONPIX);
@@ -194,7 +197,7 @@ void CPickup::StartFarm(int ClientID)
 			if(Dropable <= 0)
 			{
 				Server()->RemItem(ClientID, COOPERPIX, Server()->GetItemCount(ClientID, COOPERPIX), -1);
-				GameServer()->SendChatTarget_Localization(ClientID, -1, _("~ 矿具: {str:name} 坏了, 不能用了"), "name", Server()->GetItemName(ClientID, COOPERPIX), NULL);
+				GameServer()->SendChatTarget_Localization(ClientID, -1, _("~ 矿具: {str:name} 已损毁, 不能用了"), "name", Server()->GetItemName(ClientID, COOPERPIX), NULL);
 			}
 			Server()->SetItemSettingsCount(ClientID, COOPERPIX, Dropable-1);
 			ItemName = Server()->GetItemName(ClientID, COOPERPIX);
@@ -235,6 +238,11 @@ void CPickup::StartFarm(int ClientID)
 				default: GameServer()->GiveItem(ClientID, COOPERORE, 1+LevelItem/15); break;
 			}
 			GameServer()->GiveItem(ClientID, MINEREXP, 1);
+			
+			if(rand()%100==1)
+				GameServer()->GiveItem(ClientID, STANNUM, 1);
+
+			
 
 			// 加经验
 			GameServer()->m_apPlayers[ClientID]->AccData.Exp += 10+LevelItem;
@@ -244,6 +252,8 @@ void CPickup::StartFarm(int ClientID)
 	else if(m_SubType == 3) // ########################### WOOOD
 	{
 		m_Drop += 10+rand()%25;
+		if(Server()->GetItemCount(ClientID,DRAGONAXE)>=1)
+			m_Drop*=2;
 		GameServer()->CreateSound(m_Pos, 20); 
 
 		float getlv = (m_Drop*100.0)/100;

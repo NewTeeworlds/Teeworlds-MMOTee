@@ -884,7 +884,7 @@ void CGameContext::AreaTick()
 			else
 			{
 				m_AreaEndGame = 120*Server()->TickSpeed();
-				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 事件开始了, 一共有 {int:num} 名玩家参加"), "num", &count, NULL);
+				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 游戏开始了, 一共有 {int:num} 名玩家参加"), "num", &count, NULL);
 			}	
 		}
 	}
@@ -907,7 +907,7 @@ void CGameContext::AreaTick()
 						m_apPlayers[i]->GetCharacter()->Die(i, WEAPON_WORLD);
 				}
 			}		
-			SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 事件结束了. 没有获胜的玩家"), NULL);		
+			SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 游戏结束. 没有玩家获胜"), NULL);		
 		}
 
 		if(GetAreaCount() == 1)
@@ -944,7 +944,7 @@ void CGameContext::AreaTick()
 					}
 				}
 			}
-			SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 最终赢家是:{str:name}:"), "name", Server()->ClientName(is), NULL);	
+			SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 游戏结束.最终赢家是:{str:name}:"), "name", Server()->ClientName(is), NULL);	
 			m_AreaEndGame = 0;
 		}
 	}
@@ -1056,7 +1056,7 @@ void CGameContext::OnTick()
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, ("大家注意了!! 新人必须遵守的规则:"), NULL);	
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, ("只能玩一个服务器"), NULL);	
 		//SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, ("你的账户如果被删除,你创建的公会会重组(reform)."), NULL);	
-		//SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, ("服务器版本: 2.0（测试）作者/管理：天上的星星,中文翻译:MC_TYH以及全体MMOTEE国服玩家."), NULL);
+		//SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, ("服务器版本: 2.1 作者/管理：天上的星星,中文翻译:MC_TYH以及全体MMOTEE国服玩家."), NULL);
 	}
 	*/
 	// вывод топ листа раз в 5 минут
@@ -1094,7 +1094,7 @@ void CGameContext::OnTick()
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "原作者:Kurosio", NULL);
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "制作者/管理：天上的星星", NULL);
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "汉化：MC_TYH、Ninecloud2077及MMOTEE全体国服玩家", NULL);
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "地图制作：天际tx",NULL);
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "地图制作：天际",NULL);
 	}
 
 	AreaTick();
@@ -1347,7 +1347,8 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					SendChatTarget(ClientID, "------- {Rules} -------");
 					SendChatTarget(ClientID, "禁止使用游戏漏洞!");
 					SendChatTarget(ClientID, "禁止使用辅助性软件!");
-					SendChatTarget(ClientID, "禁止使用dummy（分身）!");
+					SendChatTarget(ClientID, "禁止使用分身!");
+					SendChatTarget(ClientID, "禁止同时在两个服务器登录账号!");
 					SendChatTarget(ClientID, "禁止分享账号!");
 					SendChatTarget(ClientID, "禁止侮辱玩家!");
 					SendChatTarget(ClientID, "禁止进行线下交易!");
@@ -1721,7 +1722,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					
 					m_apPlayers[ClientID]->AccUpgrade.Health += Get;
 					m_apPlayers[ClientID]->AccUpgrade.Upgrade -= Get;
-					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你成功地升了 {int:lv} 级"), "lv", &Get, NULL);							
+					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你的技能成功提升 {int:lv} 级"), "lv", &Get, NULL);							
 					
 					if(m_apPlayers[ClientID]->GetCharacter())
 					{
@@ -1766,11 +1767,11 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					if((m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_BERSERK && m_apPlayers[ClientID]->AccUpgrade.Damage >= BMAXDAMAGE) ||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER && m_apPlayers[ClientID]->AccUpgrade.Damage >= HMAXDAMAGE) ||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_ASSASINS && m_apPlayers[ClientID]->AccUpgrade.Damage >= AMAXDAMAGE))
-						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你已经升到满级了"), NULL);	
+						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("技能已满级"), NULL);	
 				
 					m_apPlayers[ClientID]->AccUpgrade.Damage += Get;
 					m_apPlayers[ClientID]->AccUpgrade.Upgrade -= Get;
-					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你成功地升了 {int:lv} 级"), "lv", &Get, NULL);							
+					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你的技能成功提升 {int:lv} 级"), "lv", &Get, NULL);							
 					
 					if((m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_BERSERK && m_apPlayers[ClientID]->AccUpgrade.Damage > BMAXDAMAGE-1)||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER && m_apPlayers[ClientID]->AccUpgrade.Damage > HMAXDAMAGE-1)||
@@ -1793,7 +1794,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					if((m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_BERSERK && m_apPlayers[ClientID]->AccUpgrade.Ammo >= BMAXAMMO) ||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER && m_apPlayers[ClientID]->AccUpgrade.Ammo >= HMAXAMMO) ||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_ASSASINS && m_apPlayers[ClientID]->AccUpgrade.Ammo >= AMAXAMMO))
-						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你已经升到满级了"), NULL);	
+						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("技能已满级"), NULL);	
 									
 					m_apPlayers[ClientID]->AccUpgrade.Ammo++;
 					m_apPlayers[ClientID]->AccUpgrade.Upgrade -= 5;
@@ -1838,11 +1839,11 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					if((m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_BERSERK && m_apPlayers[ClientID]->AccUpgrade.AmmoRegen >= BMAXAREGEN) ||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER && m_apPlayers[ClientID]->AccUpgrade.AmmoRegen >= HMAXAREGEN) ||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_ASSASINS && m_apPlayers[ClientID]->AccUpgrade.AmmoRegen >= AMAXAREGEN))
-						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你已经升到满级了"), NULL);	
+						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("技能已满级"), NULL);	
 									
 					m_apPlayers[ClientID]->AccUpgrade.AmmoRegen += Get;
 					m_apPlayers[ClientID]->AccUpgrade.Upgrade -= Get;
-					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你成功地升了 {int:lv} 级"), "lv", &Get, NULL);							
+					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你的技能成功提升 {int:lv} 级"), "lv", &Get, NULL);							
 					
 					if((m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_BERSERK && m_apPlayers[ClientID]->AccUpgrade.AmmoRegen > BMAXAREGEN-1)||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER && m_apPlayers[ClientID]->AccUpgrade.AmmoRegen > HMAXAREGEN-1)||
@@ -1888,11 +1889,11 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					if((m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_BERSERK && m_apPlayers[ClientID]->AccUpgrade.Speed >= BMAXHANDLE) ||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER && m_apPlayers[ClientID]->AccUpgrade.Speed >= HMAXHANDLE) ||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_ASSASINS && m_apPlayers[ClientID]->AccUpgrade.Speed >= AMAXHANDLE))
-						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你已经升到满级了"), NULL);	
+						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("技能已满级"), NULL);	
 					
 					m_apPlayers[ClientID]->AccUpgrade.Speed += Get;
 					m_apPlayers[ClientID]->AccUpgrade.Upgrade -= Get;
-					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你成功地升了 {int:lv} 级"), "lv", &Get, NULL);							
+					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你的技能成功提升 {int:lv} 级"), "lv", &Get, NULL);							
 					
 					if((m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_BERSERK && m_apPlayers[ClientID]->AccUpgrade.Speed > BMAXHANDLE-1)||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER && m_apPlayers[ClientID]->AccUpgrade.Speed > HMAXHANDLE-1)||
@@ -1946,11 +1947,11 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					if((m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_BERSERK && m_apPlayers[ClientID]->AccUpgrade.Spray >= BMAXSPREED) ||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER && m_apPlayers[ClientID]->AccUpgrade.Spray >= HMAXSPREED) ||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_ASSASINS && m_apPlayers[ClientID]->AccUpgrade.Spray >= AMAXSPREED))
-						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你已经升到满级了"), NULL);	
+						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("技能已满级"), NULL);	
 					
 					m_apPlayers[ClientID]->AccUpgrade.Spray++;
 					m_apPlayers[ClientID]->AccUpgrade.Upgrade -= 10;
-					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你成功地获得了升级"), NULL);							
+					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你的技能成功提升 {int:lv} 级"), NULL);							
 					
 					UpdateUpgrades(ClientID);
 					ResetVotes(ClientID, CLMENU);	
@@ -1986,11 +1987,11 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					if((m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_BERSERK && m_apPlayers[ClientID]->AccUpgrade.HPRegen >= BMAXHPREGEN) ||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER && m_apPlayers[ClientID]->AccUpgrade.HPRegen >= HMAXHPREGEN) ||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_ASSASINS && m_apPlayers[ClientID]->AccUpgrade.HPRegen >= AMAXHPREGEN))
-						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你已经升到满级了"), NULL);	
+						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("技能已满级"), NULL);	
 							
 					m_apPlayers[ClientID]->AccUpgrade.HPRegen += Get;
 					m_apPlayers[ClientID]->AccUpgrade.Upgrade -= Get;
-					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你成功地升了 {int:lv} 级"), "lv", &Get, NULL);							
+					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你的技能成功提升 {int:lv} 级"), "lv", &Get, NULL);							
 					
 					UpdateUpgrades(ClientID);	
 					ResetVotes(ClientID, CLMENU);	
@@ -2005,7 +2006,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					if((m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_BERSERK && m_apPlayers[ClientID]->AccUpgrade.HammerRange > 4) ||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER && m_apPlayers[ClientID]->AccUpgrade.HammerRange > 5) ||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_ASSASINS && m_apPlayers[ClientID]->AccUpgrade.HammerRange > 7))
-						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你已经升到满级了"), NULL);	
+						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("技能已满级"), NULL);	
 
 					m_apPlayers[ClientID]->AccUpgrade.HammerRange++;
 					m_apPlayers[ClientID]->AccUpgrade.SkillPoint -= HAMMERRANGE;
@@ -2024,7 +2025,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					if((m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_BERSERK && m_apPlayers[ClientID]->AccUpgrade.Pasive2 > 4) ||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER && m_apPlayers[ClientID]->AccUpgrade.Pasive2 > 10) ||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_ASSASINS && m_apPlayers[ClientID]->AccUpgrade.Pasive2 > 7))
-						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你已经升到满级了"), NULL);	
+						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("技能已满级"), NULL);	
 					
 					m_apPlayers[ClientID]->AccUpgrade.Pasive2++;
 					m_apPlayers[ClientID]->AccUpgrade.SkillPoint -= HAMMERRANGE;
@@ -2508,7 +2509,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 			CPlayer *pPlayer = m_apPlayers[ClientID];
 			if(g_Config.m_SvCityStart == 1 && pPlayer->AccData.Level < 250)
 			{ 
-				SendBroadcast_Localization(ClientID, BROADCAST_PRIORITY_GAMEANNOUNCE, BROADCAST_DURATION_GAMEANNOUNCE, _("你需要 250 级"), NULL);
+        SendBroadcast_Localization(ClientID, BROADCAST_PRIORITY_GAMEANNOUNCE, BROADCAST_DURATION_GAMEANNOUNCE, _("你需要 250 级"), NULL);
 				return;
 			}
 
@@ -2606,16 +2607,16 @@ void CGameContext::BuyItem(int ItemType, int ClientID, int Type)
 	
 	m_apPlayers[ClientID]->m_LastChangeInfo = Server()->Tick();
 	if(Server()->GetItemCount(ClientID, ItemType) && ItemType != CLANTICKET && ItemType != BOOKEXPMIN)
-		return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你已经在物品栏了"), NULL);	
+		return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你已购买."), NULL);	
 	
 	if(m_apPlayers[ClientID]->AccData.Level < Server()->GetItemPrice(ClientID, ItemType, 0))
-		return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你没有达到规定的等级"), NULL);	
+		return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你没有达到规定的等级."), NULL);	
 		
 	if(Type == 0 && m_apPlayers[ClientID]->AccData.Gold < Server()->GetItemPrice(ClientID, ItemType, 1))
-		return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你没有足够的黄金,小穷光蛋"), NULL);	
+		return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你没有足够的黄金,小穷光蛋."), NULL);	
 
 	if(Type == 1 && m_apPlayers[ClientID]->AccData.Donate < Server()->GetItemPrice(ClientID, ItemType, 1))
-		return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你没有足够点券(donate money),充钱吧"), NULL);	
+		return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你没有足够点券(donate money),充钱吧."), NULL);	
 
 	if(Type == 0)
 	{
@@ -2766,7 +2767,7 @@ void CGameContext::GiveItem(int ClientID, int ItemID, int Count, int Enchant)
 
 	if((ItemID >= AMULETCLEEVER && ItemID <= APAIN) || (ItemID >= SNAPDAMAGE && ItemID <= FORMULAFORRING) || (ItemID >= RINGBOOMER && ItemID <= EARRINGSKWAH) || (ItemID >= BOOKMONEYMIN && ItemID <= RELRINGS)
 		|| (ItemID >=CLANBOXEXP && ItemID <= CUSTOMSKIN) || (ItemID >= WHITETICKET && ItemID <= RANDOMCRAFTITEM) 
-		|| (ItemID >=GUNBOUNCE && ItemID <= LAMPHAMMER) || ItemID == JUMPIMPULS || ItemID == FARMBOX || ItemID == PIZDAMET) // rare iteems
+		|| (ItemID >=GUNBOUNCE && ItemID <= LAMPHAMMER) || ItemID == JUMPIMPULS || ItemID == FARMBOX || ItemID == PIZDAMET || ItemID == STANNUM) // rare iteems
 	{
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 获得了 {str:items}x{int:counts}"), "name", Server()->ClientName(ClientID), "items", Server()->GetItemName(ClientID, ItemID, false), "counts", &Count, NULL);					
 		
@@ -2888,6 +2889,13 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 
 			Server()->RemItem(ClientID, SKELETSBONE, 30 * Count, -1);
 		} break;
+		case IRON: 
+		{
+			if(Server()->GetItemCount(ClientID, IRONORE) < 5)
+				return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "铁矿x5", NULL);
+
+			Server()->RemItem(ClientID, IRONORE, 5, -1);
+		} break;
 		case CUSTOMSKIN: 
 		{
 			if(Server()->GetItemCount(ClientID, SKELETSSBONE) < 30 * Count || Server()->GetItemCount(ClientID, ZOMIBEBIGEYE) < 30 * Count)
@@ -2936,7 +2944,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		{
 			if(Server()->GetItemCount(ClientID, TOMATE) < 60 * Count || Server()->GetItemCount(ClientID, POTATO) < 60 * Count || Server()->GetItemCount(ClientID, CARROT) < 60 * Count)
 			{
-				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "(土豆番茄萝卜)x60", NULL);
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "(土豆x60, 番茄x60, 萝卜x60", NULL);
 				return;
 			}
 			Server()->RemItem(ClientID, TOMATE, 60 * Count, -1);
@@ -2984,11 +2992,31 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 			Server()->RemItem(ClientID, WOOD, 50 * Count, -1);
 			Server()->RemItem(ClientID, DIAMONDORE, 100 * Count, -1);
 		} break;
+		case DRAGONAXE: 
+		{
+			if(Server()->GetItemCount(ClientID, WOOD) < 200 || Server()->GetItemCount(ClientID, DRAGONORE) < 1000)
+			{
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "木头x200, 龙矿x1000", NULL);
+				return;
+			}
+			Server()->RemItem(ClientID, WOOD, 200, -1);
+			Server()->RemItem(ClientID, DIAMONDORE, 1000, -1);
+		} break;
+		case DRAGONHOE: 
+		{
+			if(Server()->GetItemCount(ClientID, WOOD) < 200 || Server()->GetItemCount(ClientID, DRAGONORE) < 1000)
+			{
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "木头x200, 龙矿x1000", NULL);
+				return;
+			}
+			Server()->RemItem(ClientID, WOOD, 200, -1);
+			Server()->RemItem(ClientID, DIAMONDORE, 1000, -1);
+		} break;
 		case FORMULAEARRINGS: 
 		{
 			if(Server()->GetItemCount(ClientID, IRONORE) < 100 * Count || Server()->GetItemCount(ClientID, COOPERORE) < 100 * Count)
 			{
-				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "(铁矿, 铜矿)x100", NULL);
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "(铁矿x100, 铜矿x100", NULL);
 				return;
 			}
 			Server()->RemItem(ClientID, COOPERORE, 100 * Count, -1);
@@ -2998,7 +3026,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		{
 			if(Server()->GetItemCount(ClientID, IRONORE) < 125 * Count || Server()->GetItemCount(ClientID, COOPERORE) < 125 * Count)
 			{
-				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "(铁矿, 铜矿)x125", NULL);
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "(铁矿x125, 铜矿x125", NULL);
 				return;
 			}
 			Server()->RemItem(ClientID, COOPERORE, 125 * Count, -1);
@@ -3008,7 +3036,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		{
 			if(Server()->GetItemCount(ClientID, IRONORE) < 150 * Count || Server()->GetItemCount(ClientID, COOPERORE) < 150 * Count)
 			{
-				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "(铁矿, 铜矿)x150", NULL);
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "(铁矿x150, 铜矿x150", NULL);
 				return;
 			}
 			Server()->RemItem(ClientID, COOPERORE, 150 * Count, -1);
@@ -3565,7 +3593,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote_Localization(ClientID, "umana", "☞ [{int:sum}] 魔能 +1(1升级点 {str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.Mana, "bonus", "C+0");
 		AddVote_Localization(ClientID, "uspray", "☞ [{int:sum}] 子弹散射 +1(10升级点 {str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.Spray, "bonus", "C+0");
 		AddVote("············", "null", ClientID);
-		AddVote_Localization(ClientID, "null", "♞ {str:psevdo}", "psevdo", LocalizeText(ClientID, "Passive Skills"));
+		AddVote_Localization(ClientID, "null", "♞ {str:psevdo}", "psevdo", LocalizeText(ClientID, "职业被动技"));
 		
 		int Need = HAMMERRANGE;
 		if(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER)
@@ -3590,8 +3618,10 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 				m_apPlayers[ClientID]->AccUpgrade.Pasive2 ? "✔" : "x", "sum", &m_apPlayers[ClientID]->AccUpgrade.Pasive2);			
 		}
 		AddVote("············", "null", ClientID);
-		AddVote_Localization(ClientID, "null", "☭ {str:psevdo}", "psevdo", LocalizeText(ClientID, "Active Skills"));
-		AddVote_Localization(ClientID, "uskillwall", "☞ (70技能点) 激光墙 ({str:act})", "act", Server()->GetItemCount(ClientID, SKWALL) ? "30 魔能 ✔" : "x");	
+
+		AddVote_Localization(ClientID, "null", "☭ {str:psevdo}", "psevdo", "主动技能");
+		AddVote_Localization(ClientID, "uskillwall", "☞ (70技能点) 魔能-激光墙 ({str:act})", "act", Server()->GetItemCount(ClientID, SKWALL) ? "30 Mana ✔" : "x");	
+
 		SkillSettings(ClientID, SKWALL, "sskillwall");
 		AddVote_Localization(ClientID, "uskillheal", "☞ (60技能点) 治疗 ({str:act})", "act", Server()->GetItemCount(ClientID, SKHEAL) ? "50 魔能 ✔" : "x");	
 		SkillSettings(ClientID, SKHEAL, "sskillheal");
@@ -3634,6 +3664,9 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVoteMenu_Localization(ClientID, CHOUSE, MENUONLY, "- 房屋菜单与升级");
 
 		AddVoteMenu_Localization(ClientID, CLANLIST, MENUONLY, "- 公会列表");
+
+		AddVote_Localization(ClientID, 'null',"- 公会战（敬请期待）");
+
 		AddVote_Localization(ClientID, "cexit", "- 退出公会!");
 		AddBack(ClientID);
 		return;
@@ -4076,6 +4109,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 				AddNewCraftVote(ClientID, "铁矿x100, 铜矿x100", FORMULAEARRINGS);	
 				AddNewCraftVote(ClientID, "铁矿x125, 铜矿x125", FORMULAFORRING);	
 				AddNewCraftVote(ClientID, "铁矿x150, 铜矿x150", FORMULAWEAPON);	
+				AddNewCraftVote(ClientID, "铁矿x5", IRON);
 					
 			}
 			else if(m_apPlayers[ClientID]->m_SortedSelectCraft == 2)
@@ -4086,6 +4120,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 					AddNewCraftVote(ClientID, "日耀x20", SHEALSUMMER);	
 			
 				}
+
 				AddNewCraftVote(ClientID, "戒指蓝图x1, Slime的尸体x1", RARERINGSLIME);	
 				AddNewCraftVote(ClientID, "戒指蓝图x1, Boomer的尸体x100", RINGBOOMER);	
 				AddNewCraftVote(ClientID, "耳环蓝图x1, Kwah的脚x100", EARRINGSKWAH);	
@@ -4094,7 +4129,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			}
 			else if(m_apPlayers[ClientID]->m_SortedSelectCraft == 3)
 			{
-				AddNewCraftVote(ClientID, "眼睛表情 (happy, evil, surprise, blink, pain)", MODULEEMOTE);	
+				AddNewCraftVote(ClientID, "眼睛表情 (快乐, 愤怒, 惊讶, 眨眼, 痛苦)", MODULEEMOTE);	
 				AddNewCraftVote(ClientID, "手枪x1, 散弹枪x1, 榴弹炮x1, 激光枪x1", WEAPONPRESSED);	
 				AddNewCraftVote(ClientID, "武器蓝图x1, Boomer的戒指x1", MODULESHOTGUNSLIME);	
 				AddNewCraftVote(ClientID, "武器蓝图x25", ENDEXPLOSION);	
@@ -4108,7 +4143,9 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 				AddNewCraftVote(ClientID, "木头x30, 铜矿x60", COOPERPIX);		
 				AddNewCraftVote(ClientID, "木头x40, 铁矿x60", IRONPIX);		
 				AddNewCraftVote(ClientID, "木头x50, 金矿x80", GOLDPIX);		
-				AddNewCraftVote(ClientID, "木头x50, 钻石矿x100", DIAMONDPIX);					
+				AddNewCraftVote(ClientID, "木头x50, 钻石矿x100", DIAMONDPIX);	
+				AddNewCraftVote(ClientID, "木头x200, 龙矿x1000", DRAGONAXE);
+				AddNewCraftVote(ClientID, "木头x200, 龙矿x1000", DRAGONHOE);				
 			}
 			else if(m_apPlayers[ClientID]->m_SortedSelectCraft == 6)
 			{
@@ -4850,6 +4887,17 @@ void CGameContext::UseItem(int ClientID, int ItemID, int Count, int Type)
 			else if(ItemID == CARROT)
 			{
 				PackOne += 10;
+				if(i == Count-1)
+				{
+					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:used} x{int:num} ,获得了 {int:pvars} 经验"), 
+						"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvars", &PackOne , NULL);	
+				
+					pPlayer->ExpAdd(PackOne, false);
+				}
+			}
+			else if(ItemID == CABBAGE)
+			{
+				PackOne += 35;
 				if(i == Count-1)
 				{
 					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:used} x{int:num} ,获得了 {int:pvars} 经验"), 
