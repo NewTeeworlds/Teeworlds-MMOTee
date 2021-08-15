@@ -152,7 +152,7 @@ void CPickup::StartFarm(int ClientID)
 			Count = Server()->GetItemCount(ClientID, DIAMONDPIX);
 			Broke = 699*Server()->GetItemCount(ClientID, DIAMONDPIX);
 			Dropable = Server()->GetItemSettings(ClientID, DIAMONDPIX);
-			if(!Dropable)
+			if(Dropable <= 0)
 			{
 				Server()->RemItem(ClientID, DIAMONDPIX, Server()->GetItemCount(ClientID, DIAMONDPIX), -1);
 				GameServer()->SendChatTarget_Localization(ClientID, -1, _("~ 矿具: {str:name} 已损毁, 不能用了"), "name", Server()->GetItemName(ClientID, DIAMONDPIX), NULL);
@@ -166,7 +166,7 @@ void CPickup::StartFarm(int ClientID)
 			Count = Server()->GetItemCount(ClientID, GOLDPIX);
 			Broke = 491*Server()->GetItemCount(ClientID, GOLDPIX);
 			Dropable = Server()->GetItemSettings(ClientID, GOLDPIX);
-			if(!Dropable)
+			if(Dropable <= 0)
 			{
 				Server()->RemItem(ClientID, GOLDPIX, Server()->GetItemCount(ClientID, GOLDPIX), -1);
 				GameServer()->SendChatTarget_Localization(ClientID, -1, _("~ 矿具: {str:name} 已损毁, 不能用了"), "name", Server()->GetItemName(ClientID, GOLDPIX), NULL);
@@ -180,7 +180,7 @@ void CPickup::StartFarm(int ClientID)
 			Count = Server()->GetItemCount(ClientID, IRONPIX);
 			Broke = 211*Server()->GetItemCount(ClientID, IRONPIX);
 			Dropable = Server()->GetItemSettings(ClientID, IRONPIX);
-			if(!Dropable)
+			if(Dropable <= 0)
 			{
 				Server()->RemItem(ClientID, IRONPIX, Server()->GetItemCount(ClientID, IRONPIX), -1);
 				GameServer()->SendChatTarget_Localization(ClientID, -1, _("~ 矿具: {str:name} 已损毁, 不能用了"), "name", Server()->GetItemName(ClientID, IRONPIX), NULL);
@@ -194,7 +194,7 @@ void CPickup::StartFarm(int ClientID)
 			Count = Server()->GetItemCount(ClientID, COOPERPIX);
 			Broke = 180*Server()->GetItemCount(ClientID, COOPERPIX);
 			Dropable = Server()->GetItemSettings(ClientID, COOPERPIX);
-			if(!Dropable)
+			if(Dropable <= 0)
 			{
 				Server()->RemItem(ClientID, COOPERPIX, Server()->GetItemCount(ClientID, COOPERPIX), -1);
 				GameServer()->SendChatTarget_Localization(ClientID, -1, _("~ 矿具: {str:name} 已损毁, 不能用了"), "name", Server()->GetItemName(ClientID, COOPERPIX), NULL);
@@ -221,16 +221,20 @@ void CPickup::StartFarm(int ClientID)
 
 		if(m_Drop >= 100)
 		{
-			int ItemDrop = 3+LevelItem/g_Config.m_SvMinerExp;
+			int ItemDrop = 3+LevelItem/g_Config.m_SvMinerUpgrade;
 			if(ItemDrop > 11)
 				ItemDrop = 11;
-
+			int DragonOre = 1 + LevelItem / 250;
+			if(DragonOre >= 6)
+			{
+				DragonOre = 6;
+			}
 			switch(rand()%ItemDrop)
 			{
 				case 3: GameServer()->GiveItem(ClientID, IRONORE, 1+LevelItem/15); break; 
 				case 4: GameServer()->GiveItem(ClientID, GOLDORE, 1+LevelItem/15); break; 
 				case 5: GameServer()->GiveItem(ClientID, DIAMONDORE, 1+LevelItem/15); break; 
-				case 7: GameServer()->GiveItem(ClientID, DRAGONORE, 1 + LevelItem / 50); break; 
+				case 7: GameServer()->GiveItem(ClientID, DRAGONORE, DragonOre); break; 
 				default: GameServer()->GiveItem(ClientID, COOPERORE, 1+LevelItem/15); break;
 			}
 			GameServer()->GiveItem(ClientID, MINEREXP, 1);
@@ -240,7 +244,7 @@ void CPickup::StartFarm(int ClientID)
 
 			
 
-			// ОПЫТ ГНИДАМ
+			// 加经验
 			GameServer()->m_apPlayers[ClientID]->AccData.Exp += 10+LevelItem;
 			GameServer()->SendChatTarget_Localization(ClientID, -1, _("[Player] 经验+10 +{int:bonus}点专长经验"), "bonus", &LevelItem, NULL);
 		}
@@ -262,7 +266,7 @@ void CPickup::StartFarm(int ClientID)
 		{
 			GameServer()->GiveItem(ClientID, WOOD, 1);
 		
-			// ОПЫТ ГНИДАМ
+			// 加经验
 			GameServer()->m_apPlayers[ClientID]->AccData.Exp += 10;
 			GameServer()->SendChatTarget_Localization(ClientID, -1, _("[Player] 经验+10 +并不存在的专长经验"), NULL);
 		}
@@ -312,11 +316,11 @@ void CPickup::MaterFarm(int ClientID, int MaterialID)
 	if(m_Drop >= 100)
 	{
 		Server()->SetMaterials(MaterialID, Server()->GetMaterials(MaterialID)-25);
-		GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("在物品栏对装备附魔或者卖给商店吧."), NULL);
+		GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("在装备栏对装备附魔或者卖给商店吧."), NULL);
 		GameServer()->GiveItem(ClientID, MATERIAL, 25+LevelItem*3);
 		GameServer()->GiveItem(ClientID, LOADEREXP, 10);
 
-		// ОПЫТ ГНИДАМ
+		// 加经验
 		GameServer()->m_apPlayers[ClientID]->AccData.Exp += 20+LevelItem;
 		GameServer()->SendChatTarget_Localization(ClientID, -1, _("[Player] 经验+20 +{int:bonus}点专长经验"), "bonus", &LevelItem, NULL);
 

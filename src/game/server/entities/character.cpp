@@ -2070,7 +2070,7 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 						
 						if(!g_Config.m_SvCityStart)
 						{
-							CreateDropRandom(MONEYBAG, 2+rand()%5+1, false, i, Force/(50+randforce));
+							CreateDropRandom(MONEYBAG, 100+rand()%5+1, false, i, Force/(50+randforce));
 							CreateDropRandom(RARESLIMEDIRT, 1, 90, i, Force/(45+randforce));
 							CreateDropRandom(FORMULAFORRING, 1, 90, i, Force/(40+randforce));
 							CreateDropRandom(FORMULAEARRINGS, 1, 90, i, Force/(35+randforce));
@@ -2079,7 +2079,7 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 						}
 						else if(g_Config.m_SvCityStart == 1)
 						{
-							CreateDropRandom(MONEYBAG, 40+rand()%20+1, false, i, Force/(50+randforce));
+							CreateDropRandom(MONEYBAG, 300+rand()%20+1, false, i, Force/(50+randforce));
 							CreateDropRandom(BOOKEXPMIN, 1, 15, i, Force/(45+randforce));
 							CreateDropRandom(BOOKMONEYMIN, 1, 80, i, Force/(45+randforce));
 							CreateDropRandom(CLANBOXEXP, 1, 50, i, Force/(45+randforce));
@@ -2170,18 +2170,24 @@ void CCharacter::Snap(int SnappingClient)
 	if(m_pPlayer && m_pPlayer->GetBotType() <= 0)
 	{
 		EmoteNormal = EMOTE_NORMAL;
-		if(m_pPlayer->m_ActiveChair) EmoteNormal = EMOTE_HAPPY;
-		if(Server()->GetItemCount(m_pPlayer->GetCID(), AHAPPY))
-			EmoteNormal = EMOTE_HAPPY;
-		else if(Server()->GetItemCount(m_pPlayer->GetCID(), APAIN))
-			EmoteNormal = EMOTE_PAIN;
-		else if(Server()->GetItemCount(m_pPlayer->GetCID(), ASUPRRISE))
-			EmoteNormal = EMOTE_SURPRISE;
-		else if(Server()->GetItemCount(m_pPlayer->GetCID(), ABLINK))
-			EmoteNormal = EMOTE_BLINK;
-		else if(Server()->GetItemCount(m_pPlayer->GetCID(), AEVIL))
-			EmoteNormal = EMOTE_ANGRY;
-
+		if(Server()->GetItemCount(m_pPlayer->GetCID(), MODULEEMOTE))
+		{
+			EmoteNormal = Server()->GetItemSettings(m_pPlayer->GetCID(), MODULEEMOTE);
+		}
+		else
+		{
+			if(m_pPlayer->m_ActiveChair) EmoteNormal = EMOTE_HAPPY;
+			if(Server()->GetItemCount(m_pPlayer->GetCID(), AHAPPY))
+				EmoteNormal = EMOTE_HAPPY;
+			else if(Server()->GetItemCount(m_pPlayer->GetCID(), APAIN))
+				EmoteNormal = EMOTE_PAIN;
+			else if(Server()->GetItemCount(m_pPlayer->GetCID(), ASUPRRISE))
+				EmoteNormal = EMOTE_SURPRISE;
+			else if(Server()->GetItemCount(m_pPlayer->GetCID(), ABLINK))
+				EmoteNormal = EMOTE_BLINK;
+			else if(Server()->GetItemCount(m_pPlayer->GetCID(), AEVIL))
+				EmoteNormal = EMOTE_ANGRY;
+		}
 		if(m_InWater)
 			EmoteNormal = EMOTE_BLINK;
 	}

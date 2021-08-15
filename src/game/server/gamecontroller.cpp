@@ -157,6 +157,8 @@ void IGameController::OnPlayerInfoChange(class CPlayer *pP)
 		
 	// Тело броня
 	
+	if(!Server()->GetItemSettings(pP->GetCID(), CUSTOMCOLOR))
+	{
 	if(Server()->GetItemSettings(pP->GetCID(), LEATHERBODY)) 
 	{
 		if(pP->GetCharacter())
@@ -237,6 +239,11 @@ void IGameController::OnPlayerInfoChange(class CPlayer *pP)
 		pP->m_TeeInfos.m_ColorFeet = 15204096;
 	else 
 		pP->m_TeeInfos.m_ColorFeet = 1000;
+	}
+	else
+	{
+		pP->m_TeeInfos.m_UseCustomColor = false;
+	}
 
 	if(IsTeamplay())
 	{

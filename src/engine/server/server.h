@@ -142,6 +142,7 @@ public:
 		//Login
 		int m_LogInstance;
 		int m_UserID;
+		int m_UserStatusID;
 		int m_ClanID;
 		int m_Level;
 		int m_Exp;
@@ -161,6 +162,7 @@ public:
 		bool m_IsJailed;
 		int m_JailLength;
 		int m_SummerHealingTimes;
+		int m_LoginID;
 
 		int m_ItemCount[7];
 
@@ -191,6 +193,7 @@ public:
 		int f_id;
 		char f_name [32];
 		char f_creator [MAX_NAME_LENGTH];
+		char f_admin [MAX_NAME_LENGTH];
 		int f_level;
 		int f_exp;
 		int f_money;
@@ -206,7 +209,9 @@ public:
 
 	virtual int GetClan(int Type, int ClanID);
 	virtual bool GetLeader(int ClientID, int ClanID);
+	virtual bool GetAdmin(int ClientID, int ClanID);
 	const char *LeaderName(int ClientID);
+	const char *AdminName(int ClientID);
 	const char *GetClanName(int ClanID);
 
 	virtual int GetUserID(int ClientID);
@@ -429,8 +434,11 @@ public:
 
 	virtual void Register(int ClientID, const char* pUsername, const char* pPassword, const char* pEmail);
 	virtual void ChangePassword(int ClientID, const char* pPassword);
-	virtual void ChangePassword_Admin(int ClientID, const char* pUSername, const char* pPassword);
-
+	virtual void ChangePassword_Admin(int ClientID, const char* pUsername, const char* pPassword);
+	virtual void SyncOnline(int ClientID);
+	virtual void SyncOffline(int ClientID);
+	virtual void Ban_DB(int ClientID, int ClientID_Ban, const char* Reason);
+	virtual void Unban_DB(int ClientID, const char* Nick);
 	// Инициализация сохранение загрузка
 	virtual void UpdateStats(int ClientID, int Type = 0);
 	virtual void InitClientDB(int ClientID);
@@ -454,7 +462,8 @@ public:
 	virtual void NewClan(int ClientID, const char* pName);
 	virtual void EnterClan(int ClientID, int ClanID);
 	virtual void ChangeLeader(int ClanID, const char* pName);
-	
+	virtual void ChangeAdmin(int ClanID, const char* pName);
+
 	// Инициализация сохранение загрузка
 	virtual void InitClan();
 	virtual void InitClanID(int ClanID, bool Need, const char* SubType, int Price, bool Save);

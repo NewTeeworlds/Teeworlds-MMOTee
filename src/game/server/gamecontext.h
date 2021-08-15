@@ -216,6 +216,7 @@ public:
 	void BuyUpgradeClan(int ClientID, int Money, int Type, const char* SubType);
 	void CreateNewShop(int ClientID, int ItemID, int Type, int Level, int Price);
 	void SkillSettings(int ClientID, int ItemType, const char *Msg);
+	void EyeEmoteSettings(int ClientID, int ItemType, const char *Msg);
 	void BuySkill(int ClientID, int Price, int ItemID);
 	void UseItem(int ClientID, int ItemID, int Count, int Type);
 

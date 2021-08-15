@@ -1173,6 +1173,8 @@ void CGameContext::OnClientConnected(int ClientID)
 
 void CGameContext::OnClientDrop(int ClientID, const char *pReason)
 {
+	Server()->SyncOffline(ClientID);
+	//dbg_msg("ustatus","syncoffline");
 	m_apPlayers[ClientID]->OnDisconnect(pReason);
 	delete m_apPlayers[ClientID];
 	m_apPlayers[ClientID] = 0;
@@ -1385,9 +1387,9 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 				// КЛАН ФУНКЦИИ
 				else if(str_comp(aCmd, "houseopen") == 0)
 				{
-					if(!Server()->GetLeader(ClientID, Server()->GetClanID(ClientID)))
+					if(!Server()->GetLeader(ClientID, Server()->GetClanID(ClientID)) || Server()->GetAdmin(ClientID, Server()->GetClanID(ClientID)))
 					{
-						SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# 你不是该公会的会长"), NULL);
+						SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# 你不是该公会的会长或者管理员"), NULL);
 						return;
 					}
 					if(Server()->SetOpenHouse(Server()->GetOwnHouse(ClientID)))
@@ -1401,11 +1403,16 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 
 				else if(str_comp(aCmd, "ckickoff") == 0)
 				{
-					if(Server()->GetLeader(ClientID, Server()->GetClanID(ClientID)))
+					if(Server()->GetLeader(ClientID, Server()->GetClanID(ClientID)) || Server()->GetAdmin(ClientID, Server()->GetClanID(ClientID)))
 					{	
 						if(str_comp_nocase(m_apPlayers[ClientID]->m_SelectPlayer, Server()->ClientName(ClientID)) == 0)
 							return;
-						
+						if(str_comp_nocase(m_apPlayers[ClientID]->m_SelectPlayer, Server()->LeaderName(Server()->GetClanID(ClientID))) 
+							|| str_comp_nocase(m_apPlayers[ClientID]->m_SelectPlayer, Server()->AdminName(Server()->GetClanID(ClientID))))
+						{
+							SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# 你不能把该公会的会长或者管理员踢出公会"), NULL);
+							return;
+						}
 						bool Type = false;
 						for(int i = 0; i < MAX_NOBOT; ++i)
 						{
@@ -1423,7 +1430,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 						ResetVotes(ClientID, CLANLIST);
 					}
 					else
-						SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# 你不是该公会的会长"), NULL);
+						SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# 你不是该公会的会长或者管理员"), NULL);
 												
 					return;
 				}	
@@ -1435,20 +1442,84 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 						if(str_comp_nocase(m_apPlayers[ClientID]->m_SelectPlayer, Server()->ClientName(ClientID)) == 0)
 							return;
 						
-						bool heh = false;
+						bool found = false;
 						for(int i = 0; i < MAX_NOBOT; ++i){
 							if(m_apPlayers[i]){
 								if(Server()->GetClanID(i) == Server()->GetClanID(ClientID)){
 										
-									heh = true;
+									found = true;
 									SendChatTarget_Localization(i, CHATCATEGORY_DEFAULT, _("公会新的会长:{str:name}"), "name", m_apPlayers[ClientID]->m_SelectPlayer, NULL);	
 								}
 							}
 						}
 						
-						if(heh)
+						if(found)
 						{
 							Server()->ChangeLeader(Server()->GetClanID(ClientID), m_apPlayers[ClientID]->m_SelectPlayer); 
+							ResetVotes(ClientID, CLANLIST);
+							
+						}
+					}
+					else
+						SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# 你不是该公会的会长"), NULL);
+												
+					return;
+				}	
+
+				else if(str_comp(aCmd, "cgetadmin") == 0)
+				{
+					if(Server()->GetLeader(ClientID, Server()->GetClanID(ClientID)))
+					{	
+						if(str_comp_nocase(m_apPlayers[ClientID]->m_SelectPlayer, Server()->ClientName(ClientID)) == 0)
+							return;
+						
+						bool found = false;
+						for(int i = 0; i < MAX_NOBOT; ++i){
+							if(m_apPlayers[i])
+							{
+								if(Server()->GetClanID(i) == Server()->GetClanID(ClientID)){
+										
+									found = true;
+									SendChatTarget_Localization(i, CHATCATEGORY_DEFAULT, _("公会新的管理员:{str:name}"), "name", m_apPlayers[ClientID]->m_SelectPlayer, NULL);	
+								}
+							}
+						}
+						
+						if(found)
+						{
+							Server()->ChangeAdmin(Server()->GetClanID(ClientID), m_apPlayers[ClientID]->m_SelectPlayer); 
+							ResetVotes(ClientID, CLANLIST);
+							
+						}
+					}
+					else
+						SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# 你不是该公会的会长"), NULL);
+												
+					return;
+				}	
+
+				else if(str_comp(aCmd, "cremadmin") == 0)
+				{
+					if(Server()->GetLeader(ClientID, Server()->GetClanID(ClientID)))
+					{	
+						if(str_comp_nocase(m_apPlayers[ClientID]->m_SelectPlayer, Server()->ClientName(ClientID)) == 0)
+							return;
+						
+						bool found = false;
+						for(int i = 0; i < MAX_NOBOT; ++i){
+							if(m_apPlayers[i])
+							{
+								if(Server()->GetClanID(i) == Server()->GetClanID(ClientID)){
+										
+									found = true;
+									SendChatTarget_Localization(i, CHATCATEGORY_DEFAULT, _("公会原管理员 {str:name} 被罢免了!"), "name", m_apPlayers[ClientID]->m_SelectPlayer, NULL);	
+								}
+							}
+						}
+						
+						if(found)
+						{
+							Server()->ChangeAdmin(Server()->GetClanID(ClientID), "Nope"); 
 							ResetVotes(ClientID, CLANLIST);
 							
 						}
@@ -1472,8 +1543,8 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 				
 				else if(str_comp(aCmd, "uccount") == 0)
 				{						
-					if(Server()->GetClan(DMAXCOUNTUCLAN, Server()->GetClanID(ClientID)) >= 20)
-						return 	SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("Max upgrades"), NULL);
+					if(Server()->GetClan(DMAXCOUNTUCLAN, Server()->GetClanID(ClientID)) >= 25)
+						return 	SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("人数已达到最大值"), NULL);
 
 					BuyUpgradeClan(ClientID, (m_apPlayers[ClientID]->GetNeedForUpgClan(DMAXCOUNTUCLAN))*4, DMAXCOUNTUCLAN,"MaxNum");	
 					return;
@@ -2079,6 +2150,16 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					ResetVotes(ClientID, CLMENU);	
 					return;
 				}	
+				else if(str_comp(aCmd, "semote") == 0)
+				{
+					int Get = Server()->GetItemSettings(ClientID, MODULEEMOTE)+1;
+					if(Get > 5) Server()->SetItemSettingsCount(ClientID, MODULEEMOTE, 0);
+					else Server()->SetItemSettingsCount(ClientID, MODULEEMOTE, Get);
+						
+					UpdateStats(ClientID);
+					ResetVotes(ClientID, SETTINGS);	
+					return;
+				}	
 				else if(str_comp(aCmd, "ssantipvp") == 0)
 				{
 					Server()->SetItemSettings(ClientID, SANTIPVP);
@@ -2202,8 +2283,9 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 
 				// 批量领取邮件 命令: cleanmail	
 				//// 只领取在线奖励,不领取神器 & 升级奖励			
-				else if(str_comp(aCmd, "cleanmail") == 0)
+				/*else if(str_comp(aCmd, "cleanmail") == 0)
 				{
+					Server()->InitMailID(ClientID);
 					if(m_apPlayers[ClientID]->m_LastChangeInfo && m_apPlayers[ClientID]->m_LastChangeInfo+Server()->TickSpeed()*4 > Server()->Tick())
 						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("请等待..."), NULL);
 
@@ -2218,7 +2300,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 						GiveItem(ClientID, ItemID, ItemNum);
 					}
 					ResetVotes(ClientID, MAILMENU);
-				}
+				}*/
 
 				for(int i = 0; i < 20; i++)
 				{
@@ -2352,7 +2434,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					str_format(aBuf, sizeof(aBuf), "cra%d", i);
 					if(str_comp(aCmd, aBuf) == 0)
 					{
-						CreateItem(ClientID, i, 1);
+						CreateItem(ClientID, i, chartoint(pReason, 100));
 						return;	
 					}	
 				}	
@@ -2427,7 +2509,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 			CPlayer *pPlayer = m_apPlayers[ClientID];
 			if(g_Config.m_SvCityStart == 1 && pPlayer->AccData.Level < 250)
 			{ 
-				SendBroadcast_Localization(ClientID, BROADCAST_PRIORITY_GAMEANNOUNCE, BROADCAST_DURATION_GAMEANNOUNCE, _("你需要达到100级"), NULL);
+        SendBroadcast_Localization(ClientID, BROADCAST_PRIORITY_GAMEANNOUNCE, BROADCAST_DURATION_GAMEANNOUNCE, _("你需要 250 级"), NULL);
 				return;
 			}
 
@@ -2567,7 +2649,7 @@ void CGameContext::BuyUpgradeClan(int ClientID, int Money, int Type, const char*
 	if(!m_apPlayers[ClientID] || !m_apPlayers[ClientID]->GetCharacter())
 		return;
 	
-	if(Server()->GetLeader(ClientID, Server()->GetClanID(ClientID)) 
+	if((Server()->GetLeader(ClientID, Server()->GetClanID(ClientID)) || Server()->GetAdmin(ClientID, Server()->GetClanID(ClientID))) 
 		&& Server()->GetClan(DMONEY, Server()->GetClanID(ClientID)) >= Money)
 	{
 		Server()->InitClanID(Server()->GetClanID(ClientID), MINUS, "Money", Money, true);
@@ -2720,7 +2802,7 @@ void CGameContext::RemItem(int ClientID, int ItemID, int Count)
 	if(ClientID > MAX_NOBOT || ClientID < 0 || !m_apPlayers[ClientID])
 		return;
 	SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你失去了 {str:items}x{int:counts}"), "items", Server()->GetItemName(ClientID, ItemID), "counts", &Count, NULL);				
-	Server()->RemItem(ItemID, ClientID, Count, -1);
+	Server()->RemItem(ClientID, ItemID, Count, -1);
 }
 
 
@@ -2739,7 +2821,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		default: SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("合成错误"), NULL); break;
 		case RARERINGSLIME:
 		{
-			if(!Server()->GetItemCount(ClientID, RARESLIMEDIRT) || !Server()->GetItemCount(ClientID, FORMULAFORRING))
+			if(Server()->GetItemCount(ClientID, RARESLIMEDIRT) < Count || Server()->GetItemCount(ClientID, FORMULAFORRING) < Count)
 				return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "戒指蓝图, Slime Dirt", NULL);
 
 			Server()->RemItem(ClientID, RARESLIMEDIRT, Count, -1);
@@ -2747,8 +2829,8 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		} break;
 		case MODULEEMOTE: 
 		{	
-			if(!Server()->GetItemCount(ClientID, AHAPPY) || !Server()->GetItemCount(ClientID, AEVIL) || 
-				!Server()->GetItemCount(ClientID, ASUPRRISE) || !Server()->GetItemCount(ClientID, ABLINK) || !Server()->GetItemCount(ClientID, APAIN))
+			if(Server()->GetItemCount(ClientID, AHAPPY) < Count || Server()->GetItemCount(ClientID, AEVIL) < Count || 
+				Server()->GetItemCount(ClientID, ASUPRRISE) < Count || Server()->GetItemCount(ClientID, ABLINK) < Count || Server()->GetItemCount(ClientID, APAIN) < Count)
 				return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "眼睛表情 (happy, evil, surprise, blink, pain)", NULL);
 
 			Server()->RemItem(ClientID, AHAPPY, Count, -1);
@@ -2760,8 +2842,8 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		} break;
 		case WEAPONPRESSED: 
 		{
-			if(!Server()->GetItemCount(ClientID, IGUN) || !Server()->GetItemCount(ClientID, ISHOTGUN) || 
-				!Server()->GetItemCount(ClientID, IGRENADE) || !Server()->GetItemCount(ClientID, ILASER))
+			if(Server()->GetItemCount(ClientID, IGUN) < Count || Server()->GetItemCount(ClientID, ISHOTGUN) < Count || 
+				Server()->GetItemCount(ClientID, IGRENADE) < Count || Server()->GetItemCount(ClientID, ILASER) < Count)
 				return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "武器 (手枪, 散弹枪, 榴弹炮, 激光枪)", NULL);
 
 			Server()->RemItem(ClientID, IGUN, Count, -1);
@@ -2771,7 +2853,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		} break;
 		case RINGBOOMER: 
 		{
-			if(!Server()->GetItemCount(ClientID, FORMULAFORRING) || Server()->GetItemCount(ClientID, HEADBOOMER) < 100)
+			if(Server()->GetItemCount(ClientID, FORMULAFORRING) < Count || Server()->GetItemCount(ClientID, HEADBOOMER) < 100 * Count)
 				return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "戒指蓝图, 爆破鬼才的尸体 x100", NULL);
 
 			Server()->RemItem(ClientID, HEADBOOMER, 100, -1);
@@ -2779,7 +2861,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		} break;
 		case MODULESHOTGUNSLIME: 
 		{
-			if(!Server()->GetItemCount(ClientID, FORMULAWEAPON) || !Server()->GetItemCount(ClientID, RINGBOOMER))
+			if(Server()->GetItemCount(ClientID, FORMULAWEAPON) < Count || Server()->GetItemCount(ClientID, RINGBOOMER) < Count)
 				return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "武器蓝图, 爆破鬼才的戒指", NULL);
 
 			Server()->RemItem(ClientID, FORMULAWEAPON, Count, -1);
@@ -2787,25 +2869,25 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		} break;
 		case EARRINGSKWAH: 
 		{
-			if(!Server()->GetItemCount(ClientID, FORMULAEARRINGS) || Server()->GetItemCount(ClientID, FOOTKWAH) < 100)
+			if(Server()->GetItemCount(ClientID, FORMULAEARRINGS) < Count || Server()->GetItemCount(ClientID, FOOTKWAH) < 100 * Count)
 				return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "耳环蓝图, Kwah 脚x100", NULL);
 
 			Server()->RemItem(ClientID, FORMULAEARRINGS, Count, -1);
-			Server()->RemItem(ClientID, FOOTKWAH, 100, -1);
+			Server()->RemItem(ClientID, FOOTKWAH, 100 * Count, -1);
 		} break;
 		case ZOMIBEBIGEYE: 
 		{
-			if(Server()->GetItemCount(ClientID, ZOMBIEEYE) < 30)
+			if(Server()->GetItemCount(ClientID, ZOMBIEEYE) < 30 * Count)
 				return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "僵尸眼x30", NULL);
 
-			Server()->RemItem(ClientID, ZOMBIEEYE, 30, -1);
+			Server()->RemItem(ClientID, ZOMBIEEYE, 30 * Count, -1);
 		} break;
 		case SKELETSSBONE: 
 		{
-			if(Server()->GetItemCount(ClientID, SKELETSBONE) < 30)
+			if(Server()->GetItemCount(ClientID, SKELETSBONE) < 30 * Count)
 				return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "骷髅骨头x30", NULL);
 
-			Server()->RemItem(ClientID, SKELETSBONE, 30, -1);
+			Server()->RemItem(ClientID, SKELETSBONE, 30 * Count, -1);
 		} break;
 		case IRON: 
 		{
@@ -2816,28 +2898,29 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		} break;
 		case CUSTOMSKIN: 
 		{
-			if(Server()->GetItemCount(ClientID, SKELETSSBONE) < 30 || Server()->GetItemCount(ClientID, ZOMIBEBIGEYE) < 30)
+			if(Server()->GetItemCount(ClientID, SKELETSSBONE) < 30 * Count || Server()->GetItemCount(ClientID, ZOMIBEBIGEYE) < 30 * Count)
 				return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "骷髅强化骨x30, 僵尸大眼睛x30", NULL);
 
-			Server()->RemItem(ClientID, SKELETSSBONE, 30, -1);
-			Server()->RemItem(ClientID, ZOMIBEBIGEYE, 30, -1);
+			Server()->RemItem(ClientID, SKELETSSBONE, 30 * Count, -1);
+			Server()->RemItem(ClientID, ZOMIBEBIGEYE, 30 * Count, -1);
 		} break;
 		case ENDEXPLOSION: 
 		{
 			if(!Server()->GetItemCount(ClientID, BIGCRAFT))
 				GiveItem(ClientID, BIGCRAFT, 1);
 
-			if(Server()->GetItemCount(ClientID, FORMULAWEAPON) < 25)
+			if(Server()->GetItemCount(ClientID, FORMULAWEAPON) < 25 * Count)
 			{
 				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "秘密武器x25", NULL);
 				return;
 			}
 
-			Server()->RemItem(ClientID, FORMULAWEAPON, 25, -1);
+			Server()->RemItem(ClientID, FORMULAWEAPON, 25 * Count, -1);
 		} break;
 		// 保底 15 次合成必出
 		case SHEALSUMMER: 
 		{
+			Count = 1;
 			if(Server()->GetItemCount(ClientID, ESUMMER) < 20)
 			{
 				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "日耀x20", NULL);
@@ -2854,60 +2937,60 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 			if(!Server()->GetItemCount(ClientID, TITLESUMMER))
 			{
 				GiveItem(ClientID, TITLESUMMER, 1);
-				m_apPlayers[ClientID]->AccData.SummerHealingTimes = 0;
 			}
+			m_apPlayers[ClientID]->AccData.SummerHealingTimes = 0;
 		} break;
 		case JUMPIMPULS: 
 		{
-			if(Server()->GetItemCount(ClientID, TOMATE) < 60 || Server()->GetItemCount(ClientID, POTATO) < 60 || Server()->GetItemCount(ClientID, CARROT) < 60)
+			if(Server()->GetItemCount(ClientID, TOMATE) < 60 * Count || Server()->GetItemCount(ClientID, POTATO) < 60 * Count || Server()->GetItemCount(ClientID, CARROT) < 60 * Count)
 			{
 				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "(土豆x60, 番茄x60, 萝卜x60", NULL);
 				return;
 			}
-			Server()->RemItem(ClientID, TOMATE, 60, -1);
-			Server()->RemItem(ClientID, POTATO, 60, -1);
-			Server()->RemItem(ClientID, CARROT, 60, -1);
+			Server()->RemItem(ClientID, TOMATE, 60 * Count, -1);
+			Server()->RemItem(ClientID, POTATO, 60 * Count, -1);
+			Server()->RemItem(ClientID, CARROT, 60 * Count, -1);
 		} break;
 
 		case COOPERPIX: 
 		{
-			if(Server()->GetItemCount(ClientID, WOOD) < 30 || Server()->GetItemCount(ClientID, COOPERORE) < 60)
+			if(Server()->GetItemCount(ClientID, WOOD) < 30 * Count || Server()->GetItemCount(ClientID, COOPERORE) < 60 * Count)
 			{
 				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "木头x30, 铜矿x60", NULL);
 				return;
 			}
-			Server()->RemItem(ClientID, WOOD, 30, -1);
-			Server()->RemItem(ClientID, COOPERORE, 60, -1);
+			Server()->RemItem(ClientID, WOOD, 30 * Count, -1);
+			Server()->RemItem(ClientID, COOPERORE, 60 * Count, -1);
 		} break;
 		case IRONPIX: 
 		{
-			if(Server()->GetItemCount(ClientID, WOOD) < 40 || Server()->GetItemCount(ClientID, IRONORE) < 60)
+			if(Server()->GetItemCount(ClientID, WOOD) < 40 * Count || Server()->GetItemCount(ClientID, IRONORE) < 60 * Count)
 			{
 				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "木头x40, 铁矿x60", NULL);
 				return;
 			}
-			Server()->RemItem(ClientID, WOOD, 40, -1);
-			Server()->RemItem(ClientID, IRONORE, 60, -1);
+			Server()->RemItem(ClientID, WOOD, 40 * Count, -1);
+			Server()->RemItem(ClientID, IRONORE, 60 * Count, -1);
 		} break;
 		case GOLDPIX: 
 		{
-			if(Server()->GetItemCount(ClientID, WOOD) < 50 || Server()->GetItemCount(ClientID, GOLDORE) < 80)
+			if(Server()->GetItemCount(ClientID, WOOD) < 50 * Count || Server()->GetItemCount(ClientID, GOLDORE) < 80 * Count)
 			{
 				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "木头x50, 金矿x80", NULL);
 				return;
 			}
-			Server()->RemItem(ClientID, WOOD, 50, -1);
-			Server()->RemItem(ClientID, GOLDORE, 80, -1);
+			Server()->RemItem(ClientID, WOOD, 50 * Count, -1);
+			Server()->RemItem(ClientID, GOLDORE, 80 * Count, -1);
 		} break;
 		case DIAMONDPIX: 
 		{
-			if(Server()->GetItemCount(ClientID, WOOD) < 50 || Server()->GetItemCount(ClientID, DIAMONDORE) < 100)
+			if(Server()->GetItemCount(ClientID, WOOD) < 50 * Count || Server()->GetItemCount(ClientID, DIAMONDORE) < 100 * Count)
 			{
 				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "木头x50, 钻石矿x100", NULL);
 				return;
 			}
-			Server()->RemItem(ClientID, WOOD, 50, -1);
-			Server()->RemItem(ClientID, DIAMONDORE, 100, -1);
+			Server()->RemItem(ClientID, WOOD, 50 * Count, -1);
+			Server()->RemItem(ClientID, DIAMONDORE, 100 * Count, -1);
 		} break;
 		case DRAGONAXE: 
 		{
@@ -2931,36 +3014,37 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		} break;
 		case FORMULAEARRINGS: 
 		{
-			if(Server()->GetItemCount(ClientID, IRONORE) < 100 || Server()->GetItemCount(ClientID, COOPERORE) < 100)
+			if(Server()->GetItemCount(ClientID, IRONORE) < 100 * Count || Server()->GetItemCount(ClientID, COOPERORE) < 100 * Count)
 			{
 				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "(铁矿x100, 铜矿x100", NULL);
 				return;
 			}
-			Server()->RemItem(ClientID, COOPERORE, 100, -1);
-			Server()->RemItem(ClientID, IRONORE, 100, -1);
+			Server()->RemItem(ClientID, COOPERORE, 100 * Count, -1);
+			Server()->RemItem(ClientID, IRONORE, 100 * Count, -1);
 		} break;
 		case FORMULAFORRING: 
 		{
-			if(Server()->GetItemCount(ClientID, IRONORE) < 125 || Server()->GetItemCount(ClientID, COOPERORE) < 125)
+			if(Server()->GetItemCount(ClientID, IRONORE) < 125 * Count || Server()->GetItemCount(ClientID, COOPERORE) < 125 * Count)
 			{
 				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "(铁矿x125, 铜矿x125", NULL);
 				return;
 			}
-			Server()->RemItem(ClientID, COOPERORE, 125, -1);
-			Server()->RemItem(ClientID, IRONORE, 125, -1);
+			Server()->RemItem(ClientID, COOPERORE, 125 * Count, -1);
+			Server()->RemItem(ClientID, IRONORE, 125 * Count, -1);
 		} break;
 		case FORMULAWEAPON: 
 		{
-			if(Server()->GetItemCount(ClientID, IRONORE) < 150 || Server()->GetItemCount(ClientID, COOPERORE) < 150)
+			if(Server()->GetItemCount(ClientID, IRONORE) < 150 * Count || Server()->GetItemCount(ClientID, COOPERORE) < 150 * Count)
 			{
 				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "(铁矿x150, 铜矿x150", NULL);
 				return;
 			}
-			Server()->RemItem(ClientID, COOPERORE, 150, -1);
-			Server()->RemItem(ClientID, IRONORE, 150, -1);
+			Server()->RemItem(ClientID, COOPERORE, 150 * Count, -1);
+			Server()->RemItem(ClientID, IRONORE, 150 * Count, -1);
 		} break;
 		case LEATHERBODY: 
 		{
+			Count = 1;
 			if(Server()->GetItemCount(ClientID, LEATHER) < 50 || Server()->GetItemCount(ClientID, WOOD) < 150)
 			{
 				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "皮革x50, 木头x150", NULL);
@@ -2971,6 +3055,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		} break;
 		case LEATHERFEET: 
 		{
+			Count = 1;
 			if(Server()->GetItemCount(ClientID, LEATHER) < 40 || Server()->GetItemCount(ClientID, WOOD) < 120)
 			{
 				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "皮革x40, 木头x120", NULL);
@@ -2981,6 +3066,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		} break;
 		case COOPERBODY: 
 		{
+			Count = 1;
 			if(Server()->GetItemCount(ClientID, COOPERORE) < 500 || Server()->GetItemCount(ClientID, WOOD) < 150)
 			{
 				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "铜矿x500, 木头x150", NULL);
@@ -2991,6 +3077,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		} break;
 		case COOPERFEET: 
 		{
+			Count = 1;
 			if(Server()->GetItemCount(ClientID, COOPERORE) < 400 || Server()->GetItemCount(ClientID, WOOD) < 120)
 			{
 				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "铜矿x400, 木头x120", NULL);
@@ -3001,6 +3088,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		} break;
 		case IRONBODY: 
 		{
+			Count = 1;
 			if(Server()->GetItemCount(ClientID, IRONORE) < 500 || Server()->GetItemCount(ClientID, WOOD) < 150)
 			{
 				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "铁矿x500, 木头x150", NULL);
@@ -3011,6 +3099,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		} break;
 		case IRONFEET: 
 		{
+			Count = 1;
 			if(Server()->GetItemCount(ClientID, IRONORE) < 400 || Server()->GetItemCount(ClientID, WOOD) < 120)
 			{
 				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "铁矿x400, 木头x120", NULL);
@@ -3021,6 +3110,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		} break;
 		case GOLDBODY: 
 		{
+			Count = 1;
 			if(Server()->GetItemCount(ClientID, GOLDORE) < 500 || Server()->GetItemCount(ClientID, WOOD) < 150)
 			{
 				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "金矿x500, 木头x150", NULL);
@@ -3031,6 +3121,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		} break;
 		case GOLDFEET: 
 		{
+			Count = 1;
 			if(Server()->GetItemCount(ClientID, GOLDORE) < 400 || Server()->GetItemCount(ClientID, WOOD) < 120)
 			{
 				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "金矿x400, 木头x120", NULL);
@@ -3041,6 +3132,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		} break;
 		case DIAMONDBODY: 
 		{
+			Count = 1;
 			if(Server()->GetItemCount(ClientID, DIAMONDORE) < 500 || Server()->GetItemCount(ClientID, WOOD) < 150)
 			{
 				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "钻石矿x500, 木头x150", NULL);
@@ -3051,6 +3143,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		} break;
 		case DIAMONDFEET: 
 		{
+			Count = 1;
 			if(Server()->GetItemCount(ClientID, DIAMONDORE) < 400 || Server()->GetItemCount(ClientID, WOOD) < 120)
 			{
 				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "钻石矿x400, 木头x120", NULL);
@@ -3061,6 +3154,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		} break;
 		case DRAGONBODY: 
 		{
+			Count = 1;
 			if(Server()->GetItemCount(ClientID, DRAGONORE) < 500 || Server()->GetItemCount(ClientID, WOOD) < 150)
 			{
 				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "龙矿x500, 木头x150", NULL);
@@ -3071,6 +3165,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		} break;
 		case DRAGONFEET: 
 		{
+			Count = 1;
 			if(Server()->GetItemCount(ClientID, DRAGONORE) < 400 || Server()->GetItemCount(ClientID, WOOD) < 120)
 			{
 				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "龙矿x400, 木头x120", NULL);
@@ -3081,6 +3176,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		} break;
 		case STCLASIC: 
 		{
+			Count = 1;
 			if(Server()->GetItemCount(ClientID, COOPERORE) < 100 || Server()->GetItemCount(ClientID, IRONORE) < 10)
 			{
 				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "铜矿x100, 铁矿x10", NULL);
@@ -3120,14 +3216,32 @@ void CGameContext::SkillSettings(int ClientID, int ItemType, const char *Msg)
 		switch(Server()->GetItemSettings(ClientID, ItemType))
 		{
 			case 1: Data = "F3"; break;
-			case 2: Data = "EMOTE HEARTH"; break;
-			case 3: Data = "EMOTE PAIN"; break;
-			case 4: Data = "EMOTE ..."; break;
-			case 5: Data = "EMOTE MUSIC"; break;
-			case 6: Data = "EMOTE SORRY"; break;
-			case 7: Data = "EMOTE GHOST"; break;
+			case 2: Data = "表情-比心"; break;
+			case 3: Data = "表情-Oops"; break;
+			case 4: Data = "表情-..."; break;
+			case 5: Data = "表情-哼歌"; break;
+			case 6: Data = "表情-Sorry"; break;
+			case 7: Data = "表情-鬼"; break;
 		}
-		AddVote_Localization(ClientID, Msg, "Settings {str:stat} {str:name}", "stat", Data, "name", Server()->GetItemName(ClientID, ItemType));
+		AddVote_Localization(ClientID, Msg, "设置 {str:stat} {str:name}", "stat", Data, "name", Server()->GetItemName(ClientID, ItemType));
+	}
+}
+
+void CGameContext::EyeEmoteSettings(int ClientID, int ItemType, const char *Msg)
+{
+	if(Server()->GetItemCount(ClientID, ItemType))
+	{
+		const char *Data = "正常"; 
+		switch(Server()->GetItemSettings(ClientID, ItemType))
+		{
+			default: Data = "正常"; break;
+			case 1: Data = "痛苦"; break;
+			case 2: Data = "高兴"; break;
+			case 3: Data = "惊讶"; break;
+			case 4: Data = "愤怒"; break;
+			case 5: Data = "眯眼"; break;
+		}
+		AddVote_Localization(ClientID, Msg, "设置 {str:stat} {str:name}", "stat", Data, "name", Server()->GetItemName(ClientID, ItemType));
 	}
 }
 
@@ -3248,10 +3362,11 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			CreateNewShop(ClientID, LAMPHAMMER, 3, 160, 50000);
 
 			// #################### СКИЛЫ
+			/*
 			AddVote("············", "null", ClientID);
 			AddVote_Localization(ClientID, "null", "ღ  {str:psevdo}", "psevdo", LocalizeText(ClientID, "技巧"));
 			AddVote_Localization(ClientID, "null", "暂时没有物品");
-			
+			*/
 			// #################### ПЕРСОНАЛЬНО
 			
 			AddVote("············", "null", ClientID);
@@ -3271,6 +3386,8 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			AddVote_Localization(ClientID, "null", "使你在升级时获得20个钱袋");
 			CreateNewShop(ClientID, RINGNOSELFDMG, 3, 1, 1000);
 			AddVote_Localization(ClientID, "null", "不会受到自己的伤害（比如爆炸）");
+			CreateNewShop(ClientID, CUSTOMCOLOR, 3, 100, 20000);
+			AddVote_Localization(ClientID, "null", "让你使用自己的皮肤颜色!");
 			AddVote("", "null", ClientID);
 		}
 
@@ -3320,7 +3437,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		m_apPlayers[ClientID]->m_LastVotelist = AUTH;
 		AddVote_Localization(ClientID, "null", "☪ 信息 ( ′ ω ` )?:");
 		AddVote_Localization(ClientID, "null", "我的邮箱");
-		AddVote_Localization(ClientID, "cleanmail", "批量领取物品(一次20个)");
+		//AddVote_Localization(ClientID, "cleanmail", "批量领取物品(一次20个)");
 		Server()->InitMailID(ClientID);
 		AddBack(ClientID);
 		AddVote("", "null", ClientID);
@@ -3403,6 +3520,8 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		CreateNewShop(ClientID, HOOKDAMAGE, 1, 0, 0);
 		CreateNewShop(ClientID, MODULEHOOKEXPLODE, 1, 0, 0);
 		CreateNewShop(ClientID, RINGNOSELFDMG, 1, 0, 0);
+		CreateNewShop(ClientID, CUSTOMCOLOR, 1, 0, 0);
+		EyeEmoteSettings(ClientID, MODULEEMOTE, "semote");
 		AddVote("", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "☪ {str:psevdo}", "psevdo", LocalizeText(ClientID, "锤子"));
 		CreateNewShop(ClientID, HAMMERAUTO, 1, 0, 0);
@@ -3439,12 +3558,12 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		Data = Server()->GetItemSettings(ClientID, SANTIPVP) ? "☑" : "☐";
 		AddVote_Localization(ClientID, "ssantipvp", "☞ VIP特权: 禁止PVP {str:stat}", "stat", Data);
 
-		Data = "FULL";
-		if(Server()->GetItemSettings(ClientID, SCHAT) == 1) Data = "NORMAL";
-		else if(Server()->GetItemSettings(ClientID, SCHAT) == 2) Data = "MINIMAL";
+		Data = "全部";
+		if(Server()->GetItemSettings(ClientID, SCHAT) == 1) Data = "正常";
+		else if(Server()->GetItemSettings(ClientID, SCHAT) == 2) Data = "最少";
 		AddVote_Localization(ClientID, "sssetingschat", "☞ 聊天栏输出 ({str:stat})", "stat", Data);
 
-		Data = "HAMMER";
+		Data = "锤子";
 		if(Server()->GetItemSettings(ClientID, SDROP)) Data = "F3";
 		AddVote_Localization(ClientID, "sssetingsdrop", "☞ 拾取物品方法 ({str:stat})", "stat", Data);
 
@@ -3499,12 +3618,14 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 				m_apPlayers[ClientID]->AccUpgrade.Pasive2 ? "✔" : "x", "sum", &m_apPlayers[ClientID]->AccUpgrade.Pasive2);			
 		}
 		AddVote("············", "null", ClientID);
-		AddVote_Localization(ClientID, "null", "☭ {str:psevdo}", "psevdo", LocalizeText(ClientID, "主动技能"));
+
+		AddVote_Localization(ClientID, "null", "☭ {str:psevdo}", "psevdo", "主动技能");
 		AddVote_Localization(ClientID, "uskillwall", "☞ (70技能点) 魔能-激光墙 ({str:act})", "act", Server()->GetItemCount(ClientID, SKWALL) ? "30 Mana ✔" : "x");	
+
 		SkillSettings(ClientID, SKWALL, "sskillwall");
-		AddVote_Localization(ClientID, "uskillheal", "☞ (60技能点) 魔能-治疗 ({str:act})", "act", Server()->GetItemCount(ClientID, SKHEAL) ? "50 Mana ✔" : "x");	
+		AddVote_Localization(ClientID, "uskillheal", "☞ (60技能点) 治疗 ({str:act})", "act", Server()->GetItemCount(ClientID, SKHEAL) ? "50 魔能 ✔" : "x");	
 		SkillSettings(ClientID, SKHEAL, "sskillheal");
-		AddVote_Localization(ClientID, "uskillsword", "☞ (20技能点) 魔能-光剑 ({str:act})", "act", Server()->GetItemCount(ClientID, SSWORD) ? "1 Mana ✔" : "x");	
+		AddVote_Localization(ClientID, "uskillsword", "☞ (20技能点) 光剑 ({str:act})", "act", Server()->GetItemCount(ClientID, SSWORD) ? "1 魔能(持续消耗) ✔" : "x");	
 		SkillSettings(ClientID, SSWORD, "sskillsword");
 		SkillSettings(ClientID, SHEALSUMMER, "sskillsummer");
 		AddBack(ClientID);
@@ -3526,6 +3647,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote_Localization(ClientID, "null", "公会名称: {str:name}(ID:{int:id})", "name", Server()->ClientClan(ClientID), "id", &ID);
 		AddVote_Localization(ClientID, "null", "黄金储量: {int:bank}" , "bank", &Bank);
 		AddVote_Localization(ClientID, "null", "会长: {str:leader}", "leader", Server()->LeaderName(Server()->GetClanID(ClientID)));
+		AddVote_Localization(ClientID, "null", "管理员: {str:admin}", "admin", Server()->AdminName(Server()->GetClanID(ClientID)));
 		AddVote_Localization(ClientID, "null", "关联: {int:revl}", "revl", &Relevante);
 		AddVote_Localization(ClientID, "null", "公会人数: {int:count}/{int:maxcount}", "count", &Count , "maxcount", &MaxCount);
 
@@ -3561,7 +3683,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		{
 			AddVote("", "null", ClientID);
 			AddVote_Localization(ClientID, "null", "房屋设置");
-			AddVote_Localization(ClientID, "houseopen", "房屋的门 [{str:stat}]", "stat", Server()->GetOpenHouse(Server()->GetOwnHouse(ClientID)) ? "OPEN" : "CLOSE");
+			AddVote_Localization(ClientID, "houseopen", "房屋的门 [{str:stat}]", "stat", Server()->GetOpenHouse(Server()->GetOwnHouse(ClientID)) ? "打开" : "关闭");
 			AddVote("", "null", ClientID);
 			AddVote_Localization(ClientID, "null", "公会成员的房屋升级");
 
@@ -3583,45 +3705,6 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		return;
 	}
 
-	// ############################### Инвент лист
-	else if(Type == EVENTLIST)
-	{
-		m_apPlayers[ClientID]->m_LastVotelist = AUTH;	
-		AddVote_Localization(ClientID, "null", "☪ 信息 ( ′ ω ` )?:");
-		AddVote_Localization(ClientID, "null", "事件列表");
-		AddVote("", "null", ClientID);
-
-		bool found = false;
-		if(g_Config.m_SvEventSummer)
-		{
-			found = true;
-			AddVote_Localization(ClientID, "null", "事件汇总(summer):");
-			AddVote_Localization(ClientID, "null", "杀死怪物时随机获得合成物品");			
-			AddVote_Localization(ClientID, "null", "如果成功的话将会随机合成");
-			AddVote_Localization(ClientID, "null", "你将得到称号与技能汇总(summer)"); 
-			AddVote("", "null", ClientID);
-		}
-		if(g_Config.m_SvEventHammer)
-		{
-			found = true;
-			AddVote_Localization(ClientID, "null", "事件物品(地上掉的锤子):");
-			AddVote_Localization(ClientID, "null", "当杀死怪物时随机获得一种盒子");
-			AddVote("", "null", ClientID);
-		}
-		if(g_Config.m_SvEventSchool)
-		{
-			found = true;
-			AddVote_Localization(ClientID, "null", "在线奖励(Back to School):");
-			AddVote_Localization(ClientID, "null", "每10分钟你会得到一次在线奖励");
-			AddVote_Localization(ClientID, "null", "如果你收集了 25个灵魂（soul patricle）");
-			AddVote_Localization(ClientID, "null", "你将会在下次在线奖励中得到自定义皮肤道具");
-		}
-		if(!found)
-			AddVote_Localization(ClientID, "null", "肥肠豹潜! 现在没有活动的事件.");// az ——翻译员
-
-		AddBack(ClientID);
-		return;
-	}
 
 	// ############################### Лист клана
 	else if(Type == CLANLIST)
@@ -3629,7 +3712,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		m_apPlayers[ClientID]->m_LastVotelist = CLAN;	
 		AddVote_Localization(ClientID, "null", "☪ 信息 ( ′ ω ` )?:");
 		AddVote_Localization(ClientID, "null", "这是会长处置玩家的菜单");
-		AddVote_Localization(ClientID, "null", "For open player settings");
+		//AddVote_Localization(ClientID, "null", "For open player settings");
 		Server()->ListClan(ClientID, Server()->GetClanID(ClientID));
 		AddBack(ClientID);
 		AddVote("", "null", ClientID);
@@ -3643,6 +3726,23 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		
 		AddVote_Localization(ClientID, "null", "▶ 选择了玩家 {str:name}", "name", m_apPlayers[ClientID]->m_SelectPlayer);
 		AddVote_Localization(ClientID, "cgetleader", "▹ 转让公会");
+		bool IsAdmin;
+		for(int i = 0; i < MAX_NOBOT; ++i)
+		{
+			if(m_apPlayers[i])
+			{
+				if(str_comp_nocase(m_apPlayers[ClientID]->m_SelectPlayer, Server()->ClientName(i)) == 0)
+					IsAdmin = true;
+			}
+		}
+		if(!IsAdmin)
+		{
+			AddVote_Localization(ClientID, "cgetadmin", "▹ 授予公会管理员");
+		}
+		else
+		{
+			AddVote_Localization(ClientID, "cremadmin", "▹ 移除公会管理员");
+		}
 		AddVote_Localization(ClientID, "ckickoff", "▹ 踢出公会");
 
 		AddBack(ClientID);
@@ -3691,7 +3791,45 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddBack(ClientID);
 		return;
 	}
-	
+	// ############################### Инвент лист
+	else if(Type == EVENTLIST)
+	{
+		m_apPlayers[ClientID]->m_LastVotelist = AUTH;	
+		AddVote_Localization(ClientID, "null", "☪ 信息 ( ′ ω ` )?:");
+		AddVote_Localization(ClientID, "null", "事件列表");
+		AddVote("", "null", ClientID);
+
+		bool found = false;
+		if(g_Config.m_SvEventSummer)
+		{
+			found = true;
+			AddVote_Localization(ClientID, "null", "事件汇总(summer):");
+			AddVote_Localization(ClientID, "null", "杀死怪物时随机获得合成物品");			
+			AddVote_Localization(ClientID, "null", "如果成功的话将会随机合成");
+			AddVote_Localization(ClientID, "null", "你将得到称号与技能汇总(summer)"); 
+			AddVote("", "null", ClientID);
+		}
+		if(g_Config.m_SvEventHammer)
+		{
+			found = true;
+			AddVote_Localization(ClientID, "null", "事件物品(地上掉的锤子):");
+			AddVote_Localization(ClientID, "null", "当杀死怪物时随机获得一种盒子");
+			AddVote("", "null", ClientID);
+		}
+		if(g_Config.m_SvEventSchool)
+		{
+			found = true;
+			AddVote_Localization(ClientID, "null", "在线奖励(Back to School):");
+			AddVote_Localization(ClientID, "null", "每10分钟你会得到一次在线奖励");
+			AddVote_Localization(ClientID, "null", "如果你收集了 25个灵魂碎片");
+			AddVote_Localization(ClientID, "null", "你将会在下次在线奖励中得到自定义皮肤道具");
+		}
+		if(!found)
+			AddVote_Localization(ClientID, "null", "肥肠豹潜! 现在没有活动的事件.");// az ——翻译员
+
+		AddBack(ClientID);
+		return;
+	}
 	// ############################### Лист разыскиваемых
 	else if(Type == RESLIST)
 	{
@@ -3737,7 +3875,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote_Localization(ClientID, "sort2", "☞ 黄金排名");
 		AddVote_Localization(ClientID, "sort3", "☞ 任务排名");
 		AddVote_Localization(ClientID, "sort6", "☞ 击杀排名");
-		AddVote_Localization(ClientID, "sort7", "☞ Win Area排名");
+		AddVote_Localization(ClientID, "sort7", "☞ 竞技场胜利次数排名");
 		AddVote("", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "★ 公会 - {str:psevdo}", "psevdo", LocalizeText(ClientID, "Clans"));		
 		AddVote_Localization(ClientID, "sort4", "☞ 等级排名");
@@ -3812,14 +3950,15 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		m_apPlayers[ClientID]->m_LastVotelist = AUTH;	
 		AddVote_Localization(ClientID, "null", "☪ 信息 ( ′ ω ` )?:");
 		AddVote_Localization(ClientID, "null", "充钱与特权");
-		AddVote_Localization(ClientID, "null", "1 欧元 - 100 点券(donate coin)");
+		//AddVote_Localization(ClientID, "null", "1 欧元 - 100 点券(donate coin)");
 		AddVote_Localization(ClientID, "null", "向管理员 天上的星星 捐赠(打钱)");// 这边以后肯定要改 :)
+		if(!g_Config.m_SvDonate) AddVote_Localization(ClientID, "null", "服务器目前资金足够,暂时不需要充值");
 		AddVote("", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "$ 你充了 {int:don}", "don", &m_apPlayers[ClientID]->AccData.Donate);
 		AddVote_Localization(ClientID, "bvip", "☞ VIP 包 [1000]");
 		AddVote_Localization(ClientID, "null", "物品 禁止PVP, 技能点(SP)盒子, 10,000 钱袋");
-		AddVote_Localization(ClientID, "null", "X2 - 若干钱与经验 + 特殊物品 Snap Draw");
-		AddVote_Localization(ClientID, "bsp", "☞ 技能点盒子(SP) [200]");
+		AddVote_Localization(ClientID, "null", "VIP 称号(吃菜经验/打怪掉落X2) + 专属特效");
+		AddVote_Localization(ClientID, "bsp", "☞ 技能点盒子 [200]");
 		AddVote_Localization(ClientID, "null", "获得 20 升级点 + 10 技能点");
 		AddVote_Localization(ClientID, "bantipvp", "☞ 物品 禁止PVP [200]");
 		AddVote_Localization(ClientID, "null", "你将会获得禁止PVP设置");
@@ -3952,8 +4091,8 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote_Localization(ClientID, "null", "合成菜单");
 		AddVote("", "null", ClientID);
 		AddVote_Localization(ClientID, "scr1", "▹ 基础物品");
-		AddVote_Localization(ClientID, "scr2", "▹ 神器(Artifacts)");
-		AddVote_Localization(ClientID, "scr3", "▹ 配件(Modules)与武器");
+		AddVote_Localization(ClientID, "scr2", "▹ 神器");
+		AddVote_Localization(ClientID, "scr3", "▹ 配件与武器");
 		AddVote_Localization(ClientID, "scr4", "▹ 增益与食物");
 		AddVote_Localization(ClientID, "scr5", "▹ 工作专长相关");
 		AddVote_Localization(ClientID, "scr6", "▹ 装备");
@@ -3978,12 +4117,13 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 				if(g_Config.m_SvEventSummer)
 				{
 					AddVote_Localization(ClientID, "null", "注意:合成成功率4%,15次失败后必定合成成功");
-					AddNewCraftVote(ClientID, "日耀(Sun Ray)x20", SHEALSUMMER);	
+					AddNewCraftVote(ClientID, "日耀x20", SHEALSUMMER);	
 			
 				}
-				AddNewCraftVote(ClientID, "戒指蓝图x1, Slime 的尸体x1", RARERINGSLIME);	
-				AddNewCraftVote(ClientID, "戒指蓝图x1, 爆破鬼才的尸体x100", RINGBOOMER);	
-				AddNewCraftVote(ClientID, "耳环蓝图x1, kwah 的脚x100", EARRINGSKWAH);	
+
+				AddNewCraftVote(ClientID, "戒指蓝图x1, Slime的尸体x1", RARERINGSLIME);	
+				AddNewCraftVote(ClientID, "戒指蓝图x1, Boomer的尸体x100", RINGBOOMER);	
+				AddNewCraftVote(ClientID, "耳环蓝图x1, Kwah的脚x100", EARRINGSKWAH);	
 				AddNewCraftVote(ClientID, "僵尸大眼睛x30,骷髅强化骨x30", CUSTOMSKIN);	
 				AddNewCraftVote(ClientID, "土豆x60,番茄x60,萝卜x60", JUMPIMPULS);		
 			}
@@ -3991,8 +4131,8 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			{
 				AddNewCraftVote(ClientID, "眼睛表情 (快乐, 愤怒, 惊讶, 眨眼, 痛苦)", MODULEEMOTE);	
 				AddNewCraftVote(ClientID, "手枪x1, 散弹枪x1, 榴弹炮x1, 激光枪x1", WEAPONPRESSED);	
-				AddNewCraftVote(ClientID, "武器蓝图x1, 爆破鬼才的戒指(ring boomer)x1", MODULESHOTGUNSLIME);	
-				AddNewCraftVote(ClientID, "武器蓝图(formula weapons)x25", ENDEXPLOSION);	
+				AddNewCraftVote(ClientID, "武器蓝图x1, Boomer的戒指x1", MODULESHOTGUNSLIME);	
+				AddNewCraftVote(ClientID, "武器蓝图x25", ENDEXPLOSION);	
 			}
 			else if(m_apPlayers[ClientID]->m_SortedSelectCraft == 4)
 			{
@@ -4034,7 +4174,7 @@ void CGameContext::AddNewCraftVote(int ClientID, const char *Need, int ItemID)
 {
 	AddVote_Localization(ClientID, "null", "物品: {str:name}", "name", Server()->GetItemName(ClientID, ItemID));
 	AddVote_Localization(ClientID, "null", "需要: {str:need}", "need", Need);
-	AddVote_Localization(ClientID, "null", "Desc {str:desc}", "desc", Server()->GetItemDesc(ClientID, ItemID));
+	AddVote_Localization(ClientID, "null", "描述: {str:desc}", "desc", Server()->GetItemDesc(ClientID, ItemID));
 	AddVoteMenu_Localization(ClientID, ItemID, CRAFTONLY, "- 合成 {str:name} !", "name", Server()->GetItemName(ClientID, ItemID));
 	AddVote("--------------------", "null", ClientID);		
 	return;	
@@ -4108,7 +4248,7 @@ void CGameContext::StartArea(int WaitTime, int Type)
 	int Gets = 0;
 	switch(m_AreaType)
 	{
-		case 1: NameGame = "Insta"; Gets = 50; break;
+		case 1: NameGame = "激光瞬杀"; Gets = 50; break;
 		case 2: NameGame = "FNG"; Gets = 5; break;
 	}
 	SendChatTarget(-1, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~");

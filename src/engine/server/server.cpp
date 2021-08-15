@@ -1032,6 +1032,7 @@ void CServer::ProcessClientPacket(CNetChunk *pPacket)
 
 				m_aClients[ClientID].m_State = CClient::STATE_INGAME;
 				GameServer()->OnClientEnter(ClientID);
+				SyncOnline(ClientID);
 			}
 		}
 		else if(Msg == NETMSG_INPUT)
@@ -1646,7 +1647,7 @@ int CServer::Run()
 	for(int i = 0; i < MAX_CLIENTS; ++i)
 	{
 		if(m_aClients[i].m_State != CClient::STATE_EMPTY)
-			m_NetServer.Drop(i, "Server shutdown");
+			m_NetServer.Drop(i, "服务器倒闭了");
 	}
 
 	GameServer()->OnShutdown();
@@ -2093,6 +2094,13 @@ const char *CServer::LeaderName(int ClanID)
 		return "";
 }
 
+const char *CServer::AdminName(int ClanID)
+{
+	if(ClanID > 0) return m_stClan[ClanID].f_admin;
+	else
+		return "";
+}
+
 const char *CServer::GetClanName(int ClanID)
 {
 	if(ClanID > 0) return m_stClan[ClanID].f_name;
@@ -2455,7 +2463,7 @@ const char *CServer::GetItemName_en(int ClientID, int ItemID)
 	}
 	else
 	{
-		dbg_msg("sql",ItemName_en[ClientID][ItemID].i_name);
+		//dbg_msg("sql",ItemName_en[ClientID][ItemID].i_name);
 		return ItemName_en[ClientID][ItemID].i_name;
 	}
 }
@@ -2818,8 +2826,8 @@ void CServer::RemMail(int IDMail)
 	CSqlJob* pJob = new CSqlJob_Server_RemMail(this, IDMail);
 	pJob->Start();
 }
-/*
-// 批量领取邮件
+
+/*// 批量领取邮件
 class CSqlJob_Server_RemMails : public CSqlJob
 {
 private:
@@ -2835,9 +2843,36 @@ public:
 
 	virtual bool Job(CSqlServer* pSqlServer)
 	{
-		char aBuf[256];			
+		char aBuf[256];	
+		struct _Items
+		{
+			int ItemID = 0;
+			int ItemCount = 0;
+		};
 		try
 		{
+			str_format(aBuf, sizeof(aBuf), 
+				"SELECT DISTINCT ItemID FROM tw_Mail " 
+				"WHERE IDOwner = '%d' ;"
+				, m_IDOwner);	
+			pSqlServer->executeSqlQuery(aBuf);
+			if(pSqlServer->GetResults()->next())
+			{
+				_Items Items[pSqlServer->GetResults()->rowsCount()];
+			}
+
+			str_format(aBuf, sizeof(aBuf), 
+				"SELECT * FROM tw_Mail " 
+				"WHERE IDOwner = '%d' ;"
+				, m_IDOwner);	
+			pSqlServer->executeSqlQuery(aBuf);
+			int itemid, itemcount;
+			while (pSqlServer->GetResults()->next())
+			{
+				itemid = (int)pSqlServer->GetResults()->getInt("ItemID");
+				itemcount = (int)pSqlServer->GetResults()->getInt("ItemCount");
+			}
+			
 			str_format(aBuf, sizeof(aBuf), 
 				"DELETE FROM tw_Mail " 
 				"WHERE IDOwner = '%d' ;"
@@ -3358,12 +3393,12 @@ public:
 					str_format(iUsed, sizeof(iUsed), "set%d", ItemID);
 					if(m_Type == 17)
 					{
-						str_format(iName, sizeof(iName), "➳ %s %s (Damage +%d)", 
+						str_format(iName, sizeof(iName), "➳ %s %s (伤害 +%d)", 
 							Data,  m_pServer->GetItemName(m_ClientID, ItemID), m_pServer->GetBonusEnchant(m_ClientID, ItemID, m_Type));				
 					}
 					else
 					{
-						str_format(iName, sizeof(iName), "➳ %s %s (Health +%d Armor +%d)", 
+						str_format(iName, sizeof(iName), "➳ %s %s (生命值 +%d 护盾 +%d)", 
 							Data,  m_pServer->GetItemName(m_ClientID, ItemID), m_pServer->GetBonusEnchant(m_ClientID, ItemID, m_Type), 
 							m_pServer->GetBonusEnchant(m_ClientID, ItemID, m_Type));				
 					}
@@ -3384,7 +3419,7 @@ public:
 			}
 			if(!found)
 			{
-				CServer::CGameServerCmd* pCmd = new CGameServerCmd_AddLocalizeVote_Language(m_ClientID, "null", _("This menu empty"));
+				CServer::CGameServerCmd* pCmd = new CGameServerCmd_AddLocalizeVote_Language(m_ClientID, "null", _("这个栏目是空的"));
 				m_pServer->AddGameServerCmd(pCmd);
 			}
 		}
@@ -3417,6 +3452,17 @@ bool CServer::GetLeader(int ClientID, int ClanID)
 		return false;
 	
 	if(str_comp_nocase(m_stClan[ClanID].f_creator, ClientName(ClientID)) == 0)
+		return true;
+	else 
+		return false;
+}
+
+bool CServer::GetAdmin(int ClientID, int ClanID)
+{
+	if(m_aClients[ClientID].m_ClanID < 1)
+		return false;
+	
+	if(str_comp_nocase(m_stClan[ClanID].f_admin, ClientName(ClientID)) == 0)
 		return true;
 	else 
 		return false;
@@ -3456,6 +3502,7 @@ public:
 				m_pServer->m_stClan[ClanID].f_chairupgr = (int)pSqlServer->GetResults()->getInt("ChairHouse");
 				str_copy(m_pServer->m_stClan[ClanID].f_name, pSqlServer->GetResults()->getString("Clanname").c_str(), sizeof(m_pServer->m_stClan[ClanID].f_name));
 				str_copy(m_pServer->m_stClan[ClanID].f_creator, pSqlServer->GetResults()->getString("LeaderName").c_str(), sizeof(m_pServer->m_stClan[ClanID].f_creator));
+				str_copy(m_pServer->m_stClan[ClanID].f_admin, pSqlServer->GetResults()->getString("AdminName").c_str(), sizeof(m_pServer->m_stClan[ClanID].f_admin));
 				
 				
 				m_pServer->UpdClanCount(ClanID);
@@ -3518,6 +3565,16 @@ public:
 				return true;
 			}
 
+			if(str_comp(m_sType.ClrStr(), "Admin") == 0)
+			{
+				m_sType = CSqlString<64>(m_pServer->m_stClan[m_ClanID].f_admin);
+				str_format(aBuf, sizeof(aBuf), 
+					"UPDATE tw_Clans SET AdminName = '%s' WHERE ClanID = '%d';",
+					m_sType.ClrStr(), m_ClanID);
+				pSqlServer->executeSqlQuery(aBuf);
+				return true;
+			}
+
 			if(str_comp(m_sType.ClrStr(), "Init") == 0)
 			{
 				str_format(aBuf, sizeof(aBuf), "SELECT * FROM tw_Clans WHERE ClanID = '%d';", m_ClanID);
@@ -3534,6 +3591,7 @@ public:
 					m_pServer->m_stClan[m_ClanID].f_exp = (int)pSqlServer->GetResults()->getInt("Exp");
 					m_pServer->m_stClan[m_ClanID].f_money = (int)pSqlServer->GetResults()->getInt("Money");
 					str_copy(m_pServer->m_stClan[m_ClanID].f_creator, pSqlServer->GetResults()->getString("LeaderName").c_str(), sizeof(m_pServer->m_stClan[m_ClanID].f_creator));
+					str_copy(m_pServer->m_stClan[m_ClanID].f_admin, pSqlServer->GetResults()->getString("AdminName").c_str(), sizeof(m_pServer->m_stClan[m_ClanID].f_admin));
 				}
 				return true;
 			}
@@ -3809,11 +3867,11 @@ public:
 				int ClanAdded = (int)pSqlServer->GetResults()->getInt("ClanAdded");
 				
 				str_format(aBufCs, sizeof(aBufCs), "cs%d", Num);
-				str_format(aBufW, sizeof(aBufW), "▹ Level %d:%s(ID:%d)", Level, aReform, UserID);
+				str_format(aBufW, sizeof(aBufW), "▹ 等级 %d:%s(ID:%d)", Level, aReform, UserID);
 				CServer::CGameServerCmd* pCmd = new CGameServerCmd_AddLocalizeVote_Language(m_ClientID, aBufCs, _(aBufW));
 				m_pServer->AddGameServerCmd(pCmd);
 
-				str_format(aBufW, sizeof(aBufW), "Added %d money", ClanAdded);
+				str_format(aBufW, sizeof(aBufW), "为公会贡献了 %d 黄金", ClanAdded);
 				pCmd = new CGameServerCmd_AddLocalizeVote_Language(m_ClientID, aBufCs, _(aBufW));
 				m_pServer->AddGameServerCmd(pCmd);
 				
@@ -3908,6 +3966,12 @@ void CServer::ChangeLeader(int ClanID, const char* pName)
 {
 	str_copy(m_stClan[ClanID].f_creator, pName, sizeof(m_stClan[ClanID].f_creator));
 	InitClanID(ClanID, PLUS, "Leader", 0, false);
+}
+
+void CServer::ChangeAdmin(int ClanID, const char* pName)
+{
+	str_copy(m_stClan[ClanID].f_admin, pName, sizeof(m_stClan[ClanID].f_admin));
+	InitClanID(ClanID, PLUS, "Admin", 0, false);
 }
 
 // Выход с клана
@@ -4008,7 +4072,7 @@ public:
 		{
 			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("Error initilized clan say administrator."));
 			m_pServer->AddGameServerCmd(pCmd);
-			dbg_msg("sql", "Can't init new clan (MySQL Error: %s)", e.what());
+			dbg_msg("sql", "用户数据初始化失败 (MySQL 错误: %s)", e.what());
 			
 			return false;
 		}
@@ -4031,9 +4095,9 @@ public:
 		}
 		catch (sql::SQLException &e)
 		{
-			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, "An error occured during the logging.");
+			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, "登录时出现错误.");
 			m_pServer->AddGameServerCmd(pCmd);
-			dbg_msg("sql", "Can't init inventory (MySQL Error: %s)", e.what());
+			dbg_msg("sql", "用户数据初始化失败 (MySQL 错误: %s)", e.what());
 			
 			return false;
 		}
@@ -4059,16 +4123,28 @@ public:
 				m_pServer->m_aClients[m_ClientID].Mana = (int)pSqlServer->GetResults()->getInt("Mana");
 				m_pServer->m_aClients[m_ClientID].m_HammerRange = (int)pSqlServer->GetResults()->getInt("HammerRange");
 				m_pServer->m_aClients[m_ClientID].m_Pasive2 = (int)pSqlServer->GetResults()->getInt("Pasive2");
-				
-				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("你已登录.欢迎."));
-				m_pServer->AddGameServerCmd(pCmd);			
+				if(m_pServer->m_aClients[m_ClientID].m_Level <= 0)
+				{
+					CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, "登录时发生错误.");
+					m_pServer->AddGameServerCmd(pCmd);
+					return false;
+				}
+				else
+				{
+					CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("你已登录.欢迎."));
+					m_pServer->AddGameServerCmd(pCmd);	
+
+					CServer::CGameServerCmd* pCmd1 = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("登录成功.按下esc界面中的“开始游戏”进入."));
+					m_pServer->AddGameServerCmd(pCmd1);	
+				}
+						
 			}					
 		}
 		catch (sql::SQLException &e)
 		{
 			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, "登录时出现错误.");
 			m_pServer->AddGameServerCmd(pCmd);
-			dbg_msg("sql", "无法检查用户名/密码 (MySQL 错误: %s)", e.what());
+			dbg_msg("sql", "用户数据初始化失败 (MySQL 错误: %s)", e.what());
 			return false;
 		}
 		return true;
@@ -4185,17 +4261,21 @@ public:
 		}
 		catch (sql::SQLException &e)
 		{
-			if(m_Type == 0)
+
+			if(str_length(e.what()) > 0)
 			{
-				dbg_msg("sql", "个人信息更新失败 (MySQL Error: %s)", e.what());
-			}
-			else if(m_Type == 1)
-			{
-				dbg_msg("sql", "玩家升级点信息更新失败 (MySQL Error: %s)", e.what());	
-			}
-			else if(m_Type == 3)
-			{
-				dbg_msg("sql", "玩家公会信息更新失败 (MySQL Error: %s)", e.what());	
+				if(m_Type == 0)
+				{
+					dbg_msg("sql", "个人信息更新失败 (MySQL Error: %s)", e.what());
+				}
+				else if(m_Type == 1)
+				{
+					dbg_msg("sql", "玩家升级点信息更新失败 (MySQL Error: %s)", e.what());	
+				}
+				else if(m_Type == 3)
+				{
+					dbg_msg("sql", "玩家公会信息更新失败 (MySQL Error: %s)", e.what());	
+				}
 			}
 			
 			return false;
@@ -4262,8 +4342,8 @@ public:
 				}
 				m_pServer->m_aClients[m_ClientID].m_UserID = (int)pSqlServer->GetResults()->getInt("UserId");
 				m_pServer->InitClientDB(m_ClientID);
-				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("登录成功.按下esc界面中的“开始游戏”进入."));
-				m_pServer->AddGameServerCmd(pCmd);	
+				
+				
 			}
 			else
 			{
@@ -4387,7 +4467,7 @@ public:
 
 		try
 		{
-			//Проверяем имя или ник в базе
+			//检查数据库中的名称或昵称
 			str_format(aBuf, sizeof(aBuf), 
 				"SELECT UserId FROM tw_Users WHERE Username = '%s' OR Nick = '%s';"
 				, m_sName.ClrStr(), m_sNick.ClrStr());
@@ -4862,4 +4942,308 @@ int* CServer::GetIdMap(int ClientID)
 void CServer::SetCustClt(int ClientID)
 {
 	m_aClients[ClientID].m_CustClt = 1;
+}
+
+class CSqlJob_Server_SyncOnline : public CSqlJob
+{
+private:
+	CServer* m_pServer;
+	int m_ClientID;
+	CSqlString<64> m_sNick;
+	
+public:
+	CSqlJob_Server_SyncOnline(CServer* pServer, int ClientID)
+	{
+		m_pServer = pServer;
+		m_ClientID = ClientID;
+		m_sNick = CSqlString<64>(m_pServer->ClientName(m_ClientID));
+	}
+
+	virtual bool Job(CSqlServer* pSqlServer)
+	{
+		// Проверка регистра
+		//if(m_pServer->m_aClients[m_ClientID].m_LogInstance != GetInstance())
+		//	return true;
+		//dbg_msg("test","5");
+		while(m_pServer->m_aClients[m_ClientID].m_LogInstance != GetInstance())
+		{
+			sleep(1);
+		}
+		char aBuf[512];
+		char aAddrStr[64];
+		net_addr_str(m_pServer->m_NetServer.ClientAddr(m_ClientID), aAddrStr, sizeof(aAddrStr), false);
+		//dbg_msg("test","6");
+		try
+		{
+			//检查数据库中的名称或昵称
+			str_format(aBuf, sizeof(aBuf), 
+				"SELECT * FROM tw_UserStatus WHERE IP = '%s' ORDER BY ID DESC LIMIT 1;"
+				,aAddrStr);
+			pSqlServer->executeSqlQuery(aBuf);
+			//dbg_msg("test","7 %s", aBuf);
+			if(pSqlServer->GetResults()->next())
+			{
+				int IsOnline;
+				int IsBanned;
+				char banreason[512];
+				IsOnline = (int)pSqlServer->GetResults()->getInt("online");
+				IsBanned = (int)pSqlServer->GetResults()->getInt("ban");
+				str_copy(banreason, pSqlServer->GetResults()->getString("banreason").c_str(), sizeof(banreason));
+				//dbg_msg("test","8 %d %d %s", IsOnline, IsBanned, banreason);
+				if(IsOnline)
+				{
+					m_pServer->Kick(m_ClientID, "禁止重复登录");
+					return true;
+				}
+				else if(IsBanned)
+				{
+					str_format(banreason, sizeof(banreason), "你被封禁了,原因: %s", banreason);
+					m_pServer->Kick(m_ClientID, banreason);
+					return true;
+				}
+			}
+
+			str_format(aBuf, sizeof(aBuf),
+				"INSERT INTO tw_UserStatus (IP, Nick, online) VALUES ('%s', '%s', '1');",
+				 aAddrStr, m_sNick.ClrStr());
+			
+			pSqlServer->executeSql(aBuf);
+
+			str_format(aBuf, sizeof(aBuf), 
+				"SELECT ID FROM tw_UserStatus WHERE IP = '%s' ORDER BY ID DESC LIMIT 1;"
+				,aAddrStr);
+			pSqlServer->executeSqlQuery(aBuf);
+			if(pSqlServer->GetResults()->next())
+			{
+				m_pServer->m_aClients[m_ClientID].m_UserStatusID = (int)pSqlServer->GetResults()->getInt("ID");
+				//dbg_msg("uid","%d",m_pServer->m_aClients[m_ClientID].m_UserID);
+			}
+				dbg_msg("user","玩家 %s 上线了", m_sNick.ClrStr());
+		}
+		catch (sql::SQLException &e)
+		{
+			dbg_msg("sql", "在检查登录状态时发生了错误 (MySQL 错误: %s)", e.what());
+			
+			return false;
+		}
+		
+		return true;
+	}
+	virtual void CleanInstanceRef()
+	{
+		m_pServer->m_aClients[m_ClientID].m_LogInstance = -1;
+	}
+};
+
+inline void CServer::SyncOnline(int ClientID)
+{
+	//dbg_msg("test","1");
+	if(m_aClients[ClientID].m_LogInstance >= 0)
+		return;
+	/*while(m_aClients[ClientID].m_LogInstance != GetInstance())
+	{
+		sleep(1);
+	}
+	*/
+	//dbg_msg("test","2");
+	CSqlJob* pJob = new CSqlJob_Server_SyncOnline(this, ClientID);
+	//dbg_msg("test","3");
+	m_aClients[ClientID].m_LogInstance = pJob->GetInstance();
+	//dbg_msg("test","4 %d",m_aClients[ClientID].m_LogInstance);
+	pJob->Start();
+}
+
+class CSqlJob_Server_SyncOffline : public CSqlJob
+{
+private:
+	CServer* m_pServer;
+	int m_ClientID;
+	int m_UserStatusID;
+	CSqlString<64> m_sNick;
+	
+public:
+	CSqlJob_Server_SyncOffline(CServer* pServer, int ClientID)
+	{
+		m_pServer = pServer;
+		m_ClientID = ClientID;
+		m_sNick = CSqlString<64>(m_pServer->ClientName(m_ClientID));
+		m_UserStatusID = m_pServer->m_aClients[m_ClientID].m_UserStatusID;
+	}
+
+	virtual bool Job(CSqlServer* pSqlServer)
+	{
+		char aBuf[512];
+		//char aAddrStr[64];
+		//net_addr_str(m_pServer->m_NetServer.ClientAddr(m_ClientID), aAddrStr, sizeof(aAddrStr), false);
+		//dbg_msg("ID","%d",m_UserID);
+		if(m_UserStatusID >= 0)
+		{
+			try
+			{
+				////检查数据库中的 IP
+				str_format(aBuf, sizeof(aBuf), 
+					"SELECT * FROM tw_UserStatus WHERE ID = '%d';"
+					,m_UserStatusID);
+				pSqlServer->executeSqlQuery(aBuf);
+				//dbg_msg("test","1 %s",aBuf);
+				if(pSqlServer->GetResults()->next())
+				{
+					str_format(aBuf, sizeof(aBuf), 
+						"UPDATE tw_UserStatus SET online = '0' WHERE ID = '%d';"
+						,m_UserStatusID);
+					pSqlServer->executeSql(aBuf);
+					//dbg_msg("test","2 %s", aBuf);
+				}
+				/*else
+				{
+					str_format(aBuf, sizeof(aBuf),
+					"INSERT INTO tw_UserStatus (IP, Nick, online) VALUES ('%s', '%s', '0');",
+				 	aAddrStr, m_sNick.ClrStr());
+				 	//dbg_msg("test","3 %s",aBuf);
+					pSqlServer->executeSql(aBuf);
+				}*/
+				dbg_msg("user","玩家 %s 下线了", m_sNick.ClrStr());
+				return true;
+			}
+			catch (sql::SQLException &e)
+			{
+				dbg_msg("sql", "在检查登录状态时发生了错误 (MySQL 错误: %s)", e.what());
+
+				return false;
+			}
+		}
+		return true;
+	}
+	
+};
+
+inline void CServer::SyncOffline(int ClientID)
+{
+	CSqlJob* pJob = new CSqlJob_Server_SyncOffline(this, ClientID);
+	pJob->Start();
+}
+
+class CSqlJob_Server_Ban_DB : public CSqlJob
+{
+private:
+	CServer* m_pServer;
+	int m_ClientID;
+	int m_UserStatusID;
+	int m_ClientID_Ban;
+	CSqlString<64> m_sNick;	
+	CSqlString<64> m_Reason;
+
+public:
+	CSqlJob_Server_Ban_DB(CServer* pServer, int ClientID, int ClientID_Ban, const char* Reason)
+	{
+		m_pServer = pServer;
+		m_ClientID = ClientID;
+		m_sNick = CSqlString<64>(m_pServer->ClientName(m_ClientID_Ban));
+		m_ClientID_Ban = ClientID_Ban;
+		m_UserStatusID = m_pServer->m_aClients[m_ClientID_Ban].m_UserStatusID;
+		m_Reason = CSqlString<64>(Reason);
+	}
+
+	virtual bool Job(CSqlServer* pSqlServer)
+	{
+		char aBuf[512];
+		if(m_UserStatusID >= 0)
+		{
+			try
+			{
+				//检查数据库中的 IP
+				str_format(aBuf, sizeof(aBuf), 
+					"SELECT * FROM tw_UserStatus WHERE ID = '%d';"
+					,m_UserStatusID);
+				pSqlServer->executeSqlQuery(aBuf);
+				//dbg_msg("test","1 %s",aBuf);
+				if(pSqlServer->GetResults()->next())
+				{
+					str_format(aBuf, sizeof(aBuf), 
+						"UPDATE tw_UserStatus SET ban = '1', banreason = '%s' WHERE ID = '%d';"
+						,m_Reason.ClrStr() ,m_UserStatusID);
+					pSqlServer->executeSql(aBuf);
+					//dbg_msg("test","2 %s", aBuf);
+				}
+				m_pServer->Kick(m_ClientID_Ban, m_Reason.ClrStr());
+				dbg_msg("user","玩家 %s 被封禁了", m_sNick.ClrStr());
+				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("封禁成功."));
+				m_pServer->AddGameServerCmd(pCmd);	
+				return true;
+			}
+			catch (sql::SQLException &e)
+			{
+				dbg_msg("sql", "在写入 ban 数据时发生了错误 (MySQL 错误: %s)", e.what());
+				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("封禁失败."));
+				m_pServer->AddGameServerCmd(pCmd);
+				return false;
+			}
+		}
+		return true;
+	}
+	
+};
+
+inline void CServer::Ban_DB(int ClientID, int ClientID_Ban, const char* Reason)
+{
+	CSqlJob* pJob = new CSqlJob_Server_Ban_DB(this, ClientID, ClientID_Ban, Reason);
+	pJob->Start();
+}
+
+class CSqlJob_Server_Unban_DB : public CSqlJob
+{
+private:
+	CServer* m_pServer;
+	CSqlString<64> m_sNick;	
+	int m_ClientID;
+public:
+	CSqlJob_Server_Unban_DB(CServer* pServer, int ClientID, const char* Nick)
+	{
+		m_pServer = pServer;
+		m_sNick = CSqlString<64>(Nick);
+		m_ClientID = ClientID;
+	}
+
+	virtual bool Job(CSqlServer* pSqlServer)
+	{
+		char aBuf[512];
+		try
+		{
+			//检查数据库中的 IP
+			str_format(aBuf, sizeof(aBuf), 
+				"SELECT ID FROM tw_UserStatus WHERE Nick = '%s' ORDER BY ID DESC LIMIT 1;"
+				,m_sNick);
+			pSqlServer->executeSqlQuery(aBuf);
+			dbg_msg("test","1 %s",aBuf);
+			if(pSqlServer->GetResults()->next())
+			{
+				int m_UserStatusID;
+				m_UserStatusID = (int)pSqlServer->GetResults()->getInt("ID");
+				str_format(aBuf, sizeof(aBuf), 
+					"UPDATE tw_UserStatus SET ban = '0', banreason = '' WHERE ID = '%d';"
+					,m_UserStatusID);
+				pSqlServer->executeSql(aBuf);
+				dbg_msg("test","2 %s", aBuf);
+			}
+			dbg_msg("user","玩家 %s 被解封了", m_sNick.ClrStr());
+			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("解封成功."));
+			m_pServer->AddGameServerCmd(pCmd);	
+			return true;
+		}
+		catch (sql::SQLException &e)
+		{
+			dbg_msg("sql", "在写入 ban 数据时发生了错误 (MySQL 错误: %s)", e.what());
+			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("解封失败."));
+			m_pServer->AddGameServerCmd(pCmd);	
+			return false;
+		}
+		return true;
+	}
+	
+};
+
+inline void CServer::Unban_DB(int ClientID, const char* Nick)
+{
+	CSqlJob* pJob = new CSqlJob_Server_Unban_DB(this, ClientID, Nick);
+	pJob->Start();
 }

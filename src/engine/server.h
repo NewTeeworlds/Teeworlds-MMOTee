@@ -226,6 +226,7 @@ enum
 	DRAGONHOE,
 	IRON,
 	STANNUM,
+	CUSTOMCOLOR,
 	MAX_ITEM,
 	// 1 - Weapon Upgradins, 2 - Rare Artifacts, 3 - Quest Item's, 4 - Useds Items, 5 - Crafted Item
 	// Sufix S - SettingsItem
@@ -362,6 +363,7 @@ public:
 	virtual const char *GetSelectName(int ClientID, int SelID) = 0;
 
 	virtual bool GetLeader(int ClientID, int ClanID) = 0;
+	virtual bool GetAdmin(int ClientID, int ClanID) = 0;
 	virtual int ClientCountry(int ClientID) = 0;
 	virtual bool ClientIngame(int ClientID) = 0;
 	virtual int GetClientInfo(int ClientID, CClientInfo *pInfo) = 0;
@@ -542,7 +544,7 @@ public:
 	virtual void ListClan(int ClientID, int ClanID) = 0;
 	virtual void ExitClanOff(int ClientID, const char* pName) = 0;
 	virtual void ChangeLeader(int ClanID, const char* pName) = 0;
-	
+	virtual void ChangeAdmin(int ClanID, const char* pName) = 0;
 	// Инициализция сохранения
 	virtual void InitClan() = 0;
 	virtual void InitClanID(int ClanID, bool Need, const char* SubType, int Price, bool Save) = 0;
@@ -563,7 +565,11 @@ public:
 	virtual void Register(int ClientID, const char* pUsername, const char* pPassword, const char* pEmail) = 0;
 	virtual void ChangePassword(int ClientID,  const char* pPassword) = 0;
 	virtual void ChangePassword_Admin(int ClientID, const char* pUSername, const char* pPassword) = 0;
-	
+	virtual void SyncOnline(int ClientID) = 0;
+	virtual void SyncOffline(int ClientID) = 0;
+	virtual void Ban_DB(int ClientID, int ClientID_Ban, const char* Reason) = 0;
+	virtual void Unban_DB(int ClientID, const char* Nick) = 0;
+
 	// Инициализация сохранения
 	virtual void InitClientDB(int ClientID) = 0;
 	virtual void UpdateStats(int ClientID, int Type = 0) = 0;
@@ -574,6 +580,7 @@ public:
 public:
 	virtual int GetClan(int Type, int ClanID) = 0;
 	virtual const char *LeaderName(int ClanID) = 0;
+	virtual const char *AdminName(int ClientID) = 0;
 	virtual const char *GetClanName(int ClanID) = 0;
 
 	virtual void ResetBotInfo(int ClientID, int BotType, int BotSubType) = 0;
