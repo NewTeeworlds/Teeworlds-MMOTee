@@ -105,6 +105,8 @@ void CPickup::StartFarm(int ClientID)
 	if(!m_SubType) // ########################### FARMING
 	{
 		m_Drop += 20;
+		if(Server()->GetItemCount(ClientID, DRAGONHOE)>=1)
+			m_Drop += 5;		
 		GameServer()->CreateSound(m_Pos, 20); 
 
 		int LevelItem = 1+Server()->GetItemCount(ClientID, FARMLEVEL)/g_Config.m_SvFarmExp;
@@ -232,6 +234,11 @@ void CPickup::StartFarm(int ClientID)
 				default: GameServer()->GiveItem(ClientID, COOPERORE, 1+LevelItem/15); break;
 			}
 			GameServer()->GiveItem(ClientID, MINEREXP, 1);
+			
+			if(rand()%100==1)
+				GameServer()->GiveItem(ClientID, STANNUM, 1);
+
+			
 
 			// ОПЫТ ГНИДАМ
 			GameServer()->m_apPlayers[ClientID]->AccData.Exp += 10+LevelItem;
@@ -241,6 +248,8 @@ void CPickup::StartFarm(int ClientID)
 	else if(m_SubType == 3) // ########################### WOOOD
 	{
 		m_Drop += 10+rand()%25;
+		if(Server()->GetItemCount(ClientID,DRAGONAXE)>=1)
+			m_Drop*=2;
 		GameServer()->CreateSound(m_Pos, 20); 
 
 		float getlv = (m_Drop*100.0)/100;

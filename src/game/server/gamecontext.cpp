@@ -2427,7 +2427,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 			CPlayer *pPlayer = m_apPlayers[ClientID];
 			if(g_Config.m_SvCityStart == 1 && pPlayer->AccData.Level < 250)
 			{ 
-				SendBroadcast_Localization(ClientID, BROADCAST_PRIORITY_GAMEANNOUNCE, BROADCAST_DURATION_GAMEANNOUNCE, _("你需要 100 级"), NULL);
+				SendBroadcast_Localization(ClientID, BROADCAST_PRIORITY_GAMEANNOUNCE, BROADCAST_DURATION_GAMEANNOUNCE, _("你需要达到100级"), NULL);
 				return;
 			}
 
@@ -2525,16 +2525,16 @@ void CGameContext::BuyItem(int ItemType, int ClientID, int Type)
 	
 	m_apPlayers[ClientID]->m_LastChangeInfo = Server()->Tick();
 	if(Server()->GetItemCount(ClientID, ItemType) && ItemType != CLANTICKET && ItemType != BOOKEXPMIN)
-		return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你已经在物品栏了"), NULL);	
+		return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你已购买."), NULL);	
 	
 	if(m_apPlayers[ClientID]->AccData.Level < Server()->GetItemPrice(ClientID, ItemType, 0))
-		return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你没有达到规定的等级"), NULL);	
+		return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你没有达到规定的等级."), NULL);	
 		
 	if(Type == 0 && m_apPlayers[ClientID]->AccData.Gold < Server()->GetItemPrice(ClientID, ItemType, 1))
-		return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你没有足够的黄金,小穷光蛋"), NULL);	
+		return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你没有足够的黄金,小穷光蛋."), NULL);	
 
 	if(Type == 1 && m_apPlayers[ClientID]->AccData.Donate < Server()->GetItemPrice(ClientID, ItemType, 1))
-		return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你没有足够点券(donate money),充钱吧"), NULL);	
+		return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你没有足够点券(donate money),充钱吧."), NULL);	
 
 	if(Type == 0)
 	{
@@ -2685,7 +2685,7 @@ void CGameContext::GiveItem(int ClientID, int ItemID, int Count, int Enchant)
 
 	if((ItemID >= AMULETCLEEVER && ItemID <= APAIN) || (ItemID >= SNAPDAMAGE && ItemID <= FORMULAFORRING) || (ItemID >= RINGBOOMER && ItemID <= EARRINGSKWAH) || (ItemID >= BOOKMONEYMIN && ItemID <= RELRINGS)
 		|| (ItemID >=CLANBOXEXP && ItemID <= CUSTOMSKIN) || (ItemID >= WHITETICKET && ItemID <= RANDOMCRAFTITEM) 
-		|| (ItemID >=GUNBOUNCE && ItemID <= LAMPHAMMER) || ItemID == JUMPIMPULS || ItemID == FARMBOX || ItemID == PIZDAMET) // rare iteems
+		|| (ItemID >=GUNBOUNCE && ItemID <= LAMPHAMMER) || ItemID == JUMPIMPULS || ItemID == FARMBOX || ItemID == PIZDAMET || ItemID == STANNUM) // rare iteems
 	{
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 获得了 {str:items}x{int:counts}"), "name", Server()->ClientName(ClientID), "items", Server()->GetItemName(ClientID, ItemID, false), "counts", &Count, NULL);					
 		
@@ -2807,6 +2807,13 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 
 			Server()->RemItem(ClientID, SKELETSBONE, 30, -1);
 		} break;
+		case IRON: 
+		{
+			if(Server()->GetItemCount(ClientID, IRONORE) < 5)
+				return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "铁矿x5", NULL);
+
+			Server()->RemItem(ClientID, IRONORE, 5, -1);
+		} break;
 		case CUSTOMSKIN: 
 		{
 			if(Server()->GetItemCount(ClientID, SKELETSSBONE) < 30 || Server()->GetItemCount(ClientID, ZOMIBEBIGEYE) < 30)
@@ -2854,7 +2861,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		{
 			if(Server()->GetItemCount(ClientID, TOMATE) < 60 || Server()->GetItemCount(ClientID, POTATO) < 60 || Server()->GetItemCount(ClientID, CARROT) < 60)
 			{
-				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "(土豆番茄萝卜)x60", NULL);
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "(土豆x60, 番茄x60, 萝卜x60", NULL);
 				return;
 			}
 			Server()->RemItem(ClientID, TOMATE, 60, -1);
@@ -2902,11 +2909,31 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 			Server()->RemItem(ClientID, WOOD, 50, -1);
 			Server()->RemItem(ClientID, DIAMONDORE, 100, -1);
 		} break;
+		case DRAGONAXE: 
+		{
+			if(Server()->GetItemCount(ClientID, WOOD) < 200 || Server()->GetItemCount(ClientID, DRAGONORE) < 1000)
+			{
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "木头x200, 龙矿x1000", NULL);
+				return;
+			}
+			Server()->RemItem(ClientID, WOOD, 200, -1);
+			Server()->RemItem(ClientID, DIAMONDORE, 1000, -1);
+		} break;
+		case DRAGONHOE: 
+		{
+			if(Server()->GetItemCount(ClientID, WOOD) < 200 || Server()->GetItemCount(ClientID, DRAGONORE) < 1000)
+			{
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "木头x200, 龙矿x1000", NULL);
+				return;
+			}
+			Server()->RemItem(ClientID, WOOD, 200, -1);
+			Server()->RemItem(ClientID, DIAMONDORE, 1000, -1);
+		} break;
 		case FORMULAEARRINGS: 
 		{
 			if(Server()->GetItemCount(ClientID, IRONORE) < 100 || Server()->GetItemCount(ClientID, COOPERORE) < 100)
 			{
-				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "(铁矿, 铜矿)x100", NULL);
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "(铁矿x100, 铜矿x100", NULL);
 				return;
 			}
 			Server()->RemItem(ClientID, COOPERORE, 100, -1);
@@ -2916,7 +2943,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		{
 			if(Server()->GetItemCount(ClientID, IRONORE) < 125 || Server()->GetItemCount(ClientID, COOPERORE) < 125)
 			{
-				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "(铁矿, 铜矿)x125", NULL);
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "(铁矿x125, 铜矿x125", NULL);
 				return;
 			}
 			Server()->RemItem(ClientID, COOPERORE, 125, -1);
@@ -2926,7 +2953,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		{
 			if(Server()->GetItemCount(ClientID, IRONORE) < 150 || Server()->GetItemCount(ClientID, COOPERORE) < 150)
 			{
-				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "(铁矿, 铜矿)x150", NULL);
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "(铁矿x150, 铜矿x150", NULL);
 				return;
 			}
 			Server()->RemItem(ClientID, COOPERORE, 150, -1);
@@ -3943,6 +3970,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 				AddNewCraftVote(ClientID, "铁矿x100, 铜矿x100", FORMULAEARRINGS);	
 				AddNewCraftVote(ClientID, "铁矿x125, 铜矿x125", FORMULAFORRING);	
 				AddNewCraftVote(ClientID, "铁矿x150, 铜矿x150", FORMULAWEAPON);	
+				AddNewCraftVote(ClientID, "铁矿x5", IRON);
 					
 			}
 			else if(m_apPlayers[ClientID]->m_SortedSelectCraft == 2)
@@ -3953,15 +3981,15 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 					AddNewCraftVote(ClientID, "日耀(Sun Ray)x20", SHEALSUMMER);	
 			
 				}
-				AddNewCraftVote(ClientID, "戒指蓝图x1, Slime Dirtx1", RARERINGSLIME);	
-				AddNewCraftVote(ClientID, "戒指蓝图x1, body boomerx100", RINGBOOMER);	
-				AddNewCraftVote(ClientID, "耳环蓝图x1, foot kwahx100", EARRINGSKWAH);	
+				AddNewCraftVote(ClientID, "戒指蓝图x1, Slime 的尸体x1", RARERINGSLIME);	
+				AddNewCraftVote(ClientID, "戒指蓝图x1, 爆破鬼才的尸体x100", RINGBOOMER);	
+				AddNewCraftVote(ClientID, "耳环蓝图x1, kwah 的脚x100", EARRINGSKWAH);	
 				AddNewCraftVote(ClientID, "僵尸大眼睛x30,骷髅强化骨x30", CUSTOMSKIN);	
 				AddNewCraftVote(ClientID, "土豆x60,番茄x60,萝卜x60", JUMPIMPULS);		
 			}
 			else if(m_apPlayers[ClientID]->m_SortedSelectCraft == 3)
 			{
-				AddNewCraftVote(ClientID, "眼睛表情 (happy, evil, surprise, blink, pain)", MODULEEMOTE);	
+				AddNewCraftVote(ClientID, "眼睛表情 (快乐, 愤怒, 惊讶, 眨眼, 痛苦)", MODULEEMOTE);	
 				AddNewCraftVote(ClientID, "手枪x1, 散弹枪x1, 榴弹炮x1, 激光枪x1", WEAPONPRESSED);	
 				AddNewCraftVote(ClientID, "武器蓝图x1, 爆破鬼才的戒指(ring boomer)x1", MODULESHOTGUNSLIME);	
 				AddNewCraftVote(ClientID, "武器蓝图(formula weapons)x25", ENDEXPLOSION);	
@@ -3975,7 +4003,9 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 				AddNewCraftVote(ClientID, "木头x30, 铜矿x60", COOPERPIX);		
 				AddNewCraftVote(ClientID, "木头x40, 铁矿x60", IRONPIX);		
 				AddNewCraftVote(ClientID, "木头x50, 金矿x80", GOLDPIX);		
-				AddNewCraftVote(ClientID, "木头x50, 钻石矿x100", DIAMONDPIX);					
+				AddNewCraftVote(ClientID, "木头x50, 钻石矿x100", DIAMONDPIX);	
+				AddNewCraftVote(ClientID, "木头x200, 龙矿x1000", DRAGONAXE);
+				AddNewCraftVote(ClientID, "木头x200, 龙矿x1000", DRAGONHOE);				
 			}
 			else if(m_apPlayers[ClientID]->m_SortedSelectCraft == 6)
 			{
