@@ -3665,7 +3665,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 
 		AddVoteMenu_Localization(ClientID, CLANLIST, MENUONLY, "- 公会列表");
 
-		AddVote_Localization(ClientID, 'null',"- 公会战（敬请期待）");
+		AddVote_Localization(ClientID, "null", "- 公会战（敬请期待）");
 
 		AddVote_Localization(ClientID, "cexit", "- 退出公会!");
 		AddBack(ClientID);
