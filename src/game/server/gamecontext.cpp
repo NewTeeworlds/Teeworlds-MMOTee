@@ -1056,7 +1056,7 @@ void CGameContext::OnTick()
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, ("大家注意了!! 新人必须遵守的规则:"), NULL);	
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, ("只能玩一个服务器"), NULL);	
 		//SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, ("你的账户如果被删除,你创建的公会会重组(reform)."), NULL);	
-		//SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, ("服务器版本: 2.0（测试）作者/管理：天上的星星,中文翻译:MC_TYH以及全体MMOTEE国服玩家."), NULL);
+		//SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, ("服务器版本: 2.1 作者/管理：天上的星星,中文翻译:MC_TYH以及全体MMOTEE国服玩家."), NULL);
 	}
 	*/
 	// вывод топ листа раз в 5 минут
