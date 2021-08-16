@@ -2793,6 +2793,8 @@ void CGameContext::GiveItem(int ClientID, int ItemID, int Count, int Enchant)
 	if(ItemID == IRONPIX) Settings = 211*Count;
 	if(ItemID == GOLDPIX) Settings = 491*Count;
 	if(ItemID == DIAMONDPIX) Settings = 699*Count;
+	if(ItemID == DRAGONAXE) Settings = 10000*Count;
+	if(ItemID == DRAGONHOE) Settings = 8000*Count;
 
 	Server()->GiveItem(ClientID, ItemID, Count, Settings, Enchant);
 }
@@ -3000,7 +3002,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 				return;
 			}
 			Server()->RemItem(ClientID, WOOD, 200, -1);
-			Server()->RemItem(ClientID, DIAMONDORE, 1000, -1);
+			Server()->RemItem(ClientID, DRAGONORE, 1000, -1);
 		} break;
 		case DRAGONHOE: 
 		{
@@ -3010,7 +3012,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 				return;
 			}
 			Server()->RemItem(ClientID, WOOD, 200, -1);
-			Server()->RemItem(ClientID, DIAMONDORE, 1000, -1);
+			Server()->RemItem(ClientID, DRAGONORE, 1000, -1);
 		} break;
 		case FORMULAEARRINGS: 
 		{

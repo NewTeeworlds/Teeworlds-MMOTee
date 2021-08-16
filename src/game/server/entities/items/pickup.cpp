@@ -104,9 +104,26 @@ void CPickup::StartFarm(int ClientID)
 
 	if(!m_SubType) // ########################### FARMING
 	{
-		m_Drop += 20;
-		if(Server()->GetItemCount(ClientID, DRAGONHOE)>=1)
-			m_Drop += 5;		
+		int Dropable = 0;
+		int Broke = 0;
+		int Count = 0;
+		const char* ItemName = "啥都没有";
+		m_Drop += 20;	
+		if(Server()->GetItemCount(ClientID, DRAGONHOE))
+		{
+			Count = Server()->GetItemCount(ClientID, DRAGONHOE);
+			Broke = 8000*Server()->GetItemCount(ClientID, DRAGONHOE);
+			Dropable = Server()->GetItemSettings(ClientID, DRAGONHOE);
+			if(Dropable <= 0)
+			{
+				Server()->RemItem(ClientID, DRAGONHOE, Server()->GetItemCount(ClientID, DRAGONHOE), -1);
+				GameServer()->SendChatTarget_Localization(ClientID, -1, _("~ 农具: {str:name} 已损毁, 不能用了"), "name", Server()->GetItemName(ClientID, DRAGONHOE), NULL);
+			}
+			Server()->SetItemSettingsCount(ClientID, DRAGONHOE, Dropable-1);
+			ItemName = Server()->GetItemName(ClientID, DRAGONHOE);
+			m_Drop += 5;	
+		}
+		
 		GameServer()->CreateSound(m_Pos, 20); 
 
 		int LevelItem = 1+Server()->GetItemCount(ClientID, FARMLEVEL)/g_Config.m_SvFarmExp;
@@ -115,8 +132,8 @@ void CPickup::StartFarm(int ClientID)
 
 		float getlv = (m_Drop*100.0)/100;
 		const char *Pick = GameServer()->LevelString(100, (int)getlv, 10, ':', ' ');
-		GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("专长 - 种地: {int:lvl}级: {int:exp}/{int:expneed}经验\n奖励: {int:bonus} 物品 : 采集进度: {str:got} / {int:gotp}%"), 
-			"lvl", &LevelItem, "exp", &Exp, "expneed", &NeedExp, "bonus", &LevelItem, "got", Pick, "gotp", &m_Drop, NULL);
+		GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("专长 - 种地: {int:lvl}级: {int:exp}/{int:expneed}经验\n工具: {str:name}x{int:count} ({int:brok}/{int:brok2})\n物品 : 采集进度: {str:got} / {int:gotp}%"), 
+			"lvl", &LevelItem, "exp", &Exp, "expneed", &NeedExp, "name", ItemName, "count", &Count, "brok", &Dropable, "brok2", &Broke, "got", Pick, "gotp", &m_Drop, NULL);
 		delete Pick;
 
 		if(m_Drop == 100)
@@ -215,8 +232,8 @@ void CPickup::StartFarm(int ClientID)
 		
 		float getlv = (m_Drop*100.0)/100;
 		const char *Pick = GameServer()->LevelString(100, (int)getlv, 10, ':', ' ');
-		GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("专长 - 采掘: {int:lvl}级 : {int:exp}/{int:expneed}经验\n工具: {str:name}x{int:cout} ({int:brok}/{int:brok2})\n挖掘进度: {str:got} / {int:gotp}%"), 
-			"lvl", &LevelItem, "exp", &Exp, "expneed", &ExpNeed, "brok", &Dropable, "brok2", &Broke, "name", ItemName, "cout", &Count, "got", Pick, "gotp", &m_Drop, NULL);
+		GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("专长 - 采掘: {int:lvl}级 : {int:exp}/{int:expneed}经验\n工具: {str:name}x{int:count} ({int:brok}/{int:brok2})\n挖掘进度: {str:got} / {int:gotp}%"), 
+			"lvl", &LevelItem, "exp", &Exp, "expneed", &ExpNeed, "brok", &Dropable, "brok2", &Broke, "name", ItemName, "count", &Count, "got", Pick, "gotp", &m_Drop, NULL);
 		delete Pick;
 
 		if(m_Drop >= 100)
@@ -251,15 +268,32 @@ void CPickup::StartFarm(int ClientID)
 	}
 	else if(m_SubType == 3) // ########################### WOOOD
 	{
+		int Dropable = 0;
+		int Broke = 0;
+		int Count = 0;
 		m_Drop += 10+rand()%25;
-		if(Server()->GetItemCount(ClientID,DRAGONAXE)>=1)
-			m_Drop*=2;
+		const char* ItemName = "啥都没有";
+		if(Server()->GetItemCount(ClientID, DRAGONAXE))
+		{
+			Count = Server()->GetItemCount(ClientID, DRAGONAXE);
+			Broke = 10000*Server()->GetItemCount(ClientID, DRAGONAXE);
+			Dropable = Server()->GetItemSettings(ClientID, DRAGONAXE);
+			if(Dropable <= 0)
+			{
+				Server()->RemItem(ClientID, DRAGONAXE, Server()->GetItemCount(ClientID, DRAGONAXE), -1);
+				GameServer()->SendChatTarget_Localization(ClientID, -1, _("~ 工具: {str:name} 已损毁, 不能用了"), "name", Server()->GetItemName(ClientID, DRAGONAXE), NULL);
+			}
+			Server()->SetItemSettingsCount(ClientID, DRAGONAXE, Dropable-1);
+			ItemName = Server()->GetItemName(ClientID, DRAGONAXE);
+			m_Drop *= 5;	
+		}
+
 		GameServer()->CreateSound(m_Pos, 20); 
 
 		float getlv = (m_Drop*100.0)/100;
 		const char *Pick = GameServer()->LevelString(100, (int)getlv, 10, ':', ' ');
-		GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("专长 - 伐木工: (光头强不会升级)\n砍伐进度: {str:got} / {int:gotp}%"), 
-			"got", Pick, "gotp", &m_Drop, NULL);
+		GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("专长 - 伐木工: (光头强不会升级)\n工具: {str:name}x{int:count} ({int:brok}/{int:brok2})\n砍伐进度: {str:got} / {int:gotp}%"), 
+			"name", ItemName, "count", &Count, "got", "brok", &Dropable, "brok2", &Broke, Pick, "gotp", &m_Drop, NULL);
 		delete Pick;
 
 		if(m_Drop >= 100)
