@@ -285,7 +285,7 @@ void CPickup::StartFarm(int ClientID)
 			}
 			Server()->SetItemSettingsCount(ClientID, DRAGONAXE, Dropable-1);
 			ItemName = Server()->GetItemName(ClientID, DRAGONAXE);
-			m_Drop *= 5;	
+			m_Drop *=2 ;	
 		}
 
 		GameServer()->CreateSound(m_Pos, 20); 
@@ -293,7 +293,7 @@ void CPickup::StartFarm(int ClientID)
 		float getlv = (m_Drop*100.0)/100;
 		const char *Pick = GameServer()->LevelString(100, (int)getlv, 10, ':', ' ');
 		GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("专长 - 伐木工: (光头强不会升级)\n工具: {str:name}x{int:count} ({int:brok}/{int:brok2})\n砍伐进度: {str:got} / {int:gotp}%"), 
-			"name", ItemName, "count", &Count, "got", "brok", &Dropable, "brok2", &Broke, Pick, "gotp", &m_Drop, NULL);
+			"name", ItemName, "count", &Count, "got", "brok", &Dropable, "brok2", &Broke, Pick, "got", Pick, "gotp", &m_Drop, NULL);
 		delete Pick;
 
 		if(m_Drop >= 100)
