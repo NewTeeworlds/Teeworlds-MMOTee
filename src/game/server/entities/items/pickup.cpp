@@ -293,7 +293,7 @@ void CPickup::StartFarm(int ClientID)
 		float getlv = (m_Drop*100.0)/100;
 		const char *Pick = GameServer()->LevelString(100, (int)getlv, 10, ':', ' ');
 		GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("专长 - 伐木工: (光头强不会升级)\n工具: {str:name}x{int:count} ({int:brok}/{int:brok2})\n砍伐进度: {str:got} / {int:gotp}%"), 
-			"name", ItemName, "count", &Count, "got", "brok", &Dropable, "brok2", &Broke, Pick, "got", Pick, "gotp", &m_Drop, NULL);
+			"name", ItemName, "count", &Count, "brok", &Dropable, "brok2", &Broke, "got", Pick, "gotp", &m_Drop, NULL);
 		delete Pick;
 
 		if(m_Drop >= 100)
