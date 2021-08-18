@@ -1,4 +1,4 @@
-[Kurosio 的原版](https://www.teeworlds.com/forum/viewtopic.php?id=12612)  [github](kurosio/Teeworlds-Mmotee-Old)
+[Kurosio 的原版](https://www.teeworlds.com/forum/viewtopic.php?id=12612)  [github](https://github.com/kurosio/Teeworlds-Mmotee-Old)
 
 # mmotee (老版本) 来自 Kurosio
 

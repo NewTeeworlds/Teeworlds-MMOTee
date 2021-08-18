@@ -2858,7 +2858,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 			if(Server()->GetItemCount(ClientID, FORMULAFORRING) < Count || Server()->GetItemCount(ClientID, HEADBOOMER) < 100 * Count)
 				return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "戒指蓝图, 爆破鬼才的尸体 x100", NULL);
 
-			Server()->RemItem(ClientID, HEADBOOMER, 100, -1);
+			Server()->RemItem(ClientID, HEADBOOMER, 100 * Count, -1);
 			Server()->RemItem(ClientID, FORMULAFORRING, Count, -1);	
 		} break;
 		case MODULESHOTGUNSLIME: 
@@ -2893,10 +2893,10 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		} break;
 		case IRON: 
 		{
-			if(Server()->GetItemCount(ClientID, IRONORE) < 5)
+			if(Server()->GetItemCount(ClientID, IRONORE) < 5 * Count)
 				return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "铁矿x5", NULL);
 
-			Server()->RemItem(ClientID, IRONORE, 5, -1);
+			Server()->RemItem(ClientID, IRONORE, 5 * Count, -1);
 		} break;
 		case CUSTOMSKIN: 
 		{
@@ -2996,23 +2996,24 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		} break;
 		case DRAGONAXE: 
 		{
-			if(Server()->GetItemCount(ClientID, WOOD) < 200 || Server()->GetItemCount(ClientID, DRAGONORE) < 1000)
+			Count = 1;
+			if(Server()->GetItemCount(ClientID, WOOD) < 200 * Count || Server()->GetItemCount(ClientID, DRAGONORE) < 1000 * Count)
 			{
 				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "木头x200, 龙矿x1000", NULL);
 				return;
 			}
-			Server()->RemItem(ClientID, WOOD, 200, -1);
-			Server()->RemItem(ClientID, DRAGONORE, 1000, -1);
+			Server()->RemItem(ClientID, WOOD, 200 * Count, -1);
+			Server()->RemItem(ClientID, DRAGONORE, 1000 * Count, -1);
 		} break;
 		case DRAGONHOE: 
 		{
-			if(Server()->GetItemCount(ClientID, WOOD) < 200 || Server()->GetItemCount(ClientID, DRAGONORE) < 1000)
+			if(Server()->GetItemCount(ClientID, WOOD) < 200 * Count || Server()->GetItemCount(ClientID, DRAGONORE) < 1000 * Count)
 			{
 				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "木头x200, 龙矿x1000", NULL);
 				return;
 			}
-			Server()->RemItem(ClientID, WOOD, 200, -1);
-			Server()->RemItem(ClientID, DRAGONORE, 1000, -1);
+			Server()->RemItem(ClientID, WOOD, 200 * Count, -1);
+			Server()->RemItem(ClientID, DRAGONORE, 1000 * Count, -1);
 		} break;
 		case FORMULAEARRINGS: 
 		{
