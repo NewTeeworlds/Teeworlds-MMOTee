@@ -2996,7 +2996,6 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		} break;
 		case DRAGONAXE: 
 		{
-			Count = 1;
 			if(Server()->GetItemCount(ClientID, WOOD) < 200 * Count || Server()->GetItemCount(ClientID, DRAGONORE) < 1000 * Count)
 			{
 				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "木头x200, 龙矿x1000", NULL);
