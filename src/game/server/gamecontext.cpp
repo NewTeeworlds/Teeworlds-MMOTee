@@ -1333,9 +1333,9 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					dynamic_string Buffer;
 					Server()->Localization()->Format_L(Buffer, pLanguage, _("All owners InfClass"), NULL); 
 					Buffer.append("\n\n");
-					Server()->Localization()->Format_L(Buffer, pLanguage, _("Main contributors:\nNajvlad - Mapper\nRem1x - Helping\nMatodor - Helping\nKurosio - Code, Owner"), NULL); 
+					Server()->Localization()->Format_L(Buffer, pLanguage, _("主要制作人员:\nNajvlad, Rem1x, Matodor, Kurosio - 原作者"), NULL); 
 					Buffer.append("\n\n");
-					Server()->Localization()->Format_L(Buffer, pLanguage, _("Created Modify rAzataz by Kurosio"), NULL); 
+					Server()->Localization()->Format_L(Buffer, pLanguage, _("天际 - 修改地图\nNinecloud - 协助开发\n天上的星星 - 开发者,服务器管理"), NULL); 
 					Buffer.append("\n\n");
 	
 					SendMOTD(ClientID, Buffer.buffer());
@@ -1368,8 +1368,9 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					Buffer.append("\n");
 					Server()->Localization()->Format_L(Buffer, pLanguage, _("/login <用户名> <密码> - 登录账户"), NULL); 
 					Buffer.append("\n");
-					Server()->Localization()->Format_L(Buffer, pLanguage, _("/logout - 注销该账户"), NULL); 
-					Buffer.append("\n\n");
+					// 鬼知道这个玩意是谁写的,翻译之前居然不检查一下
+					//Server()->Localization()->Format_L(Buffer, pLanguage, _("/logout - 注销该账户"), NULL); 
+					//Buffer.append("\n\n");
 
 					SendMOTD(ClientID, Buffer.buffer());
 					return;
@@ -3728,14 +3729,10 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		
 		AddVote_Localization(ClientID, "null", "▶ 选择了玩家 {str:name}", "name", m_apPlayers[ClientID]->m_SelectPlayer);
 		AddVote_Localization(ClientID, "cgetleader", "▹ 转让公会");
-		bool IsAdmin;
-		for(int i = 0; i < MAX_NOBOT; ++i)
+		bool IsAdmin = false;
+		if(str_comp_nocase(m_apPlayers[ClientID]->m_SelectPlayer, Server()->AdminName(Server()->GetClanID(ClientID))) == 0)
 		{
-			if(m_apPlayers[i])
-			{
-				if(str_comp_nocase(m_apPlayers[ClientID]->m_SelectPlayer, Server()->ClientName(i)) == 0)
-					IsAdmin = true;
-			}
+			IsAdmin = true;
 		}
 		if(!IsAdmin)
 		{

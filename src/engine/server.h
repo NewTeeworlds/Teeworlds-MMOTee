@@ -580,7 +580,7 @@ public:
 public:
 	virtual int GetClan(int Type, int ClanID) = 0;
 	virtual const char *LeaderName(int ClanID) = 0;
-	virtual const char *AdminName(int ClientID) = 0;
+	virtual const char *AdminName(int ClanID) = 0;
 	virtual const char *GetClanName(int ClanID) = 0;
 
 	virtual void ResetBotInfo(int ClientID, int BotType, int BotSubType) = 0;

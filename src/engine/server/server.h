@@ -211,7 +211,7 @@ public:
 	virtual bool GetLeader(int ClientID, int ClanID);
 	virtual bool GetAdmin(int ClientID, int ClanID);
 	const char *LeaderName(int ClientID);
-	const char *AdminName(int ClientID);
+	const char *AdminName(int ClanID);
 	const char *GetClanName(int ClanID);
 
 	virtual int GetUserID(int ClientID);

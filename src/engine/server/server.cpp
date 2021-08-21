@@ -4997,8 +4997,9 @@ public:
 				}
 				else if(IsBanned)
 				{
-					str_format(banreason, sizeof(banreason), "你被封禁了,原因: %s", banreason);
-					m_pServer->Kick(m_ClientID, banreason);
+					char buf[512];
+					str_format(buf, sizeof(buf), "你被封禁了,原因: %s", banreason);
+					m_pServer->Kick(m_ClientID, buf);
 					return true;
 				}
 			}
