@@ -5248,3 +5248,73 @@ inline void CServer::Unban_DB(int ClientID, const char* Nick)
 	CSqlJob* pJob = new CSqlJob_Server_Unban_DB(this, ClientID, Nick);
 	pJob->Start();
 }
+
+class CSqlJob_Server_SetOffline : public CSqlJob
+{
+private:
+	CServer* m_pServer;
+	int m_ClientID;
+	int m_UserStatusID;
+	CSqlString<64> m_sNick;
+	
+public:
+	CSqlJob_Server_SetOffline(CServer* pServer, int ClientID, const char* pNick)
+	{
+		m_pServer = pServer;
+		m_ClientID = ClientID;
+		m_sNick = CSqlString<64>(pNick);
+		//m_UserStatusID = m_pServer->m_aClients[m_ClientID].m_UserStatusID;
+	}
+
+	virtual bool Job(CSqlServer* pSqlServer)
+	{
+		char aBuf[512];
+		//char aAddrStr[64];
+		//net_addr_str(m_pServer->m_NetServer.ClientAddr(m_ClientID), aAddrStr, sizeof(aAddrStr), false);
+		//dbg_msg("ID","%d",m_UserID);
+		//if(m_UserStatusID >= 0)
+		//{
+			try
+			{
+				str_format(aBuf, sizeof(aBuf), 
+					"SELECT * FROM tw_UserStatus WHERE Nick = '%s' ORDER BY ID DESC LIMIT 1;"
+					,m_sNick.ClrStr());
+				pSqlServer->executeSqlQuery(aBuf);
+				//dbg_msg("test","1 %s",aBuf);
+				if(pSqlServer->GetResults()->next())
+				{
+					m_UserStatusID = (int)pSqlServer->GetResults()->getInt("ID");
+					str_format(aBuf, sizeof(aBuf), 
+						"UPDATE tw_UserStatus SET online = '0' WHERE ID = '%d';"
+						,m_UserStatusID);
+					pSqlServer->executeSql(aBuf);
+					//dbg_msg("test","2 %s", aBuf);
+				}
+				/*else
+				{
+					str_format(aBuf, sizeof(aBuf),
+					"INSERT INTO tw_UserStatus (IP, Nick, online) VALUES ('%s', '%s', '0');",
+				 	aAddrStr, m_sNick.ClrStr());
+				 	//dbg_msg("test","3 %s",aBuf);
+					pSqlServer->executeSql(aBuf);
+				}*/
+				dbg_msg("user","玩家 %s 被设置为下线了", m_sNick.ClrStr());
+				return true;
+			}
+			catch (sql::SQLException &e)
+			{
+				dbg_msg("sql", "在检查登录状态时发生了错误 (MySQL 错误: %s)", e.what());
+
+				return false;
+			}
+		//}
+		return true;
+	}
+	
+};
+
+inline void CServer::SetOffline(int ClientID, const char* pNick)
+{
+	CSqlJob* pJob = new CSqlJob_Server_SetOffline(this, ClientID, pNick);
+	pJob->Start();
+}

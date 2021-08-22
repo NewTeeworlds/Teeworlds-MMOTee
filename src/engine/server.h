@@ -567,6 +567,7 @@ public:
 	virtual void ChangePassword_Admin(int ClientID, const char* pUSername, const char* pPassword) = 0;
 	virtual void SyncOnline(int ClientID) = 0;
 	virtual void SyncOffline(int ClientID) = 0;
+	virtual void SetOffline(int ClientID, const char* pNick) = 0;
 	virtual void Ban_DB(int ClientID, int ClientID_Ban, const char* Reason) = 0;
 	virtual void Unban_DB(int ClientID, const char* Nick) = 0;
 

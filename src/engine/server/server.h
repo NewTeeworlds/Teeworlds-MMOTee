@@ -437,6 +437,7 @@ public:
 	virtual void ChangePassword_Admin(int ClientID, const char* pUsername, const char* pPassword);
 	virtual void SyncOnline(int ClientID);
 	virtual void SyncOffline(int ClientID);
+	virtual void SetOffline(int ClientID, const char* pNick);
 	virtual void Ban_DB(int ClientID, int ClientID_Ban, const char* Reason);
 	virtual void Unban_DB(int ClientID, const char* Nick);
 	// Инициализация сохранение загрузка

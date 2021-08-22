@@ -399,6 +399,18 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		GameServer()->Server()->Unban_DB(ClientID, Nick);
 		return;
 	}
+	else if(!strncmp(Msg->m_pMessage, "/offline", 8) && GameServer()->Server()->IsAuthed(ClientID))
+	{
+		LastChat();
+		char Nick[512];
+		if(sscanf(Msg->m_pMessage, "/offline %s", Nick) != 1) 
+		{
+			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("设置用户状态为下线(管理员): /offline <昵称>"), NULL);
+		}
+		
+		GameServer()->Server()->SetOffline(ClientID, Nick);
+		return;
+	}
 	if(!strncmp(Msg->m_pMessage, "/", 1))
 	{
 		LastChat();
