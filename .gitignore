@@ -22,3 +22,4 @@ build/**
 /infclass_srv*
 /infclass_editor*
 /autoexec.cfg*
+.idea/**
