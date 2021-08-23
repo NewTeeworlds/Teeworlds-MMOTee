@@ -1093,7 +1093,7 @@ void CGameContext::OnTick()
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "制作者名单:", NULL);
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "原作者:Kurosio", NULL);
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "制作者/管理：天上的星星", NULL);
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "汉化：MC_TYH、Ninecloud2077及MMOTEE全体国服玩家", NULL);
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "汉化：MC_TYH、Ninecloud及MMOTEE全体国服玩家", NULL);
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "地图制作：天际",NULL);
 	}
 
@@ -1348,7 +1348,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					SendChatTarget(ClientID, "禁止使用游戏漏洞!");
 					SendChatTarget(ClientID, "禁止使用辅助性软件!");
 					SendChatTarget(ClientID, "禁止使用分身!");
-					SendChatTarget(ClientID, "禁止同时在两个服务器登录账号!");
+					SendChatTarget(ClientID, "禁止同时在多个服务器登录账号!");
 					SendChatTarget(ClientID, "禁止分享账号!");
 					SendChatTarget(ClientID, "禁止侮辱玩家!");
 					SendChatTarget(ClientID, "禁止进行线下交易!");
@@ -2901,11 +2901,19 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		} break;
 		case CUSTOMSKIN: 
 		{
-			if(Server()->GetItemCount(ClientID, SKELETSSBONE) < 30 * Count || Server()->GetItemCount(ClientID, ZOMIBEBIGEYE) < 30 * Count)
-				return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "骷髅强化骨x30, 僵尸大眼睛x30", NULL);
+			if(Server()->GetItemCount(ClientID, EVENTCUSTOMSOUL) < 25 * Count)
+				return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "灵魂碎片x25", NULL);
 
-			Server()->RemItem(ClientID, SKELETSSBONE, 30 * Count, -1);
-			Server()->RemItem(ClientID, ZOMIBEBIGEYE, 30 * Count, -1);
+			Server()->RemItem(ClientID, EVENTCUSTOMSOUL, 25 * Count, -1);
+		} break;
+		case CUSTOMCOLOR: 
+		{
+			if(Server()->GetItemCount(ClientID,CUSTOMSKIN) < 1)
+				return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, "你首先需要自定义皮肤!")
+			if(Server()->GetItemCount(ClientID, EVENTCUSTOMSOUL) < 30 * Count)
+				return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "灵魂碎片x30", NULL);
+
+			Server()->RemItem(ClientID, EVENTCUSTOMSOUL, 30 * Count, -1);
 		} break;
 		case ENDEXPLOSION: 
 		{
@@ -2993,7 +3001,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 				return;
 			}
 			Server()->RemItem(ClientID, WOOD, 50 * Count, -1);
-			Server()->RemItem(ClientID, DIAMONDORE, 100 * Count, -1);
+			Server()->RemItem(ClientID, DRAGONORE, 100 * Count, -1);
 		} break;
 		case DRAGONAXE: 
 		{
@@ -3389,9 +3397,11 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			AddVote_Localization(ClientID, "null", "使你在升级时获得20个钱袋");
 			CreateNewShop(ClientID, RINGNOSELFDMG, 3, 1, 1000);
 			AddVote_Localization(ClientID, "null", "不会受到自己的伤害（比如爆炸）");
+			/*
 			CreateNewShop(ClientID, CUSTOMCOLOR, 3, 100, 20000);
 			AddVote_Localization(ClientID, "null", "让你使用自己的皮肤颜色!");
 			AddVote("", "null", ClientID);
+			*/
 		}
 
 		if(m_apPlayers[ClientID]->GetWork())
@@ -3403,6 +3413,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			CreateSellWorkItem(ClientID, GOLDORE, 2);
 			CreateSellWorkItem(ClientID, DIAMONDORE, 3);
 			CreateSellWorkItem(ClientID, DRAGONORE, 10);
+			CreateSellWorkItem(ClientID, STANNUM, 50);
 		}
 		return;
 	}
@@ -3952,6 +3963,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		//AddVote_Localization(ClientID, "null", "1 欧元 - 100 点券(donate coin)");
 		AddVote_Localization(ClientID, "null", "向管理员 天上的星星 捐赠(打钱)");// 这边以后肯定要改 :)
 		if(!g_Config.m_SvDonate) AddVote_Localization(ClientID, "null", "服务器目前资金足够,暂时不需要充值");
+		/*
 		AddVote("", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "$ 你充了 {int:don}", "don", &m_apPlayers[ClientID]->AccData.Donate);
 		AddVote_Localization(ClientID, "bvip", "☞ VIP 包 [1000]");
@@ -3964,6 +3976,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote("", "null", ClientID);
 		AddBack(ClientID);
 		return;
+		*/
 	}
 	
 
@@ -3997,7 +4010,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			|| Server()->GetItemType(ClientID, SelectItem) == 17)
 		{
 			AddVote("", "null", ClientID);	
-			AddVote_Localization(ClientID, "enchantitem", "▹ 附魔该物品 (需要 1000 个材料[material])");	
+			AddVote_Localization(ClientID, "enchantitem", "▹ 附魔该物品 (需要 1000 个材料)");	
 			AddVote("", "null", ClientID);	
 		}
 		AddVote_Localization(ClientID, "destitem", "▹ 摧毁物品 ㄟ( ▔, ▔ )ㄏ ");
@@ -4189,7 +4202,7 @@ void CGameContext::CreateSellWorkItem(int ClientID, int ItemID, int Price)
 {
 	Server()->SetItemPrice(ClientID, ItemID, 1, Price*2);
 	int Count = Server()->GetItemCount(ClientID, ItemID);
-	AddVoteMenu_Localization(ClientID, ItemID, SELLITEMWORK, "出售 {str:name}:{int:count} [每一个获得{int:price}黄金]", "name", Server()->GetItemName(ClientID, ItemID), "count", &Count, "price", &Price);
+	AddVoteMenu_Localization(ClientID, ItemID, SELLITEMWORK, "出售 {str:name}:{int:count} [每个获得{int:price}黄金]", "name", Server()->GetItemName(ClientID, ItemID), "count", &Count, "price", &Price);
 	return;
 }
 
