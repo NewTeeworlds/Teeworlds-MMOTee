@@ -3388,6 +3388,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			CreateNewShop(ClientID, MOONO2, 3, 100, 5);
 			CreateNewShop(ClientID, BOOKEXPMIN, 2, 1, 100);
 			CreateNewShop(ClientID, CLANTICKET, 2, 15, 2500);
+			CreateNewShop(ClientID, GOLDTICKET, 2, 1, 1);
 
 			// #################### РЕДКИЕ
 			
@@ -3402,6 +3403,9 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			AddVote_Localization(ClientID, "null", "让你使用自己的皮肤颜色!");
 			AddVote("", "null", ClientID);
 			*/
+			AddVote("············", "null", ClientID);
+			CreateSellWorkItem(ClientID, GOLDTICKET, 1);
+
 		}
 
 		if(m_apPlayers[ClientID]->GetWork())
