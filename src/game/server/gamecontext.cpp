@@ -2909,7 +2909,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		case CUSTOMCOLOR: 
 		{
 			if(Server()->GetItemCount(ClientID,CUSTOMSKIN) < 1)
-				return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, "你首先需要自定义皮肤!")
+				return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, "你首先需要自定义皮肤!");
 			if(Server()->GetItemCount(ClientID, EVENTCUSTOMSOUL) < 30 * Count)
 				return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "灵魂碎片x30", NULL);
 
