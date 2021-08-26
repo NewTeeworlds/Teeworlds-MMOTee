@@ -1,5 +1,5 @@
 FROM ubuntu:latest
-#RUN sed -i 's/\(deb\|security\).debian.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list
+RUN sed -i 's/\(archive\|security\).ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list
 #RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
 #RUN sed -i 's|security.debian.org/debian-security|mirrors.ustc.edu.cn/debian-security|g' /etc/apt/sources.list
 RUN apt update -y && apt install vim curl mariadb-client libmysqlcppconn-dev libicu-dev gcc g++ pkg-config libssl-dev python build-essential -y
