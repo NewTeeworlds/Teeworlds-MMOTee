@@ -5290,21 +5290,18 @@ public:
 					pSqlServer->executeSql(aBuf);
 					//dbg_msg("test","2 %s", aBuf);
 				}
-				/*else
-				{
-					str_format(aBuf, sizeof(aBuf),
-					"INSERT INTO tw_UserStatus (IP, Nick, online) VALUES ('%s', '%s', '0');",
-				 	aAddrStr, m_sNick.ClrStr());
-				 	//dbg_msg("test","3 %s",aBuf);
-					pSqlServer->executeSql(aBuf);
-				}*/
 				dbg_msg("user","玩家 %s 被设置为下线了", m_sNick.ClrStr());
+				char aText[600];
+				str_format(aText, sizeof(aText), "成功将玩家 %s 设置为下线.", m_sNick.ClrStr());
+				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, aText);
+				m_pServer->AddGameServerCmd(pCmd);
 				return true;
 			}
 			catch (sql::SQLException &e)
 			{
 				dbg_msg("sql", "在检查登录状态时发生了错误 (MySQL 错误: %s)", e.what());
-
+				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("操作失败."));
+				m_pServer->AddGameServerCmd(pCmd);
 				return false;
 			}
 		//}
