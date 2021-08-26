@@ -41,10 +41,14 @@ jobs:
     - name: Make a Server Pack
       run: cd ${{github.workspace}} && cp build/Mmotee-Server . && tar Jcf server.tar.xz Mmotee-Server data docs maps other server_lang template-cn.sql Readme.md autoexec.cfg.example
 
-    - name: Upload Artifact
+    - name: Upload Server Binary
       uses: actions/upload-artifact@v2
       with:
         name: Server Binary
         path: build/Mmotee-Server
+
+    - name: Upload Server Pack
+      uses: actions/upload-artifact@v2
+      with:
         name: Server Pack
         path: server.tar.xz
