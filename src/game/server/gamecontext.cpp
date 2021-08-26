@@ -3835,8 +3835,10 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			found = true;
 			AddVote_Localization(ClientID, "null", "在线奖励(Back to School):");
 			AddVote_Localization(ClientID, "null", "每10分钟你会得到一次在线奖励");
+			/*
 			AddVote_Localization(ClientID, "null", "如果你收集了 25个灵魂碎片");
 			AddVote_Localization(ClientID, "null", "你将会在下次在线奖励中得到自定义皮肤道具");
+			*/
 		}
 		if(!found)
 			AddVote_Localization(ClientID, "null", "肥肠豹潜! 现在没有活动的事件.");// az ——翻译员
@@ -4265,7 +4267,7 @@ void CGameContext::StartArea(int WaitTime, int Type)
 	switch(m_AreaType)
 	{
 		case 1: NameGame = "激光瞬杀"; Gets = 50; break;
-		case 2: NameGame = "FNG"; Gets = 5; break;
+		case 2: NameGame = "激光献祭"; Gets = 5; break;
 	}
 	SendChatTarget(-1, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 小游戏 {str:name} 开启了."), "name", NameGame, NULL);
@@ -4279,7 +4281,7 @@ void CGameContext::EnterArea(int ClientID)
 		return;
 		
 	if(m_apPlayers[ClientID]->m_JailTick || m_apPlayers[ClientID]->m_Search)
-		return 	SendBroadcast_Localization(ClientID, 250, 150, _("你被通缉了. 不能进入area room."));
+		return 	SendBroadcast_Localization(ClientID, 250, 150, _("你被通缉了. 不能进入小游戏."));
 		
 	if(!m_AreaStartTick)
 		return 	SendBroadcast_Localization(ClientID, 250, 150, _("小游戏未开启.请等待开启."));
