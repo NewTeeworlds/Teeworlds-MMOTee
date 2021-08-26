@@ -75,7 +75,7 @@ bool CSqlServer::Connect()
 
 		sql::ConnectOptionsMap connection_properties;
 		connection_properties["hostName"]      = sql::SQLString(m_aIp);
-		connection_properties["port"]          = sql::SQLString(m_Port);
+		connection_properties["port"]          = m_Port;
 		connection_properties["userName"]      = sql::SQLString(m_aUser);
 		connection_properties["password"]      = sql::SQLString(m_aPass);
 		connection_properties["OPT_CONNECT_TIMEOUT"] = 10;
