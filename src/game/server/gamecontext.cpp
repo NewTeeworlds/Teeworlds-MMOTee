@@ -1710,6 +1710,17 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					if(m_apPlayers[ClientID]->AccUpgrade.Upgrade < Get)				
 						Get = m_apPlayers[ClientID]->AccUpgrade.Upgrade;
 					
+					int GetSize = 0;
+					switch(m_apPlayers[ClientID]->GetClass())
+					{
+						case PLAYERCLASS_ASSASINS: GetSize = AMAXHEALTH-m_apPlayers[ClientID]->AccUpgrade.Health; break;
+						case PLAYERCLASS_BERSERK: GetSize = BMAXHEALTH-m_apPlayers[ClientID]->AccUpgrade.Health; break;
+						case PLAYERCLASS_HEALER: GetSize = HMAXHEALTH-m_apPlayers[ClientID]->AccUpgrade.Health; break;
+					}
+					
+					if(Get > GetSize)
+						Get = GetSize;
+
 					if(Get < 1 || Get > 1000)
 						Get = 1;
 					
@@ -1719,8 +1730,8 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					if((m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_BERSERK && m_apPlayers[ClientID]->AccUpgrade.Health >= BMAXHEALTH) ||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER && m_apPlayers[ClientID]->AccUpgrade.Health >= HMAXHEALTH) ||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_ASSASINS && m_apPlayers[ClientID]->AccUpgrade.Health >= AMAXHEALTH))
-						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你已经升到满级了"), NULL);	
-					
+						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("技能已满级"), NULL);	
+				
 					m_apPlayers[ClientID]->AccUpgrade.Health += Get;
 					m_apPlayers[ClientID]->AccUpgrade.Upgrade -= Get;
 					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你的技能成功提升 {int:lv} 级"), "lv", &Get, NULL);							
@@ -3968,8 +3979,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote_Localization(ClientID, "null", "充钱与特权");
 		//AddVote_Localization(ClientID, "null", "1 欧元 - 100 点券(donate coin)");
 		AddVote_Localization(ClientID, "null", "向管理员 天上的星星 捐赠(打钱)");// 这边以后肯定要改 :)
-		if(!g_Config.m_SvDonate) AddVote_Localization(ClientID, "null", "服务器目前资金足够,暂时不需要充值");
-		/*
+		
 		AddVote("", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "$ 你充了 {int:don}", "don", &m_apPlayers[ClientID]->AccData.Donate);
 		AddVote_Localization(ClientID, "bvip", "☞ VIP 包 [1000]");
@@ -3982,7 +3992,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote("", "null", ClientID);
 		AddBack(ClientID);
 		return;
-		*/
+		
 	}
 	
 
