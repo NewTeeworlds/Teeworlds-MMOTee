@@ -374,6 +374,7 @@ void CPlayer::Tick()
 					GameServer()->SendMail(m_ClientID, 9, Type, 1);
 					GameServer()->SendChatTarget_Localization(m_ClientID, CHATCATEGORY_DEFAULT, _("在线奖励:{str:name} 获得了 {str:item}."), "name", Server()->ClientName(m_ClientID), "item", Server()->GetItemName(m_ClientID, Type), NULL);					
 
+					/* 
 					if(Server()->GetItemCount(m_ClientID, EVENTCUSTOMSOUL) >= 25)
 					{
 						Server()->RemItem(m_ClientID, EVENTCUSTOMSOUL, 25, -1);
@@ -381,6 +382,7 @@ void CPlayer::Tick()
 						GameServer()->SendMail(m_ClientID, 11, CUSTOMSKIN, 1);
 						GameServer()->SendChatTarget_Localization(m_ClientID, CHATCATEGORY_DEFAULT, _("在线奖励:你收集了 25 个灵魂碎片并且得到了自定义皮肤的机会."), NULL);					
 					}
+					*/
 				}
 			}
 			BasicAuthedTick();

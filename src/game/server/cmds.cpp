@@ -20,7 +20,6 @@
 /lang (语言ID) 设置语言 (留空显示可用语言列表)
 4.管理员指令
 /sd <声音ID> 设置声音(?)
-/trah <玩家ID> 与某玩家做爱(雾)
 /giveitem <玩家ID> <物品ID> <物品数量> (物品等级) 给某人物品 
 /remitem <玩家ID> <物品ID> <物品数量> 拿走某人物品 
 /sendmail <玩家ID> <物品ID> <物品数量> 通过邮件向某人发送物品
@@ -303,7 +302,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		int id = 0, JailLength = 0;
 		if ((sscanf(Msg->m_pMessage, "/jail %d %d", &id, &JailLength)) != 2)
 		{
-			return GameServer()->SendChatTarget(ClientID, "Use: /jail <id> <JailLength>");
+			return GameServer()->SendChatTarget(ClientID, "使用: /jail <玩家id> <入狱时长>");
 		}
 		/*m_pPlayer->AccData.IsJailed = true;
 		m_pPlayer->AccData.Jail = true;
@@ -320,7 +319,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		int id = 0;
 		if ((sscanf(Msg->m_pMessage, "/unjail %d", &id)) != 1)
 		{
-			return GameServer()->SendChatTarget(ClientID, "Use: /unjail <id>");
+			return GameServer()->SendChatTarget(ClientID, "使用: /unjail <玩家id>");
 		}
 		/*m_pPlayer->AccData.IsJailed = false;
 		m_pPlayer->AccData.Jail = false;
