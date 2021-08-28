@@ -96,7 +96,7 @@ void CPlayer::RandomBoxTick()
 		int getitem = 0;
 		if(m_OpenBox % 30 == 0)
 		{
-			int RandGet = rand()%100;			
+			int RandGet = rand()%100;
 			if(RandGet >= 0 && RandGet <= 95)
 			{
 				int RandItem = rand()%2;

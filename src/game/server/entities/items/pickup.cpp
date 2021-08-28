@@ -256,7 +256,7 @@ void CPickup::StartFarm(int ClientID)
 			}
 			GameServer()->GiveItem(ClientID, MINEREXP, 1);
 			
-			if(rand()%100==1)
+			if(rand()%500==1)
 				GameServer()->GiveItem(ClientID, STANNUM, 1);
 
 			

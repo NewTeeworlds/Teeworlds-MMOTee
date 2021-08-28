@@ -1709,7 +1709,8 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 						
 					if(m_apPlayers[ClientID]->AccUpgrade.Upgrade < Get)				
 						Get = m_apPlayers[ClientID]->AccUpgrade.Upgrade;
-					
+					// 血量的问题不修复
+					/*
 					int GetSize = 0;
 					switch(m_apPlayers[ClientID]->GetClass())
 					{
@@ -1720,7 +1721,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					
 					if(Get > GetSize)
 						Get = GetSize;
-
+					*/
 					if(Get < 1 || Get > 1000)
 						Get = 1;
 					
@@ -2922,9 +2923,9 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 			if(Server()->GetItemCount(ClientID,CUSTOMSKIN) < 1)
 				return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, "你首先需要自定义皮肤!");
 			if(Server()->GetItemCount(ClientID, EVENTCUSTOMSOUL) < 30 * Count)
-				return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "灵魂碎片x30", NULL);
+				return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "灵魂碎片x50", NULL);
 
-			Server()->RemItem(ClientID, EVENTCUSTOMSOUL, 30 * Count, -1);
+			Server()->RemItem(ClientID, EVENTCUSTOMSOUL, 50 * Count, -1);
 		} break;
 		case ENDEXPLOSION: 
 		{
@@ -3012,7 +3013,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 				return;
 			}
 			Server()->RemItem(ClientID, WOOD, 50 * Count, -1);
-			Server()->RemItem(ClientID, DRAGONORE, 100 * Count, -1);
+			Server()->RemItem(ClientID, DIAMONDORE, 100 * Count, -1);
 		} break;
 		case DRAGONAXE: 
 		{
@@ -3428,7 +3429,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			CreateSellWorkItem(ClientID, GOLDORE, 2);
 			CreateSellWorkItem(ClientID, DIAMONDORE, 3);
 			CreateSellWorkItem(ClientID, DRAGONORE, 10);
-			CreateSellWorkItem(ClientID, STANNUM, 50);
+			CreateSellWorkItem(ClientID, STANNUM, 20);
 		}
 		return;
 	}
@@ -3979,7 +3980,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote_Localization(ClientID, "null", "充钱与特权");
 		//AddVote_Localization(ClientID, "null", "1 欧元 - 100 点券(donate coin)");
 		AddVote_Localization(ClientID, "null", "向管理员 天上的星星 捐赠(打钱)");// 这边以后肯定要改 :)
-		
+		if(!g_Config.m_SvDonate) AddVote_Localization(ClientID, "null", "服务器目前资金足够,暂时不需要充值");
 		AddVote("", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "$ 你充了 {int:don}", "don", &m_apPlayers[ClientID]->AccData.Donate);
 		AddVote_Localization(ClientID, "bvip", "☞ VIP 包 [1000]");
@@ -4152,7 +4153,8 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 				AddNewCraftVote(ClientID, "戒指蓝图x1, Slime的尸体x1", RARERINGSLIME);	
 				AddNewCraftVote(ClientID, "戒指蓝图x1, Boomer的尸体x100", RINGBOOMER);	
 				AddNewCraftVote(ClientID, "耳环蓝图x1, Kwah的脚x100", EARRINGSKWAH);	
-				AddNewCraftVote(ClientID, "僵尸大眼睛x30,骷髅强化骨x30", CUSTOMSKIN);	
+				AddNewCraftVote(ClientID, "灵魂碎片x25", CUSTOMSKIN);
+				AddNewCraftVote(ClientID, "灵魂碎片x50",CUSTOMCOLOR);
 				AddNewCraftVote(ClientID, "土豆x60,番茄x60,萝卜x60", JUMPIMPULS);		
 			}
 			else if(m_apPlayers[ClientID]->m_SortedSelectCraft == 3)
@@ -4281,7 +4283,7 @@ void CGameContext::StartArea(int WaitTime, int Type)
 	}
 	SendChatTarget(-1, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 小游戏 {str:name} 开启了."), "name", NameGame, NULL);
-	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 回报: 钱袋, 神器 {int:gets}%"), "gets", &Gets, NULL);
+	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 奖励: 钱袋, 神器 {int:gets}%"), "gets", &Gets, NULL);
 	SendChatTarget(-1, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 }
 
