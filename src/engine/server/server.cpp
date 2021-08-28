@@ -4975,10 +4975,38 @@ public:
 		//dbg_msg("test","6");
 		try
 		{
-			//检查数据库中的名称或昵称
+			//检查数据库中的 IP
 			str_format(aBuf, sizeof(aBuf), 
 				"SELECT * FROM tw_UserStatus WHERE IP = '%s' ORDER BY ID DESC LIMIT 1;"
 				,aAddrStr);
+			pSqlServer->executeSqlQuery(aBuf);
+			//dbg_msg("test","7 %s", aBuf);
+			if(pSqlServer->GetResults()->next())
+			{
+				int IsOnline;
+				int IsBanned;
+				char banreason[512];
+				IsOnline = (int)pSqlServer->GetResults()->getInt("online");
+				IsBanned = (int)pSqlServer->GetResults()->getInt("ban");
+				str_copy(banreason, pSqlServer->GetResults()->getString("banreason").c_str(), sizeof(banreason));
+				//dbg_msg("test","8 %d %d %s", IsOnline, IsBanned, banreason);
+				if(IsOnline)
+				{
+					m_pServer->Kick(m_ClientID, "禁止重复登录");
+					return true;
+				}
+				else if(IsBanned)
+				{
+					char buf[512];
+					str_format(buf, sizeof(buf), "你被封禁了,原因: %s", banreason);
+					m_pServer->Kick(m_ClientID, buf);
+					return true;
+				}
+			}
+			//检查数据库中的名称或昵称
+			str_format(aBuf, sizeof(aBuf), 
+				"SELECT * FROM tw_UserStatus WHERE Nick = '%s' ORDER BY ID DESC LIMIT 1;"
+				,m_sNick.ClrStr());
 			pSqlServer->executeSqlQuery(aBuf);
 			//dbg_msg("test","7 %s", aBuf);
 			if(pSqlServer->GetResults()->next())

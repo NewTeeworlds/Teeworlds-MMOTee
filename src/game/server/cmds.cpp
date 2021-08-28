@@ -74,7 +74,14 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		}
 		return;
 	}
-	
+	/*else if(!strncmp(Msg->m_pMessage, "/health", 7))
+	{	
+		if(GameServer()->Server()->Tick() % (1 * GameServer()->Server()->TickSpeed() * 2) == 0)
+		{
+			GameServer()->SendBroadcast_LStat(ClientID, 106, 50, -1);
+		}
+		return;
+	}*/
 	else if(!strncmp(Msg->m_pMessage, "/giveitem", 9) && GameServer()->Server()->IsAuthed(ClientID))
 	{
 		LastChat();
@@ -238,7 +245,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "? ---- 命令列表");
 		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/invite <玩家昵称>, /createboss, /cmdlist, /lang <语言>");
 		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/login (用户名) <密码>, /register <用户名> <密码>");
-		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/newclan <公会名称> /password <密码> <重复密码>");
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/newclan <公会名称>, /password <密码> <重复密码>");
 		return;
 	}
 

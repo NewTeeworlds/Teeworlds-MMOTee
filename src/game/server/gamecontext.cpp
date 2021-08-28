@@ -635,12 +635,9 @@ void CGameContext::SendBroadcast_LStat(int To, int Priority, int LifeSpan, int T
 		default: Buffer.clear();
 	}
 		
-	if(Server()->Tick() % (1 * Server()->TickSpeed() * 2) == 0)
-	{
 	SendBroadcast_Localization(To, Priority, LifeSpan, " \n\n等级: {int:lvl} | 经验: {int:exp}/{int:expl}\n----------------------\n{str:sdata} {int:getl}%\n{str:dataang} 怒气\n----------------------\n{str:mana} 魔能\n生命值: {int:hp}/{int:hpstart}\n\n\n\n\n\n\n\n\n\n\n\n{str:buff}{str:emp}", 
 		"lvl", &m_apPlayers[To]->AccData.Level, "exp", &m_apPlayers[To]->AccData.Exp, "expl", &Optmem, "sdata", Level, "getl", &getl, "dataang", Angry, "mana", Mana, "hp", &m_apPlayers[To]->m_Health, "hpstart", &m_apPlayers[To]->m_HealthStart, "buff", Buffer.buffer(),
 		"emp", "                                                                                                                                                                    ");
-	}
 	delete Level;
 	delete Angry;
 	delete Mana;
@@ -3190,7 +3187,8 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		} break;
 	}
 	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 合成了物品 {str:item}x{int:coun}"), "name", Server()->ClientName(ClientID), "item", Server()->GetItemName(ClientID, ItemID, false), "coun", &Count ,NULL);				
-	SendMail(ClientID, 7, ItemID, Count);
+	//SendMail(ClientID, 7, ItemID, Count);
+	GiveItem(ClientID, ItemID, Count,0);
 }
 
 void CGameContext::BuySkill(int ClientID, int Price, int ItemID)
