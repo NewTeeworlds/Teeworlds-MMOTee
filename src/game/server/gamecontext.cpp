@@ -1385,7 +1385,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 				// КЛАН ФУНКЦИИ
 				else if(str_comp(aCmd, "houseopen") == 0)
 				{
-					if(!Server()->GetLeader(ClientID, Server()->GetClanID(ClientID)) || Server()->GetAdmin(ClientID, Server()->GetClanID(ClientID)))
+					if(!Server()->GetLeader(ClientID, Server()->GetClanID(ClientID)) && !Server()->GetAdmin(ClientID, Server()->GetClanID(ClientID)))
 					{
 						SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# 你不是该公会的会长或者管理员"), NULL);
 						return;
@@ -1405,8 +1405,8 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					{	
 						if(str_comp_nocase(m_apPlayers[ClientID]->m_SelectPlayer, Server()->ClientName(ClientID)) == 0)
 							return;
-						if(str_comp_nocase(m_apPlayers[ClientID]->m_SelectPlayer, Server()->LeaderName(Server()->GetClanID(ClientID))) 
-							|| str_comp_nocase(m_apPlayers[ClientID]->m_SelectPlayer, Server()->AdminName(Server()->GetClanID(ClientID))))
+						if(str_comp_nocase(m_apPlayers[ClientID]->m_SelectPlayer, Server()->LeaderName(Server()->GetClanID(ClientID))) == 0 
+							|| str_comp_nocase(m_apPlayers[ClientID]->m_SelectPlayer, Server()->AdminName(Server()->GetClanID(ClientID))) == 0)
 						{
 							SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# 你不能把该公会的会长或者管理员踢出公会"), NULL);
 							return;
