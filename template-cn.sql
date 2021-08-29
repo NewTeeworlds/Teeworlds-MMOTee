@@ -354,7 +354,7 @@ INSERT INTO `tw_uItemList` VALUES
 (127,5,'锡矿','- 用于合成'),
 (128,2,'自定义颜色','让你使用自己的皮肤颜色'),
 (129,4,'卷心菜','- 获得35经验'),
-(130,2,'金券','- 更方便地交易黄金!');
+(130,4,'金券','- 更方便地交易黄金!');
 /*!40000 ALTER TABLE `tw_uItemList` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -511,7 +511,8 @@ INSERT INTO `tw_uItemList_en` VALUES
 (126,5,'Fine Iron','- Item for crafting'),
 (127,5,'Stannum Ore','- Item for crafting'),
 (128,2,'Custom Color','Use customized tee color'),
-(129,4,'Cabbage','- You got 35 exp');
+(129,4,'Cabbage','- You got 35 exp'),
+(130,4,'Gold Ticket','- Item for exchanging Gold');
 /*!40000 ALTER TABLE `tw_uItemList_en` ENABLE KEYS */;
 UNLOCK TABLES;
 

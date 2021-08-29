@@ -1183,21 +1183,14 @@ void CCharacter::Tick()
 		
 		if(IndexShit == ZONE_WHITEROOM) 
 		{
-			int IsInRoom=0;
 			if(!Server()->GetItemCount(m_pPlayer->GetCID(), WHITETICKET))
 			{
 				Die(m_pPlayer->GetCID(), WEAPON_WORLD);
-				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), 200, ("你没有进入白房间的门票，请前往商店购买门票 (White Ticket)!"), NULL);
-			}else{
-				if(IsInRoom)
-				{
-					IsInRoom=0;
-				}
-				else{
+				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), 200, ("你没有进入白房间的门票，请前往商店购买门票!"), NULL);
+			}
+			else
+			{
 					GameServer()->SendBroadcast_Localization(m_pPlayer->GetCID(), 200, 100, _("欢迎来到白房间."), NULL);
-					IsInRoom=1;
-				}
-
 			}
 		}
 		
@@ -1597,7 +1590,7 @@ void CCharacter::Die(int Killer, int Weapon)
 		if(m_pPlayer->GetBotType() == BOT_BOSSSLIME && !GameServer()->m_WinWaitBoss)
 		{
 			int CountWin = GameServer()->GetBossCount();
-			GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("首领 {str:bossn} 被{int:cwin}个玩家击败."), "bossn", "Slime", "cwin", &CountWin, NULL);			
+			GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("Boss {str:bossn} 被{int:cwin}个玩家击败."), "bossn", "Slime", "cwin", &CountWin, NULL);			
 			
 			GameServer()->m_WinWaitBoss = 1000;
 		}
@@ -1606,7 +1599,7 @@ void CCharacter::Die(int Killer, int Weapon)
 		if(m_pPlayer->m_InBossed)
 		{	
 			m_pPlayer->m_InBossed = false;
-			GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("你被首领{str:name}击败."), "name", GameServer()->GetBossName(GameServer()->m_BossType), NULL);
+			GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("你被 Boss {str:name}击败."), "name", GameServer()->GetBossName(GameServer()->m_BossType), NULL);
 		}
 	}
 
@@ -1618,7 +1611,7 @@ void CCharacter::Die(int Killer, int Weapon)
 		if(m_pPlayer->m_InArea)
 		{	
 			m_pPlayer->m_InArea = false;
-			GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("你被击败."), NULL);
+			GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("你被击败了."), NULL);
 		}	
 	}
 
@@ -2070,7 +2063,7 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 						
 						if(!g_Config.m_SvCityStart)
 						{
-							CreateDropRandom(MONEYBAG, 100+rand()%5+1, false, i, Force/(50+randforce));
+							CreateDropRandom(MONEYBAG, 100+rand()%200+1, false, i, Force/(50+randforce));
 							CreateDropRandom(RARESLIMEDIRT, 1, 90, i, Force/(45+randforce));
 							CreateDropRandom(FORMULAFORRING, 1, 90, i, Force/(40+randforce));
 							CreateDropRandom(FORMULAEARRINGS, 1, 90, i, Force/(35+randforce));
@@ -2079,7 +2072,7 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 						}
 						else if(g_Config.m_SvCityStart == 1)
 						{
-							CreateDropRandom(MONEYBAG, 300+rand()%20+1, false, i, Force/(50+randforce));
+							CreateDropRandom(MONEYBAG, 300+rand()%200+1, false, i, Force/(50+randforce));
 							CreateDropRandom(BOOKEXPMIN, 1, 15, i, Force/(45+randforce));
 							CreateDropRandom(BOOKMONEYMIN, 1, 80, i, Force/(45+randforce));
 							CreateDropRandom(CLANBOXEXP, 1, 50, i, Force/(45+randforce));

@@ -15,7 +15,7 @@
 #include <iostream>
 #include "gamemodes/mod.h"  
 #include <game/server/entities/loltext.h>
-#define BOSSID 62
+#define BOSSID 39
 const int MAX_COUNT = 1e9;
 
 enum
@@ -2444,7 +2444,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					str_format(aBuf, sizeof(aBuf), "cra%d", i);
 					if(str_comp(aCmd, aBuf) == 0)
 					{
-						CreateItem(ClientID, i, chartoint(pReason, 100));
+						CreateItem(ClientID, i, chartoint(pReason, 100000000));
 						return;	
 					}	
 				}	
@@ -2519,7 +2519,12 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 			CPlayer *pPlayer = m_apPlayers[ClientID];
 			if(g_Config.m_SvCityStart == 1 && pPlayer->AccData.Level < 250)
 			{ 
-        SendBroadcast_Localization(ClientID, BROADCAST_PRIORITY_GAMEANNOUNCE, BROADCAST_DURATION_GAMEANNOUNCE, _("你需要 250 级"), NULL);
+       			SendBroadcast_Localization(ClientID, BROADCAST_PRIORITY_GAMEANNOUNCE, BROADCAST_DURATION_GAMEANNOUNCE, _("你需要 250 级"), NULL);
+				return;
+			}
+			if(pPlayer->AccData.Level <= 0 || pPlayer->AccData.Class == -1 || pPlayer->AccData.ClanAdded == -1 || pPlayer->AccData.Kill == -1)
+			{
+				SendBroadcast_Localization(ClientID, BROADCAST_PRIORITY_GAMEANNOUNCE, BROADCAST_DURATION_GAMEANNOUNCE, _("读取数据时发生错误,请退出游戏,重新进入."), NULL);
 				return;
 			}
 
@@ -2616,7 +2621,7 @@ void CGameContext::BuyItem(int ItemType, int ClientID, int Type)
 		return;
 	
 	m_apPlayers[ClientID]->m_LastChangeInfo = Server()->Tick();
-	if(Server()->GetItemCount(ClientID, ItemType) && ItemType != CLANTICKET && ItemType != BOOKEXPMIN)
+	if(Server()->GetItemCount(ClientID, ItemType) && ItemType != CLANTICKET && ItemType != BOOKEXPMIN && ItemType != GOLDTICKET && ItemType != MONEYBAG)
 		return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你已购买."), NULL);	
 	
 	if(m_apPlayers[ClientID]->AccData.Level < Server()->GetItemPrice(ClientID, ItemType, 0))
@@ -2647,7 +2652,7 @@ void CGameContext::BuyItem(int ItemType, int ClientID, int Type)
 	if(ItemType == IGRENADE) m_apPlayers[ClientID]->GetCharacter()->GiveWeapon(WEAPON_GRENADE, 5);
 	if(ItemType == ILASER) m_apPlayers[ClientID]->GetCharacter()->GiveWeapon(WEAPON_RIFLE, 5);
 	
-	dbg_msg("buy/shop", "%s buy item %s:%d", Server()->ClientName(ClientID), Server()->GetItemName(ClientID, ItemType, false), ItemType);
+	dbg_msg("buy/shop", "%s 购买了 %s:%d", Server()->ClientName(ClientID), Server()->GetItemName(ClientID, ItemType, false), ItemType);
 	m_apPlayers[ClientID]->m_LoginSync = 10;
 	UpdateStats(ClientID);
 	return;	
@@ -2834,7 +2839,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		case RARERINGSLIME:
 		{
 			if(Server()->GetItemCount(ClientID, RARESLIMEDIRT) < Count || Server()->GetItemCount(ClientID, FORMULAFORRING) < Count)
-				return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "戒指蓝图, Slime Dirt", NULL);
+				return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "戒指蓝图, Slime 的尸体", NULL);
 
 			Server()->RemItem(ClientID, RARESLIMEDIRT, Count, -1);
 			Server()->RemItem(ClientID, FORMULAFORRING, Count, -1);	
@@ -2918,8 +2923,8 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		case CUSTOMCOLOR: 
 		{
 			if(Server()->GetItemCount(ClientID,CUSTOMSKIN) < 1)
-				return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, "你首先需要自定义皮肤!");
-			if(Server()->GetItemCount(ClientID, EVENTCUSTOMSOUL) < 30 * Count)
+				return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, "你首先需要自定义皮肤(灵魂)!");
+			if(Server()->GetItemCount(ClientID, EVENTCUSTOMSOUL) < 50 * Count)
 				return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "灵魂碎片x50", NULL);
 
 			Server()->RemItem(ClientID, EVENTCUSTOMSOUL, 50 * Count, -1);
@@ -2958,7 +2963,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 			{
 				GiveItem(ClientID, TITLESUMMER, 1);
 			}
-			m_apPlayers[ClientID]->AccData.SummerHealingTimes = 0;
+			Server()->UpdateStat(ClientID, DSUMMERHEALINGTIMES, 0);
 		} break;
 		case JUMPIMPULS: 
 		{
@@ -3205,6 +3210,16 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 			Server()->RemItem(ClientID, COOPERORE, 100, -1);
 			Server()->RemItem(ClientID, IRONORE, 10, -1);
 		} break;
+		case GOLDTICKET: 
+		{
+			if(m_apPlayers[ClientID]->AccData.Gold < 100 * Count)
+			{
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "100 黄金", NULL);
+				return;
+			}
+			m_apPlayers[ClientID]->AccData.Gold -= 100 * Count;
+			UpdateStats(ClientID);
+		} break;
 	}
 	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 合成了物品 {str:item}x{int:coun}"), "name", Server()->ClientName(ClientID), "item", Server()->GetItemName(ClientID, ItemID, false), "coun", &Count ,NULL);				
 	//SendMail(ClientID, 7, ItemID, Count);
@@ -3308,7 +3323,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote_Localization(ClientID, "null", "ღ 黄金: {int:gold} 白银: {int:Money}", "gold", &m_apPlayers[ClientID]->AccData.Gold ,"Money", &m_apPlayers[ClientID]->AccData.Money);
 		AddVote("······················· ", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "# {str:psevdo}", "psevdo", LocalizeText(ClientID, "子菜单--信息"));
-		AddVote_Localization(ClientID, "info", "☞ {str:dis}", "dis", g_Config.m_Discord);
+		AddVote_Localization(ClientID, "info", "☞ {str:chat}", "chat", "QQ群: 736636701");
 		AddVote_Localization(ClientID, "rrul", "☞ 注意事项");
 		AddVoteMenu_Localization(ClientID, RESLIST, MENUONLY, "☞ 通缉犯");
 		AddVoteMenu_Localization(ClientID, EVENTLIST, MENUONLY, "☞ 事件与奖金");
@@ -3398,7 +3413,6 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			CreateNewShop(ClientID, MOONO2, 3, 100, 5);
 			CreateNewShop(ClientID, BOOKEXPMIN, 2, 1, 100);
 			CreateNewShop(ClientID, CLANTICKET, 2, 15, 2500);
-			CreateNewShop(ClientID, GOLDTICKET, 2, 1, 1);
 
 			// #################### РЕДКИЕ
 			
@@ -3413,9 +3427,6 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			AddVote_Localization(ClientID, "null", "让你使用自己的皮肤颜色!");
 			AddVote("", "null", ClientID);
 			*/
-			AddVote("············", "null", ClientID);
-			CreateSellWorkItem(ClientID, GOLDTICKET, 1);
-
 		}
 
 		if(m_apPlayers[ClientID]->GetWork())
@@ -3844,7 +3855,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		{
 			found = true;
 			AddVote_Localization(ClientID, "null", "在线奖励(Back to School):");
-			AddVote_Localization(ClientID, "null", "每10分钟你会得到一次在线奖励");
+			AddVote_Localization(ClientID, "null", "每30分钟你会得到一次在线奖励");
 			/*
 			AddVote_Localization(ClientID, "null", "如果你收集了 25个灵魂碎片");
 			AddVote_Localization(ClientID, "null", "你将会在下次在线奖励中得到自定义皮肤道具");
@@ -4131,6 +4142,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		{
 			if(m_apPlayers[ClientID]->m_SortedSelectCraft == 1)
 			{
+				AddNewCraftVote(ClientID, "与黄金1:100兑换", GOLDTICKET);
 				AddNewCraftVote(ClientID, "骷髅骨头x30", SKELETSSBONE);	
 				AddNewCraftVote(ClientID, "僵尸眼x30", ZOMIBEBIGEYE);	
 				AddNewCraftVote(ClientID, "铁矿x100, 铜矿x100", FORMULAEARRINGS);	
@@ -4874,69 +4886,62 @@ void CGameContext::UseItem(int ClientID, int ItemID, int Count, int Type)
 			return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("用法: /newclan <公会名> - 创建一个新的公会"), NULL);
 
 		int PackOne = 0;
-		for(int i = 0; i < Count; ++i)
+		if(ItemID == MONEYBAG)
 		{
-			if(ItemID == MONEYBAG)
+			for(int i = 0;i < Count;i++)
 			{
 				PackOne += rand()%20000+5;
 				if(i == Count-1)
 				{
 					int GetGold = PackOne/10000;
 					int GetSilv = PackOne - GetGold*10000;
-
 					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:used} x{int:num} ,获得了 {int:pvar} 黄金与 {int:pvars} 白银"), 
 						"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvar", &GetGold, "pvars", &GetSilv , NULL);	
-				
 					pPlayer->MoneyAdd(PackOne);
 				}
 			}
-			else if(ItemID == TOMATE)
+		}
+		else if(ItemID == GOLDTICKET)
+		{
+			PackOne = 100 * Count;
+			SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:used} x{int:num} ,获得了 {int:pvars} 黄金"), 
+				"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvars", &PackOne , NULL);
+			pPlayer->AccData.Gold += PackOne;
+			UpdateStats(ClientID);
+		}
+		else if(ItemID == TOMATE)
+		{
+			PackOne = 15 * Count;
+			SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:used} x{int:num} ,获得了 {int:pvars} 经验"), 
+				"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvars", &PackOne , NULL);
+			pPlayer->ExpAdd(PackOne, false);
+		}
+		else if(ItemID == POTATO)
+		{
+			PackOne = 25 * Count;
+			SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:used} x{int:num} ,获得了 {int:pvars} 经验"), 
+				"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvars", &PackOne , NULL);
+			pPlayer->ExpAdd(PackOne, false);
+		}
+		else if(ItemID == CARROT)
+		{
+			PackOne = 10 * Count;
+			SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:used} x{int:num} ,获得了 {int:pvars} 经验"), 
+				"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvars", &PackOne , NULL);
+				pPlayer->ExpAdd(PackOne, false);
+		}
+		else if(ItemID == CABBAGE)
+		{
+			PackOne = 35 * Count;
+			SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:used} x{int:num} ,获得了 {int:pvars} 经验"), 
+				"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvars", &PackOne , NULL);
+			pPlayer->ExpAdd(PackOne, false);
+		}
+		else if(ItemID == CLANBOXEXP)
+		{
+			if(!Server()->GetClanID(ClientID)) 
+			for(int i = 0;i < Count;i++)
 			{
-				PackOne += 15;
-				if(i == Count-1)
-				{
-					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:used} x{int:num} ,获得了 {int:pvars} 经验"), 
-						"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvars", &PackOne , NULL);	
-				
-					pPlayer->ExpAdd(PackOne, false);
-				}
-			}
-			else if(ItemID == POTATO)
-			{
-				PackOne += 25;
-				if(i == Count-1)
-				{
-					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:used} x{int:num} ,获得了 {int:pvars} 经验"), 
-						"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvars", &PackOne , NULL);	
-				
-					pPlayer->ExpAdd(PackOne, false);
-				}
-			}
-			else if(ItemID == CARROT)
-			{
-				PackOne += 10;
-				if(i == Count-1)
-				{
-					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:used} x{int:num} ,获得了 {int:pvars} 经验"), 
-						"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvars", &PackOne , NULL);	
-				
-					pPlayer->ExpAdd(PackOne, false);
-				}
-			}
-			else if(ItemID == CABBAGE)
-			{
-				PackOne += 35;
-				if(i == Count-1)
-				{
-					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:used} x{int:num} ,获得了 {int:pvars} 经验"), 
-						"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvars", &PackOne , NULL);	
-				
-					pPlayer->ExpAdd(PackOne, false);
-				}
-			}
-			else if(ItemID == CLANBOXEXP)
-			{
-				if(!Server()->GetClanID(ClientID)) break;
 				PackOne += rand()%20000+5;
 				if(i == Count-1)
 				{
@@ -4944,66 +4949,53 @@ void CGameContext::UseItem(int ClientID, int ItemID, int Count, int Type)
 					Server()->InitClanID(Server()->GetClanID(ClientID), PLUS, "Exp", PackOne, true);
 				}
 			}
-			else if(ItemID == CLANTICKET)
-			{		
-				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("用法: /newclan <公会名> - 创建一个新的公会"), NULL);	
-				break;
-			}
-			else if(ItemID == RESETINGSKILL)
-			{		
-				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:items}x{int:num}"), "name", Server()->ClientName(ClientID), "items", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, NULL);
-				m_apPlayers[ClientID]->ResetSkill(ClientID);
-			}
-			else if(ItemID ==  RESETINGUPGRADE)
-			{		
-				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:items}x{int:num}"), "name", Server()->ClientName(ClientID), "items", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, NULL);
-				m_apPlayers[ClientID]->ResetUpgrade(ClientID);
-			}
-			else if(ItemID ==  BOOKEXPMIN)
-			{		
-				if(i == Count-1)
-					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你使用了物品:{str:items}x{int:num}"), "items", Server()->GetItemName(ClientID, ItemID), "num", &Count, NULL);
-			
-				m_apPlayers[ClientID]->m_ExperienceAdd += 600*Server()->TickSpeed();
-			}
-			else if(ItemID ==  BOOKMONEYMIN)
-			{		
-				if(i == Count-1)
-					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你使用了物品:{str:items}x{int:num}"), "items", Server()->GetItemName(ClientID, ItemID), "num", &Count, NULL);
-				
-				m_apPlayers[ClientID]->m_MoneyAdd += 600*Server()->TickSpeed();
-			}
-			else if(ItemID ==  SKILLUPBOX)
-			{		
-				m_apPlayers[ClientID]->AccUpgrade.Upgrade += 20;
-				m_apPlayers[ClientID]->AccUpgrade.SkillPoint += 10;
-				if(i == Count-1)
-					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你使用了物品:{str:items}x{int:num}"), "items", Server()->GetItemName(ClientID, ItemID), "num", &Count, NULL);
-
-				UpdateUpgrades(ClientID);
-			}
-			else if(ItemID == VIPPACKAGE)
-			{		
-				Count = 1;
-				SendMail(ClientID, 6, SKILLUPBOX, 1);
-				SendMail(ClientID, 6, SANTIPVP, 1);
-				SendMail(ClientID, 6, X2MONEYEXPVIP, 1);
-				SendMail(ClientID, 6, SPECSNAPDRAW, 1);
-				SendMail(ClientID, 6, MONEYBAG, 10000);
-				UpdateStats(ClientID);
-				break;
-			}
-			else if(ItemID == RANDOMCRAFTITEM || ItemID == EVENTBOX || ItemID == FARMBOX)
-			{
-				m_apPlayers[ClientID]->m_OpenBox = 210;
-				m_apPlayers[ClientID]->m_OpenBoxType = ItemID;
-				m_apPlayers[ClientID]->m_OpenBoxAmount = Count;
-				break;
-			}
-			else 
-				break;
 		}
-		dbg_msg("used", "%s use item %s:%d (count: %d)", Server()->ClientName(ClientID), Server()->GetItemName(ClientID, ItemID, false), ItemID, Count);
+		else if(ItemID == RESETINGSKILL)
+		{	
+			Count = 1;	
+			SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:items}x{int:num}"), "name", Server()->ClientName(ClientID), "items", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, NULL);
+			m_apPlayers[ClientID]->ResetSkill(ClientID);
+		}
+		else if(ItemID ==  RESETINGUPGRADE)
+		{		
+			Count = 1;
+			SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 使用了物品:{str:items}x{int:num}"), "name", Server()->ClientName(ClientID), "items", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, NULL);
+			m_apPlayers[ClientID]->ResetUpgrade(ClientID);
+		}
+		else if(ItemID ==  BOOKEXPMIN)
+		{		
+			SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你使用了物品:{str:items}x{int:num}"), "items", Server()->GetItemName(ClientID, ItemID), "num", &Count, NULL);
+			m_apPlayers[ClientID]->m_ExperienceAdd += Count*600*Server()->TickSpeed();
+		}
+		else if(ItemID ==  BOOKMONEYMIN)
+		{		
+			SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你使用了物品:{str:items}x{int:num}"), "items", Server()->GetItemName(ClientID, ItemID), "num", &Count, NULL);
+			m_apPlayers[ClientID]->m_MoneyAdd += Count*600*Server()->TickSpeed();
+		}
+		else if(ItemID ==  SKILLUPBOX)
+		{		
+			m_apPlayers[ClientID]->AccUpgrade.Upgrade += 20 * Count;
+			m_apPlayers[ClientID]->AccUpgrade.SkillPoint += 10 * Count;
+			SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你使用了物品:{str:items}x{int:num}"), "items", Server()->GetItemName(ClientID, ItemID), "num", &Count, NULL);
+			UpdateUpgrades(ClientID);
+		}
+		else if(ItemID == VIPPACKAGE)
+		{		
+			Count = 1;
+			SendMail(ClientID, 6, SKILLUPBOX, 1);
+			SendMail(ClientID, 6, SANTIPVP, 1);
+			SendMail(ClientID, 6, X2MONEYEXPVIP, 1);
+			SendMail(ClientID, 6, SPECSNAPDRAW, 1);
+			SendMail(ClientID, 6, MONEYBAG, 10000);
+			UpdateStats(ClientID);
+		}
+		else if(ItemID == RANDOMCRAFTITEM || ItemID == EVENTBOX || ItemID == FARMBOX)
+		{
+			m_apPlayers[ClientID]->m_OpenBox = 210;
+			m_apPlayers[ClientID]->m_OpenBoxType = ItemID;
+			m_apPlayers[ClientID]->m_OpenBoxAmount = Count;
+		}
+		dbg_msg("used", "%s 使用了 %s:%d (数量: %d)", Server()->ClientName(ClientID), Server()->GetItemName(ClientID, ItemID, false), ItemID, Count);
 		return;
 	}
 	if(Type == USEDSELL)
@@ -5095,7 +5087,7 @@ void CGameContext::StartBoss(int ClientID, int WaitTime, int BossType)
 	m_apPlayers[ClientID]->GetCharacter()->Die(ClientID, WEAPON_WORLD);
 
 	SendChatTarget(-1, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 创建了需求，在Boss房(boss room) {str:names}"), "name", Server()->ClientName(ClientID), "names", GetBossName(m_BossType), NULL);
+	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 创建了Boss战, Boss 是 {str:names}"), "name", Server()->ClientName(ClientID), "names", GetBossName(m_BossType), NULL);
 	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("欲加入的玩家, 你需要进入Boss房(boss room)"), "name", Server()->ClientName(ClientID), "names", GetBossName(m_BossType), NULL);
 	SendChatTarget(-1, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 }

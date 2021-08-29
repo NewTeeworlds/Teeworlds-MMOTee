@@ -787,7 +787,7 @@ int CServer::DelClientCallback(int ClientID, const char *pReason, void *pUser)
 	pThis->m_aClients[ClientID].m_UserID = -1;
 	pThis->m_aClients[ClientID].m_ClanID = -1;
 	pThis->m_aClients[ClientID].m_Level = -1;
-	pThis->m_aClients[ClientID].m_Jail = -1;
+	pThis->m_aClients[ClientID].m_Jail = false;
 	pThis->m_aClients[ClientID].m_Rel = -1;
 	pThis->m_aClients[ClientID].m_Exp = -1;
 	pThis->m_aClients[ClientID].m_Donate = -1;
@@ -796,9 +796,9 @@ int CServer::DelClientCallback(int ClientID, const char *pReason, void *pUser)
 	pThis->m_aClients[ClientID].m_Kill = -1;
 	pThis->m_aClients[ClientID].m_WinArea = -1;
 	pThis->m_aClients[ClientID].m_ClanAdded = -1;
-	pThis->m_aClients[ClientID].m_IsJailed = -1;
+	pThis->m_aClients[ClientID].m_IsJailed = false;
 	pThis->m_aClients[ClientID].m_JailLength = 0;
-	pThis->m_aClients[ClientID].m_SummerHealingTimes = -1;
+	pThis->m_aClients[ClientID].m_SummerHealingTimes = 0;
 	pThis->m_aClients[ClientID].Health = 0;
 	pThis->m_aClients[ClientID].Speed = 0;
 	pThis->m_aClients[ClientID].Damage = 0;
@@ -4065,12 +4065,20 @@ public:
 				m_pServer->m_aClients[m_ClientID].m_ClanAdded = m_pServer->m_aClients[m_ClientID].m_ClanID > 0 ? (int)pSqlServer->GetResults()->getInt("ClanAdded") : 0;
 	
 				str_copy(m_pServer->m_aClients[m_ClientID].m_aUsername, pSqlServer->GetResults()->getString("Nick").c_str(), sizeof(m_pServer->m_aClients[m_ClientID].m_aUsername));
-				dbg_msg("infclass", "DT init %d ID acc", m_pServer->m_aClients[m_ClientID].m_UserID);	
+				dbg_msg("user", "玩家ID %d 的数据初始化成功", m_pServer->m_aClients[m_ClientID].m_UserID);	
 			}
+			else
+			{
+				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("登录时出现错误,请退出游戏,重新进入."));
+				m_pServer->AddGameServerCmd(pCmd);
+				dbg_msg("sql", "玩家 %s 数据初始化失败", m_pServer->m_aClients[m_ClientID].m_aName);
+			
+			return false;
+			}			
 		}
 		catch (sql::SQLException &e)
 		{
-			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("Error initilized clan say administrator."));
+			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("登录时出现错误."));
 			m_pServer->AddGameServerCmd(pCmd);
 			dbg_msg("sql", "用户数据初始化失败 (MySQL 错误: %s)", e.what());
 			
@@ -4123,16 +4131,16 @@ public:
 				m_pServer->m_aClients[m_ClientID].Mana = (int)pSqlServer->GetResults()->getInt("Mana");
 				m_pServer->m_aClients[m_ClientID].m_HammerRange = (int)pSqlServer->GetResults()->getInt("HammerRange");
 				m_pServer->m_aClients[m_ClientID].m_Pasive2 = (int)pSqlServer->GetResults()->getInt("Pasive2");
-				if(m_pServer->m_aClients[m_ClientID].m_Level <= 0)
+				if(m_pServer->m_aClients[m_ClientID].m_Level <= 0 || m_pServer->m_aClients[m_ClientID].m_Class == -1 ) 
 				{
-					CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, "登录时发生错误.");
+					CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, "登录时发生数据读取错误,请重新进入游戏.");
 					m_pServer->AddGameServerCmd(pCmd);
 					return false;
 				}
 				else
 				{
-					CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("你已登录.欢迎."));
-					m_pServer->AddGameServerCmd(pCmd);	
+					//CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("你已登录.欢迎."));
+					//m_pServer->AddGameServerCmd(pCmd);	
 
 					CServer::CGameServerCmd* pCmd1 = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("登录成功.按下esc界面中的“开始游戏”进入."));
 					m_pServer->AddGameServerCmd(pCmd1);	

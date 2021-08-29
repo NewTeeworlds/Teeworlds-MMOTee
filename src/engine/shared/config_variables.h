@@ -46,7 +46,7 @@ MACRO_CONFIG_INT(SvSkinStealAction, sv_skinstealaction, 0, 0, 1, CFGFLAG_SERVER,
 	MACRO_CONFIG_INT(DbgDummies, dbg_dummies, 0, 0, 15, CFGFLAG_SERVER, "")
 #endif
 /*结束*/
-MACRO_CONFIG_STR(Discord, discord, 128, "Discord: discord.gg/KqHEZPJ", CFGFLAG_SERVER, "Discord")
+//MACRO_CONFIG_STR(Discord, discord, 128, "Discord: discord.gg/KqHEZPJ", CFGFLAG_SERVER, "Discord")
 MACRO_CONFIG_STR(Password, password, 32, "", CFGFLAG_SERVER, "Password to the server")
 MACRO_CONFIG_STR(Logfile, logfile, 128, "", CFGFLAG_SERVER, "Filename to log all output to")
 MACRO_CONFIG_INT(ConsoleOutputLevel, console_output_level, 0, 0, 2, CFGFLAG_SERVER, "Adjusts the amount of information in the console")

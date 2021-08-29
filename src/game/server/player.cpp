@@ -356,7 +356,7 @@ void CPlayer::Tick()
 		{		
 			if(g_Config.m_SvEventSchool)
 			{
-				if(Server()->Tick() % (1 * Server()->TickSpeed() * 600) == 0)
+				if(Server()->Tick() % (1 * Server()->TickSpeed() * 1800) == 0)
 				{
 					int Type;
 					switch(rand()%9)
@@ -978,9 +978,9 @@ void CPlayer::TryRespawn()
 			m_BigBot = true;
 
 			AccUpgrade.Health = (int)(AccData.Level/3);
-			AccUpgrade.Damage = 10;
+			AccUpgrade.Damage = 100;
 			if(g_Config.m_SvCityStart == 1)
-				AccUpgrade.Damage = 180;
+				AccUpgrade.Damage = 400;
 		}
 		else if(m_BotType == BOT_NPC)
 		{
