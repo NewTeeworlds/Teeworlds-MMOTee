@@ -3597,10 +3597,10 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		Data = Server()->GetItemSettings(ClientID, SANTIPVP) ? "☑" : "☐";
 		AddVote_Localization(ClientID, "ssantipvp", "☞ VIP特权: 禁止PVP {str:stat}", "stat", Data);
 
-		Data = "全部";
-		if(Server()->GetItemSettings(ClientID, SCHAT) == 1) Data = "正常";
+		Data = "正常";
+		if(Server()->GetItemSettings(ClientID, SCHAT) == 1) Data = "过滤";
 		else if(Server()->GetItemSettings(ClientID, SCHAT) == 2) Data = "最少";
-		AddVote_Localization(ClientID, "sssetingschat", "☞ 聊天栏输出 ({str:stat})", "stat", Data);
+		AddVote_Localization(ClientID, "sssetingschat", "☞ 聊天栏提示信息 ({str:stat})", "stat", Data);
 
 		Data = "锤子";
 		if(Server()->GetItemSettings(ClientID, SDROP)) Data = "F3";
