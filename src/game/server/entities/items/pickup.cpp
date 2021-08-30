@@ -271,7 +271,7 @@ void CPickup::StartFarm(int ClientID)
 		int Dropable = 0;
 		int Broke = 0;
 		int Count = 0;
-		m_Drop += 10+rand()%25;
+		
 		const char* ItemName = "啥都没有";
 		if(Server()->GetItemCount(ClientID, DRAGONAXE))
 		{
@@ -285,7 +285,11 @@ void CPickup::StartFarm(int ClientID)
 			}
 			Server()->SetItemSettingsCount(ClientID, DRAGONAXE, Dropable-1);
 			ItemName = Server()->GetItemName(ClientID, DRAGONAXE);
-			m_Drop *=2 ;	
+			m_Drop += 35;	
+		}
+		else
+		{
+			m_Drop += 10+rand()%25;
 		}
 
 		GameServer()->CreateSound(m_Pos, 20); 
