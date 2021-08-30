@@ -5041,8 +5041,8 @@ public:
 			}
 
 			str_format(aBuf, sizeof(aBuf),
-				"INSERT INTO tw_UserStatus (IP, Nick, online) VALUES ('%s', '%s', '1');",
-				 aAddrStr, m_sNick.ClrStr());
+				"INSERT INTO tw_UserStatus (IP, Nick, online, serverid) VALUES ('%s', '%s', '1','%d');",
+				 aAddrStr, m_sNick.ClrStr(), g_Config.m_ServerID);
 			
 			pSqlServer->executeSql(aBuf);
 
