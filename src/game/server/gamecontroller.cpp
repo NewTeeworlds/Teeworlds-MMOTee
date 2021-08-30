@@ -365,7 +365,8 @@ void IGameController::Tick()
 		{
 			if(GameServer()->m_apPlayers[i] && GameServer()->m_apPlayers[i]->GetTeam() == TEAM_SPECTATORS && !Server()->IsAuthed(i))
 			{
-				if(Server()->Tick() > GameServer()->m_apPlayers[i]->m_LastActionTick+g_Config.m_SvSpecKickTime*Server()->TickSpeed()*60
+				//dbg_msg("test","%d",Server()->Tick() - GameServer()->m_apPlayers[i]->m_LastActionTick-g_Config.m_SvSpecKickTime*Server()->TickSpeed()*60);
+				if(Server()->Tick() > g_Config.m_SvSpecKickTime*Server()->TickSpeed()*60
 					&& !GameServer()->m_apPlayers[i]->IsBot())
 				{
 					
