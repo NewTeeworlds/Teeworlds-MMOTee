@@ -439,6 +439,8 @@ public:
 	virtual void SyncOffline(int ClientID);
 	virtual void SetOffline(int ClientID, const char* pNick);
 	virtual void Ban_DB(int ClientID, int ClientID_Ban, const char* Reason);
+	virtual void UpdateOnline(int ClientID);
+	virtual void UpdateOffline();
 	virtual void Unban_DB(int ClientID, const char* Nick);
 	// Инициализация сохранение загрузка
 	virtual void UpdateStats(int ClientID, int Type = 0);

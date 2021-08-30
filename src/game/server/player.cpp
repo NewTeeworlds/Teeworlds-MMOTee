@@ -385,6 +385,10 @@ void CPlayer::Tick()
 					*/
 				}
 			}
+			if(Server()->Tick() % (1 * Server()->TickSpeed() * 120) == 0)
+			{
+				Server()->UpdateOnline(m_ClientID);
+			}
 			BasicAuthedTick();
 			RandomBoxTick();
 		}

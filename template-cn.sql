@@ -564,6 +564,8 @@ CREATE TABLE `tw_UserStatus` (
   `banreason` char(32) DEFAULT '',
   `banlength` int(11) NOT NULL DEFAULT '0',
   `online` tinyint NOT NULL DEFAULT '0',
+  `serverid` tinyint NOT NULL DEFAULT '0',
+  `lastupdate` DATETIME NOT NULL DEFAULT NOW(),
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -574,7 +576,7 @@ CREATE TABLE `tw_UserStatus` (
 
 LOCK TABLES `tw_UserStatus` WRITE;
 /*!40000 ALTER TABLE `tw_UserStatus` DISABLE KEYS */;
-INSERT INTO `tw_UserStatus` VALUES (1,'2021-01-01 09:05:32','127.0.0.1','天上的星星',0,'没有提供原因',0,0);
+INSERT INTO `tw_UserStatus` VALUES (1,'2021-01-01 09:05:32','127.0.0.1','天上的星星',0,'没有提供原因',0,0,0,'2021-01-01 09:05:32');
 /*!40000 ALTER TABLE `tw_UserStatus` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

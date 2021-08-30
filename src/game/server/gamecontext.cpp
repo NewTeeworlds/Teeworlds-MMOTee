@@ -1093,7 +1093,10 @@ void CGameContext::OnTick()
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "汉化：MC_TYH、Ninecloud及MMOTEE全体国服玩家", NULL);
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "地图制作：天际",NULL);
 	}
-
+	if(Server()->Tick() % (1 * Server()->TickSpeed() * 360) == 0)
+	{
+		Server()->UpdateOffline();
+	}
 	AreaTick();
 	BossTick();
 

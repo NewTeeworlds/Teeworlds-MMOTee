@@ -3510,12 +3510,12 @@ public:
 			}
 			
 			dbg_msg("infclass", "############################################");
-			dbg_msg("infclass", "################ LOADS CLAN %d", Num);
+			dbg_msg("infclass", "################ 加载了 %d 个公会", Num);
 			dbg_msg("infclass", "############################################");
 		}
 		catch (sql::SQLException &e)
 		{
-			dbg_msg("infclass", "Fail in initializ clans");
+			dbg_msg("infclass", "Fail in initialize clans");
 			return false;
 		}
 		
@@ -4483,7 +4483,7 @@ public:
 
 			if(pSqlServer->GetResults()->next())
 			{
-				dbg_msg("infclass", "User already taken");
+				dbg_msg("infclass", "用户名/昵称 %s 已被占用",m_sNick.ClrStr());
 				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("这个用户名/昵称已被占用"));
 				m_pServer->AddGameServerCmd(pCmd);
 				return true;
@@ -5349,5 +5349,111 @@ public:
 inline void CServer::SetOffline(int ClientID, const char* pNick)
 {
 	CSqlJob* pJob = new CSqlJob_Server_SetOffline(this, ClientID, pNick);
+	pJob->Start();
+}
+
+class CSqlJob_Server_UpdateOnline : public CSqlJob
+{
+private:
+	CServer* m_pServer;
+	int m_ClientID;
+	int m_UserStatusID;
+	CSqlString<64> m_sNick;
+	
+public:
+	CSqlJob_Server_UpdateOnline(CServer* pServer, int ClientID)
+	{
+		m_pServer = pServer;
+		m_ClientID = ClientID;
+		m_sNick = CSqlString<64>(m_pServer->ClientName(m_ClientID));
+		m_UserStatusID = m_pServer->m_aClients[m_ClientID].m_UserStatusID;
+	}
+
+	virtual bool Job(CSqlServer* pSqlServer)
+	{
+		char aBuf[512];
+		//dbg_msg("ID","%d",m_UserID);
+		if(m_UserStatusID >= 0)
+		{
+			try
+			{
+				str_format(aBuf, sizeof(aBuf), 
+					"SELECT * FROM tw_UserStatus WHERE ID = '%d';"
+					,m_UserStatusID);
+				pSqlServer->executeSqlQuery(aBuf);
+				//dbg_msg("test","1 %s",aBuf);
+				if(pSqlServer->GetResults()->next())
+				{
+					str_format(aBuf, sizeof(aBuf), 
+						"UPDATE tw_UserStatus SET lastupdate = now() WHERE ID = '%d';"
+						,m_UserStatusID);
+					pSqlServer->executeSql(aBuf);
+					//dbg_msg("test","2 %s", aBuf);
+				}
+				dbg_msg("user","玩家 %s 的状态更新了", m_sNick.ClrStr());
+				return true;
+			}
+			catch (sql::SQLException &e)
+			{
+				if(str_length(e.what()) > 0)
+				dbg_msg("sql", "在更新玩家状态时发生了错误 (MySQL 错误: %s)", e.what());
+				return false;
+			}
+		}
+		return true;
+	}
+	
+};
+
+inline void CServer::UpdateOnline(int ClientID)
+{
+	CSqlJob* pJob = new CSqlJob_Server_UpdateOnline(this, ClientID);
+	pJob->Start();
+}
+
+
+class CSqlJob_Server_UpdateOffline : public CSqlJob
+{
+private:
+	CServer* m_pServer;
+	
+public:
+	CSqlJob_Server_UpdateOffline(CServer* pServer)
+	{
+		m_pServer = pServer;
+	}
+
+	virtual bool Job(CSqlServer* pSqlServer)
+	{
+		char aBuf[512];
+		char Nick[64];
+		try
+		{
+			str_copy(aBuf, "SELECT * FROM tw_UserStatus WHERE online = '1' and timestampdiff(second, lastupdate, now()) > 360;", sizeof(aBuf));
+			pSqlServer->executeSqlQuery(aBuf);
+				//dbg_msg("test","1 %s",aBuf);
+			while(pSqlServer->GetResults()->next())
+			{
+				str_copy(Nick, pSqlServer->GetResults()->getString("Nick").c_str(), sizeof(Nick));
+				//dbg_msg("test","2 %s", aBuf);
+				dbg_msg("user","玩家 %s 超时了,被设置为下线", Nick);
+			}
+			str_copy(aBuf, "UPDATE tw_UserStatus SET online = '0' WHERE online = '1' and timestampdiff(second, lastupdate, now()) > 360;", sizeof(aBuf));
+			pSqlServer->executeSqlQuery(aBuf);
+			return true;
+		}
+		catch (sql::SQLException &e)
+		{
+			if(str_length(e.what()) > 0)
+				dbg_msg("sql", "在更新玩家状态时发生了错误 (MySQL 错误: %s)", e.what());
+			return false;
+		}
+	}
+	
+};
+
+inline void CServer::UpdateOffline()
+{
+	CSqlJob* pJob = new CSqlJob_Server_UpdateOffline(this);
 	pJob->Start();
 }
