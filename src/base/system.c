@@ -117,12 +117,10 @@ void dbg_msg(const char *sys, const char *fmt, ...)
 	char str[1024*4];
 	char *msg;
 	int i, len;
-	time_t rawtime;
-	struct tm *date;
-	time(&rawtime);
-	date = localtime(&rawtime);
+	char timestr[80];
+	str_timestamp_format(timestr, sizeof(timestr), FORMAT_SPACE);
 
-	str_format(str, sizeof(str), "[%d-%d %d:%d:%d][%s]: ", date->tm_mon + 1, date->tm_mday, date->tm_hour, date->tm_min, date->tm_sec, sys);
+	str_format(str, sizeof(str), "[%s][%s]: ", timestr, sys);
 	len = strlen(str);
 	msg = (char *)str + len;
 

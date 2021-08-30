@@ -359,6 +359,21 @@ void IGameController::Tick()
 			}
 		}
 	}
+	if(g_Config.m_SvSpecKickTime > 0)
+	{
+		for(int i = 0; i < MAX_CLIENTS; ++i)
+		{
+			if(GameServer()->m_apPlayers[i] && GameServer()->m_apPlayers[i]->GetTeam() == TEAM_SPECTATORS && !Server()->IsAuthed(i))
+			{
+				if(Server()->Tick() > GameServer()->m_apPlayers[i]->m_LastActionTick+g_Config.m_SvSpecKickTime*Server()->TickSpeed()*60
+					&& !GameServer()->m_apPlayers[i]->IsBot())
+				{
+					
+					Server()->Kick(i, "Kicked for inactivity (Spec)");
+				}
+			}
+		}
+	}
 }
 
 bool IGameController::IsTeamplay() const
