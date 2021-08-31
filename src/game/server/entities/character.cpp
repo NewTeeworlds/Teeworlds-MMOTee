@@ -2510,7 +2510,7 @@ void CCharacter::ClassSpawnAttributes()
 		GiveWeapon(WEAPON_RIFLE, geta);
 
 	m_aWeapons[WEAPON_HAMMER].m_Got = true;
-	GiveWeapon(WEAPON_HAMMER, 10000);
+	GiveWeapon(WEAPON_HAMMER, 1145140000);
 	m_ActiveWeapon = WEAPON_HAMMER;
 }
 

@@ -87,7 +87,7 @@ void CDropItem::Tick()
 		else str_format(aBuf, sizeof(aBuf), "%s", Server()->GetItemName(ClientID, m_ItemID));
 
 		GameServer()->SendBroadcast_Localization(ClientID, 200, 10,
-			_("使用 {str:button} 来拾起 \n'{str:name}'x{int:num}\n这个物品是属于 {str:nhow} 的"), "button", Server()->GetItemSettings(ClientID, SDROP) ? "F3" : "Hammer", "name", aBuf, "num", &m_Count, "nhow", m_HowID != -1 ? Server()->ClientName(m_HowID) : "Nope", NULL);
+			_("使用 {str:button} 来拾起 \n'{str:name}'x{int:num}\n这个物品是属于 {str:nhow} 的"), "button", Server()->GetItemSettings(ClientID, SDROP) ? "F3" : "锤子", "name", aBuf, "num", &m_Count, "nhow", m_HowID != -1 ? Server()->ClientName(m_HowID) : "Nope", NULL);
 	}
 
 	vec2 LastPos;

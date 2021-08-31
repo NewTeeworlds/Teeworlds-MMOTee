@@ -5254,7 +5254,7 @@ public:
 			//检查数据库中的 IP
 			str_format(aBuf, sizeof(aBuf), 
 				"SELECT ID FROM tw_UserStatus WHERE Nick = '%s' ORDER BY ID DESC LIMIT 1;"
-				,m_sNick);
+				,m_sNick.ClrStr());
 			pSqlServer->executeSqlQuery(aBuf);
 			dbg_msg("test","1 %s",aBuf);
 			if(pSqlServer->GetResults()->next())
