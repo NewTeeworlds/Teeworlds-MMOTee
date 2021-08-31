@@ -30,6 +30,7 @@ CPlayer::CPlayer(CGameContext *pGameServer, int ClientID, int Team)
 	m_Team = GameServer()->m_pController->ClampTeam(Team);
 	m_SpectatorID = SPEC_FREEVIEW;
 	m_LastActionTick = Server()->Tick();
+	m_SpecTick = Server()->Tick();
 	
 	m_Bot = (ClientID >= g_Config.m_SvMaxClients-MAX_BOTS);
 	m_BotType = m_BotSubType = m_SelectItem = m_SelectArmor = -1;
@@ -796,13 +797,44 @@ void CPlayer::FakeSnap(int SnappingClient)
 	StrToInts(&pClientInfo->m_Skin0, 6, m_TeeInfos.m_SkinName);
 }
 
-void CPlayer::OnDisconnect(const char *pReason)
+void CPlayer::OnDisconnect(int Type, const char *pReason)
 {
 	GameServer()->ClearVotes(m_ClientID);
 	KillCharacter();
 	//Server()->SyncOffline(m_ClientID);
-	if(Server()->ClientIngame(m_ClientID))	
-		GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:PlayerName} 离开了游戏"), "PlayerName", Server()->ClientName(m_ClientID), NULL);
+	//if(Server()->ClientIngame(m_ClientID))	
+	//	GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:PlayerName} 离开了游戏"), "PlayerName", Server()->ClientName(m_ClientID), NULL);
+	
+	if(Server()->ClientIngame(m_ClientID))
+	{
+		if(Type == CLIENTDROPTYPE_BAN)
+		{
+			GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:PlayerName} 被封禁了 ({str:Reason})"),
+				"PlayerName", Server()->ClientName(m_ClientID),
+				"Reason", pReason,
+				NULL);
+		}
+		else if(Type == CLIENTDROPTYPE_KICK)
+		{
+			GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:PlayerName} 被踢出了 ({str:Reason})"),
+				"PlayerName", Server()->ClientName(m_ClientID),
+				"Reason", pReason,
+				NULL);
+		}
+		else if(pReason && *pReason)
+		{
+			GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:PlayerName} 离开了游戏 ({str:Reason})"),
+				"PlayerName", Server()->ClientName(m_ClientID),
+				"Reason", pReason,
+				NULL);
+		}
+		else
+		{
+			GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:PlayerName} 离开了游戏"),
+				"PlayerName", Server()->ClientName(m_ClientID),
+				NULL);
+		}
+	}
 }
 
 void CPlayer::OnPredictedInput(CNetObj_PlayerInput *NewInput)

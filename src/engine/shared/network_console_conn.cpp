@@ -53,7 +53,37 @@ void CConsoleNetConnection::Disconnect(const char *pReason)
 
 int CConsoleNetConnection::Update()
 {
+	if(State() == NET_CONNSTATE_ONLINE)
+	{
+		if((int)(sizeof(m_aBuffer)) <= m_BufferOffset)
+		{
+			m_State = NET_CONNSTATE_ERROR;
+			str_copy(m_aErrorString, "too weak connection (out of buffer)", sizeof(m_aErrorString));
+			return -1;
+		}
 
+		int Bytes = net_tcp_recv(m_Socket, m_aBuffer+m_BufferOffset, (int)(sizeof(m_aBuffer))-m_BufferOffset);
+
+		if(Bytes > 0)
+		{
+			m_BufferOffset += Bytes;
+		}
+		else if(Bytes < 0)
+		{
+			if(net_would_block()) // no data received
+				return 0;
+
+			m_State = NET_CONNSTATE_ERROR; // error
+			str_copy(m_aErrorString, "connection failure", sizeof(m_aErrorString));
+			return -1;
+		}
+		else
+		{
+			m_State = NET_CONNSTATE_ERROR;
+			str_copy(m_aErrorString, "remote end closed the connection", sizeof(m_aErrorString));
+			return -1;
+		}
+	}
 
 	return 0;
 }

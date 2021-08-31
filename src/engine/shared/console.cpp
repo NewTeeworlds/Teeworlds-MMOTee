@@ -228,6 +228,15 @@ void CConsole::SetPrintOutputLevel(int Index, int OutputLevel)
 void CConsole::Print(int Level, const char *pFrom, const char *pStr)
 {
 	dbg_msg(pFrom ,"%s", pStr);
+	for(int i = 0; i < m_NumPrintCB; ++i)
+	{
+		if(Level <= m_aPrintCB[i].m_OutputLevel && m_aPrintCB[i].m_pfnPrintCallback)
+		{
+			char aBuf[1024];
+			str_format(aBuf, sizeof(aBuf), "[%s]: %s", pFrom, pStr);
+			m_aPrintCB[i].m_pfnPrintCallback(aBuf, m_aPrintCB[i].m_pPrintCallbackUserdata);
+		}
+	}
 }
 
 bool CConsole::LineIsValid(const char *pStr)
@@ -363,11 +372,6 @@ void CConsole::ExecuteLineStroked(int Stroke, const char *pStr, int ClientID, bo
 							Print(OUTPUT_LEVEL_STANDARD, "Console", "Invalid arguments.");
 							Print(OUTPUT_LEVEL_STANDARD, "Console", aBuf);
 						}
-						else
-						{
-							pCommand->m_pfnCallback(&Result, pCommand->m_pUserData);
-						}
-						return;
 					}
 				}
 			}
@@ -509,7 +513,7 @@ bool CConsole::ConModCommandAccess(IResult *pResult, void *pUser)
 		str_format(aBuf, sizeof(aBuf), "No such command: '%s'.", pResult->GetString(0));
 
 	pConsole->Print(OUTPUT_LEVEL_STANDARD, "Console", aBuf);
-	
+
 	return true;
 }
 
@@ -688,7 +692,158 @@ bool CConsole::ConToggleStroke(IConsole::IResult *pResult, void *pUser)
 
 	if(aBuf[0] != 0)
 		pConsole->Print(OUTPUT_LEVEL_STANDARD, "Console", aBuf);
+
+	return true;
+}
+
+bool CConsole::ConAdjustVariable(IConsole::IResult *pResult, void *pUserData)
+{
+	CConsole *pConsole = (CConsole*)pUserData;
+
+	if(pResult->NumArguments() != 2)
+	{
+		pConsole->Print(OUTPUT_LEVEL_STANDARD, "Console", "Invalid usage. Use: increase <variable> <amount>");
+		return false;
+	}
+
+	const char *pVariableName = pResult->GetString(0);
+	int Val = pResult->GetInteger(1);
+
+	CCommand *pCommand = pConsole->FindCommand(pVariableName, pConsole->m_FlagMask);
+	if(!pCommand || (pCommand->m_Flags & CFGFLAG_ECON))
+	{
+		// Ignore the command for ECON variables
+		pConsole->Print(OUTPUT_LEVEL_STANDARD, "Console", "The variable does not exist");
+		return false;
+	}
+
+	FCommandCallback pfnCallback = pCommand->m_pfnCallback;
+	void *pCommandUserData = pCommand->m_pUserData;
+
+	// check for chain
+	if(pCommand->m_pfnCallback == Con_Chain)
+	{
+		CChain *pChainInfo = static_cast<CChain *>(pCommand->m_pUserData);
+		pfnCallback = pChainInfo->m_pfnCallback;
+		pCommandUserData = pChainInfo->m_pCallbackUserData;
+	}
+
+	char aBuf[256];
+	aBuf[0] = 0;
+	if(pfnCallback == IntVariableCommand)
+	{
+		CIntVariableData *pData = static_cast<CIntVariableData *>(pCommandUserData);
+
+		Val = *(pData->m_pVariable) + Val;
+		// do clamping
+		if(pData->m_Min != pData->m_Max)
+		{
+			if (Val < pData->m_Min)
+				Val = pData->m_Min;
+			if (pData->m_Max != 0 && Val > pData->m_Max)
+				Val = pData->m_Max;
+		}
+
+		*(pData->m_pVariable) = Val;
+		str_format(aBuf, sizeof(aBuf), "%s %d", pCommand->m_pName, *pData->m_pVariable);
+	}
+	else
+	{
+		str_format(aBuf, sizeof(aBuf), "'%s' is not an integer variable", pCommand->m_pName);
+	}
+
+	if(aBuf[0])
+		pConsole->Print(OUTPUT_LEVEL_STANDARD, "Console", aBuf);
+
+	return aBuf[0];
+}
+
+bool CConsole::ConModCommandGet(IConsole::IResult *pArguments, void *pUserData)
+{
+	CConsole *pConsole = (CConsole*)pUserData;
+
+	const char *pVariableName = pArguments->GetString(0);
+
+	CCommand *pCommand = pConsole->FindCommand(pVariableName, pConsole->m_FlagMask);
+	if(!pCommand || (pCommand->m_Flags & CFGFLAG_ECON))
+	{
+		// Ignore the 'get' command for ECON variables
+		return false;
+	}
+
+	FCommandCallback pfnCallback = pCommand->m_pfnCallback;
+	void *pCommandUserData = pCommand->m_pUserData;
+
+	// check for chain
+	if(pCommand->m_pfnCallback == Con_Chain)
+	{
+		CChain *pChainInfo = static_cast<CChain *>(pCommand->m_pUserData);
+		pfnCallback = pChainInfo->m_pfnCallback;
+		pCommandUserData = pChainInfo->m_pCallbackUserData;
+	}
+
+	char aBuf[1024];
+	aBuf[0] = 0;
+	if(pfnCallback == IntVariableCommand)
+	{
+		CIntVariableData *pData = static_cast<CIntVariableData *>(pCommandUserData);
+		str_format(aBuf, sizeof(aBuf), "%s %d", pCommand->m_pName, *pData->m_pVariable);
+	}
+	if(pfnCallback == StrVariableCommand)
+	{
+		CStrVariableData *pData = static_cast<CStrVariableData *>(pCommandUserData);
+		str_format(aBuf, sizeof(aBuf), "%s \"%s\"", pCommand->m_pName, pData->m_pStr);
+	}
+
+	if(aBuf[0])
+		pConsole->Print(OUTPUT_LEVEL_STANDARD, "Console", aBuf);
+
+	return aBuf[0];
+}
+
+bool CConsole::ConModCommandDumpVariables(IConsole::IResult *pArguments, void *pUserData)
+{
+	CConsole *pConsole = (CConsole*)pUserData;
+
+	// Allocate the buffer once outside of the loop
+	char aBuf[1024];
+	CCommand *pNextCommand = pConsole->m_pFirstCommand;
+	while(pNextCommand)
+	{
+		const CCommand *pCommand = pNextCommand;
+		pNextCommand = pNextCommand->m_pNext;
+
+		// Do not show ECON variables in the dump
+		if(pCommand->m_Flags & CFGFLAG_ECON)
+			continue;
+
+		FCommandCallback pfnCallback = pCommand->m_pfnCallback;
+		void *pCommandUserData = pCommand->m_pUserData;
 	
+		// check for chain
+		if(pCommand->m_pfnCallback == Con_Chain)
+		{
+			CChain *pChainInfo = static_cast<CChain *>(pCommand->m_pUserData);
+			pfnCallback = pChainInfo->m_pfnCallback;
+			pCommandUserData = pChainInfo->m_pCallbackUserData;
+		}
+
+		aBuf[0] = 0;
+		if(pfnCallback == IntVariableCommand)
+		{
+			CIntVariableData *pData = static_cast<CIntVariableData *>(pCommandUserData);
+			str_format(aBuf, sizeof(aBuf), "%s %d", pCommand->m_pName, *pData->m_pVariable);
+		}
+		if(pfnCallback == StrVariableCommand)
+		{
+			CStrVariableData *pData = static_cast<CStrVariableData *>(pCommandUserData);
+			str_format(aBuf, sizeof(aBuf), "%s \"%s\"", pCommand->m_pName, pData->m_pStr);
+		}
+
+		if(aBuf[0])
+			pConsole->Print(OUTPUT_LEVEL_STANDARD, "Console", aBuf);
+	}
+
 	return true;
 }
 
@@ -718,6 +873,9 @@ CConsole::CConsole(int FlagMask)
 
 	Register("mod_command", "s?i", CFGFLAG_SERVER, ConModCommandAccess, this, "Specify command accessibility for moderators");
 	Register("mod_status", "", CFGFLAG_SERVER, ConModCommandStatus, this, "List all commands which are accessible for moderators");
+	Register("adjust", "si", CFGFLAG_SERVER, ConAdjustVariable, this, "Adjust the variable value (add the given delta)");
+	Register("get", "s", CFGFLAG_SERVER, ConModCommandGet, this, "Get the value of a config variable");
+	Register("dump_variables", "", CFGFLAG_SERVER|CFGFLAG_CLIENT, ConModCommandDumpVariables, this, "Dump all config variables");
 
 	// TODO: this should disappear
 	#define MACRO_CONFIG_INT(Name,ScriptName,Def,Min,Max,Flags,Desc) \
@@ -736,6 +894,19 @@ CConsole::CConsole(int FlagMask)
 
 	#undef MACRO_CONFIG_INT
 	#undef MACRO_CONFIG_STR
+}
+
+CConsole::~CConsole()
+{
+	CCommand *pCommand = m_pFirstCommand;
+	while(pCommand)
+	{
+		CCommand *pNext = pCommand->m_pNext;
+		if(pCommand->m_pfnCallback == Con_Chain)
+			delete static_cast<CChain *>(pCommand->m_pUserData);
+		delete pCommand;
+		pCommand = pNext;
+	}
 }
 
 void CConsole::ParseArguments(int NumArgs, const char **ppArguments)
@@ -877,7 +1048,7 @@ void CConsole::Register(const char *pName, const char *pParams,
 	bool DoAdd = false;
 	if(pCommand == 0)
 	{
-		pCommand = new(malloc(sizeof(CCommand))) CCommand;
+		pCommand = new CCommand();
 		DoAdd = true;
 	}
 	pCommand->m_pfnCallback = pfnFunc;
@@ -1010,7 +1181,7 @@ void CConsole::Chain(const char *pName, FChainCommandCallback pfnChainFunc, void
 		return;
 	}
 
-	CChain *pChainInfo = (CChain *)malloc(sizeof(CChain));
+	CChain *pChainInfo = new CChain();
 
 	// store info
 	pChainInfo->m_pfnChainCallback = pfnChainFunc;

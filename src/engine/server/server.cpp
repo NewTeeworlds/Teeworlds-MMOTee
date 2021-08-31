@@ -228,7 +228,7 @@ int CServerBan::BanExt(T *pBanPool, const typename T::CDataType *pData, int Seco
 			CNetHash NetHash(&Data);
 			char aBuf[256];
 			MakeBanInfo(pBanPool->Find(&Data, &NetHash), aBuf, sizeof(aBuf), MSGTYPE_PLAYER);
-			Server()->m_NetServer.Drop(i, aBuf);
+			Server()->m_NetServer.Drop(i, CLIENTDROPTYPE_BAN, aBuf);
 		}
 	}
 
@@ -439,7 +439,7 @@ void CServer::Kick(int ClientID, const char *pReason)
  		return;
 	}
 
-	m_NetServer.Drop(ClientID, pReason);
+	m_NetServer.Drop(ClientID, CLIENTDROPTYPE_KICK, pReason);
 }
 
 int64 CServer::TickStartTime(int Tick)
@@ -765,13 +765,18 @@ int CServer::ClientRejoinCallback(int ClientID, void *pUser)
 	return 0;
 }
 
-int CServer::DelClientCallback(int ClientID, const char *pReason, void *pUser)
+int CServer::DelClientCallback(int ClientID, int Type, const char *pReason, void *pUser)
 {
 	CServer *pThis = (CServer *)pUser;
 	
+	/*
 	// notify the mod about the drop
 	if(pThis->m_aClients[ClientID].m_State >= CClient::STATE_READY)
 		pThis->GameServer()->OnClientDrop(ClientID, pReason);
+	*/
+	// notify the mod about the drop
+	if(pThis->m_aClients[ClientID].m_State >= CClient::STATE_READY && pThis->m_aClients[ClientID].m_WaitingTime <= 0)
+		pThis->GameServer()->OnClientDrop(ClientID, Type, pReason);
 
 	char aAddrStr[NETADDR_MAXSTRSIZE];
 	net_addr_str(pThis->m_NetServer.ClientAddr(ClientID), aAddrStr, sizeof(aAddrStr), true);
@@ -972,7 +977,7 @@ void CServer::ProcessClientPacket(CNetChunk *pPacket)
 					return;
 				if(str_comp(pVersion, "0.6 626fce9a778df4d4") != 0 && str_comp(pVersion, GameServer()->NetVersion()) != 0)
 				{
-					m_NetServer.Drop(ClientID, "Wrong version.");
+					m_NetServer.Drop(ClientID, CLIENTDROPTYPE_WRONG_VERSION, "Wrong version.");
 					return;
 				}
 
@@ -981,7 +986,7 @@ void CServer::ProcessClientPacket(CNetChunk *pPacket)
 					return;
 				if(g_Config.m_Password[0] != 0 && str_comp(g_Config.m_Password, pPassword) != 0)
 				{
-					m_NetServer.Drop(ClientID, "Wrong password");
+					m_NetServer.Drop(ClientID, CLIENTDROPTYPE_WRONG_PASSWORD, "Wrong password");
 					return;
 				}
 				m_aClients[ClientID].m_State = CClient::STATE_CONNECTING;
@@ -1172,7 +1177,7 @@ void CServer::ProcessClientPacket(CNetChunk *pPacket)
 					if(m_aClients[ClientID].m_AuthTries >= g_Config.m_SvRconMaxTries)
 					{
 						if(!g_Config.m_SvRconBantime)
-							m_NetServer.Drop(ClientID, "Too many remote console authentication tries");
+							m_NetServer.Drop(ClientID, CLIENTDROPTYPE_KICK, "Too many remote console authentication tries");
 						else
 							m_ServerBan.BanAddr(m_NetServer.ClientAddr(ClientID), g_Config.m_SvRconBantime*60, "Too many remote console authentication tries");
 					}
@@ -1239,7 +1244,7 @@ void CServer::SendServerInfo(const NETADDR *pAddr, int Token, bool Extended, int
 
 	p.Reset();
 
-	p.AddRaw(Extended?SERVERBROWSE_INFO_64_LEGACY:SERVERBROWSE_INFO, sizeof(Extended?SERVERBROWSE_INFO_64_LEGACY:SERVERBROWSE_INFO));
+	p.AddRaw(Extended?SERVERBROWSE_INFO64:SERVERBROWSE_INFO, sizeof(Extended?SERVERBROWSE_INFO64:SERVERBROWSE_INFO));
 	str_format(aBuf, sizeof(aBuf), "%d", Token);
 	p.AddString(aBuf, 6);
 
@@ -1355,10 +1360,10 @@ void CServer::PumpNetwork()
 				{
 					SendServerInfo(&Packet.m_Address, ((unsigned char *)Packet.m_pData)[sizeof(SERVERBROWSE_GETINFO)]);
 				}
-				else if(Packet.m_DataSize == sizeof(SERVERBROWSE_GETINFO_64_LEGACY)+1 &&
-					mem_comp(Packet.m_pData, SERVERBROWSE_GETINFO_64_LEGACY, sizeof(SERVERBROWSE_GETINFO_64_LEGACY)) == 0)
+				else if(Packet.m_DataSize == sizeof(SERVERBROWSE_GETINFO64)+1 &&
+					mem_comp(Packet.m_pData, SERVERBROWSE_GETINFO64, sizeof(SERVERBROWSE_GETINFO64)) == 0)
 				{
-					SendServerInfo(&Packet.m_Address, ((unsigned char *)Packet.m_pData)[sizeof(SERVERBROWSE_GETINFO_64_LEGACY)], true);
+					SendServerInfo(&Packet.m_Address, ((unsigned char *)Packet.m_pData)[sizeof(SERVERBROWSE_GETINFO64)], true);
 				}
 			}
 		}
@@ -1647,7 +1652,7 @@ int CServer::Run()
 	for(int i = 0; i < MAX_CLIENTS; ++i)
 	{
 		if(m_aClients[i].m_State != CClient::STATE_EMPTY)
-			m_NetServer.Drop(i, "服务器倒闭了");
+			m_NetServer.Drop(i, CLIENTDROPTYPE_SHUTDOWN, "服务器倒闭了");
 	}
 
 	GameServer()->OnShutdown();

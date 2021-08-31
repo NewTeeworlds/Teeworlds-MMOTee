@@ -78,7 +78,6 @@ enum
 	NET_CTRLMSG_ACCEPT=3,
 	NET_CTRLMSG_CLOSE=4,
 
-
 	NET_CONN_BUFFERSIZE=1024*32,
 
 	NET_CONNLIMIT_IPS=16,
@@ -111,7 +110,7 @@ enum
 	NET_SECURITY_TOKEN_UNSUPPORTED = 0,
 };
 
-typedef int (*NETFUNC_DELCLIENT)(int ClientID, const char* pReason, void *pUser);
+typedef int (*NETFUNC_DELCLIENT)(int ClientID, int Type, const char* pReason, void *pUser);
 typedef int (*NETFUNC_NEWCLIENT)(int ClientID, void *pUser);
 typedef int (*NETFUNC_CLIENTREJOIN)(int ClientID, void *pUser);
 
@@ -192,6 +191,10 @@ private:
 	NETSOCKET m_Socket;
 	NETSTATS m_Stats;
 
+public:
+	bool m_TimeoutProtected;
+	bool m_TimeoutSituation;
+
 private:
 	void ResetStats();
 	void SetError(const char *pString);
@@ -205,9 +208,6 @@ private:
 public:
 	void Reset(bool Rejoin=false);
 	
-	bool m_TimeoutProtected;
-	bool m_TimeoutSituation;
-
 	void Init(NETSOCKET Socket, bool BlockCloseMsg);
 	int Connect(NETADDR *pAddr);
 	void Disconnect(const char *pReason);
@@ -312,8 +312,8 @@ class CNetServer
 	int m_MaxClientsPerIP;
 
 	NETFUNC_NEWCLIENT m_pfnNewClient;
-	NETFUNC_CLIENTREJOIN m_pfnClientRejoin;
 	NETFUNC_DELCLIENT m_pfnDelClient;
+	NETFUNC_CLIENTREJOIN m_pfnClientRejoin;
 	void *m_UserPtr;
 
 	unsigned char m_SecurityTokenSeed[16];
@@ -323,11 +323,17 @@ class CNetServer
 	
 	CNetRecvUnpacker m_RecvUnpacker;
 
+	struct CCaptcha
+	{
+		char m_aText[16];
+	};
+	array<CCaptcha> m_lCaptcha;
+
 public:
 	int SetCallbacks(NETFUNC_NEWCLIENT pfnNewClient, NETFUNC_DELCLIENT pfnDelClient, void *pUser);
 	int SetCallbacks(NETFUNC_NEWCLIENT pfnNewClient, NETFUNC_CLIENTREJOIN pfnClientRejoin, NETFUNC_DELCLIENT pfnDelClient, void *pUser);
 
-	//fv
+	//
 	bool Open(NETADDR BindAddr, class CNetBan *pNetBan, int MaxClients, int MaxClientsPerIP, int Flags);
 	int Close();
 
@@ -337,13 +343,13 @@ public:
 	int Update();
 
 	//
-	int Drop(int ClientID, const char *pReason);
+	int Drop(int ClientID, int Type, const char *pReason);
 
 	void SendControl(NETADDR &Addr, int ControlMsg, const void *pExtra, int ExtraSize, SECURITY_TOKEN SecurityToken);
 	int TryAcceptClient(NETADDR &Addr, SECURITY_TOKEN SecurityToken);
 	void OnPreConnMsg(NETADDR &Addr, CNetPacketConstruct &Packet);
-	void OnTokenCtrlMsg(NETADDR &Addr, int ControlMsg, const CNetPacketConstruct &Packet);
 	void OnConnCtrlMsg(NETADDR &Addr, int ClientID, int ControlMsg, const CNetPacketConstruct &Packet);
+	void OnTokenCtrlMsg(NETADDR &Addr, int ControlMsg, const CNetPacketConstruct &Packet);
 	bool ClientExists(const NETADDR &Addr) { return GetClientSlot(Addr) != -1; };
 	int GetClientSlot(const NETADDR &Addr);
 	SECURITY_TOKEN GetToken(const NETADDR &Addr);
@@ -361,6 +367,10 @@ public:
 
 	//
 	void SetMaxClientsPerIP(int Max);
+	
+	void AddCaptcha(const char* pText);
+	const char* GetCaptcha(const NETADDR* pAddr, bool Debug=false);
+	bool IsCaptchaInitialized() { return m_lCaptcha.size() > 0; }
 };
 
 class CNetConsole
@@ -372,7 +382,7 @@ class CNetConsole
 
 	NETSOCKET m_Socket;
 	class CNetBan *m_pNetBan;
-	CSlot m_aSlots[NET_MAX_CONSOLE_CLIENTS]; 
+	CSlot m_aSlots[NET_MAX_CONSOLE_CLIENTS];
 
 	NETFUNC_NEWCLIENT m_pfnNewClient;
 	NETFUNC_DELCLIENT m_pfnDelClient;
@@ -394,7 +404,7 @@ public:
 
 	//
 	int AcceptClient(NETSOCKET Socket, const NETADDR *pAddr);
-	int Drop(int ClientID, const char *pReason);
+	int Drop(int ClientID, int Type, const char *pReason);
 
 	// status requests
 	const NETADDR *ClientAddr(int ClientID) const { return m_aSlots[ClientID].m_Connection.PeerAddress(); }
@@ -409,8 +419,8 @@ class CNetClient
 	//NETADDR m_ServerAddr;
 	CNetConnection m_Connection;
 	CNetRecvUnpacker m_RecvUnpacker;
-	NETSOCKET m_Socket;
 public:
+	NETSOCKET m_Socket;
 	// openness
 	bool Open(NETADDR BindAddr, int Flags);
 	int Close();
@@ -432,8 +442,9 @@ public:
 	// error and state
 	int NetType() const { return m_Socket.type; }
 	int State();
-	int GotProblems();
-	const char *ErrorString();
+
+	int GotProblems() const;
+	const char *ErrorString() const;
 };
 
 

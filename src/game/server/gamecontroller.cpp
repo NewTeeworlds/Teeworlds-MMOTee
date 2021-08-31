@@ -365,11 +365,17 @@ void IGameController::Tick()
 		{
 			if(GameServer()->m_apPlayers[i] && GameServer()->m_apPlayers[i]->GetTeam() == TEAM_SPECTATORS && !Server()->IsAuthed(i))
 			{
+				int seconds;
 				//dbg_msg("test","%d",Server()->Tick() - GameServer()->m_apPlayers[i]->m_LastActionTick-g_Config.m_SvSpecKickTime*Server()->TickSpeed()*60);
-				if(Server()->Tick() > g_Config.m_SvSpecKickTime*Server()->TickSpeed()*60
+				if(Server()->Tick() >=  GameServer()->m_apPlayers[i]->m_SpecTick + (g_Config.m_SvSpecKickTime - 1)*Server()->TickSpeed()*60
+					&& !GameServer()->m_apPlayers[i]->IsBot() && Server()->Tick() % Server()->TickSpeed()*60*10 == 0 )
+				{
+					seconds =  GameServer()->m_apPlayers[i]->m_SpecTick/Server()->TickSpeed() + g_Config.m_SvSpecKickTime*60 - Server()->Tick() / Server()->TickSpeed();
+					GameServer()->SendChatTarget_Localization(i, CHATCATEGORY_DEFAULT, _("请在{int:seconds}秒内登录,否则将被系统自动踢出."), "seconds", &seconds, NULL);
+				}
+				if(Server()->Tick() >  GameServer()->m_apPlayers[i]->m_SpecTick + g_Config.m_SvSpecKickTime*Server()->TickSpeed()*60
 					&& !GameServer()->m_apPlayers[i]->IsBot())
 				{
-					
 					Server()->Kick(i, "Kicked for inactivity (Spec)");
 				}
 			}

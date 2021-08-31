@@ -6,49 +6,6 @@
 
 #include "netban.h"
 
-template<class DATATYPE>
-void CNetBan::MakeBanInfo(const CNode<DATATYPE, CBanInfo> *pBan, char *pBuf, unsigned BuffSize, int Type) const
-{
-	if(pBan == 0 || pBuf == 0)
-	{
-		if(BuffSize > 0)
-			pBuf[0] = 0;
-		return;
-	}
-	
-	// build type based part
-	char aBuf[256];
-	if(Type == MSGTYPE_PLAYER)
-		str_copy(aBuf, "You have been banned", sizeof(aBuf));
-	else
-	{
-		char aTemp[256];
-		switch(Type)
-		{
-		case MSGTYPE_LIST:
-			str_format(aBuf, sizeof(aBuf), "%s banned", NetToString(&pBan->m_Data, aTemp, sizeof(aTemp))); break;
-		case MSGTYPE_BANADD:
-			str_format(aBuf, sizeof(aBuf), "banned %s", NetToString(&pBan->m_Data, aTemp, sizeof(aTemp))); break;
-		case MSGTYPE_BANREM:
-			str_format(aBuf, sizeof(aBuf), "unbanned %s", NetToString(&pBan->m_Data, aTemp, sizeof(aTemp))); break;
-		default:
-			aBuf[0] = 0;
-		}
-	}
-
-	// add info part
-	if(pBan->m_Info.m_Expires != CBanInfo::EXPIRES_NEVER)
-	{
-		int Mins = ((pBan->m_Info.m_Expires-time_timestamp()) + 59) / 60;
-		if(Mins <= 1)
-			str_format(pBuf, BuffSize, "%s for 1 minute (%s)", aBuf, pBan->m_Info.m_aReason);
-		else
-			str_format(pBuf, BuffSize, "%s for %d minutes (%s)", aBuf, Mins, pBan->m_Info.m_aReason);
-	}
-	else
-		str_format(pBuf, BuffSize, "%s for life (%s)", aBuf, pBan->m_Info.m_aReason);
-}
-
 template<class POOL>
 int CNetBan::Ban(POOL *pBanPool, const typename POOL::CDataType *pData, int Seconds, const char *pReason)
 {

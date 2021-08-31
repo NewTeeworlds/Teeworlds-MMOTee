@@ -35,9 +35,11 @@ void CNetConnection::Reset(bool Rejoin)
 	m_LastRecvTime = 0;
 	//m_LastUpdateTime = 0;
 
-	mem_zero(&m_PeerAddr, sizeof(m_PeerAddr));
+	//mem_zero(&m_PeerAddr, sizeof(m_PeerAddr));
+	m_UnknownSeq = false;
 
 	m_Buffer.Init();
+
 	mem_zero(&m_Construct, sizeof(m_Construct));
 }
 
@@ -212,20 +214,14 @@ void CNetConnection::Disconnect(const char *pReason)
 
 	if(m_RemoteClosed == 0)
 	{
-		if(!m_TimeoutSituation)
-		{
-			if(pReason)
-				SendControl(NET_CTRLMSG_CLOSE, pReason, str_length(pReason)+1);
-			else
-				SendControl(NET_CTRLMSG_CLOSE, 0, 0);
-		}
+		if(pReason)
+			SendControl(NET_CTRLMSG_CLOSE, pReason, str_length(pReason)+1);
+		else
+			SendControl(NET_CTRLMSG_CLOSE, 0, 0);
 
-		if(pReason != m_ErrorString)
-		{
-			m_ErrorString[0] = 0;
-			if(pReason)
-				str_copy(m_ErrorString, pReason, sizeof(m_ErrorString));
-		}
+		m_ErrorString[0] = 0;
+		if(pReason)
+			str_copy(m_ErrorString, pReason, sizeof(m_ErrorString));
 	}
 
 	Reset();
@@ -273,12 +269,11 @@ int CNetConnection::Feed(CNetPacketConstruct *pPacket, NETADDR *pAddr)
 	if(pPacket->m_Flags&NET_PACKETFLAG_RESEND)
 		Resend();
 
-	if(pPacket->m_Flags&NET_PACKETFLAG_CONNLESS)
-		return 1;
-
+	//
 	if(pPacket->m_Flags&NET_PACKETFLAG_CONTROL)
 	{
 		int CtrlMsg = pPacket->m_aChunkData[0];
+
 		if(CtrlMsg == NET_CTRLMSG_CLOSE)
 		{
 			if(net_addr_comp(&m_PeerAddr, pAddr) == 0)
@@ -364,16 +359,9 @@ int CNetConnection::Feed(CNetPacketConstruct *pPacket, NETADDR *pAddr)
 int CNetConnection::Update()
 {
 	int64 Now = time_get();
-	if(State() == NET_CONNSTATE_ERROR && m_TimeoutSituation && (Now-m_LastRecvTime) > time_freq()*10)
-	{
-		m_TimeoutSituation = false;
-		SetError("Timeout Protection over");
-	}
 
 	if(State() == NET_CONNSTATE_OFFLINE || State() == NET_CONNSTATE_ERROR)
 		return 0;
-
-	m_TimeoutSituation = false;
 
 	// check for timeout
 	if(State() != NET_CONNSTATE_OFFLINE &&
@@ -382,7 +370,6 @@ int CNetConnection::Update()
 	{
 		m_State = NET_CONNSTATE_ERROR;
 		SetError("Timeout");
-		m_TimeoutSituation = true;
 	}
 
 	// fix resends
@@ -394,14 +381,11 @@ int CNetConnection::Update()
 		if(Now-pResend->m_FirstSendTime > time_freq()*10)
 		{
 			m_State = NET_CONNSTATE_ERROR;
-			char aBuf[512];
-			str_format(aBuf, sizeof(aBuf), "Too weak connection (not acked for %d seconds)", 10);
-			SetError(aBuf);
-			m_TimeoutSituation = true;
+			SetError("Too weak connection (not acked for 10 seconds)");
 		}
 		else
 		{
-			// resend packet if we haven't got it acked in 1 second
+			// resend packet if we havn't got it acked in 1 second
 			if(Now-pResend->m_LastSendTime > time_freq())
 				ResendChunk(pResend);
 		}

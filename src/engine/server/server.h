@@ -348,7 +348,7 @@ public:
 	void DoSnapshot();
 
 	static int NewClientCallback(int ClientID, void *pUser);
-	static int DelClientCallback(int ClientID, const char *pReason, void *pUser);
+	static int DelClientCallback(int ClientID, int Type, const char *pReason, void *pUser);
 
 	static int ClientRejoinCallback(int ClientID, void *pUser);
 

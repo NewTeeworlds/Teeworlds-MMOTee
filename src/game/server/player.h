@@ -36,7 +36,7 @@ public:
 
 	void OnDirectInput(CNetObj_PlayerInput *NewInput);
 	void OnPredictedInput(CNetObj_PlayerInput *NewInput);
-	void OnDisconnect(const char *pReason);
+	void OnDisconnect(int Type, const char *pReason);
 
 	void KillCharacter(int Weapon = WEAPON_GAME);
 	CCharacter *GetCharacter();
@@ -153,6 +153,7 @@ public:
 	int m_DieTick;
 	int m_ScoreStartTick;
 	int m_LastActionTick;
+	int m_SpecTick;
 
 	bool m_StolenSkin;	
 	struct

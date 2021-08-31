@@ -1171,11 +1171,13 @@ void CGameContext::OnClientConnected(int ClientID)
 	m_BroadcastStates[ClientID].m_NextMessage[0] = 0;
 }
 
-void CGameContext::OnClientDrop(int ClientID, const char *pReason)
+void CGameContext::OnClientDrop(int ClientID, int Type, const char *pReason)
 {
 	Server()->SyncOffline(ClientID);
 	//dbg_msg("ustatus","syncoffline");
-	m_apPlayers[ClientID]->OnDisconnect(pReason);
+	m_pController->OnClientDrop(ClientID, Type);
+	
+	m_apPlayers[ClientID]->OnDisconnect(Type, pReason);
 	delete m_apPlayers[ClientID];
 	m_apPlayers[ClientID] = 0;
 
@@ -1185,6 +1187,7 @@ void CGameContext::OnClientDrop(int ClientID, const char *pReason)
 		if(m_apPlayers[i] && m_apPlayers[i]->m_SpectatorID == ClientID)
 			m_apPlayers[i]->m_SpectatorID = SPEC_FREEVIEW;
 	}
+
 }
 
 void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
