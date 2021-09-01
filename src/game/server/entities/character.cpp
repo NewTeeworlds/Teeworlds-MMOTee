@@ -1590,7 +1590,7 @@ void CCharacter::Die(int Killer, int Weapon)
 		if(m_pPlayer->GetBotType() == BOT_BOSSSLIME && !GameServer()->m_WinWaitBoss)
 		{
 			int CountWin = GameServer()->GetBossCount();
-			GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("Boss {str:bossn} 被{int:cwin}个玩家击败."), "bossn", "Slime", "cwin", &CountWin, NULL);			
+			GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("Boss {str:bossn} 被{int:cwin}个玩家击败."), "bossn", GameServer()->GetBossName(GameServer()->m_BossType), "cwin", &CountWin, NULL);			
 			
 			GameServer()->m_WinWaitBoss = 1000;
 		}
@@ -1890,7 +1890,9 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 	{		
 		if(Server()->GetItemCount(From, FREEAZER))
 		{
-			int randget = rand()%200-Server()->GetItemCount(From, FREEAZER)*5;
+			int probability = 200-Server()->GetItemCount(From, FREEAZER)*5;
+			if (probability <= 3) probability = 3;
+			int randget = rand()%probability;
 			if(randget == 1)
 			{
 				if(m_pPlayer->GetBotType() == BOT_BOSSSLIME) Freeze(3);
@@ -2310,7 +2312,7 @@ void CCharacter::GiveNinjaBuf()
 void CCharacter::ClassSpawnAttributes()
 {			
 	if(!Server()->GetItemSettings(m_pPlayer->GetCID(), SCHAT))
-		GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("Attention! All settings in vote \n注意！所有的设置项都在投票选项里面"), NULL);
+		GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("注意！所有的设置项都在投票选项里面"), NULL);
 
 	if(m_pPlayer->m_InArea)
 	{
@@ -2323,7 +2325,7 @@ void CCharacter::ClassSpawnAttributes()
 		if(GameServer()->m_AreaType == 2)
 		{
 			m_aWeapons[WEAPON_HAMMER].m_Got = true;
-			Server()->SetMaxAmmo(m_pPlayer->GetCID(), INFWEAPON_HAMMER, 1145140000);// 我讨厌卡锤
+			Server()->SetMaxAmmo(m_pPlayer->GetCID(), INFWEAPON_HAMMER, 10000);// 我讨厌卡锤
 			Server()->SetFireDelay(m_pPlayer->GetCID(), INFWEAPON_HAMMER, 1000);
 			Server()->SetAmmoRegenTime(m_pPlayer->GetCID(), INFWEAPON_HAMMER, 0);
 		}
@@ -2470,7 +2472,7 @@ void CCharacter::ClassSpawnAttributes()
 			new CSnapFullProject(GameWorld(), m_Pos, m_pPlayer->GetCID(), 5, 1, true);
 	}
 	
-	Server()->SetMaxAmmo(m_pPlayer->GetCID(), INFWEAPON_HAMMER, 1145140000);	
+	Server()->SetMaxAmmo(m_pPlayer->GetCID(), INFWEAPON_HAMMER, 10000);	
 	if(Server()->GetItemSettings(m_pPlayer->GetCID(), LAMPHAMMER)) Server()->SetFireDelay(m_pPlayer->GetCID(), INFWEAPON_HAMMER, 1200);
 	else Server()->SetFireDelay(m_pPlayer->GetCID(), INFWEAPON_HAMMER, getsp);
 
@@ -2510,7 +2512,7 @@ void CCharacter::ClassSpawnAttributes()
 		GiveWeapon(WEAPON_RIFLE, geta);
 
 	m_aWeapons[WEAPON_HAMMER].m_Got = true;
-	GiveWeapon(WEAPON_HAMMER, 1145140000);
+	GiveWeapon(WEAPON_HAMMER, -1);
 	m_ActiveWeapon = WEAPON_HAMMER;
 }
 

@@ -5253,10 +5253,10 @@ public:
 		{
 			//检查数据库中的 IP
 			str_format(aBuf, sizeof(aBuf), 
-				"SELECT ID FROM tw_UserStatus WHERE Nick = '%s' ORDER BY ID DESC LIMIT 1;"
+				"SELECT ID FROM tw_UserStatus WHERE Nick = '%s' AND ban = '1' ORDER BY ID DESC LIMIT 1;"
 				,m_sNick.ClrStr());
 			pSqlServer->executeSqlQuery(aBuf);
-			dbg_msg("test","1 %s",aBuf);
+			//dbg_msg("test","1 %s",aBuf);
 			if(pSqlServer->GetResults()->next())
 			{
 				int m_UserStatusID;
@@ -5265,12 +5265,19 @@ public:
 					"UPDATE tw_UserStatus SET ban = '0', banreason = '' WHERE ID = '%d';"
 					,m_UserStatusID);
 				pSqlServer->executeSql(aBuf);
-				dbg_msg("test","2 %s", aBuf);
-			}
+				//dbg_msg("test","2 %s", aBuf);
+			
 			dbg_msg("user","玩家 %s 被解封了", m_sNick.ClrStr());
 			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("解封成功."));
 			m_pServer->AddGameServerCmd(pCmd);	
 			return true;
+			}
+			else
+			{
+				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("未找到该用户或该用户未被封禁."));
+				m_pServer->AddGameServerCmd(pCmd);
+				return true;
+			}
 		}
 		catch (sql::SQLException &e)
 		{
@@ -5395,7 +5402,7 @@ public:
 					pSqlServer->executeSql(aBuf);
 					//dbg_msg("test","2 %s", aBuf);
 				}
-				dbg_msg("user","玩家 %s 的状态更新了", m_sNick.ClrStr());
+				//dbg_msg("user","玩家 %s 的状态更新了", m_sNick.ClrStr());
 				return true;
 			}
 			catch (sql::SQLException &e)
