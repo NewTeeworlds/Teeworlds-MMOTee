@@ -196,7 +196,7 @@ public:
 		char f_admin [MAX_NAME_LENGTH];
 		int f_level;
 		int f_exp;
-		int f_money;
+		unsigned long int f_money;
 		int f_maxnum;
 		int f_countnum;
 		int f_kd;
@@ -243,7 +243,7 @@ public:
 		int i_nprice;
 		int i_enchant;
 	};
-	_m_stInv m_stInv[MAX_CLIENTS][200];
+	_m_stInv m_stInv[MAX_NOBOT][200];
 	
 	struct _ItemName_en
 	{
@@ -257,12 +257,12 @@ public:
 		int i_nprice;
 		int i_enchant;
 	};
-	_ItemName_en ItemName_en[MAX_CLIENTS][200];
+	_ItemName_en ItemName_en[200];
 
 	virtual const char *GetItemName(int ClientID, int ItemID, bool tlang = true);
-	virtual const char *GetItemName_en(int ClientID, int ItemID);
+	virtual const char *GetItemName_en(int ItemID);
 	virtual const char *GetItemDesc(int ClientID, int ItemID);
-	virtual const char *GetItemDesc_en(int ClientID, int ItemID);
+	virtual const char *GetItemDesc_en(int ItemID);
 	virtual int GetItemCount(int ClientID, int ItemID);
 	virtual int GetItemSettings(int ClientID, int ItemID);
 	virtual int GetItemType(int ClientID, int ItemID);

@@ -2793,7 +2793,7 @@ void CGameContext::GiveItem(int ClientID, int ItemID, int Count, int Enchant)
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 获得了 {str:items}x{int:counts}"), "name", Server()->ClientName(ClientID), "items", Server()->GetItemName(ClientID, ItemID, false), "counts", &Count, NULL);					
 		
 		if(m_apPlayers[ClientID]->GetCharacter())
-			CreateLolText(m_apPlayers[ClientID]->GetCharacter(), false, vec2(0,-75), vec2 (0,-1), 50, Server()->GetItemName_en(ClientID, ItemID));
+			CreateLolText(m_apPlayers[ClientID]->GetCharacter(), false, vec2(0,-75), vec2 (0,-1), 50, Server()->GetItemName_en(ItemID));
 	}
 	if(Server()->GetItemType(ClientID, ItemID) == 10)
 	{

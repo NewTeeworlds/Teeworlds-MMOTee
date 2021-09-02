@@ -2460,7 +2460,7 @@ const char *CServer::GetItemName(int ClientID, int ItemID, bool ntlang)
 		else return m_stInv[ClientID][ItemID].i_name;
 	}
 }
-const char *CServer::GetItemName_en(int ClientID, int ItemID)
+const char *CServer::GetItemName_en(int ItemID)
 {
 	if(ItemID < 0 || ItemID >= 200)
 	{
@@ -2469,7 +2469,7 @@ const char *CServer::GetItemName_en(int ClientID, int ItemID)
 	else
 	{
 		//dbg_msg("sql",ItemName_en[ClientID][ItemID].i_name);
-		return ItemName_en[ClientID][ItemID].i_name;
+		return ItemName_en[ItemID].i_name;
 	}
 }
 int CServer::GetItemCountType(int ClientID, int Type)
@@ -2491,11 +2491,11 @@ const char *CServer::GetItemDesc(int ClientID, int ItemID)
 		return "(invalid)";
 	else return m_stInv[ClientID][ItemID].i_desc;
 }
-const char *CServer::GetItemDesc_en(int ClientID, int ItemID)
+const char *CServer::GetItemDesc_en(int ItemID)
 {
 	if(ItemID < 0 || ItemID >= 200)
 		return "(invalid)";
-	else return ItemName_en[ClientID][ItemID].i_desc;
+	else return ItemName_en[ItemID].i_desc;
 }
 int CServer::GetItemCount(int ClientID, int ItemID)
 {
@@ -3025,14 +3025,11 @@ public:
 				pSqlServer->executeSqlQuery("SELECT * FROM tw_uItemList_en;");
 				while(pSqlServer->GetResults()->next())
 				{
-					for(int i = 0; i < MAX_NOBOT; ++i)
-					{
-						int ItemID = (int)pSqlServer->GetResults()->getInt("il_id");
-						m_pServer->ItemName_en[i][ItemID].i_id = ItemID;
-						m_pServer->ItemName_en[i][ItemID].i_type = (int)pSqlServer->GetResults()->getInt("item_type");
-						str_copy(m_pServer->ItemName_en[i][ItemID].i_name, pSqlServer->GetResults()->getString("item_name").c_str(), sizeof(m_pServer->ItemName_en[i][ItemID].i_name));
-						str_copy(m_pServer->ItemName_en[i][ItemID].i_desc, pSqlServer->GetResults()->getString("item_desc").c_str(), sizeof(m_pServer->ItemName_en[i][ItemID].i_desc));
-					}
+					int ItemID = (int)pSqlServer->GetResults()->getInt("il_id");
+					m_pServer->ItemName_en[ItemID].i_id = ItemID;
+					m_pServer->ItemName_en[ItemID].i_type = (int)pSqlServer->GetResults()->getInt("item_type");
+					str_copy(m_pServer->ItemName_en[ItemID].i_name, pSqlServer->GetResults()->getString("item_name").c_str(), sizeof(m_pServer->ItemName_en[ItemID].i_name));
+					str_copy(m_pServer->ItemName_en[ItemID].i_desc, pSqlServer->GetResults()->getString("item_desc").c_str(), sizeof(m_pServer->ItemName_en[ItemID].i_desc));
 				}
 			}
 			else
@@ -3594,7 +3591,7 @@ public:
 					m_pServer->m_stClan[m_ClanID].f_maxnum = (int)pSqlServer->GetResults()->getInt("MaxNum");
 					m_pServer->m_stClan[m_ClanID].f_level = (int)pSqlServer->GetResults()->getInt("Level");
 					m_pServer->m_stClan[m_ClanID].f_exp = (int)pSqlServer->GetResults()->getInt("Exp");
-					m_pServer->m_stClan[m_ClanID].f_money = (int)pSqlServer->GetResults()->getInt("Money");
+					m_pServer->m_stClan[m_ClanID].f_money = (unsigned long)pSqlServer->GetResults()->getUInt64("Money");
 					str_copy(m_pServer->m_stClan[m_ClanID].f_creator, pSqlServer->GetResults()->getString("LeaderName").c_str(), sizeof(m_pServer->m_stClan[m_ClanID].f_creator));
 					str_copy(m_pServer->m_stClan[m_ClanID].f_admin, pSqlServer->GetResults()->getString("AdminName").c_str(), sizeof(m_pServer->m_stClan[m_ClanID].f_admin));
 				}

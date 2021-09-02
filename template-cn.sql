@@ -31,7 +31,7 @@ CREATE TABLE `tw_Clans` (
   `Level` int(11) NOT NULL DEFAULT '1',
   `Exp` int(11) NOT NULL DEFAULT '0',
   `MaxNum` int(11) NOT NULL DEFAULT '2',
-  `Money` int(11) NOT NULL DEFAULT '0',
+  `Money` bigint(32) NOT NULL DEFAULT '0',
   `Relevance` int(11) NOT NULL DEFAULT '0',
   `MoneyAdd` int(11) NOT NULL DEFAULT '0',
   `ExpAdd` int(11) NOT NULL DEFAULT '0',
@@ -158,7 +158,7 @@ CREATE TABLE `tw_Users` (
 LOCK TABLES `tw_Users` WRITE;
 /*!40000 ALTER TABLE `tw_Users` DISABLE KEYS */;
 INSERT INTO `tw_Users` VALUES 
-(1,'test','天上的星星','null','505a47881334859c582f2731b59fac1e',712,1355885,8203,22959,0,0,0,0,0,0,2,0,1,7,0,1,53301,1,0,0,'2018-06-08 15:30:36','127.0.0.1');
+(1,'test','天上的星星','null','505a47881334859c582f2731b59fac1e',212,1355885,8203,22959,0,0,0,0,0,0,2,0,1,7,0,1,53301,1,0,0,'2018-06-08 15:30:36','127.0.0.1');
 /*!40000 ALTER TABLE `tw_Users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -215,7 +215,7 @@ CREATE TABLE `tw_uItemList` (
   `item_desc` char(100) NOT NULL DEFAULT '- 无描述',
   PRIMARY KEY (`il_id`) USING BTREE,
   KEY `item_type` (`item_type`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=126 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=130 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
