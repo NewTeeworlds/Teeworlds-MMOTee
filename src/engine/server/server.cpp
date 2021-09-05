@@ -171,7 +171,7 @@ template<class T>
 int CServerBan::BanExt(T *pBanPool, const typename T::CDataType *pData, int Seconds, const char *pReason)
 {
 	// validate address
-	if(Server()->m_RconClientID >= 0 && Server()->m_RconClientID < MAX_CLIENTS &&
+	if(Server()->m_RconClientID >= 0 && Server()->m_RconClientID < MAX_NOBOT &&
 		Server()->m_aClients[Server()->m_RconClientID].m_State != CServer::CClient::STATE_EMPTY)
 	{
 		if(NetMatch(pData, Server()->m_NetServer.ClientAddr(Server()->m_RconClientID)))
@@ -180,7 +180,7 @@ int CServerBan::BanExt(T *pBanPool, const typename T::CDataType *pData, int Seco
 			return -1;
 		}
 
-		for(int i = 0; i < MAX_CLIENTS; ++i)
+		for(int i = 0; i < MAX_NOBOT; ++i)
 		{
 			if(i == Server()->m_RconClientID || Server()->m_aClients[i].m_State == CServer::CClient::STATE_EMPTY)
 				continue;
@@ -194,7 +194,7 @@ int CServerBan::BanExt(T *pBanPool, const typename T::CDataType *pData, int Seco
 	}
 	else if(Server()->m_RconClientID == IServer::RCON_CID_VOTE)
 	{
-		for(int i = 0; i < MAX_CLIENTS; ++i)
+		for(int i = 0; i < MAX_NOBOT; ++i)
 		{
 			if(Server()->m_aClients[i].m_State == CServer::CClient::STATE_EMPTY)
 				continue;
@@ -215,7 +215,7 @@ int CServerBan::BanExt(T *pBanPool, const typename T::CDataType *pData, int Seco
 
 	// don't drop it like that. just kick the desired guy
 	typename T::CDataType Data = *pData;
-	for(int i = 0; i < MAX_CLIENTS; ++i)
+	for(int i = 0; i < MAX_NOBOT; ++i)
 	{
 		if(Server()->m_aClients[i].m_State == CServer::CClient::STATE_EMPTY)
 			continue;
@@ -261,7 +261,7 @@ bool CServerBan::ConBanExt(IConsole::IResult *pResult, void *pUser)
 	if(StrAllnum(pStr))
 	{
 		int ClientID = str_toint(pStr);
-		if(ClientID < 0 || ClientID >= MAX_CLIENTS || pThis->Server()->m_aClients[ClientID].m_State == CServer::CClient::STATE_EMPTY)
+		if(ClientID < 0 || ClientID >= MAX_NOBOT || pThis->Server()->m_aClients[ClientID].m_State == CServer::CClient::STATE_EMPTY)
 			pThis->Console()->Print(IConsole::OUTPUT_LEVEL_STANDARD, "net_ban", "ban error (invalid client id)");
 		else
 		{
@@ -298,7 +298,7 @@ void CServer::CClient::Reset(bool ResetScore)
 		m_UserID = -1;
 
 		m_AntiPing = 0;
-		str_copy(m_aLanguage, "en", sizeof(m_aLanguage));
+		str_copy(m_aLanguage, "zh", sizeof(m_aLanguage));
 
 		m_WaitingTime = 0;
 	}
@@ -407,7 +407,7 @@ void CServer::SetClientName(int ClientID, const char *pName)
 
 void CServer::SetClientClan(int ClientID, const char *pClan)
 {
-	if(ClientID < 0 || ClientID >= MAX_CLIENTS || m_aClients[ClientID].m_State < CClient::STATE_READY || !pClan)
+	if(ClientID < 0 || ClientID >= MAX_NOBOT || m_aClients[ClientID].m_State < CClient::STATE_READY || !pClan)
 		return;
 
 	str_copy(m_aClients[ClientID].m_Clan, pClan, MAX_CLAN_LENGTH);
@@ -415,7 +415,7 @@ void CServer::SetClientClan(int ClientID, const char *pClan)
 
 void CServer::SetClientCountry(int ClientID, int Country)
 {
-	if(ClientID < 0 || ClientID >= MAX_CLIENTS || m_aClients[ClientID].m_State < CClient::STATE_READY)
+	if(ClientID < 0 || ClientID >= MAX_NOBOT || m_aClients[ClientID].m_State < CClient::STATE_READY)
 		return;
 
 	m_aClients[ClientID].m_Country = Country;
@@ -494,7 +494,7 @@ int CServer::GetClientInfo(int ClientID, CClientInfo *pInfo)
 
 void CServer::GetClientAddr(int ClientID, char *pAddrStr, int Size)
 {
-	if(ClientID >= 0 && ClientID < MAX_CLIENTS && m_aClients[ClientID].m_State == CClient::STATE_INGAME)
+	if(ClientID >= 0 && ClientID < MAX_NOBOT && m_aClients[ClientID].m_State == CClient::STATE_INGAME)
 		net_addr_str(m_NetServer.ClientAddr(ClientID), pAddrStr, Size, false);
 }
 
@@ -532,7 +532,7 @@ const char *CServer::ClientUsername(int ClientID)
 
 const char *CServer::ClientClan(int ClientID)
 {
-	if(ClientID < 0 || ClientID >= MAX_CLIENTS || m_aClients[ClientID].m_State == CServer::CClient::STATE_EMPTY)
+	if(ClientID < 0 || ClientID >= MAX_NOBOT || m_aClients[ClientID].m_State == CServer::CClient::STATE_EMPTY)
 		return "";
 	if(m_aClients[ClientID].m_ClanID > 0)
 		return m_stClan[m_aClients[ClientID].m_ClanID].f_name;
@@ -554,7 +554,7 @@ const char *CServer::GetSelectName(int ClientID, int SelID)
 
 int CServer::ClientCountry(int ClientID)
 {
-	if(ClientID < 0 || ClientID >= MAX_CLIENTS || m_aClients[ClientID].m_State == CServer::CClient::STATE_EMPTY)
+	if(ClientID < 0 || ClientID >= MAX_NOBOT || m_aClients[ClientID].m_State == CServer::CClient::STATE_EMPTY)
 		return -1;
 	if(m_aClients[ClientID].m_State == CServer::CClient::STATE_INGAME)
 		return m_aClients[ClientID].m_Country;
@@ -605,7 +605,7 @@ int CServer::SendMsgEx(CMsgPacker *pMsg, int Flags, int ClientID, bool System)
 		{
 			// broadcast
 			int i;
-			for(i = 0; i < MAX_CLIENTS; i++)
+			for(i = 0; i < MAX_NOBOT; i++)
 				if(m_aClients[i].m_State == CClient::STATE_INGAME)
 				{
 					Packet.m_ClientID = i;
@@ -826,7 +826,7 @@ int CServer::DelClientCallback(int ClientID, int Type, const char *pReason, void
 		pThis->m_aClients[ClientID].m_ItemReward[i] = -1;
 	}
 
-	for(int i = 0; i < 200; ++i)
+	for(int i = 0; i < MAX_ITEM; ++i)
 	{
 		pThis->m_stInv[ClientID][i].i_count = 0;
 		pThis->m_stInv[ClientID][i].i_settings = 0;
@@ -911,7 +911,7 @@ void CServer::SendRconLineAuthed(const char *pLine, void *pUser)
 	if(ReentryGuard) return;
 	ReentryGuard++;
 
-	for(i = 0; i < MAX_CLIENTS; i++)
+	for(i = 0; i < MAX_NOBOT; i++)
 	{
 		if(pThis->m_aClients[i].m_State != CClient::STATE_EMPTY && pThis->m_aClients[i].m_Authed >= pThis->m_RconAuthLevel)
 			pThis->SendRconLine(i, pLine);
@@ -1778,7 +1778,7 @@ bool CServer::ConLogout(IConsole::IResult *pResult, void *pUser)
 {
 	CServer *pServer = (CServer *)pUser;
 
-	if(pServer->m_RconClientID >= 0 && pServer->m_RconClientID < MAX_CLIENTS &&
+	if(pServer->m_RconClientID >= 0 && pServer->m_RconClientID < MAX_NOBOT &&
 		pServer->m_aClients[pServer->m_RconClientID].m_State != CServer::CClient::STATE_EMPTY)
 	{
 		CMsgPacker Msg(NETMSG_RCON_AUTH_STATUS);
@@ -2487,19 +2487,19 @@ void CServer::SetItemEnchant(int ClientID, int ItemID, int Price)
 }
 const char *CServer::GetItemDesc(int ClientID, int ItemID)
 {
-	if(ItemID < 0 || ItemID >= 200)
+	if(ItemID < 0 || ItemID >= MAX_ITEM)
 		return "(invalid)";
 	else return m_stInv[ClientID][ItemID].i_desc;
 }
 const char *CServer::GetItemDesc_en(int ItemID)
 {
-	if(ItemID < 0 || ItemID >= 200)
+	if(ItemID < 0 || ItemID >= MAX_ITEM)
 		return "(invalid)";
 	else return ItemName_en[ItemID].i_desc;
 }
 int CServer::GetItemCount(int ClientID, int ItemID)
 {
-	if(ClientID >= MAX_CLIENTS)
+	if(ClientID >= MAX_NOBOT)
 		return 0;
 		
 	return m_stInv[ClientID][ItemID].i_count;
@@ -2563,7 +2563,7 @@ void CServer::SetItemPrice(int ClientID, int ItemID, int Level, int Price)
 
 int CServer::GetItemPrice(int ClientID, int ItemID, int Type)
 {
-	if(ItemID < 0 || ItemID >= 200)
+	if(ItemID < 0 || ItemID >= MAX_ITEM)
 		return 0;
 
 	if(!m_stInv[ClientID][ItemID].i_nlevel)
@@ -2800,103 +2800,139 @@ class CSqlJob_Server_RemMail : public CSqlJob
 private:
 	CServer* m_pServer;
 	int m_IDMail;
+	int m_ClientID;
 	
 public:
-	CSqlJob_Server_RemMail(CServer* pServer, int IDMail)
+	CSqlJob_Server_RemMail(CServer* pServer,int ClientID, int IDMail)
 	{
 		m_pServer = pServer;
 		m_IDMail = IDMail; 
+		m_ClientID = ClientID;
 	}
 
 	virtual bool Job(CSqlServer* pSqlServer)
 	{
-		char aBuf[256];			
-		try
+		char aBuf[256];
+		if(m_pServer->m_aClients[m_ClientID].m_ItemReward[m_IDMail] > 0 && m_pServer->m_aClients[m_ClientID].m_ItemNumReward[m_IDMail] > 0)
 		{
-			str_format(aBuf, sizeof(aBuf), 
-				"DELETE FROM tw_Mail " 
-				"WHERE ID = '%d' LIMIT 1;"
-				, m_IDMail);	
-			pSqlServer->executeSql(aBuf);
+			try
+			{
+				int it_id = m_pServer->m_aClients[m_ClientID].m_ItemReward[m_IDMail], it_count = m_pServer->m_aClients[m_ClientID].m_ItemNumReward[m_IDMail];
+				m_pServer->SetRewardMail(m_ClientID, m_IDMail, -1, -1);
+				m_pServer->GameServer()->GiveItem(m_ClientID, it_id, it_count);
+				str_format(aBuf, sizeof(aBuf),
+						   "DELETE FROM tw_Mail "
+						   "WHERE ID = '%d' LIMIT 1;",
+						   m_pServer->m_aClients[m_ClientID].m_MailID[m_IDMail]);
+				pSqlServer->executeSql(aBuf);
+			}
+			catch (sql::SQLException &e)
+			{
+				return false;
+			}
+			return true;
 		}
-		catch (sql::SQLException &e)
+		else
 		{
-			return false;
+			return true;
 		}
-		return true;
 	}
 };
-void CServer::RemMail(int IDMail)
+void CServer::RemMail(int ClientID, int IDMail)
 {
-	CSqlJob* pJob = new CSqlJob_Server_RemMail(this, IDMail);
+	CSqlJob* pJob = new CSqlJob_Server_RemMail(this, ClientID, IDMail);
 	pJob->Start();
 }
 
-/*// 批量领取邮件
-class CSqlJob_Server_RemMails : public CSqlJob
+// 批量领取邮件(在线奖励)
+class CSqlJob_Server_RemMail_OnlineBonus : public CSqlJob
 {
 private:
 	CServer* m_pServer;
-	int m_IDMail;
+	int m_IDOwner;
+	int m_ClientID;
 	
 public:
-	CSqlJob_Server_RemMails(CServer* pServer, int IDOwner)
+	CSqlJob_Server_RemMail_OnlineBonus(CServer* pServer, int ClientID)
 	{
 		m_pServer = pServer;
-		m_IDOwner = IDOwner; 
+		m_ClientID = ClientID;
+		m_IDOwner = m_pServer->m_aClients[m_ClientID].m_UserID;
 	}
 
 	virtual bool Job(CSqlServer* pSqlServer)
 	{
 		char aBuf[256];	
+		if(m_pServer->m_aClients[m_ClientID].m_LogInstance != GetInstance())
+			return true;
 		struct _Items
 		{
 			int ItemID = 0;
 			int ItemCount = 0;
 		};
-		try
+		_Items Items[8];
+		Items[0].ItemID = COOPERPIX;
+		Items[1].ItemID = WOOD;
+		Items[2].ItemID = DRAGONORE;
+		Items[3].ItemID = COOPERORE;
+		Items[4].ItemID = IRONORE;
+		Items[5].ItemID = GOLDORE;
+		Items[6].ItemID = DIAMONDORE;
+		Items[7].ItemID = EVENTCUSTOMSOUL;
+		for(int i = 0;i < 8;i++)
 		{
-			str_format(aBuf, sizeof(aBuf), 
-				"SELECT DISTINCT ItemID FROM tw_Mail " 
-				"WHERE IDOwner = '%d' ;"
-				, m_IDOwner);	
-			pSqlServer->executeSqlQuery(aBuf);
-			if(pSqlServer->GetResults()->next())
+			try
 			{
-				_Items Items[pSqlServer->GetResults()->rowsCount()];
+				str_format(aBuf, sizeof(aBuf), 
+					"SELECT COUNT(*) FROM tw_Mail " 
+					"WHERE IDOwner = '%d' AND ItemID = '%d';"
+					, m_IDOwner, Items[i].ItemID);	
+				pSqlServer->executeSqlQuery(aBuf);
+				if(pSqlServer->GetResults()->next())
+				{
+					Items[i].ItemCount = (int)pSqlServer->GetResults()->getInt("COUNT(*)");
+				}
 			}
-
-			str_format(aBuf, sizeof(aBuf), 
-				"SELECT * FROM tw_Mail " 
-				"WHERE IDOwner = '%d' ;"
-				, m_IDOwner);	
-			pSqlServer->executeSqlQuery(aBuf);
-			int itemid, itemcount;
-			while (pSqlServer->GetResults()->next())
+			catch (sql::SQLException &e)
 			{
-				itemid = (int)pSqlServer->GetResults()->getInt("ItemID");
-				itemcount = (int)pSqlServer->GetResults()->getInt("ItemCount");
+				return false;
 			}
-			
-			str_format(aBuf, sizeof(aBuf), 
-				"DELETE FROM tw_Mail " 
-				"WHERE IDOwner = '%d' ;"
-				, m_IDOwner);	
-			pSqlServer->executeSql(aBuf);
 		}
-		catch (sql::SQLException &e)
+
+		str_format(aBuf, sizeof(aBuf), 
+			"DELETE FROM tw_Mail " 
+			"WHERE IDOwner = '%d' AND MailType = '9';"
+			, m_IDOwner);	
+			pSqlServer->executeSql(aBuf);
+		m_pServer->InitMailID(m_ClientID);
+		/*if(Items[0].ItemCount > 0)
 		{
-			return false;
+			m_pServer->GameServer()->GiveItem(m_ClientID, Items[0].ItemID, Items[0].ItemCount);
+			//m_pServer->GameServer()->SendChatTarget_Localization(m_ClientID, CHATCATEGORY_DEFAULT, _("你获得了 {str:items}x{int:counts}"), "items", m_pServer->GetItemName(m_ClientID, Items[0].ItemID), "counts", &Items[0].ItemCount, NULL);
+		}*/
+		for(int i = 0;i < 8;i++)
+		{
+			if(Items[i].ItemCount > 0)
+			{
+				m_pServer->GameServer()->GiveItem(m_ClientID, Items[i].ItemID, Items[i].ItemCount);
+				//m_pServer->GameServer()->SendChatTarget_Localization(m_ClientID, CHATCATEGORY_DEFAULT, _("你获得了 {str:items}x{int:counts}"), "items", m_pServer->GetItemName(m_ClientID, Items[i].ItemID), "counts", &Items[i].ItemCount, NULL);
+			}
 		}
 		return true;
 	}
+
+	virtual void CleanInstanceRef()
+	{
+		m_pServer->m_aClients[m_ClientID].m_LogInstance = -1;
+	}
 };
-void CServer::RemMails(int IDOwner)
+void CServer::RemMail_OnlineBonus(int ClientID)
 {
-	CSqlJob* pJob = new CSqlJob_Server_RemMails(this, IDOwner);
+	CSqlJob* pJob = new CSqlJob_Server_RemMail_OnlineBonus(this, ClientID);
+	m_aClients[ClientID].m_LogInstance = pJob->GetInstance();
 	pJob->Start();
 }
-*/
+
 /*
 class CSqlJob_Server_GetMailCount : public CSqlJob
 {
@@ -4342,7 +4378,7 @@ public:
 			
 			if(pSqlServer->GetResults()->next())
 			{
-				for(int i = 0; i < MAX_CLIENTS; ++i)
+				for(int i = 0; i < MAX_NOBOT; ++i)
 				{
 					if((int)pSqlServer->GetResults()->getInt("UserId") == m_pServer->m_aClients[i].m_UserID)
 					{

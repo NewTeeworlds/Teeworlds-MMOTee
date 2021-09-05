@@ -287,7 +287,7 @@ void CGameContext::SendChatTarget(int To, const char *pText)
 void CGameContext::SendChatTarget_Localization(int To, int Category, const char* pText, ...)
 {
 	int Start = (To < 0 ? 0 : To);
-	int End = (To < 0 ? MAX_CLIENTS : To+1);
+	int End = (To < 0 ? MAX_NOBOT : To+1);
 	
 	CNetMsg_Sv_Chat Msg;
 	Msg.m_Team = 0;
@@ -1004,20 +1004,25 @@ void CGameContext::OnTick()
 			//Send broadcast only if the message is different, or to fight auto-fading
 			if(
 				str_comp(m_BroadcastStates[i].m_PrevMessage, m_BroadcastStates[i].m_NextMessage) != 0 ||
-				m_BroadcastStates[i].m_NoChangeTick > Server()->TickSpeed()
+				(m_BroadcastStates[i].m_NoChangeTick > Server()->TickSpeed() && strlen(m_BroadcastStates[i].m_NextMessage) > 0)
 			)
 			{
+				//dbg_msg("test","%s %s %d %d",m_BroadcastStates[i].m_PrevMessage, m_BroadcastStates[i].m_NextMessage, str_comp(m_BroadcastStates[i].m_PrevMessage, m_BroadcastStates[i].m_NextMessage), m_BroadcastStates[i].m_NoChangeTick);
 				CNetMsg_Sv_Broadcast Msg;
-				Msg.m_pMessage = m_BroadcastStates[i].m_NextMessage;
-				Server()->SendPackMsg(&Msg, MSGFLAG_VITAL, i);
-				
 				str_copy(m_BroadcastStates[i].m_PrevMessage, m_BroadcastStates[i].m_NextMessage, sizeof(m_BroadcastStates[i].m_PrevMessage));
+				//dbg_msg("test1","%s %s %d %d",m_BroadcastStates[i].m_PrevMessage, m_BroadcastStates[i].m_NextMessage, str_comp(m_BroadcastStates[i].m_PrevMessage, m_BroadcastStates[i].m_NextMessage), m_BroadcastStates[i].m_NoChangeTick);
+				Msg.m_pMessage = m_BroadcastStates[i].m_NextMessage;
+				//dbg_msg("test2","%s %s %d %d",m_BroadcastStates[i].m_PrevMessage, m_BroadcastStates[i].m_NextMessage, str_comp(m_BroadcastStates[i].m_PrevMessage, m_BroadcastStates[i].m_NextMessage), m_BroadcastStates[i].m_NoChangeTick);
+				Server()->SendPackMsg(&Msg, MSGFLAG_VITAL, i);
+				//dbg_msg("test3","%s %s %d %d",m_BroadcastStates[i].m_PrevMessage, m_BroadcastStates[i].m_NextMessage, str_comp(m_BroadcastStates[i].m_PrevMessage, m_BroadcastStates[i].m_NextMessage), m_BroadcastStates[i].m_NoChangeTick);
 				
+				//strcpy(m_BroadcastStates[i].m_PrevMessage, m_BroadcastStates[i].m_NextMessage);
 				m_BroadcastStates[i].m_NoChangeTick = 0;
 			}
 			else
+			{
 				m_BroadcastStates[i].m_NoChangeTick++;
-			
+			}
 			//Update broadcast state
 			if(m_BroadcastStates[i].m_LifeSpanTick > 0)
 				m_BroadcastStates[i].m_LifeSpanTick--;
@@ -1182,7 +1187,7 @@ void CGameContext::OnClientDrop(int ClientID, int Type, const char *pReason)
 	m_apPlayers[ClientID] = 0;
 
 	// update spectator modes
-	for(int i = 0; i < MAX_CLIENTS; ++i)
+	for(int i = 0; i < MAX_NOBOT; ++i)
 	{
 		if(m_apPlayers[i] && m_apPlayers[i]->m_SpectatorID == ClientID)
 			m_apPlayers[i]->m_SpectatorID = SPEC_FREEVIEW;
@@ -2298,25 +2303,17 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 				}	
 
 				// 批量领取邮件 命令: cleanmail	
-				//// 只领取在线奖励,不领取神器 & 升级奖励			
-				/*else if(str_comp(aCmd, "cleanmail") == 0)
+				// 只领取在线奖励,不领取神器 & 升级奖励			
+				else if(str_comp(aCmd, "getolbonus") == 0)
 				{
 					Server()->InitMailID(ClientID);
-					if(m_apPlayers[ClientID]->m_LastChangeInfo && m_apPlayers[ClientID]->m_LastChangeInfo+Server()->TickSpeed()*4 > Server()->Tick())
-						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("请等待..."), NULL);
+					//if(m_apPlayers[ClientID]->m_LastChangeInfo && m_apPlayers[ClientID]->m_LastChangeInfo+Server()->TickSpeed()*4 > Server()->Tick())
+					//	return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("请等待..."), NULL);
 
 					m_apPlayers[ClientID]->m_LastChangeInfo = Server()->Tick();
-					for(int i = 0; i < 20; i++)
-					{
-						Server()->RemMail(Server()->GetMailRewardDell(ClientID, i));
-						int ItemID = Server()->GetRewardMail(ClientID, i, 0);
-						int ItemNum = Server()->GetRewardMail(ClientID, i, 1);
-						Server()->SetRewardMail(ClientID, i, -1, -1);
-						if(ItemID != -1 && ItemNum != -1)
-						GiveItem(ClientID, ItemID, ItemNum);
-					}
+					Server()->RemMail_OnlineBonus(ClientID);
 					ResetVotes(ClientID, MAILMENU);
-				}*/
+				}
 
 				for(int i = 0; i < 20; i++)
 				{
@@ -2324,13 +2321,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					str_format(aBuf, sizeof(aBuf), "reward%d", i);
 					if(str_comp(aCmd, aBuf) == 0)
 					{
-						Server()->RemMail(Server()->GetMailRewardDell(ClientID, i));
-						int ItemID = Server()->GetRewardMail(ClientID, i, 0);
-						int ItemNum = Server()->GetRewardMail(ClientID, i, 1);
-						Server()->SetRewardMail(ClientID, i, -1, -1);
-						if(ItemID != -1 && ItemNum != -1)
-							GiveItem(ClientID, ItemID, ItemNum);
-					
+						Server()->RemMail(ClientID, i);
 						ResetVotes(ClientID, MAILMENU);
 					}
 				}
@@ -3482,7 +3473,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		m_apPlayers[ClientID]->m_LastVotelist = AUTH;
 		AddVote_Localization(ClientID, "null", "☪ 信息 ( ′ ω ` )?:");
 		AddVote_Localization(ClientID, "null", "我的邮箱");
-		//AddVote_Localization(ClientID, "cleanmail", "批量领取物品(一次20个)");
+		AddVote_Localization(ClientID, "getolbonus", "领取在线奖励");
 		Server()->InitMailID(ClientID);
 		AddBack(ClientID);
 		AddVote("", "null", ClientID);
@@ -4345,7 +4336,7 @@ bool CGameContext::ConchainSpecialMotdupdate(IConsole::IResult *pResult, void *p
 		CNetMsg_Sv_Motd Msg;
 		Msg.m_pMessage = g_Config.m_SvMotd;
 		CGameContext *pSelf = (CGameContext *)pUserData;
-		for(int i = 0; i < MAX_CLIENTS; ++i)
+		for(int i = 0; i < MAX_NOBOT; ++i)
 			if(pSelf->m_apPlayers[i])
 				pSelf->Server()->SendPackMsg(&Msg, MSGFLAG_VITAL, i);
 	}
@@ -4832,7 +4823,7 @@ void CGameContext::SendChatClan(int ClanID, const char* pText, ...)
 	Msg.m_Team = 0;
 	Msg.m_ClientID = -1;
 
-	for(int i = 0; i < MAX_CLIENTS; i++)
+	for(int i = 0; i < MAX_NOBOT; i++)
 	{
 		if(m_apPlayers[i] && Server()->GetClanID(i) && Server()->GetClanID(i) == ClanID)
 		{	

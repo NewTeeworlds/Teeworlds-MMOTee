@@ -243,7 +243,7 @@ public:
 		int i_nprice;
 		int i_enchant;
 	};
-	_m_stInv m_stInv[MAX_NOBOT][200];
+	_m_stInv m_stInv[MAX_NOBOT][MAX_ITEM];
 	
 	struct _ItemName_en
 	{
@@ -257,7 +257,7 @@ public:
 		int i_nprice;
 		int i_enchant;
 	};
-	_ItemName_en ItemName_en[200];
+	_ItemName_en ItemName_en[MAX_ITEM];
 
 	virtual const char *GetItemName(int ClientID, int ItemID, bool tlang = true);
 	virtual const char *GetItemName_en(int ItemID);
@@ -454,7 +454,8 @@ public:
 	virtual int GetItemCountType(int ClientID, int Type);
 	virtual void InitMailID(int ClientID);
 	virtual void SendMail(int AuthedID, int MailType, int ItemID, int ItemNum);
-	virtual void RemMail(int IDMail);
+	virtual void RemMail(int ClientID, int IDMail);
+	virtual void RemMail_OnlineBonus(int ClientID);
 	//virtual void RemMails(int IDOwner);
 	
 	// ----- Кланы

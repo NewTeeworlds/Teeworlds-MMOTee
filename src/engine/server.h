@@ -379,7 +379,8 @@ public:
 
 	virtual void InitMailID(int ClientID) = 0;
 	virtual void SendMail(int AuthedID, int MailType, int ItemID, int ItemNum) = 0;
-	virtual void RemMail(int IDMail) = 0;
+	virtual void RemMail(int ClientID, int IDMail) = 0;
+	virtual void RemMail_OnlineBonus(int ClientID) = 0;
 	// virtual void RemMails(int IDOwner) = 0;
 	//virtual int GetMailCount(int ClientID) = 0;
 	virtual int GetMailRewardDell(int ClientID, int ID) = 0;
@@ -401,7 +402,7 @@ public:
 		T tmp;
 		if (ClientID == -1)
 		{
-			for(int i = 0; i < MAX_CLIENTS; i++)
+			for(int i = 0; i < MAX_NOBOT; i++)
 				if(ClientIngame(i))
 				{
 					mem_copy(&tmp, pMsg, sizeof(T));
@@ -602,7 +603,7 @@ public:
 	virtual void OnInit() = 0;
 	virtual void OnConsoleInit() = 0;
 	virtual void OnShutdown() = 0;
-
+	virtual void GiveItem(int ClientID, int ItemID, int Count, int Enchant = 0) = 0;
 	virtual void OnTick() = 0;
 	virtual void OnPreSnap() = 0;
 	virtual void OnSnap(int ClientID) = 0;

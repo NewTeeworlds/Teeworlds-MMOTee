@@ -1190,7 +1190,7 @@ void CCharacter::Tick()
 			}
 			else
 			{
-					GameServer()->SendBroadcast_Localization(m_pPlayer->GetCID(), 200, 100, _("欢迎来到白房间."), NULL);
+				GameServer()->SendBroadcast_Localization(m_pPlayer->GetCID(), 200, 100, _("欢迎来到白房间."), NULL);
 			}
 		}
 		
@@ -1977,7 +1977,7 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 		if(From >= 0 && From != m_pPlayer->GetCID() && GameServer()->m_apPlayers[From])
 		{
 			int64_t Mask = CmaskOne(From);
-			for(int i = 0; i < MAX_CLIENTS; i++)
+			for(int i = 0; i < MAX_NOBOT; i++)
 			{
 				if(GameServer()->m_apPlayers[i] && GameServer()->m_apPlayers[i]->GetTeam() == TEAM_SPECTATORS && GameServer()->m_apPlayers[i]->m_SpectatorID == From)
 					Mask |= CmaskOne(i);

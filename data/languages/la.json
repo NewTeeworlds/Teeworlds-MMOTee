@@ -1,0 +1,629 @@
+{"translation":[
+	{
+		"key": "{str:Victim} has been muted for {sec:Duration} ({str:Reason})",
+		"value": "{str:Victim} lingua praecisa est ad {sec:Duration} ({str:Reason})"
+	},
+	{
+		"key": "You are now logged.",
+		"value": "Nunc conscriptus es."
+	},
+	{
+		"key": "Wrong username/password.",
+		"value": "Nomen falsum aut tessera falsa."
+	},
+	{
+		"key": "An error occured during the operation.",
+		"value": "Error obvenit operatione."
+	},
+	{
+		"key": "You must be logged for this operation",
+		"value": "Tibi conscriptum esse opus est, ut hanc operationem conficias."
+	},
+	{
+		"key": "Please wait 5 minutes before creating another account",
+		"value": "Expecta minutas 5 ante quam recrees adcomputum alium"
+	},
+	{
+		"key": "An error occured during the creation of your account.",
+		"value": "Error obvenit, quum accomputus creatus est."
+	},
+	{
+		"key": "This username is already taken by an existing account",
+		"value": "Hoc accomputus iam exemptus est."
+	},
+	{
+		"key": "Your account has been created and you are now logged.",
+		"value": "Accomputus tuus confectus est tuque iam conscriptus es."
+	},
+	{
+		"key": "You must be logged to see your rank",
+		"value": "Tibi conscriptum esse opus est, ut decus videas."
+	},
+	{
+		"key": "You must be logged to see your goal",
+		"value": "Tibi conscriptum esse opus est, ut terminum videas."
+	},
+	{
+		"key": "You have already notified that {str:PlayerName} ought to be banned",
+		"value": "Iam denuntiavisti {str:PlayerName} esse proiectum"
+	},
+	{
+		"key": "{str:PlayerName} wants {str:VictimName} to be banned ({str:Reason})",
+		"value": "{str:PlayerName} {str:VictimName} proiectum esse postulavit ({str:Reason})"
+	},
+	{
+		"key": "{str:VictimName} has been infected",
+		"value": "{str:VictimName} infectus est"
+	},
+	{
+		"key": "Infected won the round in {sec:RoundDuration}",
+		"value": "Infecti evicere per {sec:RoundDuration}"
+	},
+	{
+		"key": "{int:NumHumans} humans won the round",
+		"one": "Homo unicus pugnam evicit",
+		"other": "{int:NumHumans} Homines pugnam evicere",
+	},
+	{
+		"key": "You have survived, +5 points",
+		"value": "Pugnae superes, +5 copiae"
+	},
+	{
+		"key": "You have infected {str:VictimName}, +3 points",
+		"value": "Infecisti {str:VictimName}, +3 copiae"
+	},
+	{
+		"key": "You have killed a witch, +5 points",
+		"value": "Maleficam necavisti, +5 copiae"
+	},
+	{
+		"key": "You have eliminated your target, +2 points",
+		"value": "Scopum sustulisti, +2 copiae"
+	},
+	{
+		"key": "Hook protection enabled",
+		"value": "Protectio contra captionem instructa"
+	},
+	{
+		"key": "Hook protection disabled",
+		"value": "Protectio contra captionem secessa"
+	},
+	{
+		"key": "{str:PlayerName} has been banned ({str:Reason})",
+		"value": "{str:PlayerName} proiectus est ({str:Reason})"
+	},
+	{
+		"key": "{str:PlayerName} has been kicked ({str:Reason})",
+		"value": "{str:PlayerName} eiectus est ({str:Reason}) "
+	},
+	{
+		"key": "{str:PlayerName} has left the game ({str:Reason})",
+		"value": "{str:PlayerName} pugnam reliquit ({str:Reason})"
+	},
+	{
+		"key": "{str:PlayerName} has left the game",
+		"value": "{str:PlayerName} pugnam reliquit"
+	},
+	{
+		"key": "{str:PlayerName} joined the spectators",
+		"value": "{str:PlayerName} ad spectatores accessit"
+	},
+	{
+		"key": "{str:PlayerName} joined the game",
+		"value": "{str:PlayerName} ad ludum accessit"
+	},
+	{
+		"key": "Engineer",
+		"value": "Clavicarius"
+	},
+	{
+		"key": "Soldier",
+		"value": "Miles"
+	},
+	{
+		"key": "Medic",
+		"value": "Medicus"
+	},
+	{
+		"key": "Hero",
+		"value": "Heros"
+	},
+	{
+		"key": "Ninja",
+		"value": "Ninja"
+	},
+	{
+		"key": "Mercenary",
+		"value": "Mercennarius"
+	},
+	{
+		"key": "Sniper",
+		"value": "Sniper"
+	},
+	{
+		"key": "Scientist",
+		"value": "Scientista"
+	},
+	{
+		"key": "Biologist",
+		"value": "Biologista"
+	},
+	{
+		"key": "Smoker",
+		"value": "Fumigator"
+	},
+	{
+		"key": "Hunter",
+		"value": "Venator"
+	},
+	{
+		"key": "Boomer",
+		"value": "Boomer"
+	},
+	{
+		"key": "Ghost",
+		"value": "Larua"
+	},
+	{
+		"key": "Spider",
+		"value": "Aranea"
+	},
+	{
+		"key": "Ghoul",
+		"value": "\u0120\u016bl"
+	},
+	{
+		"key": "Slug",
+		"value": "Limax"
+	},
+	{
+		"key": "Witch",
+		"value": "Malefica"
+	},
+	{
+		"key": "Undead",
+		"value": "Immortalis"
+	},
+	{
+		"key": "Unknown class",
+		"value": "Classis incognita"
+	},
+	{
+		"key": "You are a human: {str:ClassName}",
+		"value": "Homo es: {str:ClassName}"
+	},
+	{
+		"key": "You are an infected: {str:ClassName}",
+		"value": "Infectus es: {str:ClassName}"
+	},
+	{
+		"key": "{str:PlayerName} entered and joined the game",
+		"value": "{str:PlayerName} intravit accessitque"
+	},
+	{
+		"key": "You are muted for {sec:Duration}",
+		"value": "Lingua tibi praecisa est ad {sec:Duration}"
+	},
+	{
+		"key": "You can't join the spectators right now",
+		"value": "Nondum ad spectatores accedere potes"
+	},
+	{
+		"key": "{str:PlayerName} changed their name to {str:NewName}",
+		"value": "{str:PlayerName} nomen innovavit {str:NewName}"
+	},
+	{
+		"key": "Switch language to english?",
+		"value": "Linguam in latinam commutare?"
+	},
+	{
+		"key": "You can change the language of this mod using the command /language.",
+		"value": "Linguam modificationis iusso /language permutare licet."
+	},
+	{
+		"key": "If your language is not available, you can help with translation (/help translate).",
+		"value": "Si lingua tua non in promptu est, tibi traductioni subvenire licet (/help translate)."
+	},
+	{
+		"key": "InfectionClass, by necropotame (version {str:VersionCode})",
+		"value": "InfectionClass, auctoris necropotame (version {str:VersionCode})"
+	},
+	{
+		"key": "Based on the concept of Infection mod by Gravity",
+		"value": "Constat in conceptu modificationis Infection, auctoris Gravity"
+	},
+	{
+		"key": "Main contributors: {str:ListOfContributors}",
+		"value": "Contributores praecipui: {str:ListOfContributors}"
+	},
+	{
+		"key": "Thanks to {str:ListOfContributors}",
+		"value": "Grates {str:ListOfContributors}"
+	},
+	{
+		"key": "No player was found with this name",
+		"value": "Arenarius huius nominis non repertus est."
+	},
+	{
+		"key": "Rules of the game",
+		"value": "Regulae ludi"
+	},
+	{
+		"key": "InfectionClass is a team game between humans and infected.",
+		"value": "InfectionClass ludus gregum inter homines infectosque."
+	},
+	{
+		"key": "All players start as human.",
+		"value": "Omnes arenarii homines incohant."
+	},
+	{
+		"key": "10 seconds later, two players become infected.",
+		"value": "Post secundas 10, arenarii duo inficiuntur."
+	},
+	{
+		"key": "The goal for humans is to survive until the army clean the map.",
+		"value": "Finis hominum est supervivere, donec militia arenam repurgat."
+	},
+	{
+		"key": "The goal for infected is to infect all humans.",
+		"value": "Finis infectorum est inficere homines omnes."
+	},
+	{
+		"key": "How to translate the mod",
+		"value": "Quemadmodum modificationem traducere potes:"
+	},
+	{
+		"key": "Create an account on Crowdin and join a translation team:",
+		"value": "Nomen tibi apud Crowdin da et gregi traductionis accede:"
+	},
+	{
+		"key": "For any question about the translation process, please contact us on IRC ({str:IRCAddress})",
+		"value": "Quaestione de traductionis processu exorta nos via IRC ({str:IRCAddress}) postula"
+	},
+	{
+		"key": "The Engineer can build walls with his hammer to block infected.",
+		"value": "Clavicarius malleo valla infectos inhibendes exstruere potest."
+	},
+	{
+		"key": "When an infected touch the wall, he dies.",
+		"value": "Quum infectus vallum tangit, tum moritur."
+	},
+	{
+		"key": "The lifespan of a wall is {sec:LifeSpan}, and walls are limited to one per player at the same time.",
+		"value": "Vallum {sec:LifeSpan} constat durare, tummodo arenarius unum solum vallum exstruere potest."
+	},
+	{
+		"key": "The Soldier can pose floating bombs with his hammer.",
+		"value": "Miles malleo bombas impendentes creare potest."
+	},
+	{
+		"key": "Each bomb can explode {int:NumBombs} times.",
+		"one": "Bomba posita explosioni uni ideona est.",
+		"other": "Bomba posita explosioni numeri {int:NumBombs} ideona est.",
+	},
+	{
+		"key": "Use the hammer to place the bomb and explode it multiple times.",
+		"value": "Malleo utere, ut bombam interponas inardescasque pluriens."
+	},
+	{
+		"key": "Bombs are limited to one per player at the same time.",
+		"value": "Bombae terminatae sunt, ut una arenario quoicumque quandocumque sola exstet."
+	},
+	{
+		"key": "The Scientist can pose floating mines with his hammer.",
+		"value": "Scientista malleo minas pendentes interponere potest."
+	},
+	{
+		"key": "Mines are limited to {int:NumMines} per player at the same time.",
+		"one": "Minae terminatae sunt, ut una arenario quoicumque quandocumque exstet.",
+		"other": "Minae terminatae sunt, ut {int:NumMines} arenario quoicumque quandocumque exstent.",
+	},
+	{
+		"key": "He has also grenades that teleport him.",
+		"value": "Etiam granatas quae eum teleportant habet."
+	},
+	{
+		"key": "The biologist has a shotgun with bouncing bullets and can create a spring laser trap by shooting with his rifle.",
+		"value": "Biologus sclopetum dispergens cum missilibus reflectentibus habet laqueumque sclopeto laserico struere potest."
+	},
+	{
+		"key": "The Medic can protect humans with his hammer by giving them armor.",
+		"value": "Medicus malleo tegumina disponens homines tuerier potest."
+	},
+	{
+		"key": "He has also a powerful shotgun that can pullback infected.",
+		"value": "Etiam sibi sclopetum dispergens habet potens, quod infectos deicere pollet."
+	},
+	{
+		"key": "The Hero has a shotgun, a laser rifle and grenades.",
+		"value": "Heros sclopetum dispergens, sclopetum lasericum granatasque habet."
+	},
+	{
+		"key": "The Hero must find a flag hidden in the map.",
+		"value": "Heroi vexillum in mappa reconditum inveniendum est. "
+	},
+	{
+		"key": "Once taken, the flag gives 1 health point, 4 armor points, and full ammo to all humans, furthermore full health and armor to the hero.",
+		"value": "Heroe vexillum indepto punctum unum integritatis valetudinis uniquoique gregis humani redditur, puncta quatuor tegumentorum suppletur et arma replentur, integritas herois penitus."
+	},
+	{
+		"key": "The hero cannot be healed by a medic, but he can withstand a thrust by an infected, an his health suffice.",
+		"value": "Heros a medico sanari non ideoneus est, sed plagae infecti resistere, quin pereat, si integritas sua huic sufficit."
+	},
+	{
+		"key": "The Ninja can throw flash grenades that can freeze infected during three seconds.",
+		"value": "Ninja granatas iacere potest quae infectos tres secundas congelare pollent."
+	},
+	{
+		"key": "His hammer is replaced by a katana, allowing him to jump {int:NinjaJump} times before touching the ground.",
+		"one": "Malleus eius katana permutatus. Quo in manus pervenit, ut insultet semel, antequam solum contingit.",
+		"other": "Malleus eius katana permutatus. Quo in manus pervenit, ut insultet {int:NinjaJump} temporibus, antequam solum contingit.",
+	},
+	{
+		"key": "The Mercenary fly in air using his machine gun.",
+		"value": "Mercennarius sclopeto polybolico in aere volare potest."
+	},
+	{
+		"key": "He can coil explosives with his hammer that hinder infected from harming.",
+		"value": "Vasa displosiva quae infectos nocendi valentia distineunt convolvere capax est."
+	},
+	{
+		"key": "He can also throw poison grenades that each deal {int:NumDamagePoints} damage points.",
+		"one": "Ad hoc granatas veneficas iacere potest quae singulae plagam unam inponunt.",
+		"other": "Ad hoc granatas veneficas iacere potest quae plagas {int:NumDamagePoints} inponunt.",
+	},
+	{
+		"key": "The Sniper can lock his position in air for 15 seconds with his hammer.",
+		"value": "Sniper malleo positionem 15 secundas claudere in aere potest."
+	},
+	{
+		"key": "He can jump two times in air.",
+		"value": "Bis in aere exsilere potest."
+	},
+	{
+		"key": "He has also a powerful rifle that deals 30 damage points in locked position, and 10\u201313 otherwise.",
+		"value": "Sclopetum striatum habet quod nocet 30 in claustro, 10\u201313 alias."
+	},
+	{
+		"key": "The Smoker can infect humans and heal infected with his hammer.",
+		"value": "Fumigator malleo homines inficere infectosque sanare potest."
+	},
+	{
+		"key": "He can also inflict 4 damage points per second by hooking humans.",
+		"value": "Plagas quoque 4 per secundam unco infligere potest."
+	},
+	{
+		"key": "The Boomer explodes when he attack.",
+		"value": "Boomer explodit, quum oppugnat."
+	},
+	{
+		"key": "All humans affected by the explosion become infected.",
+		"value": "Homines toti explosione affecti inficiuntur."
+	},
+	{
+		"key": "He can also inflict 1 damage point per second by hooking humans.",
+		"value": "Plagam 1 quoque per secundam unco infligere potest."
+	},
+	{
+		"key": "The Hunter can infect humans and heal infected with his hammer.",
+		"value": "Venator malleo homines inficere infectosque sanare potest."
+	},
+	{
+		"key": "The Ghost can infect humans and heal infected with his hammer.",
+		"value": "Larua malleo homines inficere infectosque sanare potest."
+	},
+	{
+		"key": "He is invisible, except if a human is near him, if he takes a damage or if he use his hammer.",
+		"value": "Latens est, donec homo proxumus sit, pugnam experiatur aut malleo utatur."
+	},
+	{
+		"key": "The Spider can infect humans and heal infected with his hammer.",
+		"value": "Aranea malleo homines inficere infectosque sanare potest."
+	},
+	{
+		"key": "When selecting any gun, his hook enter in web mode.",
+		"value": "Quum telum quodlubet seligis, captio eius unco in modum retialem transit."
+	},
+	{
+		"key": "Any human that touch a hook in web mode is automatically grabbed.",
+		"value": "Homo quicumque uncum in modo retiali tangens apprehenditur."
+	},
+	{
+		"key": "The hook of the spider (in both mode) deal 1 damage point per second and can grab a human during 2 seconds.",
+		"value": "Uncus araneus (in modos ambobus) plagam 1 infligit et hominem secundas 2 tenet."
+	},
+	{
+		"key": "The Ghoul can infect humans and heal infected with his hammer.",
+		"value": "\u0120\u016bl malleo homines inficere infectosque sanare potest."
+	},
+	{
+		"key": "He can devour all that has died close to him, which makes him stronger, faster and more resistant.",
+		"value": "Omnia circa eum mortua devorare potest, quo fortior, celerior firmiorque fiat."
+	},
+	{
+		"key": "Thereupon he digests his fodder bit by bit going back to his normal state, and besides, death bereaves him of his nourishment.",
+		"value": "Exinde pabulum digerit sensim ad statum vulgarem revolviens, ultro ei letum alimenta detrahit."
+	},
+	{
+		"key": "The Slug can infect humans and heal infected with his hammer.",
+		"value": "Limax malleo homines inficere infectosque sanare potest."
+	},
+	{
+		"key": "He can make the ground and walls toxic by spreading slime with his hammer.",
+		"value": "Solum parietesque veneniferos malleo mucum reddendo potest."
+	},
+	{
+		"key": "Touching the slime inflicts three damage points in three seconds on a human.",
+		"value": "Contamen muci homini plagas tres per secunda tria infligit."
+	},
+	{
+		"key": "The Undead can infect humans and heal infected with his hammer.",
+		"value": "Immortalis malleo homines inficere infectosque sanare potest."
+	},
+	{
+		"key": "Instead of dying, he freezes during 10 seconds.",
+		"value": "Pro morte secundas 10 gelatur."
+	},
+	{
+		"key": "If an infected heals him, the freeze effect disappear.",
+		"value": "Quando infectus eum sanat, effectus gelationis decedit."
+	},
+	{
+		"key": "The Witch can infect humans and heal infected with his hammer.",
+		"value": "Malefica malleo homines inficere infectosque sanare potest."
+	},
+	{
+		"key": "When an infected dies, he may re-spawn near her.",
+		"value": "Infectus mortuus iuxta eam ab inferis exsistere potest."
+	},
+	{
+		"key": "If the Witch dies, she disappears and is replaced by another class of infected.",
+		"value": "Malefica mortua decedit commutaturque infecto classis alius."
+	},
+	{
+		"key": "She can also inflict 1 damage point per second by hooking humans.",
+		"value": "Plagam 1 quoque per secundam unco infligere potest."
+	},
+	{
+		"key": "Targeted chat messages",
+		"value": "Nuntia colineata"
+	},
+	{
+		"key": "Use \u201c/msg <PlayerName> <My Message>\u201d to send a private message to this player.",
+		"value": "Utere \u00bb/msg <Nomen arenarii> <Nuntium meum>\u00ab, ut nuntium privatum haec arenario emittas."
+	},
+	{
+		"key": "Use \u201c/msg !<ClassName> <My Message>\u201d to send a private message to all players with a specific class.",
+		"value": "Utere \u00bb/msg !<nomen classis> <Nuntium meum>\u00ab, ut nuntium ad arenarios classis specialis collineatum emittas."
+	},
+	{
+		"key": "Example: \u201c/msg !medic I'm wounded!\u201d",
+		"value": "Exemplum: \u00bb/msg !medic Vulneratus sum!\u00ab"
+	},
+	{
+		"key": "Use \u201c/msg !near\u201d to send a private message to all players near you.",
+		"value": "Utere \u00bb/msg !near\u00ab, ut nuntium collineatum ad arenarios propinquos emittas."
+	},
+	{
+		"key": "Choose a help page with /help <page>",
+		"value": "Paginam auxiliarem iusso \u00bb/help <pagina>\u00ab eligas"
+	},
+	{
+		"key": "Available help pages: {str:PageList}",
+		"value": "Paginae auxiliares promptae: {str:PageList}"
+	},
+	{
+		"key": "A random class will be automatically attributed to you when rounds start",
+		"value": "Classis fortuita tibi assignatur, quum ludus incipit"
+	},
+	{
+		"key": "The class selector will be displayed when rounds start",
+		"value": "Selector classis praebebitur, quum ludus incipit"
+	},
+	{
+		"key": "Unknown language",
+		"value": "Lingua incognita"
+	},
+	{
+		"key": "Available languages: {str:ListOfLanguage}",
+		"value": "Paginae auxiliares promptae: {str:ListOfLanguage}"
+	},
+	{
+		"key": "List of commands",
+		"value": "Tabula iussorum"
+	},
+	{
+		"key": "Press <F3> or <F4> to enable or disable hook protection",
+		"value": "Preme <F3> aut <F4> ad instructionem protectionis contra captionem"
+	},
+	{
+		"key": "You have held a bonus area for one minute, +5 points",
+		"value": "Zonae seorsae unam minutam immoratus es, +5 copiae"
+	},
+	{
+		"key": "You are frozen: {sec:EffectDuration}",
+		"value": "Gelatus es: {sec:EffectDuration}"
+	},
+	{
+		"key": "Random choice",
+		"value": "Electio fortuita"
+	},
+	{
+		"key": "Choose your class",
+		"value": "Classem elige"
+	},
+	{
+		"key": "Laser wall: {sec:RemainingTime}",
+		"value": "Vallum lasericum: {sec:RemainingTime}"
+	},
+	{
+		"key": "{int:NumBombs} bombs left",
+		"one": "Bomba una reliqua",
+		"other": "{int:NumBombs} bombae reliquae",
+	},
+	{
+		"key": "{int:NumMines} mines are active",
+		"one": "Una mina reliqua",
+		"other": "{int:NumMines} minae reliquae",
+	},
+	{
+		"key": "Mine activated",
+		"value": "Mina posita"
+	},
+	{
+		"key": "Next target in {sec:RemainingTime}",
+		"value": "Scopus sequens post {sec:RemainingTime}"
+	},
+	{
+		"key": "Target to eliminate: {str:PlayerName}",
+		"value": "Scopus tollendus: {str:PlayerName}"
+	},
+	{
+		"key": "Position lock: {sec:RemainingTime}",
+		"value": "Claustrum positionis: {sec:RemainingTime}"
+	},
+	{
+		"key": "Explosive yield: {percent:BombLevel}",
+		"value": "Vis displosiva: {percent:BombLevel}"
+	},
+	{
+		"key": "Next flag in {sec:RemainingTime}",
+		"value": "Vexillum sequens post {sec:RemainingTime}"
+	},
+	{
+		"key": "Web mode enabled",
+		"value": "Modus retialis instructus"
+	},
+	{
+		"key": "Stomach filled by {percent:FodderInStomach}",
+		"value": "Venter infertus {percent:FodderInStomach}"
+	},
+	{
+		"key": "The witch is dead",
+		"value": "Malefica mortua est"
+	},
+	{
+		"key": "The undead is finally dead",
+		"value": "Immortalis tandem mortuus est"
+	},
+	{
+		"key": "Sword velocity increased",
+		"value": "Velocitas ensis aucta"
+	},
+	{
+		"key": "Sword strength increased",
+		"value": "Vis ensis aucta"
+	},
+	{
+		"key": "Grenade limit increased",
+		"value": "Limes granatarius auctus"
+	},
+	{
+		"key": "Type \u201c/help {str:ClassName}\u201d for more information about your class",
+		"value": "Scribe \u00bb/help {str:ClassName}\u00ab pro informationibus pluribus"
+	},
+	{
+		"key": "The Hero found the flag!",
+		"value": "Heros vexillum invenit!"
+	},
+]}

@@ -19,7 +19,7 @@ CBonus::CBonus(CGameWorld *pGameWorld, vec2 Pos, vec2 Dir, int Type, int Owner)
 	m_Type = Type;
 	m_GetLevel = 1;
 	
-	if(Owner > -1 && Owner < MAX_CLIENTS)
+	if(Owner > -1 && Owner < MAX_NOBOT)
 	{
 		if(GameServer()->m_apPlayers[Owner])
 			m_GetLevel = GameServer()->m_apPlayers[Owner]->AccData.Level*100;

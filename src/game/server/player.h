@@ -44,7 +44,7 @@ public:
 
 	vec2 m_ViewPos;
 	int m_PlayerFlags;
-	int m_aActLatency[MAX_CLIENTS];
+	int m_aActLatency[MAX_NOBOT];
 	int m_SpectatorID;
 
 	bool m_IsReady;
