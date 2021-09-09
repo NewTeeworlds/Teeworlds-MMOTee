@@ -2603,7 +2603,9 @@ public:
 	{
 		try
 		{
-			pSqlServer->executeSqlQuery("SELECT * FROM tw_Materials");
+			char aBuf[256];
+			str_format(aBuf, sizeof(aBuf), "SELECT * FROM %s_Materials", pSqlServer->GetPrefix());
+			pSqlServer->executeSqlQuery(aBuf);
 			while(pSqlServer->GetResults()->next())
 			{
 				int IDMAT = (int)pSqlServer->GetResults()->getInt("ID");
@@ -2642,15 +2644,16 @@ public:
 		try
 		{
 			str_format(aBuf, sizeof(aBuf), 
-				"UPDATE tw_Materials "
+				"UPDATE %s_Materials "
 				"SET Materials = '%d' "
 				"WHERE ID = '%d';"
+				, pSqlServer->GetPrefix()
 				, m_pServer->m_Materials[m_ID], m_ID+1);
 			pSqlServer->executeSql(aBuf);
 		}
 		catch (sql::SQLException &e)
 		{
-			dbg_msg("sql", "Can't get top10 (MySQL Error: %s)", e.what());
+			dbg_msg("sql", "Can't Save Material (MySQL Error: %s)", e.what());
 			return false;
 		}
 		return true;
@@ -2708,8 +2711,9 @@ public:
 		{
 			int iscope = 0;
 			str_format(aBuf, sizeof(aBuf), 
-				"SELECT * FROM tw_Mail "
+				"SELECT * FROM %s_Mail "
 				"WHERE IDOwner = '%d' LIMIT 20;"
+				, pSqlServer->GetPrefix()
 				, m_pServer->m_aClients[m_ClientID].m_UserID);
 			pSqlServer->executeSqlQuery(aBuf);
 			while(pSqlServer->GetResults()->next())
@@ -2821,8 +2825,9 @@ public:
 				m_pServer->SetRewardMail(m_ClientID, m_IDMail, -1, -1);
 				m_pServer->GameServer()->GiveItem(m_ClientID, it_id, it_count);
 				str_format(aBuf, sizeof(aBuf),
-						   "DELETE FROM tw_Mail "
+						   "DELETE FROM %s_Mail "
 						   "WHERE ID = '%d' LIMIT 1;",
+						   pSqlServer->GetPrefix(),
 						   m_pServer->m_aClients[m_ClientID].m_MailID[m_IDMail]);
 				pSqlServer->executeSql(aBuf);
 			}
@@ -2884,8 +2889,9 @@ public:
 			try
 			{
 				str_format(aBuf, sizeof(aBuf), 
-					"SELECT COUNT(*) FROM tw_Mail " 
+					"SELECT COUNT(*) FROM %s_Mail " 
 					"WHERE IDOwner = '%d' AND ItemID = '%d';"
+					, pSqlServer->GetPrefix()
 					, m_IDOwner, Items[i].ItemID);	
 				pSqlServer->executeSqlQuery(aBuf);
 				if(pSqlServer->GetResults()->next())
@@ -2900,8 +2906,9 @@ public:
 		}
 
 		str_format(aBuf, sizeof(aBuf), 
-			"DELETE FROM tw_Mail " 
+			"DELETE FROM %s_Mail " 
 			"WHERE IDOwner = '%d' AND MailType = '9';"
+			, pSqlServer->GetPrefix()
 			, m_IDOwner);	
 			pSqlServer->executeSql(aBuf);
 		m_pServer->InitMailID(m_ClientID);
@@ -2955,8 +2962,9 @@ public:
 		try
 		{
 			str_format(aBuf, sizeof(aBuf), 
-				"SELECT count(*) FROM tw_Mail " 
+				"SELECT count(*) FROM %s_Mail " 
 				"WHERE IDOwner = '%d' ;"
+				, pSqlServer->GetPrefix()
 				, m_ClientID);	
 			pSqlServer->executeSqlQuery(aBuf);
 			if(pSqlServer->GetResults()->next())
@@ -3005,9 +3013,10 @@ public:
 		try
 		{
 			str_format(aBuf, sizeof(aBuf), 
-				"INSERT INTO tw_Mail "
+				"INSERT INTO %s_Mail "
 				"(IDOwner, MailType, ItemID, ItemCount) "
 				"VALUES ('%d', '%d', '%d', '%d');"
+				, pSqlServer->GetPrefix()
 				, m_AuthedID, m_MailType, m_ItemID, m_ItemNum);	
 			pSqlServer->executeSql(aBuf);
 		}
@@ -3046,7 +3055,9 @@ public:
 		{
 			if(m_ItemID == -1 && m_ClientID == -1)
 			{
-				pSqlServer->executeSqlQuery("SELECT * FROM tw_uItemList;");
+				char aBuf[256];
+				str_format(aBuf, sizeof(aBuf), "SELECT * FROM %s_uItemList;", pSqlServer->GetPrefix());
+				pSqlServer->executeSqlQuery(aBuf);
 				while(pSqlServer->GetResults()->next())
 				{
 					for(int i = 0; i < MAX_NOBOT; ++i)
@@ -3058,7 +3069,8 @@ public:
 						str_copy(m_pServer->m_stInv[i][ItemID].i_desc, pSqlServer->GetResults()->getString("item_desc").c_str(), sizeof(m_pServer->m_stInv[i][ItemID].i_desc));
 					}
 				}
-				pSqlServer->executeSqlQuery("SELECT * FROM tw_uItemList_en;");
+				str_format(aBuf, sizeof(aBuf), "SELECT * FROM %s_uItemList_en;", pSqlServer->GetPrefix());
+				pSqlServer->executeSqlQuery(aBuf);
 				while(pSqlServer->GetResults()->next())
 				{
 					int ItemID = (int)pSqlServer->GetResults()->getInt("il_id");
@@ -3071,7 +3083,7 @@ public:
 			else
 			{
 				char aBuf[128];
-				str_format(aBuf, sizeof(aBuf), "SELECT item_count FROM tw_uItems WHERE item_owner = '%d' AND il_id = '%d';", m_pServer->m_aClients[m_ClientID].m_UserID, m_ItemID);
+				str_format(aBuf, sizeof(aBuf), "SELECT item_count FROM %s_uItems WHERE item_owner = '%d' AND il_id = '%d';", pSqlServer->GetPrefix(), m_pServer->m_aClients[m_ClientID].m_UserID, m_ItemID);
 				pSqlServer->executeSqlQuery(aBuf);
 
 				if(pSqlServer->GetResults()->next())
@@ -3121,9 +3133,10 @@ public:
 			if(m_pServer->m_stInv[m_ClientID][m_ItemID].i_count > 0)
 			{
 				str_format(aBuf, sizeof(aBuf), 
-					"UPDATE tw_uItems "
+					"UPDATE %s_uItems "
 					"SET item_count = item_count + '%d', item_settings = item_settings + '%d' "
 					"WHERE item_owner = '%d' AND il_id = '%d';"
+					, pSqlServer->GetPrefix()
 					, m_Count, m_Settings, m_pServer->m_aClients[m_ClientID].m_UserID, m_ItemID);
 				pSqlServer->executeSql(aBuf);
 				
@@ -3132,9 +3145,10 @@ public:
 				return true;
 			}
 			str_format(aBuf, sizeof(aBuf), 
-				"INSERT INTO tw_uItems "
+				"INSERT INTO %s_uItems "
 				"(il_id, item_owner, item_count, item_type, item_settings, item_enchant) "
 				"VALUES ('%d', '%d', '%d', '%d', '%d', '%d');"
+				, pSqlServer->GetPrefix()
 				, m_ItemID, m_pServer->m_aClients[m_ClientID].m_UserID, m_Count, m_pServer->m_stInv[m_ClientID][m_ItemID].i_type, m_Settings, m_Enchant);	
 			pSqlServer->executeSql(aBuf);
 
@@ -3191,8 +3205,9 @@ public:
 		try
 		{
 			str_format(aBuf, sizeof(aBuf), 
-				"SELECT item_count FROM tw_uItems "
+				"SELECT item_count FROM %s_uItems "
 				"WHERE item_owner = '%d' AND il_id = '%d';",
+				pSqlServer->GetPrefix(),
 				m_pServer->m_aClients[m_ClientID].m_UserID, m_ItemID);
 			pSqlServer->executeSqlQuery(aBuf);
 
@@ -3204,9 +3219,10 @@ public:
 				if(Count > m_Count)
 				{
 					str_format(aBuf, sizeof(aBuf), 
-						"UPDATE tw_uItems "
+						"UPDATE %s_uItems "
 						"SET item_count = item_count - '%d' "
 						"WHERE item_owner = '%d' AND il_id = '%d';"
+						, pSqlServer->GetPrefix()
 						, m_Count, m_pServer->m_aClients[m_ClientID].m_UserID, m_ItemID);
 					pSqlServer->executeSql(aBuf);	
 					m_pServer->m_stInv[m_ClientID][m_ItemID].i_count -= m_Count;
@@ -3214,8 +3230,9 @@ public:
 				else
 				{
 					str_format(aBuf, sizeof(aBuf), 
-						"DELETE FROM tw_uItems " 
+						"DELETE FROM %s_uItems " 
 						"WHERE item_owner = '%d' AND il_id = '%d';"
+						, pSqlServer->GetPrefix()
 						, m_pServer->m_aClients[m_ClientID].m_UserID, m_ItemID);	
 					pSqlServer->executeSql(aBuf);			
 					m_pServer->m_stInv[m_ClientID][m_ItemID].i_count = 0;
@@ -3337,9 +3354,10 @@ public:
 			if(m_pServer->GetItemCount(m_ClientID, m_ItemID) > 0)
 			{
 				str_format(aBuf, sizeof(aBuf), 
-					"UPDATE tw_uItems "
+					"UPDATE %s_uItems "
 					"SET item_settings = '%d', item_enchant = '%d' "
 					"WHERE item_owner = '%d' AND il_id = '%d';"
+					, pSqlServer->GetPrefix()
 					, m_pServer->m_stInv[m_ClientID][m_ItemID].i_settings, m_pServer->m_stInv[m_ClientID][m_ItemID].i_enchant, m_pServer->m_aClients[m_ClientID].m_UserID, m_ItemID);
 				pSqlServer->executeSql(aBuf);
 			}
@@ -3387,8 +3405,9 @@ public:
 			if(bGetCount)
 			{
 				str_format(aBuf, sizeof(aBuf), 
-					"SELECT il_id, item_type FROM tw_uItems "
+					"SELECT il_id, item_type FROM %s_uItems "
 					"WHERE item_owner = '%d' AND item_type != '10, 12, 15, 16, 17';",
+					pSqlServer->GetPrefix(),
 					m_pServer->m_aClients[m_ClientID].m_UserID, m_Type);
 				pSqlServer->executeSqlQuery(aBuf);
 
@@ -3404,8 +3423,9 @@ public:
 			}
 
 			str_format(aBuf, sizeof(aBuf), 
-				"SELECT il_id, item_count FROM tw_uItems "
+				"SELECT il_id, item_count FROM %s_uItems "
 				"WHERE item_owner = '%d' AND item_type = '%d';",
+				pSqlServer->GetPrefix(),
 				m_pServer->m_aClients[m_ClientID].m_UserID, m_Type);
 			pSqlServer->executeSqlQuery(aBuf);
 			
@@ -3522,7 +3542,9 @@ public:
 	{
 		try
 		{
-			pSqlServer->executeSqlQuery("SELECT * FROM tw_Clans;");
+			char aBuf[256];
+			str_format(aBuf, sizeof(aBuf), "SELECT * FROM %s_Clans", pSqlServer->GetPrefix());
+			pSqlServer->executeSqlQuery(aBuf);
 
 			int Num = 0;
 			while(pSqlServer->GetResults()->next())
@@ -3597,7 +3619,8 @@ public:
 			{
 				m_sType = CSqlString<64>(m_pServer->m_stClan[m_ClanID].f_creator);
 				str_format(aBuf, sizeof(aBuf), 
-					"UPDATE tw_Clans SET LeaderName = '%s' WHERE ClanID = '%d';",
+					"UPDATE %s_Clans SET LeaderName = '%s' WHERE ClanID = '%d';",
+					pSqlServer->GetPrefix(),
 					m_sType.ClrStr(), m_ClanID);
 				pSqlServer->executeSqlQuery(aBuf);
 				return true;
@@ -3607,7 +3630,8 @@ public:
 			{
 				m_sType = CSqlString<64>(m_pServer->m_stClan[m_ClanID].f_admin);
 				str_format(aBuf, sizeof(aBuf), 
-					"UPDATE tw_Clans SET AdminName = '%s' WHERE ClanID = '%d';",
+					"UPDATE %s_Clans SET AdminName = '%s' WHERE ClanID = '%d';",
+					pSqlServer->GetPrefix(),
 					m_sType.ClrStr(), m_ClanID);
 				pSqlServer->executeSqlQuery(aBuf);
 				return true;
@@ -3615,7 +3639,7 @@ public:
 
 			if(str_comp(m_sType.ClrStr(), "Init") == 0)
 			{
-				str_format(aBuf, sizeof(aBuf), "SELECT * FROM tw_Clans WHERE ClanID = '%d';", m_ClanID);
+				str_format(aBuf, sizeof(aBuf), "SELECT * FROM %s_Clans WHERE ClanID = '%d';", pSqlServer->GetPrefix(), m_ClanID);
 				pSqlServer->executeSqlQuery(aBuf);
 				if(pSqlServer->GetResults()->next())
 				{
@@ -3634,7 +3658,7 @@ public:
 				return true;
 			}
 
-			str_format(aBuf, sizeof(aBuf), "SELECT %s FROM tw_Clans WHERE ClanID = '%d';", m_sType.ClrStr(), m_ClanID);
+			str_format(aBuf, sizeof(aBuf), "SELECT %s FROM %s_Clans WHERE ClanID = '%d';", pSqlServer->GetPrefix(), m_sType.ClrStr(), m_ClanID);
 			pSqlServer->executeSqlQuery(aBuf);
 			if(pSqlServer->GetResults()->next())
 			{
@@ -3714,7 +3738,8 @@ public:
 				if(m_Save && VarGot > -1)
 				{
 					str_format(aBuf, sizeof(aBuf), 
-						"UPDATE tw_Clans SET %s = '%d' WHERE ClanID = '%d';",
+						"UPDATE %s_Clans SET %s = '%d' WHERE ClanID = '%d';",
+						pSqlServer->GetPrefix(),
 						m_sType.ClrStr(), VarGot, m_ClanID);
 					pSqlServer->executeSqlQuery(aBuf);
 				}
@@ -3811,7 +3836,8 @@ public:
 					//try
 					//{
 						//dbg_msg("test","4,%d", ClanID);
-						str_format(aBuf, sizeof(aBuf), "UPDATE tw_Users SET ClanID = '%d' WHERE UserId = '%d';"
+						str_format(aBuf, sizeof(aBuf), "UPDATE %s_Users SET ClanID = '%d' WHERE UserId = '%d';"
+							, pSqlServer->GetPrefix()
 							, ClanID, m_pServer->m_aClients[m_ClientID].m_UserID);
 						pSqlServer->executeSql(aBuf);	// 麻了,鬼知道为啥这玩意执行以后,明明是成功的,读取到的值居然是失败的
 						//dbg_msg("test","5");
@@ -3890,8 +3916,8 @@ public:
 		try
 		{
 			str_format(aBuf, sizeof(aBuf), 
-				"SELECT UserID, ClanID, Level, Nick, ClanAdded FROM tw_Users "
-				"WHERE ClanID = '%d' ORDER BY Level DESC;", m_ClanID);
+				"SELECT UserID, ClanID, Level, Nick, ClanAdded FROM %s_Users "
+				"WHERE ClanID = '%d' ORDER BY Level DESC;", pSqlServer->GetPrefix(), m_ClanID);
 			pSqlServer->executeSqlQuery(aBuf);
 			
 			int Num = 0;
@@ -3965,8 +3991,9 @@ public:
 		try
 		{
 			str_format(aBuf, sizeof(aBuf), 
-				"SELECT ClanID FROM tw_Users "
+				"SELECT ClanID FROM %s_Users "
 				"WHERE ClanID = '%d';"
+				, pSqlServer->GetPrefix()
 				, m_ClanID);
 			pSqlServer->executeSqlQuery(aBuf);
 			
@@ -4034,7 +4061,7 @@ public:
 		{
 			int ClanID = 0;
 			str_format(aBuf, sizeof(aBuf), 
-				"UPDATE tw_Users SET ClanID = %d, ClanAdded = %d WHERE Nick = '%s';", ClanID, ClanID, m_sName.ClrStr());
+				"UPDATE %s_Users SET ClanID = %d, ClanAdded = %d WHERE Nick = '%s';", pSqlServer->GetPrefix(), ClanID, ClanID, m_sName.ClrStr());
 			pSqlServer->executeSqlQuery(aBuf);	
 		}
 		catch (sql::SQLException &e)
@@ -4078,8 +4105,9 @@ public:
 		try
 		{
 			str_format(aBuf, sizeof(aBuf), 
-				"SELECT * FROM tw_Users "
+				"SELECT * FROM %s_Users "
 				"WHERE UserId = %d;"
+				, pSqlServer->GetPrefix()
 				, m_pServer->m_aClients[m_ClientID].m_UserID);
 			pSqlServer->executeSqlQuery(aBuf);
 
@@ -4126,7 +4154,7 @@ public:
 		try
 		{
 			str_format(aBuf, sizeof(aBuf), 
-				"SELECT il_id, item_count, item_settings, item_enchant FROM tw_uItems WHERE item_owner = %d;", m_pServer->m_aClients[m_ClientID].m_UserID);
+				"SELECT il_id, item_count, item_settings, item_enchant FROM %s_uItems WHERE item_owner = %d;", pSqlServer->GetPrefix(), m_pServer->m_aClients[m_ClientID].m_UserID);
 			pSqlServer->executeSqlQuery(aBuf);
 
 			while(pSqlServer->GetResults()->next())
@@ -4151,7 +4179,8 @@ public:
 		try
 		{
 			str_format(aBuf, sizeof(aBuf), 
-				"SELECT * FROM tw_uClass WHERE UserID = %d;"
+				"SELECT * FROM %s_uClass WHERE UserID = %d;"
+				, pSqlServer->GetPrefix()
 				, m_pServer->m_aClients[m_ClientID].m_UserID);
 			pSqlServer->executeSqlQuery(aBuf);
 
@@ -4297,7 +4326,8 @@ public:
 			{
 				int ClanID = m_pServer->m_aClients[m_ClientID].m_ClanID;
 				str_format(aBuf, sizeof(aBuf), 
-					"UPDATE tw_Users SET ClanID = '%d' WHERE UserId = '%d';"
+					"UPDATE %s_Users SET ClanID = '%d' WHERE UserId = '%d';"
+					, pSqlServer->GetPrefix()
 					, ClanID, m_pServer->m_aClients[m_ClientID].m_UserID);
 				pSqlServer->executeSqlQuery(aBuf);	
 				
@@ -4449,8 +4479,9 @@ public:
 		try
 		{
 			str_format(aBuf, sizeof(aBuf), 
-				"SELECT Nick, Seccurity FROM tw_Users "
+				"SELECT Nick, Seccurity FROM %s_Users "
 				"WHERE Nick = '%s';"
+				, pSqlServer->GetPrefix()
 				, m_sNick.ClrStr());
 			pSqlServer->executeSqlQuery(aBuf);
 			
@@ -4515,7 +4546,8 @@ public:
 		{
 			//检查数据库中的名称或昵称
 			str_format(aBuf, sizeof(aBuf), 
-				"SELECT UserId FROM tw_Users WHERE Username = '%s' OR Nick = '%s';"
+				"SELECT UserId FROM %s_Users WHERE Username = '%s' OR Nick = '%s';"
+				, pSqlServer->GetPrefix()
 				, m_sName.ClrStr(), m_sNick.ClrStr());
 			pSqlServer->executeSqlQuery(aBuf);
 
@@ -4540,9 +4572,10 @@ public:
 		try
 		{	
 			str_format(aBuf, sizeof(aBuf), 
-				"INSERT INTO tw_Users "
+				"INSERT INTO %s_Users "
 				"(Username, Nick, PasswordHash, Email, ClanID ,RegisterDate, RegisterIp) "
 				"VALUES ('%s', '%s', '%s', '%s', '0', UTC_TIMESTAMP(), '%s');"
+				, pSqlServer->GetPrefix()
 				, m_sName.ClrStr(), m_sNick.ClrStr(), m_sPasswordHash.ClrStr(), m_sEmail.ClrStr(), aAddrStr);
 			pSqlServer->executeSql(aBuf);
 		}
@@ -4559,7 +4592,8 @@ public:
 		try
 		{	
 			str_format(aBuf, sizeof(aBuf), 
-				"SELECT UserId FROM tw_Users WHERE Username = '%s' AND PasswordHash = '%s';"
+				"SELECT UserId FROM %s_Users WHERE Username = '%s' AND PasswordHash = '%s';"
+				, pSqlServer->GetPrefix()
 				, m_sName.ClrStr(), m_sPasswordHash.ClrStr());
 			pSqlServer->executeSqlQuery(aBuf);
 
@@ -4567,7 +4601,8 @@ public:
 			{
 				int UsedID = (int)pSqlServer->GetResults()->getInt("UserId");
 				str_format(aBuf, sizeof(aBuf), 
-					"INSERT INTO tw_uClass (UserID, Username) VALUES ('%d', '%s');"
+					"INSERT INTO %s_uClass (UserID, Username) VALUES ('%d', '%s');"
+					, pSqlServer->GetPrefix()
 					, UsedID, m_sName.ClrStr());
 				pSqlServer->executeSql(aBuf);
 
@@ -4638,7 +4673,8 @@ public:
 		try
 		{	
 			str_format(aBuf, sizeof(aBuf), 
-				"UPDATE tw_Users SET PasswordHash = '%s' WHERE Username = '%s';"
+				"UPDATE %s_Users SET PasswordHash = '%s' WHERE Username = '%s';"
+				, pSqlServer->GetPrefix()
 				, m_sPasswordHash.ClrStr(), m_sUsername);
 			pSqlServer->executeSqlQuery(aBuf);	
 		}
@@ -4695,7 +4731,8 @@ public:
 		{	
 			//dbg_msg("test","1");
 			str_format(aBuf, sizeof(aBuf), 
-				"UPDATE tw_Users SET PasswordHash = '%s' WHERE UserId = '%d';"
+				"UPDATE %s_Users SET PasswordHash = '%s' WHERE UserId = '%d';"
+				, pSqlServer->GetPrefix()
 				, m_sPasswordHash.ClrStr(), m_pServer->m_aClients[m_ClientID].m_UserID);
 			//dbg_msg("test","1.5");
 			pSqlServer->executeSqlQuery(aBuf);	
@@ -4826,8 +4863,9 @@ public:
 		{
 			int SortTop = m_Type == 2 ? 5 : 10;		
 			str_format(aBuf, sizeof(aBuf), 
-				"SELECT %s, Clanname, LeaderName FROM tw_Clans "
+				"SELECT %s, Clanname, LeaderName FROM %s_Clans "
 				"ORDER BY %s DESC LIMIT %d;",
+				pSqlServer->GetPrefix(),
 				m_sType.ClrStr(), m_sType.ClrStr(), SortTop);
 			pSqlServer->executeSqlQuery(aBuf);
 
@@ -4886,7 +4924,9 @@ public:
 	{
 		try
 		{
-			pSqlServer->executeSqlQuery("SELECT ClanID, Money FROM tw_Clans ORDER BY Money DESC LIMIT 3;");
+			char aBuf[256];
+			str_format(aBuf, sizeof(aBuf), "SELECT ClanID, Money FROM %s_Clans ORDER BY Money DESC LIMIT 3;", pSqlServer->GetPrefix());
+			pSqlServer->executeSqlQuery(aBuf);
 			int House = 0;
 			while(pSqlServer->GetResults()->next())
 			{
@@ -5023,7 +5063,8 @@ public:
 		{
 			//检查数据库中的 IP
 			str_format(aBuf, sizeof(aBuf), 
-				"SELECT * FROM tw_UserStatus WHERE IP = '%s' ORDER BY ID DESC LIMIT 1;"
+				"SELECT * FROM %s_UserStatus WHERE IP = '%s' ORDER BY ID DESC LIMIT 1;"
+				,pSqlServer->GetPrefix()
 				,aAddrStr);
 			pSqlServer->executeSqlQuery(aBuf);
 			//dbg_msg("test","7 %s", aBuf);
@@ -5051,8 +5092,9 @@ public:
 			}
 			//检查数据库中的名称或昵称
 			str_format(aBuf, sizeof(aBuf), 
-				"SELECT * FROM tw_UserStatus WHERE Nick = '%s' ORDER BY ID DESC LIMIT 1;"
-				,m_sNick.ClrStr());
+				"SELECT * FROM %s_UserStatus WHERE Nick = '%s' ORDER BY ID DESC LIMIT 1;"
+				, pSqlServer->GetPrefix()
+				, m_sNick.ClrStr());
 			pSqlServer->executeSqlQuery(aBuf);
 			//dbg_msg("test","7 %s", aBuf);
 			if(pSqlServer->GetResults()->next())
@@ -5079,14 +5121,16 @@ public:
 			}
 
 			str_format(aBuf, sizeof(aBuf),
-				"INSERT INTO tw_UserStatus (IP, Nick, online, serverid) VALUES ('%s', '%s', '1','%d');",
+				"INSERT INTO %s_UserStatus (IP, Nick, online, serverid) VALUES ('%s', '%s', '1','%d');",
+				 pSqlServer->GetPrefix(),
 				 aAddrStr, m_sNick.ClrStr(), g_Config.m_ServerID);
 			
 			pSqlServer->executeSql(aBuf);
 
 			str_format(aBuf, sizeof(aBuf), 
-				"SELECT ID FROM tw_UserStatus WHERE IP = '%s' ORDER BY ID DESC LIMIT 1;"
-				,aAddrStr);
+				"SELECT ID FROM %s_UserStatus WHERE IP = '%s' ORDER BY ID DESC LIMIT 1;"
+				, pSqlServer->GetPrefix()
+				, aAddrStr);
 			pSqlServer->executeSqlQuery(aBuf);
 			if(pSqlServer->GetResults()->next())
 			{
@@ -5157,15 +5201,17 @@ public:
 			{
 				////检查数据库中的 IP
 				str_format(aBuf, sizeof(aBuf), 
-					"SELECT * FROM tw_UserStatus WHERE ID = '%d';"
-					,m_UserStatusID);
+					"SELECT * FROM %s_UserStatus WHERE ID = '%d';"
+					, pSqlServer->GetPrefix()
+					, m_UserStatusID);
 				pSqlServer->executeSqlQuery(aBuf);
 				//dbg_msg("test","1 %s",aBuf);
 				if(pSqlServer->GetResults()->next())
 				{
 					str_format(aBuf, sizeof(aBuf), 
-						"UPDATE tw_UserStatus SET online = '0' WHERE ID = '%d';"
-						,m_UserStatusID);
+						"UPDATE %s_UserStatus SET online = '0' WHERE ID = '%d';"\
+						, pSqlServer->GetPrefix()
+						, m_UserStatusID);
 					pSqlServer->executeSql(aBuf);
 					//dbg_msg("test","2 %s", aBuf);
 				}
@@ -5228,15 +5274,17 @@ public:
 			{
 				//检查数据库中的 IP
 				str_format(aBuf, sizeof(aBuf), 
-					"SELECT * FROM tw_UserStatus WHERE ID = '%d';"
-					,m_UserStatusID);
+					"SELECT * FROM %s_UserStatus WHERE ID = '%d';"
+					, pSqlServer->GetPrefix()
+					, m_UserStatusID);
 				pSqlServer->executeSqlQuery(aBuf);
 				//dbg_msg("test","1 %s",aBuf);
 				if(pSqlServer->GetResults()->next())
 				{
 					str_format(aBuf, sizeof(aBuf), 
-						"UPDATE tw_UserStatus SET ban = '1', banreason = '%s' WHERE ID = '%d';"
-						,m_Reason.ClrStr() ,m_UserStatusID);
+						"UPDATE %s_UserStatus SET ban = '1', banreason = '%s' WHERE ID = '%d';"
+						, pSqlServer->GetPrefix()
+						, m_Reason.ClrStr(), m_UserStatusID);
 					pSqlServer->executeSql(aBuf);
 					//dbg_msg("test","2 %s", aBuf);
 				}
@@ -5286,8 +5334,9 @@ public:
 		{
 			//检查数据库中的 IP
 			str_format(aBuf, sizeof(aBuf), 
-				"SELECT ID FROM tw_UserStatus WHERE Nick = '%s' AND ban = '1' ORDER BY ID DESC LIMIT 1;"
-				,m_sNick.ClrStr());
+				"SELECT ID FROM %s_UserStatus WHERE Nick = '%s' AND ban = '1' ORDER BY ID DESC LIMIT 1;"
+				, pSqlServer->GetPrefix()
+				, m_sNick.ClrStr());
 			pSqlServer->executeSqlQuery(aBuf);
 			//dbg_msg("test","1 %s",aBuf);
 			if(pSqlServer->GetResults()->next())
@@ -5295,8 +5344,9 @@ public:
 				int m_UserStatusID;
 				m_UserStatusID = (int)pSqlServer->GetResults()->getInt("ID");
 				str_format(aBuf, sizeof(aBuf), 
-					"UPDATE tw_UserStatus SET ban = '0', banreason = '' WHERE ID = '%d';"
-					,m_UserStatusID);
+					"UPDATE %s_UserStatus SET ban = '0', banreason = '' WHERE ID = '%d';"
+					, pSqlServer->GetPrefix()
+					, m_UserStatusID);
 				pSqlServer->executeSql(aBuf);
 				//dbg_msg("test","2 %s", aBuf);
 			
@@ -5358,16 +5408,18 @@ public:
 			try
 			{
 				str_format(aBuf, sizeof(aBuf), 
-					"SELECT * FROM tw_UserStatus WHERE Nick = '%s' ORDER BY ID DESC LIMIT 1;"
-					,m_sNick.ClrStr());
+					"SELECT * FROM %s_UserStatus WHERE Nick = '%s' ORDER BY ID DESC LIMIT 1;"
+					, pSqlServer->GetPrefix()
+					, m_sNick.ClrStr());
 				pSqlServer->executeSqlQuery(aBuf);
 				//dbg_msg("test","1 %s",aBuf);
 				if(pSqlServer->GetResults()->next())
 				{
 					m_UserStatusID = (int)pSqlServer->GetResults()->getInt("ID");
 					str_format(aBuf, sizeof(aBuf), 
-						"UPDATE tw_UserStatus SET online = '0' WHERE ID = '%d';"
-						,m_UserStatusID);
+						"UPDATE %s_UserStatus SET online = '0' WHERE ID = '%d';"
+						, pSqlServer->GetPrefix()
+						, m_UserStatusID);
 					pSqlServer->executeSql(aBuf);
 					//dbg_msg("test","2 %s", aBuf);
 				}
@@ -5423,15 +5475,17 @@ public:
 			try
 			{
 				str_format(aBuf, sizeof(aBuf), 
-					"SELECT * FROM tw_UserStatus WHERE ID = '%d';"
-					,m_UserStatusID);
+					"SELECT * FROM %s_UserStatus WHERE ID = '%d';"
+					, pSqlServer->GetPrefix()
+					, m_UserStatusID);
 				pSqlServer->executeSqlQuery(aBuf);
 				//dbg_msg("test","1 %s",aBuf);
 				if(pSqlServer->GetResults()->next())
 				{
 					str_format(aBuf, sizeof(aBuf), 
-						"UPDATE tw_UserStatus SET lastupdate = now() WHERE ID = '%d';"
-						,m_UserStatusID);
+						"UPDATE %s_UserStatus SET lastupdate = now() WHERE ID = '%d';"
+						, pSqlServer->GetPrefix()
+						, m_UserStatusID);
 					pSqlServer->executeSql(aBuf);
 					//dbg_msg("test","2 %s", aBuf);
 				}
@@ -5474,7 +5528,7 @@ public:
 		char Nick[64];
 		try
 		{
-			str_copy(aBuf, "SELECT * FROM tw_UserStatus WHERE online = '1' and timestampdiff(second, lastupdate, now()) > 360;", sizeof(aBuf));
+			str_format(aBuf, sizeof(aBuf), "SELECT * FROM %s_UserStatus WHERE online = '1' and timestampdiff(second, lastupdate, now()) > 360;", pSqlServer->GetPrefix());
 			pSqlServer->executeSqlQuery(aBuf);
 				//dbg_msg("test","1 %s",aBuf);
 			while(pSqlServer->GetResults()->next())
@@ -5483,7 +5537,7 @@ public:
 				//dbg_msg("test","2 %s", aBuf);
 				dbg_msg("user","玩家 %s 超时了,被设置为下线", Nick);
 			}
-			str_copy(aBuf, "UPDATE tw_UserStatus SET online = '0' WHERE online = '1' and timestampdiff(second, lastupdate, now()) > 360;", sizeof(aBuf));
+			str_format(aBuf, sizeof(aBuf), "UPDATE %s_UserStatus SET online = '0' WHERE online = '1' and timestampdiff(second, lastupdate, now()) > 360;", pSqlServer->GetPrefix());
 			pSqlServer->executeSqlQuery(aBuf);
 			return true;
 		}
