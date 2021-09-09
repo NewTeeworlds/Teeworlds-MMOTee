@@ -15,8 +15,6 @@
 #include <iostream>
 #include "gamemodes/mod.h"  
 #include <game/server/entities/loltext.h>
-#define BOSSID 39
-const int MAX_COUNT = 1e9;
 
 enum
 {
