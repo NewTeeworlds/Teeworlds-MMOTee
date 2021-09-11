@@ -2439,7 +2439,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					str_format(aBuf, sizeof(aBuf), "cra%d", i);
 					if(str_comp(aCmd, aBuf) == 0)
 					{
-						CreateItem(ClientID, i, chartoint(pReason, 100000000));
+						CreateItem(ClientID, i, chartoint(pReason, MAX_COUNT));
 						return;	
 					}	
 				}	
@@ -4880,7 +4880,7 @@ void CGameContext::UseItem(int ClientID, int ItemID, int Count, int Type)
 		if(ItemID == CLANTICKET)
 			return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("用法: /newclan <公会名> - 创建一个新的公会"), NULL);
 
-		int PackOne = 0;
+		long int PackOne = 0;
 		if(ItemID == MONEYBAG)
 		{
 			for(int i = 0;i < Count;i++)

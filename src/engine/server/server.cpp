@@ -2362,7 +2362,7 @@ public:
 	}
 };
 
-int CServer::GetStat(int ClientID, int Type)
+long int CServer::GetStat(int ClientID, int Type)
 {
 	switch(Type)
 	{
@@ -2385,6 +2385,7 @@ int CServer::GetStat(int ClientID, int Type)
 	}
 	return 0;
 }
+
 
 void CServer::UpdateStat(int ClientID, int Type, int Size)
 {

@@ -145,7 +145,7 @@ public:
 		int m_UserStatusID;
 		int m_ClanID;
 		int m_Level;
-		int m_Exp;
+		long int m_Exp;
 		long int m_Money;
 		long int m_Gold;
 		int m_Donate;
@@ -157,7 +157,7 @@ public:
 		int m_WinArea;
 		bool m_Seccurity;
 		char m_Clan[64];
-		long int m_ClanAdded;
+		unsigned long int m_ClanAdded;
 		
 		bool m_IsJailed;
 		int m_JailLength;
@@ -495,7 +495,8 @@ public:
 	virtual int* GetIdMap(int ClientID);
 	virtual void SetCustClt(int ClientID);
 	
-	virtual int GetStat(int ClientID, int Type);
+	//virtual int GetStat(int ClientID, int Type);
+	virtual long int GetStat(int ClientID, int Type);
 	virtual int GetUpgrade(int ClientID, int Type);
 	virtual void UpdateStat(int ClientID, int Type, int Size);
 	virtual void UpdateUpgrade(int ClientID, int Type, int Size);

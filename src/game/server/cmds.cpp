@@ -332,7 +332,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		GameServer()->m_apPlayers[id]->AccData.JailLength = 0;
 		GameServer()->m_apPlayers[id]->GetCharacter()->Die(id, WEAPON_WORLD);
 		GameServer()->UpdateStats(id);
-		GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, ("成功将 {str:name} 放出监狱"), "name", GameServer()->Server()->ClientName(id), NULL);	
+		return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, ("成功将 {str:name} 放出监狱"), "name", GameServer()->Server()->ClientName(id), NULL);	
 	}
 	// 密码修改
 	else if(!strncmp(Msg->m_pMessage, "/password", 9))

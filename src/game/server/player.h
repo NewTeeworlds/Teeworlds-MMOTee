@@ -86,9 +86,9 @@ public:
 	struct
 	{
 		int Level;
-		int Exp;
+		long int Exp;
 		int Class = PLAYERCLASS_NONE;
-		long int Money;
+		int Money;
 		long int Gold;
 		int Donate;
 		long int ClanAdded;
@@ -204,7 +204,7 @@ public:
 	void CloseMapMenu();
 	bool MapMenuClickable();
 	
-	void ExpAdd(int Size, bool Bonus = true);
+	void ExpAdd(long int Size, bool Bonus = true);
 	void MoneyAdd(int Size, bool ClanBonus = false, bool MoneyDouble = false);
 	
 	void ResetUpgrade(int ClientID);

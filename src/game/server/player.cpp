@@ -263,21 +263,27 @@ void CPlayer::BasicAuthedTick()
 		
 		AccData.Money -= Got*10000;
 	}
-
-	if(AccData.Exp >= AccData.Level*GetNeedForUp())
+	bool upgraded = false;
+	long int needexp = AccData.Level*GetNeedForUp();
+	while(AccData.Exp >= needexp)
 	{
-		GameServer()->SendChatTarget_Localization(m_ClientID, CHATCATEGORY_DEFAULT, _("[Level UP] 恭喜你你升级了! 你获得了技能点和升级点."), NULL);
+
+		upgraded = true;
 		AccData.Exp -= AccData.Level*GetNeedForUp();
 		AccData.Level++;
 		AccUpgrade.SkillPoint += 1;
 		AccUpgrade.Upgrade += 2;
-
+		needexp = AccData.Level*GetNeedForUp();
 		int GetBag = Server()->GetItemCount(m_ClientID, AMULETCLEEVER) ? 20 : 1;
 		GameServer()->GiveItem(m_ClientID, MONEYBAG, GetBag);
 		if(AccData.Level % 10 == 0)
 			GameServer()->SendMail(m_ClientID, 8, RANDOMCRAFTITEM, 3);
 		if(AccData.Level == 2)
 			GameServer()->SendChatTarget_Localization(m_ClientID, CHATCATEGORY_DEFAULT, _("你现在可以去做任务了."), NULL);		
+	}
+	if(upgraded)
+	{
+		GameServer()->SendChatTarget_Localization(m_ClientID, CHATCATEGORY_DEFAULT, _("[Level UP] 恭喜你你升级了! 你获得了技能点和升级点."), NULL);
 		if(m_pCharacter)
 		{
 			GameServer()->CreateLolText(m_pCharacter, false, vec2(0,-75), vec2 (0,-1), 50, "Level ++");
@@ -665,12 +671,12 @@ void CPlayer::MoneyAdd(int Size, bool ClanBonus, bool MoneyDouble)
 	return;
 }
 
-void CPlayer::ExpAdd(int Size, bool Bonus)
+void CPlayer::ExpAdd(long int Size, bool Bonus)
 {
 	if(IsBot())
 		return;
 	
-	int GetExp = Size, Get = 0;
+	long int GetExp = Size, Get = 0;
 	if(Bonus && Server()->GetClanID(m_ClientID))
 	{
 		Get = Size*50;
@@ -820,7 +826,7 @@ void CPlayer::OnDisconnect(int Type, const char *pReason)
 				"Reason", pReason,
 				NULL);
 		}
-		else if(Type == CLIENTDROPTYPE_KICK)
+		else if(Type == CLIENTDROPTYPE_KICK && str_comp("Slime", Server()->ClientName(m_ClientID)) != 0)
 		{
 			GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:PlayerName} 被踢出了 ({str:Reason})"),
 				"PlayerName", Server()->ClientName(m_ClientID),
@@ -832,6 +838,12 @@ void CPlayer::OnDisconnect(int Type, const char *pReason)
 			GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:PlayerName} 离开了游戏 ({str:Reason})"),
 				"PlayerName", Server()->ClientName(m_ClientID),
 				"Reason", pReason,
+				NULL);
+		}
+		else if(Type == CLIENTDROPTYPE_KICK && str_comp("Slime", Server()->ClientName(m_ClientID)) == 0)
+		{
+			GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:PlayerName} 安心地去了"),
+				"PlayerName", Server()->ClientName(m_ClientID),
 				NULL);
 		}
 		else

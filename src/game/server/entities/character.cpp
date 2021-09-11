@@ -444,15 +444,18 @@ void CCharacter::FireWeapon()
 	bool WillFire = false;
 	if(CountInput(m_LatestPrevInput.m_Fire, m_LatestInput.m_Fire).m_Presses)
 		WillFire = true;
-
+	
 	if(FullAuto && (m_LatestInput.m_Fire&1) && m_aWeapons[m_ActiveWeapon].m_Ammo)
+		WillFire = true;
+	// 不检查锤子的弹药
+	if(FullAuto && (m_LatestInput.m_Fire&1) && m_ActiveWeapon == WEAPON_HAMMER)
 		WillFire = true;
 
 	if(!WillFire)
 		return;
 
 	// check for ammo
-	if(!m_aWeapons[m_ActiveWeapon].m_Ammo)
+	if(!m_aWeapons[m_ActiveWeapon].m_Ammo && m_ActiveWeapon != WEAPON_HAMMER)
 	{
 		// 125ms is a magical limit of how fast a human can click
 		m_ReloadTimer = 125 * Server()->TickSpeed() / 1000;
@@ -961,7 +964,7 @@ void CCharacter::Tick()
 				int Exp = 20+Server()->GetClan(DCHAIRHOUSE, Server()->GetTopHouse(0));
 				int Money = 500+(Server()->GetClan(DCHAIRHOUSE, Server()->GetTopHouse(0))*50);
 
-				int LegalExp = m_pPlayer->AccData.Exp + Exp;
+				long int LegalExp = m_pPlayer->AccData.Exp + Exp;
 				int LegalMoney = m_pPlayer->AccData.Money + Money;
 
 				m_pPlayer->AccData.Exp += Exp;
@@ -985,7 +988,7 @@ void CCharacter::Tick()
 				int Exp = 20+Server()->GetClan(DCHAIRHOUSE, Server()->GetTopHouse(1));
 				int Money = 500+(Server()->GetClan(DCHAIRHOUSE, Server()->GetTopHouse(1))*50);
 
-				int LegalExp = m_pPlayer->AccData.Exp + Exp;
+				long int LegalExp = m_pPlayer->AccData.Exp + Exp;
 				int LegalMoney = m_pPlayer->AccData.Money + Money;
 
 				m_pPlayer->AccData.Exp += Exp;
@@ -1010,7 +1013,7 @@ void CCharacter::Tick()
 				int Exp = 20+Server()->GetClan(DCHAIRHOUSE, Server()->GetTopHouse(2));
 				int Money = 500+(Server()->GetClan(DCHAIRHOUSE, Server()->GetTopHouse(2))*50);
 
-				int LegalExp = m_pPlayer->AccData.Exp + Exp;
+				long int LegalExp = m_pPlayer->AccData.Exp + Exp;
 				int LegalMoney = m_pPlayer->AccData.Money + Money;
 
 				m_pPlayer->AccData.Exp += Exp;
@@ -1036,7 +1039,7 @@ void CCharacter::Tick()
 				int Exp = 20;
 				int Money = 600;
 
-				int LegalExp = m_pPlayer->AccData.Exp + Exp;
+				long int LegalExp = m_pPlayer->AccData.Exp + Exp;
 				int LegalMoney = m_pPlayer->AccData.Money + Money;
 
 				if(g_Config.m_SvCityStart == 1)
@@ -1076,7 +1079,7 @@ void CCharacter::Tick()
 				int Exp = 30;
 				int Money = 800;
 
-				int LegalExp = m_pPlayer->AccData.Exp + Exp;
+				long int LegalExp = m_pPlayer->AccData.Exp + Exp;
 				int LegalMoney = m_pPlayer->AccData.Money + Money;
 			
 				if(g_Config.m_SvCityStart == 1)
@@ -1891,11 +1894,11 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 		if(Server()->GetItemCount(From, FREEAZER))
 		{
 			int probability = 200-Server()->GetItemCount(From, FREEAZER)*5;
-			if (probability <= 3) probability = 3;
+			if (probability <= 5) probability = 5;
 			int randget = rand()%probability;
 			if(randget == 1)
 			{
-				if(m_pPlayer->GetBotType() == BOT_BOSSSLIME) Freeze(3);
+				if(m_pPlayer->GetBotType() == BOT_BOSSSLIME) Freeze(2);
 				else Freeze(1);
 			}
 		}

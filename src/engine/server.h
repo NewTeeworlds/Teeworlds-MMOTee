@@ -527,7 +527,8 @@ public:
 	virtual int GetSeccurity(int ClientID) = 0;
 	virtual void SetSeccurity(int ClientID, int n) = 0;
 	
-	virtual int GetStat(int ClientID, int Type) = 0;
+	//virtual int GetStat(int ClientID, int Type) = 0;
+	virtual long int GetStat(int ClientID, int Type) = 0;
 	virtual int GetUpgrade(int ClientID, int Type) = 0;
 	virtual void UpdateStat(int ClientID, int Type, int Size) = 0;
 	virtual void UpdateUpgrade(int ClientID, int Type, int Size) = 0;

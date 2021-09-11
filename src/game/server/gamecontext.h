@@ -33,7 +33,7 @@ typedef unsigned __int64 uint64_t;
 #define BROADCAST_DURATION_GAMEANNOUNCE (Server()->TickSpeed()*2)
 
 const int BOSSID = MAX_CLIENTS - 1;
-const int MAX_COUNT = 1e9;
+const int MAX_COUNT = 20000000;
 
 enum
 {
