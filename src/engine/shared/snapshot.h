@@ -12,10 +12,10 @@ class CSnapshotItem
 public:
 	int m_TypeAndID;
 
-	int *Data() { return (int *)(this+1); }
-	int Type() { return m_TypeAndID>>16; }
-	int ID() { return m_TypeAndID&0xffff; }
-	int Key() { return m_TypeAndID; }
+	int *Data() { return (int *)(this + 1); }
+	int Type() const { return m_TypeAndID >> 16; }
+	int ID() const { return m_TypeAndID & 0xffff; }
+	int Key() const { return m_TypeAndID; }
 };
 
 
@@ -31,15 +31,14 @@ class CSnapshot
 public:
 	enum
 	{
-		MAX_PARTS	= 64,
-		MAX_SIZE	= MAX_PARTS*1024
+		MAX_SIZE=64*1024
 	};
 
 	void Clear() { m_DataSize = 0; m_NumItems = 0; }
 	int NumItems() const { return m_NumItems; }
-	CSnapshotItem *GetItem(int Index);
-	int GetItemSize(int Index);
-	int GetItemIndex(int Key);
+	CSnapshotItem *GetItem(int Index) const;
+	int GetItemSize(int Index) const;
+	int GetItemIndex(int Key) const;
 
 	int Crc();
 	void DebugDump();
@@ -108,7 +107,7 @@ public:
 	void PurgeAll();
 	void PurgeUntil(int Tick);
 	void Add(int Tick, int64 Tagtime, int DataSize, void *pData, int CreateAlt);
-	int Get(int Tick, int64 *pTagtime, CSnapshot **ppData, CSnapshot **ppAltData);
+	int Get(int Tick, int64 *Tagtime, CSnapshot **pData, CSnapshot **ppAltData);
 };
 
 class CSnapshotBuilder
@@ -126,14 +125,13 @@ class CSnapshotBuilder
 
 public:
 	void Init();
-	void Init(const CSnapshot *pSnapshot);
 
 	void *NewItem(int Type, int ID, int Size);
 
 	CSnapshotItem *GetItem(int Index);
 	int *GetItemData(int Key);
 
-	int Finish(void *pSnapdata);
+	int Finish(void *Snapdata);
 };
 
 

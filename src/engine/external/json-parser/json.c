@@ -377,7 +377,7 @@ json_value * json_parse_ex (json_settings * settings, const json_char * json, ch
 
                   if (top->type == json_array)
                      flags = (flags & ~ (flag_need_comma | flag_seek_value)) | flag_next;
-                  else if (json_relaxed_commas & !state.settings.settings)
+                  else if (!state.settings.settings & json_relaxed_commas)
                   {  sprintf (error, "%d:%d: Unexpected ]", cur_line, e_off);
                      goto e_failed;
                   }
@@ -532,7 +532,7 @@ json_value * json_parse_ex (json_settings * settings, const json_char * json, ch
 
                   case '"':
 
-                     if (flags & flag_need_comma && (json_relaxed_commas & !state.settings.settings))
+                     if (flags & flag_need_comma && (!state.settings.settings & json_relaxed_commas))
                      {
                         sprintf (error, "%d:%d: Expected , before \"", cur_line, e_off);
                         goto e_failed;
