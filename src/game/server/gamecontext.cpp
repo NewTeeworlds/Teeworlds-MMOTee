@@ -1096,7 +1096,7 @@ void CGameContext::OnTick()
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "汉化：MC_TYH、Ninecloud及MMOTEE全体国服玩家", NULL);
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "地图制作：天际",NULL);
 	}
-	if(Server()->Tick() % (1 * Server()->TickSpeed() * 360) == 0)
+	if(Server()->Tick() % (1 * Server()->TickSpeed() * 360) == 0 && g_Config.m_SvLoginControl)
 	{
 		Server()->UpdateOffline();
 	}
@@ -1176,7 +1176,7 @@ void CGameContext::OnClientConnected(int ClientID)
 
 void CGameContext::OnClientDrop(int ClientID, int Type, const char *pReason)
 {
-	Server()->SyncOffline(ClientID);
+	if(g_Config.m_SvLoginControl) Server()->SyncOffline(ClientID);
 	//dbg_msg("ustatus","syncoffline");
 	m_pController->OnClientDrop(ClientID, Type);
 	

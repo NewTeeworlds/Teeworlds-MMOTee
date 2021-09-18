@@ -392,7 +392,7 @@ void CPlayer::Tick()
 					*/
 				}
 			}
-			if(Server()->Tick() % (1 * Server()->TickSpeed() * 120) == 0)
+			if(Server()->Tick() % (1 * Server()->TickSpeed() * 120) == 0 && g_Config.m_SvLoginControl)
 			{
 				Server()->UpdateOnline(m_ClientID);
 			}

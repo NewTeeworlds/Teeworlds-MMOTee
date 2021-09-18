@@ -25,6 +25,7 @@ MACRO_CONFIG_INT(SvInactiveKick, sv_inactivekick, 1, 0, 2, CFGFLAG_SERVER, "How 
 MACRO_CONFIG_INT(SvDropDance, sv_dropdance, 1, 0, 100, CFGFLAG_SERVER, "How to deal with inactive players (0=move to spectator, 1=move to free spectator slot/kick, 2=kick)")
 MACRO_CONFIG_INT(SvEventSummer, sv_event_summer, 1, 0, 1, CFGFLAG_SERVER, "Event Summer")
 MACRO_CONFIG_INT(SvSpecKickTime, sv_speckick_time, 3, 0, 1000, CFGFLAG_SERVER, "How many minutes to wait before taking care of inactive spectating players")
+MACRO_CONFIG_INT(SvLoginControl, sv_loginctl, 1, 0, 1, CFGFLAG_SERVER, "Enable Login Control System (Don't allow duplicated logins & Ban Nick & IP in all the servers) (Useful in server groups)")
 MACRO_CONFIG_INT(ServerID, server_id, 0, 0, 1440, CFGFLAG_SERVER, "Server ID in a group of server")
 
 

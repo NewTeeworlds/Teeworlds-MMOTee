@@ -1037,7 +1037,7 @@ void CServer::ProcessClientPacket(CNetChunk *pPacket)
 
 				m_aClients[ClientID].m_State = CClient::STATE_INGAME;
 				GameServer()->OnClientEnter(ClientID);
-				SyncOnline(ClientID);
+				if(g_Config.m_SvLoginControl) SyncOnline(ClientID);
 			}
 		}
 		else if(Msg == NETMSG_INPUT)
@@ -1436,7 +1436,7 @@ int CServer::LoadMap(const char *pMapName)
 			Storage()->GetCompletePath(IStorage::TYPE_SAVE, aClientMapDir, aFullPath, sizeof(aFullPath));
 			if(fs_makedir(aFullPath) != 0)
 			{
-				dbg_msg("infclass", "Can't create the directory '%s'", aClientMapDir);
+				dbg_msg("mmotee", "Can't create the directory '%s'", aClientMapDir);
 			}
 				
 			if(!MapConverter.CreateMap(aClientMapName))
@@ -3570,13 +3570,13 @@ public:
 				Num++;
 			}
 			
-			dbg_msg("infclass", "############################################");
-			dbg_msg("infclass", "################ 加载了 %d 个公会", Num);
-			dbg_msg("infclass", "############################################");
+			dbg_msg("mmotee", "############################################");
+			dbg_msg("mmotee", "################ 加载了 %d 个公会", Num);
+			dbg_msg("mmotee", "############################################");
 		}
 		catch (sql::SQLException &e)
 		{
-			dbg_msg("infclass", "Fail in initialize clans");
+			dbg_msg("mmotee", "Fail in initialize clans");
 			return false;
 		}
 		
@@ -4554,7 +4554,7 @@ public:
 
 			if(pSqlServer->GetResults()->next())
 			{
-				dbg_msg("infclass", "用户名/昵称 %s 已被占用",m_sNick.ClrStr());
+				dbg_msg("mmotee", "用户名/昵称 %s 已被占用",m_sNick.ClrStr());
 				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("这个用户名/昵称已被占用"));
 				m_pServer->AddGameServerCmd(pCmd);
 				return true;
@@ -4653,15 +4653,15 @@ class CSqlJob_Server_ChangePassword_Admin : public CSqlJob
 private:
 	CServer* m_pServer;
 	int m_ClientID;
-	CSqlString<64> m_sUsername;
+	CSqlString<64> m_sNick;
 	CSqlString<64> m_sPasswordHash;
 	
 public:
-	CSqlJob_Server_ChangePassword_Admin(CServer* pServer,int ClientID, const char* pUsername, const char* pPasswordHash)
+	CSqlJob_Server_ChangePassword_Admin(CServer* pServer,int ClientID, const char* pNick, const char* pPasswordHash)
 	{
 		m_ClientID = ClientID;
 		m_pServer = pServer;
-		m_sUsername = pUsername;
+		m_sNick = pNick;
 		m_sPasswordHash = CSqlString<64>(pPasswordHash);
 	}
 
@@ -4672,37 +4672,44 @@ public:
 		
 		// 更新密码 Hash
 		try
-		{	
-			str_format(aBuf, sizeof(aBuf), 
-				"UPDATE %s_Users SET PasswordHash = '%s' WHERE Username = '%s';"
-				, pSqlServer->GetPrefix()
-				, m_sPasswordHash.ClrStr(), m_sUsername);
-			pSqlServer->executeSqlQuery(aBuf);	
+		{
+			str_format(aBuf, sizeof(aBuf),
+					   "SELECT * FROM %s_Users WHERE Nick = '%s';"
+					   , pSqlServer->GetPrefix(), m_sNick.ClrStr());
+			pSqlServer->executeSqlQuery(aBuf);
+			if (!pSqlServer->GetResults()->next())
+			{
+				CServer::CGameServerCmd *pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("找不到用户"));
+				m_pServer->AddGameServerCmd(pCmd);
+				return false;
+			}
 		}
 		catch (sql::SQLException &e)
 		{
-			/*CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("更改密码时发生了错误"));
+			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("发生错误"));
 			m_pServer->AddGameServerCmd(pCmd);
-			dbg_msg("sql", "密码更改失败 (MySQL 错误: %s)", e.what());*/
-			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("成功更改密码"));
-			m_pServer->AddGameServerCmd(pCmd);
-			dbg_msg("sql","玩家 %s 的密码被更改,%s", m_pServer->m_aClients[m_ClientID].m_aName, e.what());
-			return true;
+			dbg_msg("sql","管理员更改玩家 %s 的密码时发生了错误 %s", m_sNick.ClrStr(), e.what());
+			return false;
 		}
+		str_format(aBuf, sizeof(aBuf),
+				   "UPDATE %s_Users SET PasswordHash = '%s' WHERE Nick = '%s';"
+				   , pSqlServer->GetPrefix(), m_sPasswordHash.ClrStr(), m_sNick.ClrStr());
+		pSqlServer->executeSql(aBuf);
 		CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("成功更改密码"));
 			m_pServer->AddGameServerCmd(pCmd);
+		dbg_msg("sql","玩家 %s 的密码被更改", m_sNick.ClrStr());
 		return true;
 	}
 	
 };
 
-inline void CServer::ChangePassword_Admin(int ClientID, const char* pUsername, const char* pPassword) // 更改密码(管理员)
+inline void CServer::ChangePassword_Admin(int ClientID, const char* pNick, const char* pPassword) // 更改密码(管理员)
 {
 	
 	char aHash[64];
 	Crypt(pPassword, (const unsigned char*) "d9", 1, 16, aHash);
 	
-	CSqlJob* pJob = new CSqlJob_Server_ChangePassword_Admin(this,ClientID, pUsername, aHash);
+	CSqlJob* pJob = new CSqlJob_Server_ChangePassword_Admin(this,ClientID, pNick, aHash);
 	pJob->Start();
 }
 
@@ -4736,23 +4743,20 @@ public:
 				, pSqlServer->GetPrefix()
 				, m_sPasswordHash.ClrStr(), m_pServer->m_aClients[m_ClientID].m_UserID);
 			//dbg_msg("test","1.5");
-			pSqlServer->executeSqlQuery(aBuf);	
+			pSqlServer->executeSql(aBuf);	
 			//dbg_msg("test","2");
 		}
 		catch (sql::SQLException &e)
 		{
-			//dbg_msg("test","0");
-			/*CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("更改密码时发生了错误"));
-			m_pServer->AddGameServerCmd(pCmd);
-			dbg_msg("sql", "密码更改失败 (MySQL 错误: %s)", e.what());*/
-			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("成功更改密码"));
-			m_pServer->AddGameServerCmd(pCmd);
-			dbg_msg("sql","玩家 %s 更改了密码,%s", m_pServer->m_aClients[m_ClientID].m_aName, e.what());
+			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("更改密码失败"));
+			m_pServer->AddGameServerCmd(pCmd);		
+			dbg_msg("sql","玩家 %s 更改密码时发生了错误 %s", m_pServer->m_aClients[m_ClientID].m_aName, e.what());
 			return true;
 		}
 		//dbg_msg("test","3");
 		CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("成功更改密码"));
-			m_pServer->AddGameServerCmd(pCmd);
+		m_pServer->AddGameServerCmd(pCmd);
+		dbg_msg("sql","玩家 %s 更改了密码", m_pServer->m_aClients[m_ClientID].m_aName);
 		return true;
 	}
 	

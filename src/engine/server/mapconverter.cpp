@@ -55,7 +55,7 @@ bool CMapConverter::Load()
 	
 	if(!pPhysicsLayer)
 	{
-		Console()->Print(IConsole::OUTPUT_LEVEL_STANDARD, "infclass", "no physics layer in loaded map");
+		Console()->Print(IConsole::OUTPUT_LEVEL_STANDARD, "mmotee", "no physics layer in loaded map");
 		return false;
 	}
 		
@@ -808,7 +808,7 @@ bool CMapConverter::CreateMap(const char* pFilename)
 	if(!m_DataFile.Open(Storage(), pFilename))
 	{
 		str_format(aBuf, sizeof(aBuf), "failed to open file '%s'...", pFilename);
-		Console()->Print(IConsole::OUTPUT_LEVEL_STANDARD, "infclass", aBuf);
+		Console()->Print(IConsole::OUTPUT_LEVEL_STANDARD, "mmotee", aBuf);
 		return false;
 	}
 	
@@ -846,6 +846,6 @@ bool CMapConverter::CreateMap(const char* pFilename)
 	m_DataFile.AddItem(MAPITEMTYPE_ENVPOINTS, 0, m_lEnvPoints.size()*sizeof(CEnvPoint), m_lEnvPoints.base_ptr());
 	m_DataFile.Finish();
 	
-	Console()->Print(IConsole::OUTPUT_LEVEL_ADDINFO, "infclass", "highres map created");
+	Console()->Print(IConsole::OUTPUT_LEVEL_ADDINFO, "mmotee", "highres map created");
 	return true;
 }

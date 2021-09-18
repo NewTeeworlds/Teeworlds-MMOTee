@@ -68,7 +68,7 @@ void CLayers::Init(class IKernel *pKernel)
 	}
 	
 	if(!m_pPhysicsLayer)
-		dbg_msg("InfClass", "CLayer::Init: no Game Layer found");
+		dbg_msg("mmotee", "CLayer::Init: no Game Layer found");
 }
 
 CMapItemGroup *CLayers::GetGroup(int Index) const

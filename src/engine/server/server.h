@@ -434,7 +434,7 @@ public:
 
 	virtual void Register(int ClientID, const char* pUsername, const char* pPassword, const char* pEmail);
 	virtual void ChangePassword(int ClientID, const char* pPassword);
-	virtual void ChangePassword_Admin(int ClientID, const char* pUsername, const char* pPassword);
+	virtual void ChangePassword_Admin(int ClientID, const char* pNick, const char* pPassword);
 	virtual void SyncOnline(int ClientID);
 	virtual void SyncOffline(int ClientID);
 	virtual void SetOffline(int ClientID, const char* pNick);
