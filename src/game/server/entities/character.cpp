@@ -1660,7 +1660,7 @@ void CCharacter::Die(int Killer, int Weapon)
 				
 				if(!pKillerPlayer->IsBot())
 				{
-					pKillerPlayer->MoneyAdd(Killer, m_pPlayer->AccData.Level*1000);
+					pKillerPlayer->MoneyAdd(m_pPlayer->AccData.Level*1000, false, true);
 					GameServer()->UpdateStats(Killer);
 					GameServer()->ResetVotes(Killer, AUTH);
 				}

@@ -8,7 +8,7 @@ on:
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-  BUILD_TYPE: Debug
+  BUILD_TYPE: RelWithDebInfo
 
 jobs:
   build:
@@ -39,7 +39,7 @@ jobs:
       run: ctest -C ${{env.BUILD_TYPE}}
 
     - name: Make a Server Pack
-      run: cd ${{github.workspace}} && cp build/Mmotee-Server . && tar Jcf server.tar.xz Mmotee-Server data docs maps other server_lang template-cn.sql Readme.md autoexec.cfg.example
+      run: cd ${{github.workspace}} && cp build/Mmotee-Server . && zip -r9 Server\ Pack.zip Mmotee-Server data docs maps other server_lang template-cn.sql Readme.md autoexec.cfg.example
 
     - name: Upload Server Binary
       uses: actions/upload-artifact@v2
@@ -51,4 +51,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: Server Pack
-        path: server.tar.xz
+        path: Server\ Pack.zip

@@ -262,6 +262,9 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 
 	else if(!strncmp(Msg->m_pMessage, "/lang", 5))
 	{	
+		GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, ("Sorry, currently we have not finished translation yet. \nFor more info, see https://github.com/StarOnTheSky/mmotee_cn ."), NULL);
+		// 我们还没完成国际化
+		/* 
 		char pLanguageCode[128];
 		char aFinalLanguageCode[8];
 		aFinalLanguageCode[0] = 0;
@@ -304,9 +307,9 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 			dynamic_string Buffer;
 			//GameServer()->Server()->Localization()->Format_L(Buffer, pLanguage, _("Available languages: {str:ListOfLanguage}"), "ListOfLanguage", BufferList.buffer(), NULL);
 			//GameServer()->SendChatTarget(m_pPlayer->GetCID(), Buffer.buffer());
-			GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, ("Sorry, currently we have not finished translation yet. \nFor more info, see https://github.com/StarOnTheSky/mmotee_cn ."), NULL);
 			Buffer.clear();
 		}
+		*/
 		return;
 	}
 	else if (!strncmp(Msg->m_pMessage, "/jail", 5) && GameServer()->Server()->IsAuthed(ClientID)) 
@@ -321,9 +324,6 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		{
 			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("输入的 ID 无效."), NULL);
 		}
-		/*m_pPlayer->AccData.IsJailed = true;
-		m_pPlayer->AccData.Jail = true;
-		m_pPlayer->AccData.JailLength = JailLength;*/
 		GameServer()->m_apPlayers[id]->AccData.IsJailed = true;
 		GameServer()->m_apPlayers[id]->AccData.Jail = true;
 		GameServer()->m_apPlayers[id]->AccData.Rel = 0;
@@ -344,9 +344,6 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		{
 			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("输入的 ID 无效."), NULL);
 		}
-		/*m_pPlayer->AccData.IsJailed = false;
-		m_pPlayer->AccData.Jail = false;
-		m_pPlayer->AccData.JailLength = 0;*/
 		GameServer()->m_apPlayers[id]->AccData.IsJailed = false;
 		GameServer()->m_apPlayers[id]->AccData.Jail = false;
 		GameServer()->m_apPlayers[id]->AccData.Rel = 0;
