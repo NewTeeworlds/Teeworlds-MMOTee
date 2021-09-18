@@ -347,6 +347,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		GameServer()->m_apPlayers[id]->AccData.IsJailed = false;
 		GameServer()->m_apPlayers[id]->AccData.Jail = false;
 		GameServer()->m_apPlayers[id]->AccData.Rel = 0;
+		GameServer()->m_apPlayers[id]->m_JailTick = 0;
 		GameServer()->UpdateStats(id);
 		GameServer()->m_apPlayers[id]->AccData.JailLength = 0;
 		GameServer()->m_apPlayers[id]->GetCharacter()->Die(id, WEAPON_WORLD);
