@@ -5214,7 +5214,7 @@ public:
 				if(pSqlServer->GetResults()->next())
 				{
 					str_format(aBuf, sizeof(aBuf), 
-						"UPDATE %s_UserStatus SET online = '0' WHERE ID = '%d';"\
+						"UPDATE %s_UserStatus SET online = '0' WHERE ID = '%d';"
 						, pSqlServer->GetPrefix()
 						, m_UserStatusID);
 					pSqlServer->executeSql(aBuf);
