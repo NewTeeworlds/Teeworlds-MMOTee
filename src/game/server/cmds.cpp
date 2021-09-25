@@ -305,8 +305,8 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 			}
 			
 			dynamic_string Buffer;
-			//GameServer()->Server()->Localization()->Format_L(Buffer, pLanguage, _("Available languages: {str:ListOfLanguage}"), "ListOfLanguage", BufferList.buffer(), NULL);
-			//GameServer()->SendChatTarget(m_pPlayer->GetCID(), Buffer.buffer());
+			GameServer()->Server()->Localization()->Format_L(Buffer, pLanguage, _("Available languages: {str:ListOfLanguage}"), "ListOfLanguage", BufferList.buffer(), NULL);
+			GameServer()->SendChatTarget(m_pPlayer->GetCID(), Buffer.buffer());
 			Buffer.clear();
 		}
 		*/

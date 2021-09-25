@@ -2926,14 +2926,15 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		} break;
 		case ENDEXPLOSION: 
 		{
-			if(!Server()->GetItemCount(ClientID, BIGCRAFT))
-				GiveItem(ClientID, BIGCRAFT, 1);
-
 			if(Server()->GetItemCount(ClientID, FORMULAWEAPON) < 25 * Count)
 			{
 				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("为了合成你需要 {str:need}"), "need", "秘密武器x25", NULL);
 				return;
 			}
+
+			if(!Server()->GetItemCount(ClientID, BIGCRAFT))
+				GiveItem(ClientID, BIGCRAFT, 1);
+
 
 			Server()->RemItem(ClientID, FORMULAWEAPON, 25 * Count, -1);
 		} break;
@@ -3530,6 +3531,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		CreateNewShop(ClientID, TITLEQUESTS, 1, 0, 0);
 		CreateNewShop(ClientID, X2MONEYEXPVIP, 1, 0, 0);
 		CreateNewShop(ClientID, TITLEENCHANT, 1, 0, 0);
+		CreateNewShop(ClientID, TITLEMOON, 1, 0, 0);
 		AddBack(ClientID);
 		return;
 	}
