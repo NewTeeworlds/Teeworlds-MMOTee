@@ -310,7 +310,7 @@ INSERT INTO `tw_uItemList` VALUES
 (83,12,'称号-合成大师','- 无增益'),
 (84,10,'技能-沐浴阳光','- 立即回复大量生命'),
 (85,5,'日曜','- 用于合成 技能-沐浴阳光'),
-(86,12,'称号 阳光','- 活动称号,无加成'),
+(86,12,'称号-阳光','- 活动称号,无加成'),
 (87,4,'土豆','- 获得25经验'),
 (88,4,'番茄','- 获得15经验'),
 (89,4,'胡萝卜','- 获得10经验'),
@@ -354,7 +354,9 @@ INSERT INTO `tw_uItemList` VALUES
 (127,5,'锡矿','- 用于合成'),
 (128,2,'自定义颜色','让你使用自己的皮肤颜色'),
 (129,4,'卷心菜','- 获得35经验'),
-(130,4,'金券','- 更方便地交易黄金!');
+(130,4,'金券','- 更方便地交易黄金!'),
+(131,10,'中秋节称号','- 射速+10'),
+(132,5,'活动用品','用于合成');
 /*!40000 ALTER TABLE `tw_uItemList` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -512,7 +514,9 @@ INSERT INTO `tw_uItemList_en` VALUES
 (127,5,'Stannum Ore','- Item for crafting'),
 (128,2,'Custom Color','Use customized tee color'),
 (129,4,'Cabbage','- You got 35 exp'),
-(130,4,'Gold Ticket','- Item for exchanging Gold');
+(130,4,'Gold Ticket','- Item for exchanging Gold'),
+(131,10,'Title Moon','- Special Title for Mid-Autumn Festival'),
+(132,5,'Activity Item','For Crafting');
 /*!40000 ALTER TABLE `tw_uItemList_en` ENABLE KEYS */;
 UNLOCK TABLES;
 

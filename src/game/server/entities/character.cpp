@@ -2406,6 +2406,10 @@ void CCharacter::ClassSpawnAttributes()
 		m_Armor += 1000;
 	}
 
+	/*if(Server()->GetItemSettings(m_pPlayer->GetCID(), TITLEMOON))
+	{
+		GameServer()->m_apPlayers[m_pPlayer->GetCID()]->AccUpgrade.Speed += 10;
+	}*/
 	// 新手保护，禁用 PvP
 	m_pPlayer->m_AntiPvpSmall = false;
 	if(m_pPlayer->AccData.Level < 20)

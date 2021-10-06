@@ -156,89 +156,89 @@ void IGameController::OnPlayerInfoChange(class CPlayer *pP)
 	} 
 		
 	// Тело броня
-	
-	if(!Server()->GetItemSettings(pP->GetCID(), CUSTOMCOLOR))
-	{
-	if(Server()->GetItemSettings(pP->GetCID(), LEATHERBODY)) 
-	{
-		if(pP->GetCharacter())
-		{
-			pP->GetCharacter()->DeleteAllPickup();
-			pP->GetCharacter()->CreatePickupDraw(1, 0, 3, true);
-		}
-		pP->m_TeeInfos.m_ColorBody = 22315;
-	}
-	else if(Server()->GetItemSettings(pP->GetCID(), COOPERBODY)) 
-	{
-		if(pP->GetCharacter())
-		{
-			pP->GetCharacter()->DeleteAllPickup();
-			pP->GetCharacter()->CreatePickupDraw(2, 0, 3, true);
-		}
-		pP->m_TeeInfos.m_ColorBody = 1245056;
-	}
-	else if(Server()->GetItemSettings(pP->GetCID(), IRONBODY)) 
-	{
-		if(pP->GetCharacter())
-		{
-			pP->GetCharacter()->DeleteAllPickup();
-			pP->GetCharacter()->CreatePickupDraw(3, 0, 3, true);
-		}
-		pP->m_TeeInfos.m_ColorBody = 9895835;
-	}
-	else if(Server()->GetItemSettings(pP->GetCID(), GOLDBODY)) 
-	{
-		if(pP->GetCharacter())
-		{
-			pP->GetCharacter()->DeleteAllPickup();
-			pP->GetCharacter()->CreatePickupDraw(2, 0, 3, true);
-			pP->GetCharacter()->CreatePickupDraw(2, 1, 3, true);
-		}
-		pP->m_TeeInfos.m_ColorBody = 2883328;
-	}
-	else if(Server()->GetItemSettings(pP->GetCID(), DIAMONDBODY)) 
-	{
-		if(pP->GetCharacter())
-		{
-			pP->GetCharacter()->DeleteAllPickup();
-			pP->GetCharacter()->CreatePickupDraw(3, 0, 3, true);
-			pP->GetCharacter()->CreatePickupDraw(3, 1, 3, true);
-		}
-		pP->m_TeeInfos.m_ColorBody = 9436928;
-	}
-	else if(Server()->GetItemSettings(pP->GetCID(), DRAGONBODY)) 
-	{
-		if(pP->GetCharacter())
-		{
-			pP->GetCharacter()->DeleteAllPickup();
-			pP->GetCharacter()->CreatePickupDraw(6, 0, 3, true);
-			pP->GetCharacter()->CreatePickupDraw(6, 1, 3, true);
-		}
-		pP->m_TeeInfos.m_ColorBody = 15204096;
-	}
-	else 
-	{
-		if(pP->GetCharacter())
-			pP->GetCharacter()->DeleteAllPickup();
-			
-		pP->m_TeeInfos.m_ColorBody = 1000;
-	}
 
-	// Ноги броня
-	if(Server()->GetItemSettings(pP->GetCID(), LEATHERFEET)) 
-		pP->m_TeeInfos.m_ColorFeet = 22315;
-	else if(Server()->GetItemSettings(pP->GetCID(), COOPERFEET)) 
-		pP->m_TeeInfos.m_ColorFeet = 1245056;
-	else if(Server()->GetItemSettings(pP->GetCID(), IRONFEET)) 
-		pP->m_TeeInfos.m_ColorFeet = 9895835;
-	else if(Server()->GetItemSettings(pP->GetCID(), GOLDFEET)) 
-		pP->m_TeeInfos.m_ColorFeet = 2883328;
-	else if(Server()->GetItemSettings(pP->GetCID(), DIAMONDFEET)) 
-		pP->m_TeeInfos.m_ColorFeet = 9436928;
-	else if(Server()->GetItemSettings(pP->GetCID(), DRAGONFEET)) 
-		pP->m_TeeInfos.m_ColorFeet = 15204096;
-	else 
-		pP->m_TeeInfos.m_ColorFeet = 1000;
+	if (!Server()->GetItemSettings(pP->GetCID(), CUSTOMCOLOR))
+	{
+		if (Server()->GetItemSettings(pP->GetCID(), LEATHERBODY))
+		{
+			if (pP->GetCharacter())
+			{
+				pP->GetCharacter()->DeleteAllPickup();
+				pP->GetCharacter()->CreatePickupDraw(1, 0, 3, true);
+			}
+			pP->m_TeeInfos.m_ColorBody = 22315;
+		}
+		else if (Server()->GetItemSettings(pP->GetCID(), COOPERBODY))
+		{
+			if (pP->GetCharacter())
+			{
+				pP->GetCharacter()->DeleteAllPickup();
+				pP->GetCharacter()->CreatePickupDraw(2, 0, 3, true);
+			}
+			pP->m_TeeInfos.m_ColorBody = 1245056;
+		}
+		else if (Server()->GetItemSettings(pP->GetCID(), IRONBODY))
+		{
+			if (pP->GetCharacter())
+			{
+				pP->GetCharacter()->DeleteAllPickup();
+				pP->GetCharacter()->CreatePickupDraw(3, 0, 3, true);
+			}
+			pP->m_TeeInfos.m_ColorBody = 9895835;
+		}
+		else if (Server()->GetItemSettings(pP->GetCID(), GOLDBODY))
+		{
+			if (pP->GetCharacter())
+			{
+				pP->GetCharacter()->DeleteAllPickup();
+				pP->GetCharacter()->CreatePickupDraw(2, 0, 3, true);
+				pP->GetCharacter()->CreatePickupDraw(2, 1, 3, true);
+			}
+			pP->m_TeeInfos.m_ColorBody = 2883328;
+		}
+		else if (Server()->GetItemSettings(pP->GetCID(), DIAMONDBODY))
+		{
+			if (pP->GetCharacter())
+			{
+				pP->GetCharacter()->DeleteAllPickup();
+				pP->GetCharacter()->CreatePickupDraw(3, 0, 3, true);
+				pP->GetCharacter()->CreatePickupDraw(3, 1, 3, true);
+			}
+			pP->m_TeeInfos.m_ColorBody = 9436928;
+		}
+		else if (Server()->GetItemSettings(pP->GetCID(), DRAGONBODY))
+		{
+			if (pP->GetCharacter())
+			{
+				pP->GetCharacter()->DeleteAllPickup();
+				pP->GetCharacter()->CreatePickupDraw(6, 0, 3, true);
+				pP->GetCharacter()->CreatePickupDraw(6, 1, 3, true);
+			}
+			pP->m_TeeInfos.m_ColorBody = 15204096;
+		}
+		else
+		{
+			if (pP->GetCharacter())
+				pP->GetCharacter()->DeleteAllPickup();
+
+			pP->m_TeeInfos.m_ColorBody = 1000;
+		}
+
+		// Ноги броня
+		if (Server()->GetItemSettings(pP->GetCID(), LEATHERFEET))
+			pP->m_TeeInfos.m_ColorFeet = 22315;
+		else if (Server()->GetItemSettings(pP->GetCID(), COOPERFEET))
+			pP->m_TeeInfos.m_ColorFeet = 1245056;
+		else if (Server()->GetItemSettings(pP->GetCID(), IRONFEET))
+			pP->m_TeeInfos.m_ColorFeet = 9895835;
+		else if (Server()->GetItemSettings(pP->GetCID(), GOLDFEET))
+			pP->m_TeeInfos.m_ColorFeet = 2883328;
+		else if (Server()->GetItemSettings(pP->GetCID(), DIAMONDFEET))
+			pP->m_TeeInfos.m_ColorFeet = 9436928;
+		else if (Server()->GetItemSettings(pP->GetCID(), DRAGONFEET))
+			pP->m_TeeInfos.m_ColorFeet = 15204096;
+		else
+			pP->m_TeeInfos.m_ColorFeet = 1000;
 	}
 	else
 	{

@@ -5093,6 +5093,11 @@ public:
 					str_format(buf, sizeof(buf), "你被封禁了,原因: %s", banreason);
 					m_pServer->Kick(m_ClientID, buf);
 					return true;
+				} 
+				else if(IsOnline == -1) // 允许同 IP 双开
+				{
+					m_pServer->m_aClients[m_ClientID].m_UserStatusID = -1;
+					return true;
 				}
 			}
 			//检查数据库中的名称或昵称
@@ -5427,6 +5432,14 @@ public:
 						, m_UserStatusID);
 					pSqlServer->executeSql(aBuf);
 					//dbg_msg("test","2 %s", aBuf);
+				}
+				else
+				{
+					char aText[600];
+					str_format(aText, sizeof(aText), "找不到玩家 %s.", m_sNick.ClrStr());
+					CServer::CGameServerCmd *pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, aText);
+					m_pServer->AddGameServerCmd(pCmd);
+					return true;
 				}
 				dbg_msg("user","玩家 %s 被设置为下线了", m_sNick.ClrStr());
 				char aText[600];
