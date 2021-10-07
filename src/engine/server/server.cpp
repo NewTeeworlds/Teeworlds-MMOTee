@@ -4132,6 +4132,13 @@ public:
 				m_pServer->m_aClients[m_ClientID].m_ClanAdded = m_pServer->m_aClients[m_ClientID].m_ClanID > 0 ? (int)pSqlServer->GetResults()->getInt("ClanAdded") : 0;
 	
 				str_copy(m_pServer->m_aClients[m_ClientID].m_aUsername, pSqlServer->GetResults()->getString("Nick").c_str(), sizeof(m_pServer->m_aClients[m_ClientID].m_aUsername));
+				if(m_pServer->m_aClients[m_ClientID].m_Level <= 0 || m_pServer->m_aClients[m_ClientID].m_Class == -1 ) 
+				{
+					CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, "登录时发生数据读取错误,请重新进入游戏.");
+					m_pServer->AddGameServerCmd(pCmd);
+					dbg_msg("user", "玩家ID %d 的数据初始化出现问题", m_pServer->m_aClients[m_ClientID].m_UserID);	
+					return false;
+				}
 				dbg_msg("user", "玩家ID %d 的数据初始化成功", m_pServer->m_aClients[m_ClientID].m_UserID);	
 			}
 			else
@@ -4199,21 +4206,12 @@ public:
 				m_pServer->m_aClients[m_ClientID].Mana = (int)pSqlServer->GetResults()->getInt("Mana");
 				m_pServer->m_aClients[m_ClientID].m_HammerRange = (int)pSqlServer->GetResults()->getInt("HammerRange");
 				m_pServer->m_aClients[m_ClientID].m_Pasive2 = (int)pSqlServer->GetResults()->getInt("Pasive2");
-				if(m_pServer->m_aClients[m_ClientID].m_Level <= 0 || m_pServer->m_aClients[m_ClientID].m_Class == -1 ) 
-				{
-					CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, "登录时发生数据读取错误,请重新进入游戏.");
-					m_pServer->AddGameServerCmd(pCmd);
-					return false;
-				}
-				else
-				{
-					//CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("你已登录.欢迎."));
-					//m_pServer->AddGameServerCmd(pCmd);	
 
-					CServer::CGameServerCmd* pCmd1 = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("登录成功.按下esc界面中的“开始游戏”进入."));
-					m_pServer->AddGameServerCmd(pCmd1);	
-				}
-						
+				//CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("你已登录.欢迎."));
+				//m_pServer->AddGameServerCmd(pCmd);
+
+				CServer::CGameServerCmd *pCmd1 = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("登录成功.按下esc界面中的“开始游戏”进入."));
+				m_pServer->AddGameServerCmd(pCmd1);
 			}					
 		}
 		catch (sql::SQLException &e)
@@ -4260,6 +4258,7 @@ public:
 		{
 			if(m_Type == 0)
 			{
+				if(m_pServer->m_aClients[m_ClientID].m_Level < 0) return false;
 				str_format(aBuf, sizeof(aBuf), 
 					"UPDATE %s_Users "
 					"SET Level = '%d', "

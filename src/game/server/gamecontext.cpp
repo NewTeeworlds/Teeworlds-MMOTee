@@ -4666,22 +4666,25 @@ void CGameContext::GetStat(int ClientID) //set stat mysql pdata
 }
 void CGameContext::UpdateStat(int ClientID) //update stat mysql pdata
 {
-	Server()->UpdateStat(ClientID, DLEVEL, m_apPlayers[ClientID]->AccData.Level);
-	Server()->UpdateStat(ClientID, DEXP, m_apPlayers[ClientID]->AccData.Exp);
-	Server()->UpdateStat(ClientID, DMONEY, m_apPlayers[ClientID]->AccData.Money);
-	Server()->UpdateStat(ClientID, DGOLD, m_apPlayers[ClientID]->AccData.Gold);
-	Server()->UpdateStat(ClientID, DDONATE, m_apPlayers[ClientID]->AccData.Donate);
-	Server()->UpdateStat(ClientID, DREL, m_apPlayers[ClientID]->AccData.Rel);
-	Server()->UpdateStat(ClientID, DJAIL, m_apPlayers[ClientID]->AccData.Jail);
-	Server()->UpdateStat(ClientID, DCLASS, m_apPlayers[ClientID]->AccData.Class);
-	Server()->UpdateStat(ClientID, DQUEST, m_apPlayers[ClientID]->AccData.Quest);
-	Server()->UpdateStat(ClientID, DKILL, m_apPlayers[ClientID]->AccData.Kill);
-	Server()->UpdateStat(ClientID, DWINAREA, m_apPlayers[ClientID]->AccData.WinArea);
-	Server()->UpdateStat(ClientID, DCLANADDED, m_apPlayers[ClientID]->AccData.ClanAdded);
-	Server()->UpdateStat(ClientID, DISJAILED, m_apPlayers[ClientID]->AccData.IsJailed);
-	Server()->UpdateStat(ClientID, DJAILLENGTH, m_apPlayers[ClientID]->AccData.JailLength);
-	Server()->UpdateStat(ClientID, DSUMMERHEALINGTIMES, m_apPlayers[ClientID]->AccData.SummerHealingTimes);
-	return;
+	if (m_apPlayers[ClientID]->AccData.Level > 0)
+	{
+		Server()->UpdateStat(ClientID, DLEVEL, m_apPlayers[ClientID]->AccData.Level);
+		Server()->UpdateStat(ClientID, DEXP, m_apPlayers[ClientID]->AccData.Exp);
+		Server()->UpdateStat(ClientID, DMONEY, m_apPlayers[ClientID]->AccData.Money);
+		Server()->UpdateStat(ClientID, DGOLD, m_apPlayers[ClientID]->AccData.Gold);
+		Server()->UpdateStat(ClientID, DDONATE, m_apPlayers[ClientID]->AccData.Donate);
+		Server()->UpdateStat(ClientID, DREL, m_apPlayers[ClientID]->AccData.Rel);
+		Server()->UpdateStat(ClientID, DJAIL, m_apPlayers[ClientID]->AccData.Jail);
+		Server()->UpdateStat(ClientID, DCLASS, m_apPlayers[ClientID]->AccData.Class);
+		Server()->UpdateStat(ClientID, DQUEST, m_apPlayers[ClientID]->AccData.Quest);
+		Server()->UpdateStat(ClientID, DKILL, m_apPlayers[ClientID]->AccData.Kill);
+		Server()->UpdateStat(ClientID, DWINAREA, m_apPlayers[ClientID]->AccData.WinArea);
+		Server()->UpdateStat(ClientID, DCLANADDED, m_apPlayers[ClientID]->AccData.ClanAdded);
+		Server()->UpdateStat(ClientID, DISJAILED, m_apPlayers[ClientID]->AccData.IsJailed);
+		Server()->UpdateStat(ClientID, DJAILLENGTH, m_apPlayers[ClientID]->AccData.JailLength);
+		Server()->UpdateStat(ClientID, DSUMMERHEALINGTIMES, m_apPlayers[ClientID]->AccData.SummerHealingTimes);
+		return;
+	}
 }
 void CGameContext::UpdateStats(int ClientID)
 {
