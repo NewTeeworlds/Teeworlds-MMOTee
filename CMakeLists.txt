@@ -346,7 +346,7 @@ function(show_dependency_status OUTPUT_NAME NAME)
   endif()
 endfunction()
 
-show_dependency_status("Curl" CURL)
+#show_dependency_status("Curl" CURL)
 show_dependency_status("MySQL" MYSQL)
 show_dependency_status("OpenSSL" OPENSSL)
 show_dependency_status("PythonInterp" PYTHONINTERP)
@@ -398,7 +398,6 @@ file(COPY server_lang DESTINATION .)
 set(COPY_FILES
   ${ICU_COPY_FILES}
   ${MYSQL_COPY_FILES}
-  ${CURL_COPY_FILES}
   ${OPENSSL_COPY_FILES}
   ${OPUSFILE_COPY_FILES}
 )
