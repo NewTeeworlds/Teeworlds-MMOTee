@@ -7,9 +7,13 @@
 int CSqlServer::ms_NumReadServer = 0;
 int CSqlServer::ms_NumWriteServer = 0;
 
+/*
 CSqlServer::CSqlServer(const char* pDatabase, const char* pPrefix, const char* pUser, const char* pPass, const char* pIp, int Port, bool ReadOnly, bool SetUpDb) :
 		m_Port(Port),
 		m_SetUpDB(SetUpDb)
+*/
+CSqlServer::CSqlServer(const char* pDatabase, const char* pPrefix, const char* pUser, const char* pPass, const char* pIp, int Port, bool ReadOnly) :
+		m_Port(Port)
 {
 	str_copy(m_aDatabase, pDatabase, sizeof(m_aDatabase));
 	str_copy(m_aPrefix, pPrefix, sizeof(m_aPrefix));

@@ -48,7 +48,9 @@ enum
 class CSqlServer
 {
 public:
-	CSqlServer(const char* pDatabase, const char* pPrefix, const char* pUser, const char* pPass, const char* pIp, int Port, bool ReadOnly = true, bool SetUpDb = false);
+	//禁用内建 SetupDB, 使用数据库模板 template-cn.sql
+	//CSqlServer(const char* pDatabase, const char* pPrefix, const char* pUser, const char* pPass, const char* pIp, int Port, bool ReadOnly = true, bool SetUpDb = false);
+	CSqlServer(const char* pDatabase, const char* pPrefix, const char* pUser, const char* pPass, const char* pIp, int Port, bool ReadOnly = true);
 	~CSqlServer();
 
 	bool Connect();
@@ -87,7 +89,7 @@ private:
 	char m_aIp[64];
 	int m_Port;
 
-	bool m_SetUpDB;
+	//bool m_SetUpDB;
 
 	LOCK m_SqlLock;
 };
