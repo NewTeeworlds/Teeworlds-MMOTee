@@ -4281,17 +4281,24 @@ int CGameContext::GetAreaCount()
 
 void CGameContext::StartArea(int WaitTime, int Type, int ClientID)
 {
+	if(!m_apPlayers[ClientID] || !m_apPlayers[ClientID]->GetCharacter())
+		return;
+
 	if(m_apPlayers[ClientID]->m_JailTick || m_apPlayers[ClientID]->m_Search)
 		return 	SendBroadcast_Localization(ClientID, 250, 150, _("你被通缉了. 不能进入小游戏."));
 	m_AreaStartTick = Server()->TickSpeed()*WaitTime;
 	m_AreaType = Type;
 
 	const char* NameGame = "NONE";
-	int Gets = 0;
+	//int Gets = 0;
 	switch(m_AreaType)
 	{
+		/*
 		case 1: NameGame = "激光瞬杀"; Gets = 50; break;
 		case 2: NameGame = "激光献祭"; Gets = 5; break;
+		*/
+		case 1: NameGame = "激光瞬杀"; break;
+		case 2: NameGame = "激光献祭"; break;
 	}
 	SendChatTarget(-1, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("玩家 {str:player} 发起了小游戏 {str:name} ."), "player", Server()->ClientName(ClientID), "name", NameGame, NULL);
