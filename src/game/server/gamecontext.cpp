@@ -943,10 +943,13 @@ void CGameContext::AreaTick()
 			m_AreaEndGame = 0;
 		}
 	}
+	//用聊天命令启动
+	/*
 	// старт арены 
 	// 生存活动开始
 	if(Server()->Tick() % (1 * Server()->TickSpeed() * 600) == 0)
 		StartArea(120, rand()%2+1);
+		*/
 }
 
 void CGameContext::OnTick()
@@ -4276,8 +4279,10 @@ int CGameContext::GetAreaCount()
 	return Count;
 }
 
-void CGameContext::StartArea(int WaitTime, int Type)
-{		
+void CGameContext::StartArea(int WaitTime, int Type, int ClientID)
+{
+	if(m_apPlayers[ClientID]->m_JailTick || m_apPlayers[ClientID]->m_Search)
+		return 	SendBroadcast_Localization(ClientID, 250, 150, _("你被通缉了. 不能进入小游戏."));
 	m_AreaStartTick = Server()->TickSpeed()*WaitTime;
 	m_AreaType = Type;
 
@@ -4289,9 +4294,12 @@ void CGameContext::StartArea(int WaitTime, int Type)
 		case 2: NameGame = "激光献祭"; Gets = 5; break;
 	}
 	SendChatTarget(-1, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 小游戏 {str:name} 开启了."), "name", NameGame, NULL);
-	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 奖励: 钱袋, 神器 {int:gets}%"), "gets", &Gets, NULL);
+	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("玩家 {str:player} 发起了小游戏 {str:name} ."), "player", Server()->ClientName(ClientID), "name", NameGame, NULL);
+	//SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 奖励: 钱袋, 神器 {int:gets}%"), "gets", &Gets, NULL);
 	SendChatTarget(-1, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+	
+	m_apPlayers[ClientID]->m_InArea = true;
+	m_apPlayers[ClientID]->GetCharacter()->Die(ClientID, WEAPON_WORLD);
 }
 
 void CGameContext::EnterArea(int ClientID)
@@ -4302,8 +4310,11 @@ void CGameContext::EnterArea(int ClientID)
 	if(m_apPlayers[ClientID]->m_JailTick || m_apPlayers[ClientID]->m_Search)
 		return 	SendBroadcast_Localization(ClientID, 250, 150, _("你被通缉了. 不能进入小游戏."));
 		
+	if(!m_AreaStartTick && m_AreaEndGame > 0)
+		return 	SendBroadcast_Localization(ClientID, 250, 150, _("小游戏进行中. 请等待其结束"));
+			
 	if(!m_AreaStartTick)
-		return 	SendBroadcast_Localization(ClientID, 250, 150, _("小游戏未开启.请等待开启."));
+		return 	SendBroadcast_Localization(ClientID, 250, 150, _("需要创建小游戏 (/game)"));
 			
 	m_apPlayers[ClientID]->m_InArea = true;
 	m_apPlayers[ClientID]->GetCharacter()->Die(ClientID, WEAPON_WORLD);

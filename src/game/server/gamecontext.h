@@ -228,7 +228,7 @@ public:
 	// Арена
 	// 竞技场
 	void AreaTick();
-	void StartArea(int WaitTime, int Type);
+	void StartArea(int WaitTime, int Type, int ClientID);
 	void EnterArea(int ClientID);
 	int m_AreaStartTick;
 	int m_AreaEndGame;
