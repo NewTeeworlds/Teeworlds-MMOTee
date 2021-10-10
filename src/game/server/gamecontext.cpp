@@ -4284,8 +4284,12 @@ void CGameContext::StartArea(int WaitTime, int Type, int ClientID)
 	if(!m_apPlayers[ClientID] || !m_apPlayers[ClientID]->GetCharacter())
 		return;
 
+	if(m_apPlayers[ClientID]->m_InBossed)
+		return 	SendBroadcast_Localization(ClientID, 250, 150, _("请先完成 Boss 战"));
+
 	if(m_apPlayers[ClientID]->m_JailTick || m_apPlayers[ClientID]->m_Search)
 		return 	SendBroadcast_Localization(ClientID, 250, 150, _("你被通缉了. 不能进入小游戏."));
+		
 	m_AreaStartTick = Server()->TickSpeed()*WaitTime;
 	m_AreaType = Type;
 
@@ -4302,6 +4306,7 @@ void CGameContext::StartArea(int WaitTime, int Type, int ClientID)
 	}
 	SendChatTarget(-1, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("玩家 {str:player} 发起了小游戏 {str:name} ."), "player", Server()->ClientName(ClientID), "name", NameGame, NULL);
+	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("欲加入的玩家, 请进入小游戏房间(game)"), NULL);
 	//SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 奖励: 钱袋, 神器 {int:gets}%"), "gets", &Gets, NULL);
 	SendChatTarget(-1, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 	
@@ -4325,6 +4330,7 @@ void CGameContext::EnterArea(int ClientID)
 
 	if(m_apPlayers[ClientID]->m_InBossed)
 		return 	SendBroadcast_Localization(ClientID, 250, 150, _("请先完成 Boss 战"));
+
 	m_apPlayers[ClientID]->m_InArea = true;
 	m_apPlayers[ClientID]->GetCharacter()->Die(ClientID, WEAPON_WORLD);
 }
@@ -5111,7 +5117,7 @@ void CGameContext::StartBoss(int ClientID, int WaitTime, int BossType)
 
 	SendChatTarget(-1, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 创建了Boss战, Boss 是 {str:names}"), "name", Server()->ClientName(ClientID), "names", GetBossName(m_BossType), NULL);
-	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("欲加入的玩家, 你需要进入Boss房(boss room)"), "name", Server()->ClientName(ClientID), "names", GetBossName(m_BossType), NULL);
+	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("欲加入的玩家, 请进入Boss房(boss room)"), "name", Server()->ClientName(ClientID), "names", GetBossName(m_BossType), NULL);
 	SendChatTarget(-1, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 }
 
