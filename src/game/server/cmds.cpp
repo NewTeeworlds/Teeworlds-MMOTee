@@ -191,7 +191,13 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 			GameServer()->SendChatTarget(ClientID, "类型1为激光瞬杀,2为激光献祭");
 			return;
 		}
-		GameServer()->StartArea(120, Type, ClientID);
+		if (Type > 2 || Type < 0)
+		{
+			GameServer()->SendChatTarget(ClientID, "发起小游戏. 命令方法: /game <类型> ");
+			GameServer()->SendChatTarget(ClientID, "类型1为激光瞬杀,2为激光献祭");
+			return;
+		}
+		GameServer()->StartArea(60, Type, ClientID);
 		return;
 	}
 

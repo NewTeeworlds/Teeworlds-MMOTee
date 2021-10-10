@@ -4315,7 +4315,9 @@ void CGameContext::EnterArea(int ClientID)
 			
 	if(!m_AreaStartTick)
 		return 	SendBroadcast_Localization(ClientID, 250, 150, _("需要创建小游戏 (/game)"));
-			
+
+	if(m_apPlayers[ClientID]->m_InBossed)
+		return 	SendBroadcast_Localization(ClientID, 250, 150, _("请先完成 Boss 战"));
 	m_apPlayers[ClientID]->m_InArea = true;
 	m_apPlayers[ClientID]->GetCharacter()->Die(ClientID, WEAPON_WORLD);
 }
@@ -5076,6 +5078,9 @@ void CGameContext::StartBoss(int ClientID, int WaitTime, int BossType)
 	if(m_BossStartTick || m_BossStart)
 		return 	SendBroadcast_Localization(ClientID, 250, 150, _("Boss房发起的Boss战即将开始. 进入Boss房以进入Boss战."));
 	
+	if(m_apPlayers[ClientID]->m_InArea)
+		return 	SendBroadcast_Localization(ClientID, 250, 150, _("请先完成小游戏"));
+
 	if (!m_apPlayers[BOSSID])
 	{
 		m_apPlayers[BOSSID] = new(BOSSID) CPlayer(this, BOSSID, TEAM_RED);
