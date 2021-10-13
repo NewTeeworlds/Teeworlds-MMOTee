@@ -865,7 +865,7 @@ void CGameContext::AreaTick()
 			int count = GetAreaCount();
 			if(count < 2)
 			{
-				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 最少需要两名玩家才能开始"), NULL);	
+				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[小游戏] 最少需要两名玩家才能开始"), NULL);	
 				for(int i = 0; i < MAX_NOBOT; ++i)
 				{
 					if(m_apPlayers[i] && m_apPlayers[i]->m_InArea)
@@ -879,7 +879,7 @@ void CGameContext::AreaTick()
 			else
 			{
 				m_AreaEndGame = 120*Server()->TickSpeed();
-				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 游戏开始了, 一共有 {int:num} 名玩家参加"), "num", &count, NULL);
+				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[小游戏] 游戏开始了, 一共有 {int:num} 名玩家参加"), "num", &count, NULL);
 			}	
 		}
 	}
@@ -902,7 +902,7 @@ void CGameContext::AreaTick()
 						m_apPlayers[i]->GetCharacter()->Die(i, WEAPON_WORLD);
 				}
 			}		
-			SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 游戏结束. 没有玩家获胜"), NULL);		
+			SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[小游戏] 游戏结束. 没有玩家获胜"), NULL);		
 		}
 
 		if(GetAreaCount() == 1)
@@ -939,7 +939,7 @@ void CGameContext::AreaTick()
 					}
 				}
 			}
-			SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 游戏结束.最终赢家是:{str:name}:"), "name", Server()->ClientName(is), NULL);	
+			SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[小游戏] 游戏结束.最终赢家是:{str:name}:"), "name", Server()->ClientName(is), NULL);	
 			m_AreaEndGame = 0;
 		}
 	}
@@ -1097,7 +1097,7 @@ void CGameContext::OnTick()
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "原作者:Kurosio", NULL);
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "制作者/管理：天上的星星", NULL);
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "汉化：MC_TYH、Ninecloud及MMOTEE全体国服玩家", NULL);
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "地图制作：天际",NULL);
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "地图制作：天际, 卖鱼强",NULL);
 	}
 	if(Server()->Tick() % (1 * Server()->TickSpeed() * 360) == 0 && g_Config.m_SvLoginControl)
 	{
@@ -4307,7 +4307,7 @@ void CGameContext::StartArea(int WaitTime, int Type, int ClientID)
 	SendChatTarget(-1, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("玩家 {str:player} 发起了小游戏 {str:name} ."), "player", Server()->ClientName(ClientID), "name", NameGame, NULL);
 	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("欲加入的玩家, 请进入小游戏房间(game)"), NULL);
-	//SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 奖励: 钱袋, 神器 {int:gets}%"), "gets", &Gets, NULL);
+	//SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[小游戏] 奖励: 钱袋, 神器 {int:gets}%"), "gets", &Gets, NULL);
 	SendChatTarget(-1, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 	
 	m_apPlayers[ClientID]->m_InArea = true;
