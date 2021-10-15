@@ -865,7 +865,7 @@ void CGameContext::AreaTick()
 			int count = GetAreaCount();
 			if(count < 2)
 			{
-				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 最少需要两名玩家才能开始"), NULL);	
+				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[小游戏] 最少需要两名玩家才能开始"), NULL);	
 				for(int i = 0; i < MAX_NOBOT; ++i)
 				{
 					if(m_apPlayers[i] && m_apPlayers[i]->m_InArea)
@@ -879,7 +879,7 @@ void CGameContext::AreaTick()
 			else
 			{
 				m_AreaEndGame = 120*Server()->TickSpeed();
-				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 游戏开始了, 一共有 {int:num} 名玩家参加"), "num", &count, NULL);
+				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[小游戏] 游戏开始了, 一共有 {int:num} 名玩家参加"), "num", &count, NULL);
 			}	
 		}
 	}
@@ -902,7 +902,7 @@ void CGameContext::AreaTick()
 						m_apPlayers[i]->GetCharacter()->Die(i, WEAPON_WORLD);
 				}
 			}		
-			SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 游戏结束. 没有玩家获胜"), NULL);		
+			SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[小游戏] 游戏结束. 没有玩家获胜"), NULL);		
 		}
 
 		if(GetAreaCount() == 1)
@@ -939,14 +939,17 @@ void CGameContext::AreaTick()
 					}
 				}
 			}
-			SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 游戏结束.最终赢家是:{str:name}:"), "name", Server()->ClientName(is), NULL);	
+			SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[小游戏] 游戏结束.最终赢家是:{str:name}:"), "name", Server()->ClientName(is), NULL);	
 			m_AreaEndGame = 0;
 		}
 	}
+	//用聊天命令启动
+	/*
 	// старт арены 
 	// 生存活动开始
 	if(Server()->Tick() % (1 * Server()->TickSpeed() * 600) == 0)
 		StartArea(120, rand()%2+1);
+		*/
 }
 
 void CGameContext::OnTick()
@@ -1094,7 +1097,7 @@ void CGameContext::OnTick()
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "原作者:Kurosio", NULL);
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "制作者/管理：天上的星星", NULL);
 		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "汉化：MC_TYH、Ninecloud及MMOTEE全体国服玩家", NULL);
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "地图制作：天际",NULL);
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, "地图制作：天际, 卖鱼强",NULL);
 	}
 	if(Server()->Tick() % (1 * Server()->TickSpeed() * 360) == 0 && g_Config.m_SvLoginControl)
 	{
@@ -4276,22 +4279,39 @@ int CGameContext::GetAreaCount()
 	return Count;
 }
 
-void CGameContext::StartArea(int WaitTime, int Type)
-{		
+void CGameContext::StartArea(int WaitTime, int Type, int ClientID)
+{
+	if(!m_apPlayers[ClientID] || !m_apPlayers[ClientID]->GetCharacter())
+		return;
+
+	if(m_apPlayers[ClientID]->m_InBossed)
+		return 	SendBroadcast_Localization(ClientID, 250, 150, _("请先完成 Boss 战"));
+
+	if(m_apPlayers[ClientID]->m_JailTick || m_apPlayers[ClientID]->m_Search)
+		return 	SendBroadcast_Localization(ClientID, 250, 150, _("你被通缉了. 不能进入小游戏."));
+		
 	m_AreaStartTick = Server()->TickSpeed()*WaitTime;
 	m_AreaType = Type;
 
 	const char* NameGame = "NONE";
-	int Gets = 0;
+	//int Gets = 0;
 	switch(m_AreaType)
 	{
+		/*
 		case 1: NameGame = "激光瞬杀"; Gets = 50; break;
 		case 2: NameGame = "激光献祭"; Gets = 5; break;
+		*/
+		case 1: NameGame = "激光瞬杀"; break;
+		case 2: NameGame = "激光献祭"; break;
 	}
 	SendChatTarget(-1, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 小游戏 {str:name} 开启了."), "name", NameGame, NULL);
-	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[Survial] 奖励: 钱袋, 神器 {int:gets}%"), "gets", &Gets, NULL);
+	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("玩家 {str:player} 发起了小游戏 {str:name} ."), "player", Server()->ClientName(ClientID), "name", NameGame, NULL);
+	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("欲加入的玩家, 请进入小游戏房间(game)"), NULL);
+	//SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("[小游戏] 奖励: 钱袋, 神器 {int:gets}%"), "gets", &Gets, NULL);
 	SendChatTarget(-1, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+	
+	m_apPlayers[ClientID]->m_InArea = true;
+	m_apPlayers[ClientID]->GetCharacter()->Die(ClientID, WEAPON_WORLD);
 }
 
 void CGameContext::EnterArea(int ClientID)
@@ -4302,9 +4322,15 @@ void CGameContext::EnterArea(int ClientID)
 	if(m_apPlayers[ClientID]->m_JailTick || m_apPlayers[ClientID]->m_Search)
 		return 	SendBroadcast_Localization(ClientID, 250, 150, _("你被通缉了. 不能进入小游戏."));
 		
-	if(!m_AreaStartTick)
-		return 	SendBroadcast_Localization(ClientID, 250, 150, _("小游戏未开启.请等待开启."));
+	if(!m_AreaStartTick && m_AreaEndGame > 0)
+		return 	SendBroadcast_Localization(ClientID, 250, 150, _("小游戏进行中. 请等待其结束"));
 			
+	if(!m_AreaStartTick)
+		return 	SendBroadcast_Localization(ClientID, 250, 150, _("需要创建小游戏 (/game)"));
+
+	if(m_apPlayers[ClientID]->m_InBossed)
+		return 	SendBroadcast_Localization(ClientID, 250, 150, _("请先完成 Boss 战"));
+
 	m_apPlayers[ClientID]->m_InArea = true;
 	m_apPlayers[ClientID]->GetCharacter()->Die(ClientID, WEAPON_WORLD);
 }
@@ -5065,6 +5091,9 @@ void CGameContext::StartBoss(int ClientID, int WaitTime, int BossType)
 	if(m_BossStartTick || m_BossStart)
 		return 	SendBroadcast_Localization(ClientID, 250, 150, _("Boss房发起的Boss战即将开始. 进入Boss房以进入Boss战."));
 	
+	if(m_apPlayers[ClientID]->m_InArea)
+		return 	SendBroadcast_Localization(ClientID, 250, 150, _("请先完成小游戏"));
+
 	if (!m_apPlayers[BOSSID])
 	{
 		m_apPlayers[BOSSID] = new(BOSSID) CPlayer(this, BOSSID, TEAM_RED);
@@ -5088,7 +5117,7 @@ void CGameContext::StartBoss(int ClientID, int WaitTime, int BossType)
 
 	SendChatTarget(-1, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 创建了Boss战, Boss 是 {str:names}"), "name", Server()->ClientName(ClientID), "names", GetBossName(m_BossType), NULL);
-	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("欲加入的玩家, 你需要进入Boss房(boss room)"), "name", Server()->ClientName(ClientID), "names", GetBossName(m_BossType), NULL);
+	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("欲加入的玩家, 请进入Boss房(boss room)"), "name", Server()->ClientName(ClientID), "names", GetBossName(m_BossType), NULL);
 	SendChatTarget(-1, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 }
 
