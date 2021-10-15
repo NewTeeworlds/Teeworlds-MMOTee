@@ -4284,6 +4284,12 @@ void CGameContext::StartArea(int WaitTime, int Type, int ClientID)
 	if(!m_apPlayers[ClientID] || !m_apPlayers[ClientID]->GetCharacter())
 		return;
 
+	if(m_AreaStartTick)
+		return 	SendBroadcast_Localization(ClientID, 250, 150, _("小游戏{str:name}即将开始,请进入房间"), "name", (m_AreaType - 1) ? "激光献祭" : "激光瞬杀", NULL);
+
+	if(!m_AreaStartTick && m_AreaEndGame > 0)
+		return 	SendBroadcast_Localization(ClientID, 250, 150, _("小游戏进行中. 请等待其结束"));
+
 	if(m_apPlayers[ClientID]->m_InBossed)
 		return 	SendBroadcast_Localization(ClientID, 250, 150, _("请先完成 Boss 战"));
 
@@ -5088,7 +5094,10 @@ void CGameContext::StartBoss(int ClientID, int WaitTime, int BossType)
 	if(m_apPlayers[ClientID]->m_JailTick || m_apPlayers[ClientID]->m_Search)
 		return 	SendBroadcast_Localization(ClientID, 250, 150, _("你被通缉了，不能进入Boss房间."));
 		
-	if(m_BossStartTick || m_BossStart)
+	if(m_BossStart)
+		return 	SendBroadcast_Localization(ClientID, 250, 150, _("Boss战正在进行,请等待其结束"));
+
+	if(m_BossStartTick)
 		return 	SendBroadcast_Localization(ClientID, 250, 150, _("Boss房发起的Boss战即将开始. 进入Boss房以进入Boss战."));
 	
 	if(m_apPlayers[ClientID]->m_InArea)
