@@ -561,13 +561,13 @@ int CMapConverter::AddExternalImage(const char* pImageName, int Width, int Heigh
 
 void CMapConverter::Finalize()
 {
-	/*//int EngineerImageID = AddExternalImage("../skins/limekitty", 256, 128);
-	int SoldierImageID = AddExternalImage("../skins/brownbear", 256, 128);
+	//int EngineerImageID = AddExternalImage("../skins/limekitty", 256, 128);
+	int SoldierImageID = AddExternalImage("skins/brownbear", 256, 128);
 	//int ScientistImageID = AddExternalImage("../skins/toptri", 256, 128);
 	//int BiologistImageID = AddExternalImage("../skins/twintri", 256, 128);
 	//int MedicImageID = AddExternalImage("../skins/twinbop", 256, 128);
-	int HeroImageID = AddExternalImage("../skins/redstripe", 256, 128);
-	int NinjaImageID = AddExternalImage("../skins/x_ninja", 256, 128);
+	int HeroImageID = AddExternalImage("skins/redstripe", 256, 128);
+	int NinjaImageID = AddExternalImage("skins/x_ninja", 256, 128);
 
 	//Menu
 	
@@ -799,7 +799,7 @@ void CMapConverter::Finalize()
 				}
 			}
 		}
-	}*/
+	}
 }
 
 bool CMapConverter::CreateMap(const char* pFilename)
