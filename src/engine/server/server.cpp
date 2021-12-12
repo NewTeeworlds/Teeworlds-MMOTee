@@ -4259,7 +4259,7 @@ public:
 		{
 			if(m_Type == 0)
 			{
-				if(m_pServer->m_aClients[m_ClientID].m_Level < 0) return false;
+				if(m_pServer->m_aClients[m_ClientID].m_Level <= 0) return false;
 				str_format(aBuf, sizeof(aBuf), 
 					"UPDATE %s_Users "
 					"SET Level = '%d', "
@@ -4366,6 +4366,9 @@ void CServer::UpdateStats(int ClientID, int Type)
 	if(m_aClients[ClientID].m_Class < 0 || (m_aClients[ClientID].m_UserID < 0 && m_pGameServer))
 		return; 
 
+	if(m_aClients[ClientID].m_Level <= 0)
+		return;
+	
 	CSqlJob* pJob = new CSqlJob_Server_UpdateStat(this, ClientID, m_aClients[ClientID].m_UserID, Type);
 	pJob->Start();
 }    
