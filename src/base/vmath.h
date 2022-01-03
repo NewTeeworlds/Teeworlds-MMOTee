@@ -302,7 +302,8 @@ public:
 	vector4_base operator*(const T v) const { return vector4_base(x * v, y * v, z * v, w * v); }
 	vector4_base operator/(const vector4_base &v) const { return vector4_base(x / v.x, y / v.y, z / v.z, w / v.w); }
 	vector4_base operator/(const T v) const { return vector4_base(x / v, y / v, z / v, w / v); }
-
+	// These operators are pre-defined by the compiler and no longer required.
+	/*
 	const vector4_base &operator=(const vector4_base &v)
 	{
 		x = v.x;
@@ -360,7 +361,7 @@ public:
 		w /= v.w;
 		return *this;
 	}
-
+*/
 	bool operator==(const vector4_base &v) const { return x == v.x && y == v.y && z == v.z && w == v.w; } //TODO: do this with an eps instead
 
 	operator const T *() { return &x; }
