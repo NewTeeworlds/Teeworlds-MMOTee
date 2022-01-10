@@ -13,6 +13,11 @@
 		"file": "de",
 		"name": "Deutsch",
 		"parent": "en"
+	},
+	{
+		"file": "cn",
+		"name": "中文",
+		"parent": "en"
 	}
 ]
 }
