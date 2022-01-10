@@ -7,12 +7,12 @@
 	{
 		"file": "ru",
 		"name": "Русский",
-		"parent": "en"
+		"parent": "cn"
 	},
 	{
 		"file": "de",
 		"name": "Deutsch",
-		"parent": "en"
+		"parent": "cn"
 	},
 	{
 		"file": "en",
