@@ -1,8 +1,8 @@
 {"language indices": [
 	
 	{
-		"file": "en",
-		"name": "English"
+		"file": "cn",
+		"name": "中文",
 	},
 	{
 		"file": "ru",
@@ -15,9 +15,9 @@
 		"parent": "en"
 	},
 	{
-		"file": "cn",
-		"name": "中文",
-		"parent": "en"
+		"file": "en",
+		"name": "English",
+		"parent": "cn"
 	}
 ]
 }
