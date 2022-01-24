@@ -228,6 +228,7 @@ enum
 	CUSTOMCOLOR,
 	CABBAGE,
 	GOLDTICKET,
+	EXTENDLIMIT,
 	//TITLEMOON,
 	//FESTITEM,
 	MAX_ITEM,
@@ -526,8 +527,8 @@ public:
 	virtual int GetMaxAmmo(int ClientID, int WID) = 0;
 	virtual void SetMaxAmmo(int ClientID, int WID, int n) = 0;
 	
-	virtual int GetSeccurity(int ClientID) = 0;
-	virtual void SetSeccurity(int ClientID, int n) = 0;
+	virtual int GetSecurity(int ClientID) = 0;
+	virtual void SetSecurity(int ClientID, int n) = 0;
 	
 	//virtual int GetStat(int ClientID, int Type) = 0;
 	virtual long int GetStat(int ClientID, int Type) = 0;

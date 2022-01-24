@@ -781,6 +781,8 @@ int CServer::DelClientCallback(int ClientID, int Type, const char *pReason, void
 	char aAddrStr[NETADDR_MAXSTRSIZE];
 	net_addr_str(pThis->m_NetServer.ClientAddr(ClientID), aAddrStr, sizeof(aAddrStr), true);
 
+	pThis->m_aClients[ClientID].m_CanUpdate = false;
+
 	pThis->m_aClients[ClientID].m_State = CClient::STATE_EMPTY;
 	pThis->m_aClients[ClientID].m_aName[0] = 0;
 	pThis->m_aClients[ClientID].m_aClan[0] = 0;
@@ -2227,14 +2229,14 @@ void CServer::SetMaxAmmo(int ClientID, int WID, int n)
 	m_InfMaxAmmo[ClientID][WID] = n;
 }
 
-int CServer::GetSeccurity(int ClientID)
+int CServer::GetSecurity(int ClientID)
 {
-	return m_aClients[ClientID].m_Seccurity;
+	return m_aClients[ClientID].m_Security;
 }
 
-void CServer::SetSeccurity(int ClientID, int n)
+void CServer::SetSecurity(int ClientID, int n)
 {
-	m_aClients[ClientID].m_Seccurity = n;
+	m_aClients[ClientID].m_Security = n;
 	UpdateStats(ClientID, 0);
 }
 
@@ -2373,7 +2375,7 @@ long int CServer::GetStat(int ClientID, int Type)
 		case DGOLD: return m_aClients[ClientID].m_Gold; break;
 		case DDONATE: return m_aClients[ClientID].m_Donate; break;
 		case DQUEST: return m_aClients[ClientID].m_Quest; break;
-		case DSECC: return m_aClients[ClientID].m_Seccurity; break;
+		case DSECC: return m_aClients[ClientID].m_Security; break;
 		case DREL: return m_aClients[ClientID].m_Rel; break;
 		case DJAIL: return m_aClients[ClientID].m_Jail; break;
 		case DCLASS: return m_aClients[ClientID].m_Class; break;
@@ -2390,24 +2392,27 @@ long int CServer::GetStat(int ClientID, int Type)
 
 void CServer::UpdateStat(int ClientID, int Type, int Size)
 {
-	switch(Type)
+	if(m_aClients[ClientID].m_CanUpdate)
 	{
-		case DLEVEL: m_aClients[ClientID].m_Level = Size; break;
-		case DEXP: m_aClients[ClientID].m_Exp = Size; break;
-		case DMONEY: m_aClients[ClientID].m_Money = Size; break;
-		case DGOLD: m_aClients[ClientID].m_Gold = Size; break;
-		case DDONATE: m_aClients[ClientID].m_Donate = Size; break;	
-		case DQUEST: m_aClients[ClientID].m_Quest = Size; break;
-		case DSECC: m_aClients[ClientID].m_Seccurity = Size; break;
-		case DREL: m_aClients[ClientID].m_Rel = Size; break;
-		case DJAIL: m_aClients[ClientID].m_Jail = Size; break;
-		case DCLASS: m_aClients[ClientID].m_Class = Size; break;
-		case DKILL: m_aClients[ClientID].m_Kill = Size; break;
-		case DWINAREA: m_aClients[ClientID].m_WinArea = Size; break;
-		case DCLANADDED: m_aClients[ClientID].m_ClanAdded = Size; break;
-		case DISJAILED: m_aClients[ClientID].m_IsJailed = Size; break;
-		case DJAILLENGTH: m_aClients[ClientID].m_JailLength = Size; break;
-		case DSUMMERHEALINGTIMES: m_aClients[ClientID].m_SummerHealingTimes = Size; break;
+		switch(Type)
+		{
+			case DLEVEL: m_aClients[ClientID].m_Level = Size; break;
+			case DEXP: m_aClients[ClientID].m_Exp = Size; break;
+			case DMONEY: m_aClients[ClientID].m_Money = Size; break;
+			case DGOLD: m_aClients[ClientID].m_Gold = Size; break;
+			case DDONATE: m_aClients[ClientID].m_Donate = Size; break;	
+			case DQUEST: m_aClients[ClientID].m_Quest = Size; break;
+			case DSECC: m_aClients[ClientID].m_Security = Size; break;
+			case DREL: m_aClients[ClientID].m_Rel = Size; break;
+			case DJAIL: m_aClients[ClientID].m_Jail = Size; break;
+			case DCLASS: m_aClients[ClientID].m_Class = Size; break;
+			case DKILL: m_aClients[ClientID].m_Kill = Size; break;
+			case DWINAREA: m_aClients[ClientID].m_WinArea = Size; break;
+			case DCLANADDED: m_aClients[ClientID].m_ClanAdded = Size; break;
+			case DISJAILED: m_aClients[ClientID].m_IsJailed = Size; break;
+			case DJAILLENGTH: m_aClients[ClientID].m_JailLength = Size; break;
+			case DSUMMERHEALINGTIMES: m_aClients[ClientID].m_SummerHealingTimes = Size; break;
+		}
 	}
 }
 
@@ -2433,20 +2438,23 @@ int CServer::GetUpgrade(int ClientID, int Type)
 
 void CServer::UpdateUpgrade(int ClientID, int Type, int Size)
 {
-	switch(Type)
+	if(m_aClients[ClientID].m_CanUpdate)
 	{
-		case SUPGRADE: m_aClients[ClientID].Upgrade = Size; break;
-		case SKILLPOINT: m_aClients[ClientID].SkillPoint = Size; break;
-		case ASPEED: m_aClients[ClientID].Speed = Size; break;
-		case BDAMAGE: m_aClients[ClientID].Damage = Size; break;
-		case HHEALTH: m_aClients[ClientID].Health = Size; break;
-		case HPREGEN: m_aClients[ClientID].HPRegen = Size; break;
-		case AMMOREGEN: m_aClients[ClientID].AmmoRegen = Size; break;
-		case AMMO: m_aClients[ClientID].Ammo = Size; break;
-		case SPRAY: m_aClients[ClientID].Spray = Size; break;
-		case MANA: m_aClients[ClientID].Mana = Size; break;
-		case UHAMMERRANGE: m_aClients[ClientID].m_HammerRange = Size; break;
-		case PASIVE2: m_aClients[ClientID].m_Pasive2 = Size; break;
+		switch(Type)
+		{
+			case SUPGRADE: m_aClients[ClientID].Upgrade = Size; break;
+			case SKILLPOINT: m_aClients[ClientID].SkillPoint = Size; break;
+			case ASPEED: m_aClients[ClientID].Speed = Size; break;
+			case BDAMAGE: m_aClients[ClientID].Damage = Size; break;
+			case HHEALTH: m_aClients[ClientID].Health = Size; break;
+			case HPREGEN: m_aClients[ClientID].HPRegen = Size; break;
+			case AMMOREGEN: m_aClients[ClientID].AmmoRegen = Size; break;
+			case AMMO: m_aClients[ClientID].Ammo = Size; break;
+			case SPRAY: m_aClients[ClientID].Spray = Size; break;
+			case MANA: m_aClients[ClientID].Mana = Size; break;
+			case UHAMMERRANGE: m_aClients[ClientID].m_HammerRange = Size; break;
+			case PASIVE2: m_aClients[ClientID].m_Pasive2 = Size; break;
+		}
 	}
 }
 
@@ -3374,6 +3382,7 @@ public:
 };
 void CServer::UpdateItemSettings(int ItemID, int ClientID)
 {
+	if(!m_aClients[ClientID].m_CanUpdate) return;
 	CSqlJob* pJob = new CSqlJob_Server_UpdateItemSettings(this, ItemID, ClientID);
 	pJob->Start();
 }
@@ -4291,7 +4300,7 @@ public:
 					m_pServer->m_aClients[m_ClientID].m_Quest, 
 					m_pServer->m_aClients[m_ClientID].m_Kill,  
 					m_pServer->m_aClients[m_ClientID].m_WinArea, 
-					m_pServer->m_aClients[m_ClientID].m_Seccurity, 
+					m_pServer->m_aClients[m_ClientID].m_Security, 
 					m_pServer->m_aClients[m_ClientID].m_ClanAdded, 
 					m_pServer->m_aClients[m_ClientID].m_IsJailed, 
 					m_pServer->m_aClients[m_ClientID].m_JailLength,
@@ -4363,7 +4372,7 @@ public:
 
 void CServer::UpdateStats(int ClientID, int Type)
 {
-	if(m_aClients[ClientID].m_Class < 0 || (m_aClients[ClientID].m_UserID < 0 && m_pGameServer))
+	if(m_aClients[ClientID].m_Class < 0 || (m_aClients[ClientID].m_UserID < 0 && m_pGameServer) || !m_aClients[ClientID].m_CanUpdate)
 		return; 
 
 	if(m_aClients[ClientID].m_Level <= 0)
@@ -4401,7 +4410,7 @@ public:
 		char aBuf[512];
 		try
 		{	
-			if(m_pServer->m_aClients[m_ClientID].m_Seccurity)
+			if(m_pServer->m_aClients[m_ClientID].m_Security)
 				str_format(aBuf, sizeof(aBuf), "SELECT UserId, Username, Nick, PasswordHash FROM %s_Users "
 					"WHERE Username = '%s' AND PasswordHash = '%s' AND Nick = '%s';", pSqlServer->GetPrefix(), m_sName.ClrStr(), m_sPasswordHash.ClrStr(), m_sNick.ClrStr());
 			else
@@ -4490,7 +4499,7 @@ public:
 			pSqlServer->executeSqlQuery(aBuf);
 			
 			if(pSqlServer->GetResults()->next())
-				m_pServer->m_aClients[m_ClientID].m_Seccurity = (int)pSqlServer->GetResults()->getInt("Seccurity");
+				m_pServer->m_aClients[m_ClientID].m_Security = (int)pSqlServer->GetResults()->getInt("Seccurity");
 			else
 			{
 				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(-1, CHATCATEGORY_DEFAULT, _("欢迎新玩家！"));
@@ -4499,7 +4508,7 @@ public:
 		}
 		catch (sql::SQLException &e)
 		{
-			dbg_msg("sql", "Can't check newplayer seccurity (MySQL Error: %s)", e.what());
+			dbg_msg("sql", "Can't check newplayer security (MySQL Error: %s)", e.what());
 			return false;			
 		}
 		return true;

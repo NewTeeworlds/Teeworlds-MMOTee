@@ -146,8 +146,8 @@ public:
 		int m_ClanID;
 		int m_Level;
 		long int m_Exp;
-		long int m_Money;
-		long int m_Gold;
+		int m_Money;
+		unsigned long int m_Gold;
 		int m_Donate;
 		int m_Rel;
 		bool m_Jail;
@@ -155,7 +155,7 @@ public:
 		int m_Quest;
 		int m_Kill;
 		int m_WinArea;
-		bool m_Seccurity;
+		bool m_Security;
 		char m_Clan[64];
 		unsigned long int m_ClanAdded;
 		
@@ -186,6 +186,8 @@ public:
 		char m_aUsername[MAX_NAME_LENGTH];
 		int m_SelectItem;
 		bool m_CustClt;
+
+		bool m_CanUpdate = true;
 	};
 
 	struct _m_stClan
@@ -418,8 +420,8 @@ public:
 	virtual int GetMaxAmmo(int ClientID, int WID);
 	virtual void SetMaxAmmo(int ClientID, int WID, int n);
 	
-	virtual int GetSeccurity(int WID);
-	virtual void SetSeccurity(int WID, int n);
+	virtual int GetSecurity(int WID);
+	virtual void SetSecurity(int WID, int n);
 	virtual bool IsClientLogged(int ClientID);
 	virtual int GetClanID(int ClientID);
 

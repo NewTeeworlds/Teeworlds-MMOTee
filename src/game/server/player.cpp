@@ -307,7 +307,7 @@ void CPlayer::Tick()
 	if(Server()->IsClientLogged(m_ClientID) && AccData.Level == -1)
 	{
 		AccData.Level = 1;
-		if(!Server()->GetSeccurity(m_ClientID))
+		if(!Server()->GetSecurity(m_ClientID))
 			GameServer()->SendChatTarget_Localization(m_ClientID, CHATCATEGORY_DEFAULT, _("你的账户有风险, 请设置安全设置(security)"), NULL);				
 	}
 	
