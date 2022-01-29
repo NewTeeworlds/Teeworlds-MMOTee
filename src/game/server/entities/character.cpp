@@ -964,7 +964,7 @@ void CCharacter::Tick()
 				int Exp = 20+Server()->GetClan(DCHAIRHOUSE, Server()->GetTopHouse(0));
 				int Money = 500+(Server()->GetClan(DCHAIRHOUSE, Server()->GetTopHouse(0))*50);
 
-				long int LegalExp = m_pPlayer->AccData.Exp + Exp;
+				unsigned long int LegalExp = m_pPlayer->AccData.Exp + Exp;
 				int LegalMoney = m_pPlayer->AccData.Money + Money;
 
 				m_pPlayer->AccData.Exp += Exp;
@@ -988,7 +988,7 @@ void CCharacter::Tick()
 				int Exp = 20+Server()->GetClan(DCHAIRHOUSE, Server()->GetTopHouse(1));
 				int Money = 500+(Server()->GetClan(DCHAIRHOUSE, Server()->GetTopHouse(1))*50);
 
-				long int LegalExp = m_pPlayer->AccData.Exp + Exp;
+				unsigned long int LegalExp = m_pPlayer->AccData.Exp + Exp;
 				int LegalMoney = m_pPlayer->AccData.Money + Money;
 
 				m_pPlayer->AccData.Exp += Exp;
@@ -1013,7 +1013,7 @@ void CCharacter::Tick()
 				int Exp = 20+Server()->GetClan(DCHAIRHOUSE, Server()->GetTopHouse(2));
 				int Money = 500+(Server()->GetClan(DCHAIRHOUSE, Server()->GetTopHouse(2))*50);
 
-				long int LegalExp = m_pPlayer->AccData.Exp + Exp;
+				unsigned long int LegalExp = m_pPlayer->AccData.Exp + Exp;
 				int LegalMoney = m_pPlayer->AccData.Money + Money;
 
 				m_pPlayer->AccData.Exp += Exp;
@@ -1039,7 +1039,7 @@ void CCharacter::Tick()
 				int Exp = 20;
 				int Money = 600;
 
-				long int LegalExp = m_pPlayer->AccData.Exp + Exp;
+				unsigned long int LegalExp = m_pPlayer->AccData.Exp + Exp;
 				int LegalMoney = m_pPlayer->AccData.Money + Money;
 
 				if(g_Config.m_SvCityStart == 1)
@@ -1079,7 +1079,7 @@ void CCharacter::Tick()
 				int Exp = 30;
 				int Money = 800;
 
-				long int LegalExp = m_pPlayer->AccData.Exp + Exp;
+				unsigned long int LegalExp = m_pPlayer->AccData.Exp + Exp;
 				int LegalMoney = m_pPlayer->AccData.Money + Money;
 			
 				if(g_Config.m_SvCityStart == 1)

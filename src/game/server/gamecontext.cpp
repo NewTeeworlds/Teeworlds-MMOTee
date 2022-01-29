@@ -1586,7 +1586,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 								
 				else if(str_comp(aCmd, "cm1") == 0)
 				{
-					long int Get = 1000; 
+					unsigned long int Get = 1000; 
 					if (pReason[0] && isdigit(pReason[0]))
 						Get = atoi (pReason);
 						
@@ -1975,9 +1975,9 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					if(m_apPlayers[ClientID]->AccUpgrade.Upgrade < 10)
 						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你没有足够的升级点"), NULL);	
 					
-					if((m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_BERSERK && m_apPlayers[ClientID]->AccUpgrade.Spray >= BMAXSPREAD + 3 * Server()->GetItemCount(ClientID, EXTENDLIMIT)) ||
-						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER && m_apPlayers[ClientID]->AccUpgrade.Spray >= HMAXSPREAD + 3 * Server()->GetItemCount(ClientID, EXTENDLIMIT)) ||
-						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_ASSASINS && m_apPlayers[ClientID]->AccUpgrade.Spray >= AMAXSPREAD + 3 * Server()->GetItemCount(ClientID, EXTENDLIMIT)))
+					if((m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_BERSERK && m_apPlayers[ClientID]->AccUpgrade.Spray >= BMAXSPREAD) ||
+						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER && m_apPlayers[ClientID]->AccUpgrade.Spray >= HMAXSPREAD) ||
+						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_ASSASINS && m_apPlayers[ClientID]->AccUpgrade.Spray >= AMAXSPREAD))
 						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("技能已满级"), NULL);	
 					
 					m_apPlayers[ClientID]->AccUpgrade.Spray++;
@@ -2631,7 +2631,7 @@ void CGameContext::BuyItem(int ItemType, int ClientID, int Type)
 	if(m_apPlayers[ClientID]->AccData.Level < Server()->GetItemPrice(ClientID, ItemType, 0))
 		return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你没有达到规定的等级."), NULL);	
 		
-	if(Type == 0 && m_apPlayers[ClientID]->AccData.Gold < Server()->GetItemPrice(ClientID, ItemType, 1))
+	if(Type == 0 && m_apPlayers[ClientID]->AccData.Gold < (unsigned long)Server()->GetItemPrice(ClientID, ItemType, 1))
 		return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你没有足够的黄金,小穷光蛋."), NULL);	
 
 	if(Type == 1 && m_apPlayers[ClientID]->AccData.Donate < Server()->GetItemPrice(ClientID, ItemType, 1))
