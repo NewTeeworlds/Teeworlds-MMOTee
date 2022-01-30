@@ -86,12 +86,12 @@ public:
 	struct
 	{
 		int Level;
-		long int Exp;
+		unsigned long int Exp;
 		int Class = PLAYERCLASS_NONE;
 		int Money;
-		long int Gold;
+		unsigned long int Gold;
 		int Donate;
-		long int ClanAdded;
+		unsigned long int ClanAdded;
 		int Quest;
 		int Kill;
 		int WinArea;
@@ -117,7 +117,7 @@ public:
 		int Upgrade;
 	} AccUpgrade;
 
-	char m_SelectPlayer[64];
+	char m_SelectPlayer[MAX_CLIENTS];
 	int m_SelectItem;
 	int m_SelectItemType;
 	int m_SelectArmor;
@@ -142,8 +142,8 @@ public:
 	// TODO: clean this up
 	struct
 	{
-		char m_SkinName[64];
-		char m_CustomSkinName[64];
+		char m_SkinName[MAX_CLIENTS];
+		char m_CustomSkinName[MAX_CLIENTS];
 		int m_UseCustomColor;
 		int m_ColorBody;
 		int m_ColorFeet;
@@ -204,7 +204,7 @@ public:
 	void CloseMapMenu();
 	bool MapMenuClickable();
 	
-	void ExpAdd(long int Size, bool Bonus = true);
+	void ExpAdd(unsigned long int Size, bool Bonus = true);
 	void MoneyAdd(int Size, bool ClanBonus = false, bool MoneyDouble = false);
 	
 	void ResetUpgrade(int ClientID);

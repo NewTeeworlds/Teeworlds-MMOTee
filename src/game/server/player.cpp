@@ -264,7 +264,7 @@ void CPlayer::BasicAuthedTick()
 		AccData.Money -= Got*10000;
 	}
 	bool upgraded = false;
-	long int needexp = AccData.Level*GetNeedForUp();
+	unsigned long int needexp = AccData.Level*GetNeedForUp();
 	while(AccData.Exp >= needexp)
 	{
 
@@ -307,7 +307,7 @@ void CPlayer::Tick()
 	if(Server()->IsClientLogged(m_ClientID) && AccData.Level == -1)
 	{
 		AccData.Level = 1;
-		if(!Server()->GetSeccurity(m_ClientID))
+		if(!Server()->GetSecurity(m_ClientID))
 			GameServer()->SendChatTarget_Localization(m_ClientID, CHATCATEGORY_DEFAULT, _("你的账户有风险, 请设置安全设置(security)"), NULL);				
 	}
 	
@@ -671,12 +671,12 @@ void CPlayer::MoneyAdd(int Size, bool ClanBonus, bool MoneyDouble)
 	return;
 }
 
-void CPlayer::ExpAdd(long int Size, bool Bonus)
+void CPlayer::ExpAdd(unsigned long int Size, bool Bonus)
 {
 	if(IsBot())
 		return;
 	
-	long int GetExp = Size, Get = 0;
+	unsigned long int GetExp = Size, Get = 0;
 	if(Bonus && Server()->GetClanID(m_ClientID))
 	{
 		Get = Size*50;

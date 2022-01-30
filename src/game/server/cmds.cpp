@@ -37,7 +37,7 @@ CCmd::CCmd(CPlayer *pPlayer, CGameContext *pGameServer)
 void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 {
 	int ClientID = m_pPlayer->GetCID() >= 0 ? m_pPlayer->GetCID() : -1;
-	if(!strncmp(Msg->m_pMessage, "、", 4))
+	if(!strncmp(Msg->m_pMessage, "、", 2))
 	{
 		LastChat();
 		GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# 为防止错误输入导致的账号密码泄露，系统已禁止聊天内容以“、”开头"), "cmd", Msg->m_pMessage, NULL);
@@ -51,7 +51,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你已登录"), NULL);
 		}
 		char Username[256], Password[256];
-		if(GameServer()->Server()->GetSeccurity(ClientID))
+		if(GameServer()->Server()->GetSecurity(ClientID))
 		{
 			if(sscanf(Msg->m_pMessage, "/login %s %s", Username, Password) != 2) 
 			{
