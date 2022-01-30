@@ -37,7 +37,7 @@ CREATE TABLE `tw_Clans` (
   `ExpAdd` int(11) NOT NULL DEFAULT '0',
   `SpawnHouse` tinyint(4) NOT NULL DEFAULT '0',
   `ChairHouse` int(11) NOT NULL DEFAULT '0',
-  `CreateDate` date NOT NULL ,
+  `CreateDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`ClanID`) USING BTREE,
   KEY `ClanID` (`ClanID`) USING BTREE,
   KEY `Clanname` (`Clanname`) USING BTREE,
@@ -51,7 +51,7 @@ CREATE TABLE `tw_Clans` (
 
 LOCK TABLES `tw_Clans` WRITE;
 /*!40000 ALTER TABLE `tw_Clans` DISABLE KEYS */;
-INSERT INTO `tw_Clans` VALUES (1,'Star','天上的星星',1,'Nope',4,2595550,20,5001,16164,53,131,0,0,'0000-00-00');
+INSERT INTO `tw_Clans` VALUES (1,'Star','天上的星星',1,'Nope',4,2595550,20,5001,16164,53,131,0,0,'2021-08-04 14:00:00');
 /*!40000 ALTER TABLE `tw_Clans` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -142,12 +142,11 @@ CREATE TABLE `tw_Users` (
   `WinArea` int(11) NOT NULL DEFAULT '0',
   `SettingsChat` int(11) NOT NULL DEFAULT '0',
   `SettingsDrop` int(11) NOT NULL DEFAULT '0',
-  `RegisterDate` datetime NOT NULL,
+  `RegisterDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `RegisterIp` varchar(64) NOT NULL,
   PRIMARY KEY (`UserId`) USING BTREE,
   KEY `UserId` (`UserId`) USING BTREE,
-  KEY `Username` (`Username`) USING BTREE,
-  KEY `UserId_2` (`UserId`) USING BTREE
+  KEY `Username` (`Username`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -158,7 +157,7 @@ CREATE TABLE `tw_Users` (
 LOCK TABLES `tw_Users` WRITE;
 /*!40000 ALTER TABLE `tw_Users` DISABLE KEYS */;
 INSERT INTO `tw_Users` VALUES 
-(1,'test','天上的星星','null','505a47881334859c582f2731b59fac1e',212,1355885,8203,22959,0,0,0,0,0,0,2,0,1,7,0,1,53301,1,0,0,'2018-06-08 15:30:36','127.0.0.1');
+(1,'test','天上的星星','null','505a47881334859c582f2731b59fac1e',212,1355885,8203,22959,0,0,0,0,0,0,2,0,1,7,0,1,53301,1,0,0,'2021-08-04 14:00:00','127.0.0.1');
 /*!40000 ALTER TABLE `tw_Users` ENABLE KEYS */;
 UNLOCK TABLES;
 

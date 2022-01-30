@@ -1606,6 +1606,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 						
 						UpdateStats(ClientID);
 						ResetVotes(ClientID, AUTH);
+						Server()->GetTopClanHouse();
 						return;
 					}
 					else SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你没有那么多钱,小穷光蛋"), NULL);							

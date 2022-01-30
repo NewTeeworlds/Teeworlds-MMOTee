@@ -3789,15 +3789,10 @@ public:
 		char aBuf[512];
 		// Проверка регистра
 		if(m_pServer->m_aClients[m_ClientID].m_LogInstance != GetInstance()) return true;
-		time_t CurrentTimeS = time(0);
-		tm *CurrentTime = localtime(&CurrentTimeS);
-		char TimeString[64];
-		str_format(TimeString, sizeof(TimeString),"%d-%d-%d",
-			CurrentTime->tm_year, CurrentTime->tm_mon, CurrentTime->tm_mday);
-		//dbg_msg("time","%d,%s",CurrentTime, TimeString);
 		try
 		{
-			str_format(aBuf, sizeof(aBuf), "SELECT ClanID FROM %s_Clans WHERE Clanname COLLATE UTF8_GENERAL_CI = '%s';", pSqlServer->GetPrefix(), m_sName.ClrStr());
+			str_format(aBuf, sizeof(aBuf), "SELECT ClanID FROM %s_Clans WHERE Clanname COLLATE UTF8_GENERAL_CI = '%s';", 
+			pSqlServer->GetPrefix(), m_sName.ClrStr());
 			pSqlServer->executeSqlQuery(aBuf);
 
 			if(pSqlServer->GetResults()->next())
@@ -3811,8 +3806,8 @@ public:
 			else
 			{
 				str_format(aBuf, sizeof(aBuf), 
-					"INSERT INTO %s_Clans (Clanname, LeaderName, LeaderID, Money, Exp, CreateDate) VALUES ('%s', '%s', '%d', '0', '0', '%s');"
-					, pSqlServer->GetPrefix(), m_sName.ClrStr(), m_sNick.ClrStr(), m_pServer->m_aClients[m_ClientID].m_UserID, TimeString);
+					"INSERT INTO %s_Clans (Clanname, LeaderName, LeaderID, Money, Exp) VALUES ('%s', '%s', '%d', '0', '0');"
+					, pSqlServer->GetPrefix(), m_sName.ClrStr(), m_sNick.ClrStr(), m_pServer->m_aClients[m_ClientID].m_UserID);
 				pSqlServer->executeSql(aBuf);
 				//dbg_msg("test","1");
 				str_format(aBuf, sizeof(aBuf), 
@@ -4577,8 +4572,8 @@ public:
 		{	
 			str_format(aBuf, sizeof(aBuf), 
 				"INSERT INTO %s_Users "
-				"(Username, Nick, PasswordHash, Email, ClanID ,RegisterDate, RegisterIp) "
-				"VALUES ('%s', '%s', '%s', '%s', '0', UTC_TIMESTAMP(), '%s');"
+				"(Username, Nick, PasswordHash, Email, ClanID , RegisterIp) "
+				"VALUES ('%s', '%s', '%s', '%s', '0', '%s');"
 				, pSqlServer->GetPrefix()
 				, m_sName.ClrStr(), m_sNick.ClrStr(), m_sPasswordHash.ClrStr(), m_sEmail.ClrStr(), aAddrStr);
 			pSqlServer->executeSql(aBuf);
@@ -4802,8 +4797,7 @@ public:
 		{
 			int SortTop = m_Type == 2 ? 5 : 10;
 			str_format(aBuf, sizeof(aBuf), 
-				"SELECT %s, Nick FROM %s_Users "
-				"ORDER BY %s DESC LIMIT %d;",
+				"SELECT %s, Nick FROM %s_Users ORDER BY %s DESC LIMIT %d;",
 				m_sType.ClrStr(), pSqlServer->GetPrefix(), m_sType.ClrStr(), SortTop);
 			pSqlServer->executeSqlQuery(aBuf);
 
@@ -4871,10 +4865,8 @@ public:
 		{
 			int SortTop = m_Type == 2 ? 5 : 10;		
 			str_format(aBuf, sizeof(aBuf), 
-				"SELECT %s, Clanname, LeaderName FROM %s_Clans "
-				"ORDER BY %s DESC LIMIT %d;",
-				pSqlServer->GetPrefix(),
-				m_sType.ClrStr(), m_sType.ClrStr(), SortTop);
+				"SELECT %s, Clanname, LeaderName FROM %s_Clans ORDER BY %s DESC LIMIT %d;",
+				m_sType.ClrStr(), pSqlServer->GetPrefix(), m_sType.ClrStr(), SortTop);
 			pSqlServer->executeSqlQuery(aBuf);
 
 			int Rank = 0;
