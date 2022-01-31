@@ -48,7 +48,7 @@
 
     ./build.sh 
 
-用 `CMake` 构建(测试中)
+用 `CMake` 构建(推荐)
 
     mkdir build
     cd build
