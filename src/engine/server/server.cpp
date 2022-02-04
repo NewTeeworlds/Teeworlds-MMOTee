@@ -834,6 +834,8 @@ int CServer::DelClientCallback(int ClientID, int Type, const char *pReason, void
 		pThis->m_stInv[ClientID][i].i_settings = 0;
 		pThis->m_stInv[ClientID][i].i_nlevel = 0;
 		pThis->m_stInv[ClientID][i].i_nprice = 0;
+		pThis->m_stInv[ClientID][i].i_enchant = 0;
+		pThis->m_stInv[ClientID][i].i_id = 0;
 	}	
 
 	pThis->m_aClients[ClientID].m_LogInstance = -1;
@@ -4139,7 +4141,7 @@ public:
 				str_copy(m_pServer->m_aClients[m_ClientID].m_aUsername, pSqlServer->GetResults()->getString("Nick").c_str(), sizeof(m_pServer->m_aClients[m_ClientID].m_aUsername));
 				if(m_pServer->m_aClients[m_ClientID].m_Level <= 0 || m_pServer->m_aClients[m_ClientID].m_Class == -1 ) 
 				{
-					CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, "登录时发生数据读取错误,请重新进入游戏.");
+					CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, "登录时出现错误,请报告管理员");
 					m_pServer->AddGameServerCmd(pCmd);
 					dbg_msg("user", "玩家ID %d 的数据初始化出现问题", m_pServer->m_aClients[m_ClientID].m_UserID);	
 					return false;
@@ -4148,7 +4150,7 @@ public:
 			}
 			else
 			{
-				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("登录时出现错误,请退出游戏,重新进入."));
+				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("登录时出现错误,请报告管理员"));
 				m_pServer->AddGameServerCmd(pCmd);
 				dbg_msg("sql", "玩家 %s 数据初始化失败", m_pServer->m_aClients[m_ClientID].m_aName);
 			
@@ -4157,7 +4159,7 @@ public:
 		}
 		catch (sql::SQLException &e)
 		{
-			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("登录时出现错误."));
+			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("登录时出现错误,请报告管理员"));
 			m_pServer->AddGameServerCmd(pCmd);
 			dbg_msg("sql", "用户数据初始化失败 (MySQL 错误: %s)", e.what());
 			
@@ -4182,7 +4184,7 @@ public:
 		}
 		catch (sql::SQLException &e)
 		{
-			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, "登录时出现错误.");
+			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, "登录时出现错误,请报告管理员");
 			m_pServer->AddGameServerCmd(pCmd);
 			dbg_msg("sql", "用户数据初始化失败 (MySQL 错误: %s)", e.what());
 			
@@ -4221,7 +4223,7 @@ public:
 		}
 		catch (sql::SQLException &e)
 		{
-			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, "登录时出现错误.");
+			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, "登录时出现错误,请报告管理员");
 			m_pServer->AddGameServerCmd(pCmd);
 			dbg_msg("sql", "用户数据初始化失败 (MySQL 错误: %s)", e.what());
 			return false;
@@ -4431,13 +4433,13 @@ public:
 			}
 			else
 			{
-				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("用户名或密码错误/或是您的账户不属于该昵称."));
+				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("用户名或密码错误,或是您的账户不属于该昵称."));
 				m_pServer->AddGameServerCmd(pCmd);
 			}
 		}
 		catch (sql::SQLException &e)
 		{
-			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, "登录时发生错误.");
+			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, "登录时出现错误,请报告管理员");
 			m_pServer->AddGameServerCmd(pCmd);
 			dbg_msg("sql", "Can't check username/password (MySQL Error: %s)", e.what());
 			
@@ -4497,7 +4499,7 @@ public:
 				m_pServer->m_aClients[m_ClientID].m_Security = (int)pSqlServer->GetResults()->getInt("Seccurity");
 			else
 			{
-				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(-1, CHATCATEGORY_DEFAULT, _("欢迎新玩家！"));
+				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(-1, CHATCATEGORY_DEFAULT, _("欢迎新玩家!"));
 				m_pServer->AddGameServerCmd(pCmd);
 			}
 		}
@@ -4621,14 +4623,14 @@ public:
 			}
 			else
 			{
-				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("注册时出现错误."));
+				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("在注册账号时发生了错误"));
 				m_pServer->AddGameServerCmd(pCmd);
 				return false;
 			}
 		}
 		catch (sql::SQLException &e)
 		{
-			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("注册时出现错误."));
+			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("在注册账号时发生了错误"));
 			m_pServer->AddGameServerCmd(pCmd);
 			dbg_msg("sql", "Can't get the ID of the new user (MySQL Error: %s)", e.what());
 			
@@ -4693,7 +4695,7 @@ public:
 		}
 		catch (sql::SQLException &e)
 		{
-			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("发生错误"));
+			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("更改密码失败"));
 			m_pServer->AddGameServerCmd(pCmd);
 			dbg_msg("sql","管理员更改玩家 %s 的密码时发生了错误 %s", m_sNick.ClrStr(), e.what());
 			return false;
@@ -4945,14 +4947,14 @@ public:
 				char aBuf[128];
 				if(m_pServer->m_HouseClanID[House] != m_pServer->m_HouseOldClanID[House])
 				{
-					str_format(aBuf, sizeof(aBuf), "[House#%d] 公会 %s 得到房屋 / 公会 %s 失去了它！", House,  m_pServer->GetClanName(ClanID), m_pServer->GetClanName(m_pServer->m_HouseOldClanID[House]));
+					str_format(aBuf, sizeof(aBuf), "[房屋#%d] 公会 %s 得到房屋,公会 %s 失去了它!", House,  m_pServer->GetClanName(ClanID), m_pServer->GetClanName(m_pServer->m_HouseOldClanID[House]));
 				
 					CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(-1, CHATCATEGORY_DEFAULT, _(aBuf));
 					m_pServer->AddGameServerCmd(pCmd);
 				}
 				else
 				{
-					str_format(aBuf, sizeof(aBuf), "[House#%d] 公会 %s 守住了房屋 / 没有公会战！", House,  m_pServer->GetClanName(ClanID));
+					str_format(aBuf, sizeof(aBuf), "[房屋#%d] 公会 %s 守住了房屋!", House,  m_pServer->GetClanName(ClanID));
 				
 					CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(-1, CHATCATEGORY_DEFAULT, _(aBuf));
 					m_pServer->AddGameServerCmd(pCmd);

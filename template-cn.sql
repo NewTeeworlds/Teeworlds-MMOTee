@@ -581,7 +581,7 @@ CREATE TABLE `tw_UserStatus` (
 
 LOCK TABLES `tw_UserStatus` WRITE;
 /*!40000 ALTER TABLE `tw_UserStatus` DISABLE KEYS */;
-INSERT INTO `tw_UserStatus` VALUES (1,'2021-01-01 09:05:32','127.0.0.1','天上的星星',0,'没有提供原因',0,0,0,'2021-01-01 09:05:32');
+INSERT INTO `tw_UserStatus` VALUES (1,'2021-01-01 09:05:32','127.0.0.1','天上的星星',0,'',0,0,0,'2021-01-01 09:05:32');
 /*!40000 ALTER TABLE `tw_UserStatus` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

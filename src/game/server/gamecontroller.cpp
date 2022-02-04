@@ -500,6 +500,7 @@ int IGameController::ClampTeam(int Team)
 }
 
 /* INFECTION MODIFICATION START ***************************************/
+/*
 int IGameController::ChooseHumanClass(CPlayer* pPlayer)
 {
 	return PLAYERCLASS_ASSASINS;
@@ -514,5 +515,6 @@ bool IGameController::IsSpawnable(vec2 Position, int TeleZoneType)
 {
 	return true;
 }
+*/
 /* INFECTION MODIFICATION END *****************************************/
 

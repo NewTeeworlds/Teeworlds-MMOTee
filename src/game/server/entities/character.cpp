@@ -101,11 +101,8 @@ bool CCharacter::FindPortalPosition(vec2 Pos, vec2& Res)
 		PortalShift = PortalDir * Iterator;
 		vec2 PortalPos = m_Pos + PortalShift;
 	
-		if(GameServer()->m_pController->IsSpawnable(PortalPos, ZONE_TELE_NOSCIENTIST))
-		{
-			Res = PortalPos;
-			return true;
-		}
+		Res = PortalPos;
+		return true;
 		
 		Iterator -= 4.0f;
 	}
@@ -1406,7 +1403,8 @@ void CCharacter::Tick()
 							break;
 					}
 					
-					if(NewClass >= 0 && GameServer()->m_pController->IsChoosableClass(NewClass))
+					//if(NewClass >= 0 && GameServer()->m_pController->IsChoosableClass(NewClass))
+					if(NewClass >= 0)
 					{
 						m_AntiFireTick = Server()->Tick();
 						m_pPlayer->m_MapMenuItem = 0;

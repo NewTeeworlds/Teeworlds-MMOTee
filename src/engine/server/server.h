@@ -237,7 +237,7 @@ public:
 	{
 		int i_id;
 		char i_name [32];
-		char i_desc [50];
+		char i_desc [100];
 		int i_count;
 		int i_settings;
 		int i_type;
@@ -251,7 +251,7 @@ public:
 	{
 		int i_id;
 		char i_name [32];
-		char i_desc [50];
+		char i_desc [80];
 		int i_count;
 		int i_settings;
 		int i_type;

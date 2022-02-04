@@ -114,9 +114,11 @@ public:
 
 	//
 	virtual bool PreSpawn(CPlayer* pPlayer, vec2 *pPos);
-	virtual int ChooseHumanClass(CPlayer* pPlayer);
+
+	/* virtual int ChooseHumanClass(CPlayer* pPlayer);
 	virtual bool IsChoosableClass(int PlayerClass);
-	virtual bool IsSpawnable(vec2 Position, int TeleZoneIndex);
+	virtual bool IsSpawnable(vec2 Position, int TeleZoneIndex); */
+
 	virtual void OnClientDrop(int ClientID, int Type) {};
 
 	virtual const char *GetTeamName(int Team);

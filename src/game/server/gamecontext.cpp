@@ -1395,7 +1395,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 												
 
 				// КЛАН ФУНКЦИИ
-				else if(str_comp(aCmd, "houseopen") == 0)
+				else if(str_comp(aCmd, "chouseopen") == 0)
 				{
 					if(!Server()->GetLeader(ClientID, Server()->GetClanID(ClientID)) && !Server()->GetAdmin(ClientID, Server()->GetClanID(ClientID)))
 					{
@@ -2527,9 +2527,9 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
        			SendBroadcast_Localization(ClientID, BROADCAST_PRIORITY_GAMEANNOUNCE, BROADCAST_DURATION_GAMEANNOUNCE, _("你需要 250 级"), NULL);
 				return;
 			}
-			if(pPlayer->AccData.Level <= 0 || pPlayer->AccData.Class == -1 || pPlayer->AccData.ClanAdded == -1 || pPlayer->AccData.Kill == -1)
+			if(pPlayer->AccData.Level <= 0 || pPlayer->AccData.Class == -1)
 			{
-				SendBroadcast_Localization(ClientID, BROADCAST_PRIORITY_GAMEANNOUNCE, BROADCAST_DURATION_GAMEANNOUNCE, _("读取数据时发生错误,请退出游戏,重新进入."), NULL);
+				SendBroadcast_Localization(ClientID, BROADCAST_PRIORITY_GAMEANNOUNCE, BROADCAST_DURATION_GAMEANNOUNCE, _("读取数据时发生错误,请报告管理员"), NULL);
 				return;
 			}
 
@@ -3730,7 +3730,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		{
 			AddVote("", "null", ClientID);
 			AddVote_Localization(ClientID, "null", "房屋设置");
-			AddVote_Localization(ClientID, "houseopen", "房屋的门 [{str:stat}]", "stat", Server()->GetOpenHouse(Server()->GetOwnHouse(ClientID)) ? "打开" : "关闭");
+			AddVote_Localization(ClientID, "chouseopen", "房屋的门 [{str:stat}]", "stat", Server()->GetOpenHouse(Server()->GetOwnHouse(ClientID)) ? "打开" : "关闭");
 			AddVote("", "null", ClientID);
 			AddVote_Localization(ClientID, "null", "公会成员的房屋升级");
 
