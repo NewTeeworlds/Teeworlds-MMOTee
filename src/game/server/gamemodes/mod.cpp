@@ -248,7 +248,7 @@ bool CGameControllerMOD::PreSpawn(CPlayer* pPlayer, vec2 *pOutPos)
 	{
 		if(!pPlayer->AccData.Class)
 			Type = 0;
-		else if(!Server()->GetItemCount(pPlayer->GetCID(), SDROP) && !Server()->GetItemCount(pPlayer->GetCID(), SDROP))
+		else if(!Server()->GetItemCount(pPlayer->GetCID(), SDROP))
 		{
 			Type = 15;
 
