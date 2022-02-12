@@ -4583,8 +4583,8 @@ public:
 		{	
 			str_format(aBuf, sizeof(aBuf), 
 				"INSERT INTO %s_Users "
-				"(Username, Nick, PasswordHash, Email, ClanID , RegisterIp) "
-				"VALUES ('%s', '%s', '%s', '%s', '0', '%s');"
+				"(Username, Nick, PasswordHash, Email, RegisterIp) "
+				"VALUES ('%s', '%s', '%s', '%s', '%s');"
 				, pSqlServer->GetPrefix()
 				, m_sName.ClrStr(), m_sNick.ClrStr(), m_sPasswordHash.ClrStr(), m_sEmail.ClrStr(), aAddrStr);
 			pSqlServer->executeSql(aBuf);

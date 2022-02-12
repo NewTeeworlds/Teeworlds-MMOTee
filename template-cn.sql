@@ -134,7 +134,7 @@ CREATE TABLE `tw_Users` (
   `SummerHealingTimes` int(11) NOT NULL DEFAULT '0',
   `Class` int(11) NOT NULL DEFAULT '0',
   `ClanAdded` bigint(20) NOT NULL DEFAULT '0',
-  `ClanID` int(11) NOT NULL,
+  `ClanID` int(11) NOT NULL DEFAULT '0',
   `Quest` int(11) NOT NULL DEFAULT '1',
   `QuestDat` int(11) NOT NULL DEFAULT '0',
   `Seccurity` tinyint(4) NOT NULL DEFAULT '0',
