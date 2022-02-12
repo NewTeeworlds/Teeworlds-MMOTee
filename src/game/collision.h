@@ -28,9 +28,11 @@ public:
 		COLFLAG_NOHOOK=2,
 		COLFLAG_WATER=4,
 		
+		/*
 		ZONEFLAG_DEATH=1,
 		ZONEFLAG_INFECTION=2,
 		ZONEFLAG_NOSPAWN=4,
+		*/
 	};
 
 	CCollision();

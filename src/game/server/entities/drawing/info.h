@@ -8,7 +8,7 @@
 class CInfo : public CEntity
 {
 public:
-	CInfo(CGameWorld *pGameWorld, int Type, vec2 Pos);
+	CInfo(CGameWorld *pGameWorld, int Type, int ID, vec2 Pos);
 
 	virtual void Tick();
 	virtual void TickPaused();
@@ -16,6 +16,7 @@ public:
 
 private:
 	int m_Type;
+	int m_InfoID;
 };
 
 #endif

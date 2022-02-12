@@ -4985,12 +4985,13 @@ int CServer::GetOwnHouse(int ClientID)
 {
 	if(!GetClanID(ClientID))
 		return -1;
-	if(GetClanID(ClientID) == m_HouseClanID[0])
-		return 0;
-	if(GetClanID(ClientID) == m_HouseClanID[1])
-		return 1;
-	if(GetClanID(ClientID) == m_HouseClanID[2])
-		return 2;	
+
+	for (short int i = 0; i < COUNT_CLANHOUSE; i++)
+	{
+		if(GetClanID(ClientID) == m_HouseClanID[i])
+			return i;
+	}
+
 	return -1;
 }
 

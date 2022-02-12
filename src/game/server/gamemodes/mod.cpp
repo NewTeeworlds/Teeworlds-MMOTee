@@ -70,32 +70,42 @@ bool CGameControllerMOD::OnEntity(const char* pName, vec2 Pivot, vec2 P0, vec2 P
 	else if(str_comp(pName, "InfoCl1") == 0)
 	{
 		vec2 Pos = (P0 + P1 + P2 + P3)/4.0f;
-		new CInfo(&GameServer()->m_World, 0, Pos);
+		new CInfo(&GameServer()->m_World, 0, 0, Pos);
 	}	
 	else if(str_comp(pName, "InfoCl2") == 0)
 	{
 		vec2 Pos = (P0 + P1 + P2 + P3)/4.0f;
-		new CInfo(&GameServer()->m_World, 1, Pos);
+		new CInfo(&GameServer()->m_World, 0, 1, Pos);
 	}	
 	else if(str_comp(pName, "InfoCl3") == 0)
 	{
 		vec2 Pos = (P0 + P1 + P2 + P3)/4.0f;
-		new CInfo(&GameServer()->m_World, 2, Pos);
+		new CInfo(&GameServer()->m_World, 0 ,2, Pos);
+	}
+	else if(str_comp(pName, "InfoCl4") == 0)
+	{
+		vec2 Pos = (P0 + P1 + P2 + P3)/4.0f;
+		new CInfo(&GameServer()->m_World, 0, 3, Pos);
+	}
+	else if(str_comp(pName, "InfoCl5") == 0)
+	{
+		vec2 Pos = (P0 + P1 + P2 + P3)/4.0f;
+		new CInfo(&GameServer()->m_World, 0, 4, Pos);
 	}	
 	else if(str_comp(pName, "IMater1") == 0)
 	{
 		vec2 Pos = (P0 + P1 + P2 + P3)/4.0f;
-		new CInfo(&GameServer()->m_World, 3, Pos);
+		new CInfo(&GameServer()->m_World, 1, 0, Pos);
 	}
 	else if(str_comp(pName, "IMater2") == 0)
 	{
 		vec2 Pos = (P0 + P1 + P2 + P3)/4.0f;
-		new CInfo(&GameServer()->m_World, 4, Pos);
+		new CInfo(&GameServer()->m_World, 1, 1, Pos);
 	}
 	else if(str_comp(pName, "IMater3") == 0)
 	{
 		vec2 Pos = (P0 + P1 + P2 + P3)/4.0f;
-		new CInfo(&GameServer()->m_World, 5, Pos);
+		new CInfo(&GameServer()->m_World, 1, 2, Pos);
 	}
 	else if(str_comp(pName, "MoneyBag") == 0)
 	{
@@ -270,7 +280,13 @@ bool CGameControllerMOD::PreSpawn(CPlayer* pPlayer, vec2 *pOutPos)
 		else if(Server()->GetSpawnInClanHouse(pPlayer->GetCID(), 0))
 			Type = 16;
 		else if(Server()->GetSpawnInClanHouse(pPlayer->GetCID(), 1))
-			Type = 17;	
+			Type = 17;
+		else if(Server()->GetSpawnInClanHouse(pPlayer->GetCID(), 2))
+			Type = 18;
+		else if(Server()->GetSpawnInClanHouse(pPlayer->GetCID(), 3))
+			Type = 19;
+		else if(Server()->GetSpawnInClanHouse(pPlayer->GetCID(), 4))
+			Type = 20;
 	}
 	else
 	{
@@ -311,11 +327,7 @@ bool CGameControllerMOD::PreSpawn(CPlayer* pPlayer, vec2 *pOutPos)
 
 bool CGameControllerMOD::PickupAllowed(int Index)
 {
-	if(Index == TILE_ENTITY_POWERUP_NINJA) return false;
-	else if(Index == TILE_ENTITY_WEAPON_SHOTGUN) return false;
-	else if(Index == TILE_ENTITY_WEAPON_GRENADE) return false;
-	else if(Index == TILE_ENTITY_WEAPON_RIFLE) return false;
-	else return true;
+	return Index > TILE_ENTITY_WEAPON_RIFLE || Index < TILE_ENTITY_WEAPON_SHOTGUN;
 }
 
 bool CGameControllerMOD::IsEnabledClass(int PlayerClass) {

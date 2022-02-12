@@ -32,7 +32,7 @@ protected:
 
 /* INFECTION MODIFICATION START ***************************************/
 	array<vec2> m_HeroFlagPositions;
-	array<vec2> m_SpawnPoints[18];
+	array<vec2> m_SpawnPoints[21];
 	
 public:
 	inline const array<vec2>& HeroFlagPositions() const { return m_HeroFlagPositions; }

@@ -6,57 +6,32 @@
 
 #include "info.h"
 
-CInfo::CInfo(CGameWorld *pGameWorld, int Type, vec2 Pos)
+CInfo::CInfo(CGameWorld *pGameWorld, int Type, int ID, vec2 Pos)
 : CEntity(pGameWorld, CGameWorld::ENTTYPE_DRAW)
 {
-	m_Type = Type;
+	m_Type = Type; // 0 = Clan info, 1 = Material info
 	m_Pos = Pos;
+	m_InfoID = ID;
 
 	GameWorld()->InsertEntity(this);
 }
 
 void CInfo::Tick()
 {
-	if(Server()->Tick() % (1 * Server()->TickSpeed() * 10) == 0 && m_Type < 3)
+
+	if(Server()->Tick() % (1 * Server()->TickSpeed() * 5) == 0)
 	{
-		if(m_Type == 0)
+		if (m_Type)
 		{
 			char aBuf[128];
-			str_format(aBuf, sizeof(aBuf), "House %s Top1", Server()->GetClanName(Server()->GetTopHouse(0)));
-			GameServer()->CreateLolText(this, true, vec2(0,0), vec2 (0, 0), 500, aBuf);
-		}
-		else if(m_Type == 1)
-		{
-			char aBuf[128];
-			str_format(aBuf, sizeof(aBuf), "House %s Top2", Server()->GetClanName(Server()->GetTopHouse(1)));
-			GameServer()->CreateLolText(this, true, vec2(0,0), vec2 (0, 0), 500, aBuf);
-		}
-		else if(m_Type == 2)
-		{
-			char aBuf[128];
-			str_format(aBuf, sizeof(aBuf), "House %s Top3", Server()->GetClanName(Server()->GetTopHouse(2)));
-			GameServer()->CreateLolText(this, true, vec2(0,0), vec2 (0, 0), 500, aBuf);
-		}
-	}
-	else if(Server()->Tick() % (1 * Server()->TickSpeed() * 5) == 0 && m_Type >= 3)
-	{
-		if(m_Type == 3)
-		{
-			char aBuf[128];
-			str_format(aBuf, sizeof(aBuf), "Mat %d", Server()->GetMaterials(0));
-			GameServer()->CreateLolText(this, true, vec2(0,0), vec2 (0, 0), 250, aBuf);			
-		}
-		else if(m_Type == 4)
-		{
-			char aBuf[128];
-			str_format(aBuf, sizeof(aBuf), "Mat %d", Server()->GetMaterials(1));
+			str_format(aBuf, sizeof(aBuf), "Mat %d", Server()->GetMaterials(m_InfoID));
 			GameServer()->CreateLolText(this, true, vec2(0,0), vec2 (0, 0), 250, aBuf);
 		}
-		else if(m_Type == 5)
+		else
 		{
 			char aBuf[128];
-			str_format(aBuf, sizeof(aBuf), "Mat %d", Server()->GetMaterials(2));
-			GameServer()->CreateLolText(this, true, vec2(0,0), vec2 (0, 0), 250, aBuf);
+			str_format(aBuf, sizeof(aBuf), "House %s Top%d", Server()->GetClanName(Server()->GetTopHouse(m_InfoID)), (m_InfoID + 1));
+			GameServer()->CreateLolText(this, true, vec2(0,0), vec2 (0, 0), 500, aBuf);
 		}
 	}
 }

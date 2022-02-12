@@ -75,6 +75,12 @@ bool IGameController::OnEntity(const char* pName, vec2 Pivot, vec2 P0, vec2 P1, 
 		m_SpawnPoints[16].add(Pos);
 	else if(str_comp(pName, "ClanSp2") == 0)
 		m_SpawnPoints[17].add(Pos);
+	else if(str_comp(pName, "ClanSp3") == 0)
+		m_SpawnPoints[18].add(Pos);
+	else if(str_comp(pName, "ClanSp4") == 0)
+		m_SpawnPoints[19].add(Pos);
+	else if(str_comp(pName, "ClanSp5") == 0)
+		m_SpawnPoints[20].add(Pos);
 
 	return false;
 }

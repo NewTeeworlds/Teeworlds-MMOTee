@@ -224,8 +224,8 @@ public:
 	virtual bool GetHouse(int ClientID);
 	virtual bool GetOpenHouse(int HouseID);
 	virtual bool SetOpenHouse(int HouseID);
-	int m_HouseClanID[3];
-	int m_HouseOldClanID[3];
+	int m_HouseClanID[COUNT_CLANHOUSE];
+	int m_HouseOldClanID[COUNT_CLANHOUSE];
 
 	int m_Materials[3];
 	virtual void InitMaterialID();
