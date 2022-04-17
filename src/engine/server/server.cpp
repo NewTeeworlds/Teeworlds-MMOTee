@@ -2392,28 +2392,28 @@ long int CServer::GetStat(int ClientID, int Type)
 }
 
 
-void CServer::UpdateStat(int ClientID, int Type, int Size)
+void CServer::UpdateStat(int ClientID, int Type, int Value)
 {
 	if(m_aClients[ClientID].m_CanUpdate)
 	{
 		switch(Type)
 		{
-			case DLEVEL: m_aClients[ClientID].m_Level = Size; break;
-			case DEXP: m_aClients[ClientID].m_Exp = Size; break;
-			case DMONEY: m_aClients[ClientID].m_Money = Size; break;
-			case DGOLD: m_aClients[ClientID].m_Gold = Size; break;
-			case DDONATE: m_aClients[ClientID].m_Donate = Size; break;	
-			case DQUEST: m_aClients[ClientID].m_Quest = Size; break;
-			case DSECC: m_aClients[ClientID].m_Security = Size; break;
-			case DREL: m_aClients[ClientID].m_Rel = Size; break;
-			case DJAIL: m_aClients[ClientID].m_Jail = Size; break;
-			case DCLASS: m_aClients[ClientID].m_Class = Size; break;
-			case DKILL: m_aClients[ClientID].m_Kill = Size; break;
-			case DWINAREA: m_aClients[ClientID].m_WinArea = Size; break;
-			case DCLANADDED: m_aClients[ClientID].m_ClanAdded = Size; break;
-			case DISJAILED: m_aClients[ClientID].m_IsJailed = Size; break;
-			case DJAILLENGTH: m_aClients[ClientID].m_JailLength = Size; break;
-			case DSUMMERHEALINGTIMES: m_aClients[ClientID].m_SummerHealingTimes = Size; break;
+			case DLEVEL: m_aClients[ClientID].m_Level = Value; break;
+			case DEXP: m_aClients[ClientID].m_Exp = Value; break;
+			case DMONEY: m_aClients[ClientID].m_Money = Value; break;
+			case DGOLD: m_aClients[ClientID].m_Gold = Value; break;
+			case DDONATE: m_aClients[ClientID].m_Donate = Value; break;	
+			case DQUEST: m_aClients[ClientID].m_Quest = Value; break;
+			case DSECC: m_aClients[ClientID].m_Security = Value; break;
+			case DREL: m_aClients[ClientID].m_Rel = Value; break;
+			case DJAIL: m_aClients[ClientID].m_Jail = Value; break;
+			case DCLASS: m_aClients[ClientID].m_Class = Value; break;
+			case DKILL: m_aClients[ClientID].m_Kill = Value; break;
+			case DWINAREA: m_aClients[ClientID].m_WinArea = Value; break;
+			case DCLANADDED: m_aClients[ClientID].m_ClanAdded = Value; break;
+			case DISJAILED: m_aClients[ClientID].m_IsJailed = Value; break;
+			case DJAILLENGTH: m_aClients[ClientID].m_JailLength = Value; break;
+			case DSUMMERHEALINGTIMES: m_aClients[ClientID].m_SummerHealingTimes = Value; break;
 		}
 	}
 }
@@ -2438,24 +2438,24 @@ int CServer::GetUpgrade(int ClientID, int Type)
 	return 0;
 }
 
-void CServer::UpdateUpgrade(int ClientID, int Type, int Size)
+void CServer::UpdateUpgrade(int ClientID, int Type, int Vaule)
 {
 	if(m_aClients[ClientID].m_CanUpdate)
 	{
 		switch(Type)
 		{
-			case SUPGRADE: m_aClients[ClientID].Upgrade = Size; break;
-			case SKILLPOINT: m_aClients[ClientID].SkillPoint = Size; break;
-			case ASPEED: m_aClients[ClientID].Speed = Size; break;
-			case BDAMAGE: m_aClients[ClientID].Damage = Size; break;
-			case HHEALTH: m_aClients[ClientID].Health = Size; break;
-			case HPREGEN: m_aClients[ClientID].HPRegen = Size; break;
-			case AMMOREGEN: m_aClients[ClientID].AmmoRegen = Size; break;
-			case AMMO: m_aClients[ClientID].Ammo = Size; break;
-			case SPRAY: m_aClients[ClientID].Spray = Size; break;
-			case MANA: m_aClients[ClientID].Mana = Size; break;
-			case UHAMMERRANGE: m_aClients[ClientID].m_HammerRange = Size; break;
-			case PASIVE2: m_aClients[ClientID].m_Pasive2 = Size; break;
+			case SUPGRADE: m_aClients[ClientID].Upgrade = Vaule; break;
+			case SKILLPOINT: m_aClients[ClientID].SkillPoint = Vaule; break;
+			case ASPEED: m_aClients[ClientID].Speed = Vaule; break;
+			case BDAMAGE: m_aClients[ClientID].Damage = Vaule; break;
+			case HHEALTH: m_aClients[ClientID].Health = Vaule; break;
+			case HPREGEN: m_aClients[ClientID].HPRegen = Vaule; break;
+			case AMMOREGEN: m_aClients[ClientID].AmmoRegen = Vaule; break;
+			case AMMO: m_aClients[ClientID].Ammo = Vaule; break;
+			case SPRAY: m_aClients[ClientID].Spray = Vaule; break;
+			case MANA: m_aClients[ClientID].Mana = Vaule; break;
+			case UHAMMERRANGE: m_aClients[ClientID].m_HammerRange = Vaule; break;
+			case PASIVE2: m_aClients[ClientID].m_Pasive2 = Vaule; break;
 		}
 	}
 }

@@ -500,7 +500,7 @@ public:
 	//virtual int GetStat(int ClientID, int Type);
 	virtual long int GetStat(int ClientID, int Type);
 	virtual int GetUpgrade(int ClientID, int Type);
-	virtual void UpdateStat(int ClientID, int Type, int Size);
+	virtual void UpdateStat(int ClientID, int Type, int Value);
 	virtual void UpdateUpgrade(int ClientID, int Type, int Size);
 
 };
