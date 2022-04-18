@@ -127,7 +127,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 			&& !GameServer()->Server()->GetAdmin(ClientID, GameServer()->Server()->GetClanID(ClientID)))
 			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("# 你不是公会会长或者管理员!"), NULL);
 
-		if(GameServer()->Server()->GetClan(DCOUNTUCLAN, GameServer()->Server()->GetClanID(ClientID)) >= GameServer()->Server()->GetClan(DMAXCOUNTUCLAN, GameServer()->Server()->GetClanID(ClientID)))
+		if(GameServer()->Server()->GetClan(Clan::MemberNum, GameServer()->Server()->GetClanID(ClientID)) >= GameServer()->Server()->GetClan(Clan::MaxMemberNum, GameServer()->Server()->GetClanID(ClientID)))
 			return GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("公会人数已达到上限"), NULL);
 
 		if(GameServer()->Server()->GetClanID(ClientID) > 0)

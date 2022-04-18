@@ -592,15 +592,17 @@ int CPlayer::GetNeedForUp()
 	else return 100;
 	*/
 }
-int CPlayer::GetNeedForUpClan()
-{
-	int Get = Server()->GetClan(DLEVEL, Server()->GetClanID(m_ClientID));
-	return 1000000+Get*1000000;
-}
-int CPlayer::GetNeedForUpgClan(int Type)
+
+int CPlayer::GetNeedForUpgClan(Clan Type)
 {
 	int Get = Server()->GetClan(Type, Server()->GetClanID(m_ClientID));
-	return 100+Get*500;
+	if(Type != Clan::Level) {
+		return 100+Get*500;
+	}
+	else
+	{
+		return 1000000 + Get * 1000000;
+	}
 }
 
 void CPlayer::PostTick()
@@ -644,7 +646,7 @@ void CPlayer::MoneyAdd(int Size, bool ClanBonus, bool MoneyDouble)
 
 	int GetMoney = Size;
 	if(ClanBonus && Server()->GetClanID(m_ClientID))
-		GetMoney = (Size+Server()->GetClan(DADDMONEY, Server()->GetClanID(m_ClientID))*100);
+		GetMoney = (Size+Server()->GetClan(Clan::MoneyAdd, Server()->GetClanID(m_ClientID))*100);
 	
 	if(MoneyDouble)
 	{
@@ -681,7 +683,7 @@ void CPlayer::ExpAdd(unsigned long int Size, bool Bonus)
 	{
 		Get = Size*50;
 		Server()->InitClanID(Server()->GetClanID(m_ClientID), PLUS, "Exp", Get, true);
-		GetExp = Size+Server()->GetClan(DADDEXP, Server()->GetClanID(m_ClientID));
+		GetExp = Size+Server()->GetClan(Clan::ExpAdd, Server()->GetClanID(m_ClientID));
 	}	
 
 	if(Bonus && m_ExperienceAdd)
@@ -690,11 +692,11 @@ void CPlayer::ExpAdd(unsigned long int Size, bool Bonus)
 		GetExp = GetExp*((Server()->GetItemCount(m_ClientID, X2MONEYEXPVIP)) + 1);
 
 	if(Server()->GetClanID(m_ClientID) && 
-		Server()->GetClan(DEXP, Server()->GetClanID(m_ClientID)) >= Server()->GetClan(DLEVEL, Server()->GetClanID(m_ClientID))*GetNeedForUpClan())
+		Server()->GetClan(Clan::Exp, Server()->GetClanID(m_ClientID)) >= Server()->GetClan(Clan::Level, Server()->GetClanID(m_ClientID))*GetNeedForUpgClan(Clan::Level))
 	{
 		GameServer()->SendChatClan(Server()->GetClanID(m_ClientID), "[公会] 您所在的公会升级了!");
 
-		int warpminus = Server()->GetClan(DLEVEL, Server()->GetClanID(m_ClientID))*GetNeedForUpClan();
+		int warpminus = Server()->GetClan(Clan::Level, Server()->GetClanID(m_ClientID))*GetNeedForUpgClan(Clan::Level);
 		Server()->InitClanID(Server()->GetClanID(m_ClientID), MINUS, "Exp", warpminus, true);
 		Server()->InitClanID(Server()->GetClanID(m_ClientID), PLUS, "Level", 1, true);
 	}

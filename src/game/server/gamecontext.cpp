@@ -1553,21 +1553,21 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 				
 				else if(str_comp(aCmd, "uccount") == 0)
 				{						
-					if(Server()->GetClan(DMAXCOUNTUCLAN, Server()->GetClanID(ClientID)) >= 25)
+					if(Server()->GetClan(Clan::MaxMemberNum, Server()->GetClanID(ClientID)) >= 25)
 						return 	SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("人数已达到最大值"), NULL);
 
-					BuyUpgradeClan(ClientID, (m_apPlayers[ClientID]->GetNeedForUpgClan(DMAXCOUNTUCLAN))*4, DMAXCOUNTUCLAN,"MaxNum");	
+					BuyUpgradeClan(ClientID, (m_apPlayers[ClientID]->GetNeedForUpgClan(Clan::MaxMemberNum))*4, Clan::MaxMemberNum,"MaxNum");	
 					return;
 				}	
 				else if(str_comp(aCmd, "uaddexp") == 0)
-					BuyUpgradeClan(ClientID, m_apPlayers[ClientID]->GetNeedForUpgClan(DADDEXP), DADDEXP,"ExpAdd");							
+					BuyUpgradeClan(ClientID, m_apPlayers[ClientID]->GetNeedForUpgClan(Clan::ExpAdd), Clan::ExpAdd,"ExpAdd");							
 
 				else if(str_comp(aCmd, "uchair") == 0)
 				{
 					if(!Server()->GetHouse(ClientID))
 						return 	SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你所在的公会没有房屋!"), NULL);
 
-					BuyUpgradeClan(ClientID, m_apPlayers[ClientID]->GetNeedForUpgClan(DCHAIRHOUSE)*2, DCHAIRHOUSE,"ChairHouse");							
+					BuyUpgradeClan(ClientID, m_apPlayers[ClientID]->GetNeedForUpgClan(Clan::ChairLevel)*2, Clan::ChairLevel,"ChairHouse");							
 				}
 
 				else if(str_comp(aCmd, "uspawnhouse") == 0)
@@ -1578,11 +1578,11 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					if(Server()->GetSpawnInClanHouse(ClientID, 0) || Server()->GetSpawnInClanHouse(ClientID, 1))
 						return;
 
-					BuyUpgradeClan(ClientID, 500000, DADDEXP,"SpawnHouse");							
+					BuyUpgradeClan(ClientID, 500000, Clan::ExpAdd,"SpawnHouse");							
 				}	
 
 				else if(str_comp(aCmd, "uaddmoney") == 0)
-					BuyUpgradeClan(ClientID, m_apPlayers[ClientID]->GetNeedForUpgClan(DADDMONEY), DADDEXP,"MoneyAdd");	
+					BuyUpgradeClan(ClientID, m_apPlayers[ClientID]->GetNeedForUpgClan(Clan::MoneyAdd), Clan::ExpAdd,"MoneyAdd");	
 								
 				else if(str_comp(aCmd, "cm1") == 0)
 				{
@@ -2670,7 +2670,7 @@ void CGameContext::BuyUpgradeClan(int ClientID, int Money, int Type, const char*
 		return;
 	
 	if((Server()->GetLeader(ClientID, Server()->GetClanID(ClientID)) || Server()->GetAdmin(ClientID, Server()->GetClanID(ClientID))) 
-		&& Server()->GetClan(DMONEY, Server()->GetClanID(ClientID)) >= Money)
+		&& Server()->GetClan(Clan::Money, Server()->GetClanID(ClientID)) >= Money)
 	{
 		Server()->InitClanID(Server()->GetClanID(ClientID), MINUS, "Money", Money, true);
 		Server()->InitClanID(Server()->GetClanID(ClientID), PLUS, SubType, 1, true);
@@ -3684,10 +3684,10 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 	{
 		m_apPlayers[ClientID]->m_LastVotelist = AUTH;
 		int ID = Server()->GetClanID(ClientID);
-		int Bank = Server()->GetClan(DMONEY, Server()->GetClanID(ClientID));
-		int Count = Server()->GetClan(DCOUNTUCLAN, Server()->GetClanID(ClientID));
-		int Relevante = Server()->GetClan(DKILL, Server()->GetClanID(ClientID));
-		int MaxCount = Server()->GetClan(DMAXCOUNTUCLAN, Server()->GetClanID(ClientID));
+		int Bank = Server()->GetClan(Clan::Money, Server()->GetClanID(ClientID));
+		int Count = Server()->GetClan(Clan::MemberNum, Server()->GetClanID(ClientID));
+		int Relevante = Server()->GetClan(Clan::Relevance, Server()->GetClanID(ClientID));
+		int MaxCount = Server()->GetClan(Clan::MaxMemberNum, Server()->GetClanID(ClientID));
 
 		Server()->InitClanID(Server()->GetClanID(ClientID), PLUS, "Init", 0, false);
 
@@ -3698,11 +3698,11 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote_Localization(ClientID, "null", "关联: {int:revl}", "revl", &Relevante);
 		AddVote_Localization(ClientID, "null", "公会人数: {int:count}/{int:maxcount}", "count", &Count , "maxcount", &MaxCount);
 
-		int exp = Server()->GetClan(DEXP, Server()->GetClanID(ClientID));
-		int bonus = Server()->GetClan(DADDEXP, Server()->GetClanID(ClientID));
-		int level = Server()->GetClan(DLEVEL, Server()->GetClanID(ClientID));
-		int dlvl = Server()->GetClan(DADDMONEY, Server()->GetClanID(ClientID))*100;
-		int maxneed = Server()->GetClan(DLEVEL, Server()->GetClanID(ClientID))*m_apPlayers[ClientID]->GetNeedForUpClan();
+		int exp = Server()->GetClan(Clan::Exp, Server()->GetClanID(ClientID));
+		int bonus = Server()->GetClan(Clan::ExpAdd, Server()->GetClanID(ClientID));
+		int level = Server()->GetClan(Clan::Level, Server()->GetClanID(ClientID));
+		int dlvl = Server()->GetClan(Clan::MoneyAdd, Server()->GetClanID(ClientID))*100;
+		int maxneed = Server()->GetClan(Clan::Level, Server()->GetClanID(ClientID))*m_apPlayers[ClientID]->GetNeedForUpgClan(Clan::Level);
 		AddVote_Localization(ClientID, "null", "等级: {int:lvl} 经验 ({int:exp}/{int:maxneed})", "lvl", &level, "exp", &exp , "maxneed", &maxneed);
 		AddVote_Localization(ClientID, "null", "奖金: +{int:exp} 经验. +{int:money} 黄金", "exp", &bonus, "money", &dlvl);
 		AddVote("", "null", ClientID);
@@ -3737,8 +3737,8 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			int Count = 499999;
 			AddVote_Localization(ClientID, "uspawnhouse", "- 购买在房屋内的出生点 [{int:price}]", "price", &Count);
 		
-			int MaxCount = Server()->GetClan(DCHAIRHOUSE, Server()->GetClanID(ClientID));
-			Count = m_apPlayers[ClientID]->GetNeedForUpgClan(DCHAIRHOUSE)*2;
+			int MaxCount = Server()->GetClan(Clan::ChairLevel, Server()->GetClanID(ClientID));
+			Count = m_apPlayers[ClientID]->GetNeedForUpgClan(Clan::ChairLevel)*2;
 			AddVote_Localization(ClientID, "uchair", "- 升级挂机所获 [{int:max}*(+1) {int:coin}]", "maxcount", &MaxCount, "coin", &Count);
 
 			AddVote("", "null", ClientID);
@@ -3802,19 +3802,19 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote_Localization(ClientID, "null", "只能由会长来购买");
 		AddVote("", "null", ClientID); 
 		
-		int Count = m_apPlayers[ClientID]->GetNeedForUpgClan(DMAXCOUNTUCLAN)*4;
-		int MaxCount = Server()->GetClan(DMAXCOUNTUCLAN, Server()->GetClanID(ClientID));
+		int Count = m_apPlayers[ClientID]->GetNeedForUpgClan(Clan::MaxMemberNum)*4;
+		int MaxCount = Server()->GetClan(Clan::MaxMemberNum, Server()->GetClanID(ClientID));
 		AddVote_Localization(ClientID, "null", "公会核心升级");
 		AddVote_Localization(ClientID, "uccount", "- 升级公会最大人数 [{int:maxcount}(+1) {int:coin}]", "maxcount", &MaxCount, "coin", &Count);
 		
 		AddVote("", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "升级公会给公会成员的奖金");
-		MaxCount = Server()->GetClan(DADDEXP, Server()->GetClanID(ClientID));
-		Count = m_apPlayers[ClientID]->GetNeedForUpgClan(DADDEXP);
+		MaxCount = Server()->GetClan(Clan::ExpAdd, Server()->GetClanID(ClientID));
+		Count = m_apPlayers[ClientID]->GetNeedForUpgClan(Clan::ExpAdd);
 		AddVote_Localization(ClientID, "uaddexp", "- 升级挂机的经验奖励 [{int:max}*(+1) {int:coin}]", "maxcount", &MaxCount, "coin", &Count);
 	
-		MaxCount = Server()->GetClan(DADDMONEY, Server()->GetClanID(ClientID));
-		Count = m_apPlayers[ClientID]->GetNeedForUpgClan(DADDMONEY);
+		MaxCount = Server()->GetClan(Clan::MoneyAdd, Server()->GetClanID(ClientID));
+		Count = m_apPlayers[ClientID]->GetNeedForUpgClan(Clan::MoneyAdd);
 		AddVote_Localization(ClientID, "uaddmoney", "- 升级挂机的白银奖励 [{int:max}*(+100) {int:coin}]", "maxcount", &MaxCount, "coin", &Count);						
 		AddBack(ClientID);
 		return;

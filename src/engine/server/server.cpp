@@ -535,7 +535,7 @@ const char *CServer::ClientClan(int ClientID)
 	if(ClientID < 0 || ClientID >= MAX_NOBOT || m_aClients[ClientID].m_State == CServer::CClient::STATE_EMPTY)
 		return "";
 	if(m_aClients[ClientID].m_ClanID > 0)
-		return m_stClan[m_aClients[ClientID].m_ClanID].f_name;
+		return m_stClan[m_aClients[ClientID].m_ClanID].Name;
 	if(m_aClients[ClientID].m_State == CServer::CClient::STATE_INGAME && !IsClientLogged(ClientID))
 		return m_aClients[ClientID].m_Clan;
 	else
@@ -2081,39 +2081,68 @@ int main(int argc, const char **argv) // ignore_convention
 	return 0;
 }
 
-int CServer::GetClan(int Type, int ClanID)
+int CServer::GetClan(Clan Type, int ClanID)
 {
-	int Returns = 0;
-	if(Type == DMONEY) Returns = m_stClan[ClanID].f_money;
-	else if(Type == DEXP) Returns = m_stClan[ClanID].f_exp;
-	else if(Type == DLEVEL) Returns = m_stClan[ClanID].f_level;
-	else if(Type == DCOUNTUCLAN) Returns =  m_stClan[ClanID].f_countnum;
-	else if(Type == DMAXCOUNTUCLAN) Returns =  m_stClan[ClanID].f_maxnum;
-	else if(Type == DKILL) Returns =  m_stClan[ClanID].f_kd;
-	else if(Type == DADDEXP) Returns =  m_stClan[ClanID].f_upgrade[0];
-	else if(Type == DADDMONEY) Returns =  m_stClan[ClanID].f_upgrade[1];
-	else if(Type == DCHAIRHOUSE) Returns =  m_stClan[ClanID].f_chairupgr;
+	switch (Type)
+	{
+	case Clan::Money:
+		return m_stClan[ClanID].Money;
+		break;
 
-	return Returns;
+	case Clan::Exp:
+		return m_stClan[ClanID].Exp;
+		break;
+
+	case Clan::Level:
+		return m_stClan[ClanID].Level;
+		break;
+
+	case Clan::MaxMemberNum:
+		return m_stClan[ClanID].MaxMemberNum;
+		break;
+
+	case Clan::MemberNum:
+		return m_stClan[ClanID].MemberNum;
+		break;
+
+	case Clan::Relevance:
+		return m_stClan[ClanID].Relevance;
+		break;
+
+	case Clan::ExpAdd:
+		return m_stClan[ClanID].ExpAdd;
+		break;
+
+	case Clan::MoneyAdd:
+		return m_stClan[ClanID].MoneyAdd;
+		break;
+
+	case Clan::ChairLevel:
+		return m_stClan[ClanID].ChairLevel;
+		break;
+
+	default:
+		break;
+	}
 }
 
 const char *CServer::LeaderName(int ClanID)
 {
-	if(ClanID > 0) return m_stClan[ClanID].f_creator;
+	if(ClanID > 0) return m_stClan[ClanID].Creator;
 	else
 		return "";
 }
 
 const char *CServer::AdminName(int ClanID)
 {
-	if(ClanID > 0) return m_stClan[ClanID].f_admin;
+	if(ClanID > 0) return m_stClan[ClanID].Admin;
 	else
 		return "";
 }
 
 const char *CServer::GetClanName(int ClanID)
 {
-	if(ClanID > 0) return m_stClan[ClanID].f_name;
+	if(ClanID > 0) return m_stClan[ClanID].Name;
 	else
 		return "";
 }
@@ -3522,7 +3551,7 @@ bool CServer::GetLeader(int ClientID, int ClanID)
 	if(m_aClients[ClientID].m_ClanID < 1)
 		return false;
 	
-	if(str_comp_nocase(m_stClan[ClanID].f_creator, ClientName(ClientID)) == 0)
+	if(str_comp_nocase(m_stClan[ClanID].Creator, ClientName(ClientID)) == 0)
 		return true;
 	else 
 		return false;
@@ -3533,7 +3562,7 @@ bool CServer::GetAdmin(int ClientID, int ClanID)
 	if(m_aClients[ClientID].m_ClanID < 1)
 		return false;
 	
-	if(str_comp_nocase(m_stClan[ClanID].f_admin, ClientName(ClientID)) == 0)
+	if(str_comp_nocase(m_stClan[ClanID].Admin, ClientName(ClientID)) == 0)
 		return true;
 	else 
 		return false;
@@ -3563,19 +3592,19 @@ public:
 			while(pSqlServer->GetResults()->next())
 			{
 				int ClanID = (int)pSqlServer->GetResults()->getInt("ClanID");
-				m_pServer->m_stClan[ClanID].f_id = ClanID;
-				m_pServer->m_stClan[ClanID].f_level = (int)pSqlServer->GetResults()->getInt("Level");
-				m_pServer->m_stClan[ClanID].f_exp = (int)pSqlServer->GetResults()->getInt("Exp");
-				m_pServer->m_stClan[ClanID].f_money = (int)pSqlServer->GetResults()->getInt("Money");
-				m_pServer->m_stClan[ClanID].f_maxnum = (int)pSqlServer->GetResults()->getInt("MaxNum");
-				m_pServer->m_stClan[ClanID].f_kd = (int)pSqlServer->GetResults()->getInt("Relevance");
-				m_pServer->m_stClan[ClanID].f_upgrade[0] = (int)pSqlServer->GetResults()->getInt("ExpAdd");
-				m_pServer->m_stClan[ClanID].f_upgrade[1] = (int)pSqlServer->GetResults()->getInt("MoneyAdd");
-				m_pServer->m_stClan[ClanID].f_spawninhouse = (int)pSqlServer->GetResults()->getInt("SpawnHouse");
-				m_pServer->m_stClan[ClanID].f_chairupgr = (int)pSqlServer->GetResults()->getInt("ChairHouse");
-				str_copy(m_pServer->m_stClan[ClanID].f_name, pSqlServer->GetResults()->getString("Clanname").c_str(), sizeof(m_pServer->m_stClan[ClanID].f_name));
-				str_copy(m_pServer->m_stClan[ClanID].f_creator, pSqlServer->GetResults()->getString("LeaderName").c_str(), sizeof(m_pServer->m_stClan[ClanID].f_creator));
-				str_copy(m_pServer->m_stClan[ClanID].f_admin, pSqlServer->GetResults()->getString("AdminName").c_str(), sizeof(m_pServer->m_stClan[ClanID].f_admin));
+				m_pServer->m_stClan[ClanID].ID = ClanID;
+				m_pServer->m_stClan[ClanID].Level = (int)pSqlServer->GetResults()->getInt("Level");
+				m_pServer->m_stClan[ClanID].Exp = (int)pSqlServer->GetResults()->getInt("Exp");
+				m_pServer->m_stClan[ClanID].Money = (int)pSqlServer->GetResults()->getInt("Money");
+				m_pServer->m_stClan[ClanID].MaxMemberNum = (int)pSqlServer->GetResults()->getInt("MaxNum");
+				m_pServer->m_stClan[ClanID].Relevance = (int)pSqlServer->GetResults()->getInt("Relevance");
+				m_pServer->m_stClan[ClanID].ExpAdd = (int)pSqlServer->GetResults()->getInt("ExpAdd");
+				m_pServer->m_stClan[ClanID].MoneyAdd = (int)pSqlServer->GetResults()->getInt("MoneyAdd");
+				m_pServer->m_stClan[ClanID].IsSpawnInHouse = (int)pSqlServer->GetResults()->getInt("SpawnHouse");
+				m_pServer->m_stClan[ClanID].ChairLevel = (int)pSqlServer->GetResults()->getInt("ChairHouse");
+				str_copy(m_pServer->m_stClan[ClanID].Name, pSqlServer->GetResults()->getString("Clanname").c_str(), sizeof(m_pServer->m_stClan[ClanID].Name));
+				str_copy(m_pServer->m_stClan[ClanID].Creator, pSqlServer->GetResults()->getString("LeaderName").c_str(), sizeof(m_pServer->m_stClan[ClanID].Creator));
+				str_copy(m_pServer->m_stClan[ClanID].Admin, pSqlServer->GetResults()->getString("AdminName").c_str(), sizeof(m_pServer->m_stClan[ClanID].Admin));
 				
 				
 				m_pServer->UpdClanCount(ClanID);
@@ -3630,7 +3659,7 @@ public:
 		{
 			if(str_comp(m_sType.ClrStr(), "Leader") == 0)
 			{
-				m_sType = CSqlString<64>(m_pServer->m_stClan[m_ClanID].f_creator);
+				m_sType = CSqlString<64>(m_pServer->m_stClan[m_ClanID].Creator);
 				str_format(aBuf, sizeof(aBuf), 
 					"UPDATE %s_Clans SET LeaderName = '%s' WHERE ClanID = '%d';",
 					pSqlServer->GetPrefix(),
@@ -3641,7 +3670,7 @@ public:
 
 			if(str_comp(m_sType.ClrStr(), "Admin") == 0)
 			{
-				m_sType = CSqlString<64>(m_pServer->m_stClan[m_ClanID].f_admin);
+				m_sType = CSqlString<64>(m_pServer->m_stClan[m_ClanID].Admin);
 				str_format(aBuf, sizeof(aBuf), 
 					"UPDATE %s_Clans SET AdminName = '%s' WHERE ClanID = '%d';",
 					pSqlServer->GetPrefix(),
@@ -3656,17 +3685,17 @@ public:
 				pSqlServer->executeSqlQuery(aBuf);
 				if(pSqlServer->GetResults()->next())
 				{
-					m_pServer->m_stClan[m_ClanID].f_chairupgr = (int)pSqlServer->GetResults()->getInt("ChairHouse"); 
-					m_pServer->m_stClan[m_ClanID].f_spawninhouse = (int)pSqlServer->GetResults()->getInt("SpawnHouse");
-					m_pServer->m_stClan[m_ClanID].f_upgrade[1] = (int)pSqlServer->GetResults()->getInt("MoneyAdd");
-					m_pServer->m_stClan[m_ClanID].f_upgrade[0] = (int)pSqlServer->GetResults()->getInt("ExpAdd");
-					m_pServer->m_stClan[m_ClanID].f_kd = (int)pSqlServer->GetResults()->getInt("Relevance");
-					m_pServer->m_stClan[m_ClanID].f_maxnum = (int)pSqlServer->GetResults()->getInt("MaxNum");
-					m_pServer->m_stClan[m_ClanID].f_level = (int)pSqlServer->GetResults()->getInt("Level");
-					m_pServer->m_stClan[m_ClanID].f_exp = (int)pSqlServer->GetResults()->getInt("Exp");
-					m_pServer->m_stClan[m_ClanID].f_money = (unsigned long)pSqlServer->GetResults()->getUInt64("Money");
-					str_copy(m_pServer->m_stClan[m_ClanID].f_creator, pSqlServer->GetResults()->getString("LeaderName").c_str(), sizeof(m_pServer->m_stClan[m_ClanID].f_creator));
-					str_copy(m_pServer->m_stClan[m_ClanID].f_admin, pSqlServer->GetResults()->getString("AdminName").c_str(), sizeof(m_pServer->m_stClan[m_ClanID].f_admin));
+					m_pServer->m_stClan[m_ClanID].ChairLevel = (int)pSqlServer->GetResults()->getInt("ChairHouse"); 
+					m_pServer->m_stClan[m_ClanID].IsSpawnInHouse = (int)pSqlServer->GetResults()->getInt("SpawnHouse");
+					m_pServer->m_stClan[m_ClanID].MoneyAdd = (int)pSqlServer->GetResults()->getInt("MoneyAdd");
+					m_pServer->m_stClan[m_ClanID].ExpAdd = (int)pSqlServer->GetResults()->getInt("ExpAdd");
+					m_pServer->m_stClan[m_ClanID].Relevance = (int)pSqlServer->GetResults()->getInt("Relevance");
+					m_pServer->m_stClan[m_ClanID].MaxMemberNum = (int)pSqlServer->GetResults()->getInt("MaxNum");
+					m_pServer->m_stClan[m_ClanID].Level = (int)pSqlServer->GetResults()->getInt("Level");
+					m_pServer->m_stClan[m_ClanID].Exp = (int)pSqlServer->GetResults()->getInt("Exp");
+					m_pServer->m_stClan[m_ClanID].Money = (unsigned long)pSqlServer->GetResults()->getUInt64("Money");
+					str_copy(m_pServer->m_stClan[m_ClanID].Creator, pSqlServer->GetResults()->getString("LeaderName").c_str(), sizeof(m_pServer->m_stClan[m_ClanID].Creator));
+					str_copy(m_pServer->m_stClan[m_ClanID].Admin, pSqlServer->GetResults()->getString("AdminName").c_str(), sizeof(m_pServer->m_stClan[m_ClanID].Admin));
 				}
 				return true;
 			}
@@ -3678,75 +3707,75 @@ public:
 				int VarGot = -1;
 				if(str_comp(m_sType.ClrStr(), "Money") == 0)
 				{
-					m_pServer->m_stClan[m_ClanID].f_money = (int)pSqlServer->GetResults()->getInt("Money");
-					if(m_Need == PLUS) m_pServer->m_stClan[m_ClanID].f_money += m_Price;
-					else m_pServer->m_stClan[m_ClanID].f_money -= m_Price;
+					m_pServer->m_stClan[m_ClanID].Money = (int)pSqlServer->GetResults()->getInt("Money");
+					if(m_Need == PLUS) m_pServer->m_stClan[m_ClanID].Money += m_Price;
+					else m_pServer->m_stClan[m_ClanID].Money -= m_Price;
 
-					VarGot = m_pServer->m_stClan[m_ClanID].f_money;
+					VarGot = m_pServer->m_stClan[m_ClanID].Money;
 				}
 				else if(str_comp(m_sType.ClrStr(), "Exp") == 0)
 				{
-					m_pServer->m_stClan[m_ClanID].f_exp = (int)pSqlServer->GetResults()->getInt("Exp");
-					if(m_Need == PLUS) m_pServer->m_stClan[m_ClanID].f_exp += m_Price;
-					else m_pServer->m_stClan[m_ClanID].f_exp -= m_Price;
+					m_pServer->m_stClan[m_ClanID].Exp = (int)pSqlServer->GetResults()->getInt("Exp");
+					if(m_Need == PLUS) m_pServer->m_stClan[m_ClanID].Exp += m_Price;
+					else m_pServer->m_stClan[m_ClanID].Exp -= m_Price;
 
-					VarGot = m_pServer->m_stClan[m_ClanID].f_exp;
+					VarGot = m_pServer->m_stClan[m_ClanID].Exp;
 				}
 				else if(str_comp(m_sType.ClrStr(), "Level") == 0)
 				{
-					m_pServer->m_stClan[m_ClanID].f_level = (int)pSqlServer->GetResults()->getInt("Level");
-					if(m_Need == PLUS) m_pServer->m_stClan[m_ClanID].f_level += m_Price;
-					else m_pServer->m_stClan[m_ClanID].f_level -= m_Price;
+					m_pServer->m_stClan[m_ClanID].Level = (int)pSqlServer->GetResults()->getInt("Level");
+					if(m_Need == PLUS) m_pServer->m_stClan[m_ClanID].Level += m_Price;
+					else m_pServer->m_stClan[m_ClanID].Level -= m_Price;
 
-					VarGot = m_pServer->m_stClan[m_ClanID].f_level;
+					VarGot = m_pServer->m_stClan[m_ClanID].Level;
 				}
 				else if(str_comp(m_sType.ClrStr(), "MaxNum") == 0)
 				{
-					m_pServer->m_stClan[m_ClanID].f_maxnum = (int)pSqlServer->GetResults()->getInt("MaxNum");
-					if(m_Need == PLUS) m_pServer->m_stClan[m_ClanID].f_maxnum += m_Price;
-					else m_pServer->m_stClan[m_ClanID].f_maxnum -= m_Price;
+					m_pServer->m_stClan[m_ClanID].MaxMemberNum = (int)pSqlServer->GetResults()->getInt("MaxNum");
+					if(m_Need == PLUS) m_pServer->m_stClan[m_ClanID].MaxMemberNum += m_Price;
+					else m_pServer->m_stClan[m_ClanID].MaxMemberNum -= m_Price;
 
-					VarGot = m_pServer->m_stClan[m_ClanID].f_maxnum;
+					VarGot = m_pServer->m_stClan[m_ClanID].MaxMemberNum;
 				}
 				else if(str_comp(m_sType.ClrStr(), "Relevance") == 0)
 				{
-					m_pServer->m_stClan[m_ClanID].f_kd = (int)pSqlServer->GetResults()->getInt("Relevance");
-					if(m_Need == PLUS) m_pServer->m_stClan[m_ClanID].f_kd += m_Price;
-					else m_pServer->m_stClan[m_ClanID].f_kd -= m_Price;
+					m_pServer->m_stClan[m_ClanID].Relevance = (int)pSqlServer->GetResults()->getInt("Relevance");
+					if(m_Need == PLUS) m_pServer->m_stClan[m_ClanID].Relevance += m_Price;
+					else m_pServer->m_stClan[m_ClanID].Relevance -= m_Price;
 
-					VarGot = m_pServer->m_stClan[m_ClanID].f_kd;
+					VarGot = m_pServer->m_stClan[m_ClanID].Relevance;
 				}
 				else if(str_comp(m_sType.ClrStr(), "ExpAdd") == 0)
 				{
-					m_pServer->m_stClan[m_ClanID].f_upgrade[0] = (int)pSqlServer->GetResults()->getInt("ExpAdd");
-					if(m_Need == PLUS) m_pServer->m_stClan[m_ClanID].f_upgrade[0] += m_Price;
-					else m_pServer->m_stClan[m_ClanID].f_upgrade[0] -= m_Price;
+					m_pServer->m_stClan[m_ClanID].ExpAdd = (int)pSqlServer->GetResults()->getInt("ExpAdd");
+					if(m_Need == PLUS) m_pServer->m_stClan[m_ClanID].ExpAdd += m_Price;
+					else m_pServer->m_stClan[m_ClanID].ExpAdd -= m_Price;
 
-					VarGot = m_pServer->m_stClan[m_ClanID].f_upgrade[0];
+					VarGot = m_pServer->m_stClan[m_ClanID].ExpAdd;
 				}
 				else if(str_comp(m_sType.ClrStr(), "MoneyAdd") == 0)
 				{
-					m_pServer->m_stClan[m_ClanID].f_upgrade[1] = (int)pSqlServer->GetResults()->getInt("MoneyAdd");
-					if(m_Need == PLUS) m_pServer->m_stClan[m_ClanID].f_upgrade[1] += m_Price;
-					else m_pServer->m_stClan[m_ClanID].f_upgrade[1] -= m_Price;
+					m_pServer->m_stClan[m_ClanID].MoneyAdd = (int)pSqlServer->GetResults()->getInt("MoneyAdd");
+					if(m_Need == PLUS) m_pServer->m_stClan[m_ClanID].MoneyAdd += m_Price;
+					else m_pServer->m_stClan[m_ClanID].MoneyAdd -= m_Price;
 
-					VarGot = m_pServer->m_stClan[m_ClanID].f_upgrade[1];
+					VarGot = m_pServer->m_stClan[m_ClanID].MoneyAdd;
 				}		
 				else if(str_comp(m_sType.ClrStr(), "SpawnHouse") == 0)
 				{
-					m_pServer->m_stClan[m_ClanID].f_spawninhouse = (int)pSqlServer->GetResults()->getInt("SpawnHouse");
-					if(m_Need == PLUS) m_pServer->m_stClan[m_ClanID].f_spawninhouse += m_Price;
-					else m_pServer->m_stClan[m_ClanID].f_spawninhouse -= m_Price;
+					m_pServer->m_stClan[m_ClanID].IsSpawnInHouse = (int)pSqlServer->GetResults()->getInt("SpawnHouse");
+					if(m_Need == PLUS) m_pServer->m_stClan[m_ClanID].IsSpawnInHouse += m_Price;
+					else m_pServer->m_stClan[m_ClanID].IsSpawnInHouse -= m_Price;
 
-					VarGot = m_pServer->m_stClan[m_ClanID].f_spawninhouse;
+					VarGot = m_pServer->m_stClan[m_ClanID].IsSpawnInHouse;
 				}	
 				else if(str_comp(m_sType.ClrStr(), "ChairHouse") == 0)
 				{
-					m_pServer->m_stClan[m_ClanID].f_chairupgr = (int)pSqlServer->GetResults()->getInt("ChairHouse");
-					if(m_Need == PLUS) m_pServer->m_stClan[m_ClanID].f_chairupgr += m_Price;
-					else m_pServer->m_stClan[m_ClanID].f_chairupgr -= m_Price;
+					m_pServer->m_stClan[m_ClanID].ChairLevel = (int)pSqlServer->GetResults()->getInt("ChairHouse");
+					if(m_Need == PLUS) m_pServer->m_stClan[m_ClanID].ChairLevel += m_Price;
+					else m_pServer->m_stClan[m_ClanID].ChairLevel -= m_Price;
 
-					VarGot = m_pServer->m_stClan[m_ClanID].f_chairupgr;
+					VarGot = m_pServer->m_stClan[m_ClanID].ChairLevel;
 				}	
 				if(m_Save && VarGot > -1)
 				{
@@ -3829,14 +3858,14 @@ public:
 				if(pSqlServer->GetResults()->next())
 				{
 					int ClanID = (int)pSqlServer->GetResults()->getInt("ClanID");
-					m_pServer->m_stClan[ClanID].f_id = ClanID;
-					m_pServer->m_stClan[ClanID].f_level = (int)pSqlServer->GetResults()->getInt("Level");
-					m_pServer->m_stClan[ClanID].f_money = (int)pSqlServer->GetResults()->getInt("Money");
-					m_pServer->m_stClan[ClanID].f_maxnum = (int)pSqlServer->GetResults()->getInt("MaxNum");
-					m_pServer->m_stClan[ClanID].f_countnum = 1;
+					m_pServer->m_stClan[ClanID].ID = ClanID;
+					m_pServer->m_stClan[ClanID].Level = (int)pSqlServer->GetResults()->getInt("Level");
+					m_pServer->m_stClan[ClanID].Money = (int)pSqlServer->GetResults()->getInt("Money");
+					m_pServer->m_stClan[ClanID].MaxMemberNum = (int)pSqlServer->GetResults()->getInt("MaxNum");
+					m_pServer->m_stClan[ClanID].MemberNum = 1;
 					
-					str_copy(m_pServer->m_stClan[ClanID].f_name, pSqlServer->GetResults()->getString("Clanname").c_str(), sizeof(m_pServer->m_stClan[ClanID].f_name));
-					str_copy(m_pServer->m_stClan[ClanID].f_creator, pSqlServer->GetResults()->getString("LeaderName").c_str(), sizeof(m_pServer->m_stClan[ClanID].f_creator));
+					str_copy(m_pServer->m_stClan[ClanID].Name, pSqlServer->GetResults()->getString("Clanname").c_str(), sizeof(m_pServer->m_stClan[ClanID].Name));
+					str_copy(m_pServer->m_stClan[ClanID].Creator, pSqlServer->GetResults()->getString("LeaderName").c_str(), sizeof(m_pServer->m_stClan[ClanID].Creator));
 
 					m_pServer->m_aClients[m_ClientID].m_ClanID = ClanID;
 					str_copy(m_pServer->m_aClients[m_ClientID].m_Clan, pSqlServer->GetResults()->getString("Clanname").c_str(), sizeof(m_pServer->m_aClients[m_ClientID].m_Clan));
@@ -3950,7 +3979,7 @@ public:
 				str_copy(m_pServer->m_aClients[m_ClientID].m_SelectPlayer[Num], aReform, sizeof(m_pServer->m_aClients[m_ClientID].m_SelectPlayer[Num]));
 				Num++;
 			}
-			m_pServer->m_stClan[m_ClanID].f_countnum = Num;
+			m_pServer->m_stClan[m_ClanID].MemberNum = Num;
 		}
 		catch (sql::SQLException &e)
 		{
@@ -4009,7 +4038,7 @@ public:
 			while(pSqlServer->GetResults()->next())
 				Num++;
 
-			m_pServer->m_stClan[m_ClanID].f_countnum = Num;
+			m_pServer->m_stClan[m_ClanID].MemberNum = Num;
 		}
 		catch (sql::SQLException &e)
 		{
@@ -4028,7 +4057,7 @@ void CServer::UpdClanCount(int ClanID)
 // Присоединение к клану
 void CServer::EnterClan(int ClientID, int ClanID)
 {
-	m_stClan[ClanID].f_countnum++;
+	m_stClan[ClanID].MemberNum++;
 	m_aClients[ClientID].m_ClanAdded = 0;
 	m_aClients[ClientID].m_ClanID = ClanID;
 	UpdateStats(ClientID, 3);
@@ -4037,13 +4066,13 @@ void CServer::EnterClan(int ClientID, int ClanID)
 // Смена лидера
 void CServer::ChangeLeader(int ClanID, const char* pName)
 {
-	str_copy(m_stClan[ClanID].f_creator, pName, sizeof(m_stClan[ClanID].f_creator));
+	str_copy(m_stClan[ClanID].Creator, pName, sizeof(m_stClan[ClanID].Creator));
 	InitClanID(ClanID, PLUS, "Leader", 0, false);
 }
 
 void CServer::ChangeAdmin(int ClanID, const char* pName)
 {
-	str_copy(m_stClan[ClanID].f_admin, pName, sizeof(m_stClan[ClanID].f_admin));
+	str_copy(m_stClan[ClanID].Admin, pName, sizeof(m_stClan[ClanID].Admin));
 	InitClanID(ClanID, PLUS, "Admin", 0, false);
 }
 
@@ -5007,7 +5036,7 @@ bool CServer::GetSpawnInClanHouse(int ClientID, int HouseID)
 	if(GetClanID(ClientID) != m_HouseClanID[HouseID])
 		return false;
 
-	return m_stClan[GetClanID(ClientID)].f_spawninhouse;
+	return m_stClan[GetClanID(ClientID)].IsSpawnInHouse;
 }
 
 bool CServer::SetOpenHouse(int HouseID)
@@ -5015,7 +5044,7 @@ bool CServer::SetOpenHouse(int HouseID)
 	if(HouseID == -1)
 		return false;
 
-	m_stClan[m_HouseClanID[HouseID]].f_openhouse ^= true;
+	m_stClan[m_HouseClanID[HouseID]].IsHouseOpen ^= true;
 	return true;
 }
 
@@ -5024,7 +5053,7 @@ bool CServer::GetOpenHouse(int HouseID)
 	if(HouseID == -1)
 		return false;
 
-	return m_stClan[m_HouseClanID[HouseID]].f_openhouse;
+	return m_stClan[m_HouseClanID[HouseID]].IsHouseOpen;
 }
 
 void CServer::Ban(int ClientID, int Seconds, const char* pReason)

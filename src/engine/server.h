@@ -8,7 +8,7 @@
 #include <engine/shared/protocol.h>
 
 /* INFECTION MODIFICATION START ***************************************/
-enum
+enum InfWeapons
 {
 	INFWEAPON_NONE,
 	INFWEAPON_HAMMER,
@@ -39,7 +39,7 @@ enum
 };
 
 // votes
-enum
+enum Menus
 {
 	NOAUTH,
 	AUTH,
@@ -69,7 +69,7 @@ enum
 };
 
 // items
-enum
+enum Items
 {
 	NOPE = 0,
 	MONEYBAG,
@@ -236,7 +236,28 @@ enum
 	// Sufix S - SettingsItem
 };
 
-enum
+
+enum Clan {
+	// Constant
+	Name,
+	Creator,
+	Admin,
+	Level,
+	Exp,
+	Money,
+	MaxMemberNum,
+	Relevance,
+	ChairLevel,
+	ExpAdd,
+	MoneyAdd,
+
+	// Non-Constant
+	MemberNum,
+	IsSpawnInHouse
+	
+};
+
+enum PlayerVars
 {
 	DLEVEL,
 	DEXP,
@@ -251,17 +272,11 @@ enum
 	DSECC,
 	DKILL,
 	DWINAREA,
-	DADDEXP,
-	DADDMONEY,
 	DCLANADDED,
-	DCHAIRHOUSE,
 
 	DISJAILED,
 	DJAILLENGTH,
 	DSUMMERHEALINGTIMES,
-
-	DCOUNTUCLAN,
-	DMAXCOUNTUCLAN,
 	
 	UHAMMERRANGE,
 	PASIVE2,
@@ -278,7 +293,7 @@ enum
 	MANA,
 };
 
-enum
+enum Sign
 {
 	PLUS,
 	MINUS,
@@ -292,7 +307,7 @@ enum
 	NB_PLAYERSCOREMODE,
 };
 
-enum
+enum ChatCategory
 {
 	CHATCATEGORY_DEFAULT=0,
 	CHATCATEGORY_HEALER,
@@ -315,7 +330,7 @@ public:
 	class CLocalization* m_pLocalization;
 
 public:
-	enum
+	enum AuthType
 	{ 
 		AUTHED_NO=0,
 		AUTHED_MOD,
@@ -586,8 +601,7 @@ public:
 //#endif
 	virtual void Ban(int i, int Seconds, const char* pReason) = 0;
 
-public:
-	virtual int GetClan(int Type, int ClanID) = 0;
+	virtual int GetClan(Clan Type, int ClanID) = 0;
 	virtual const char *LeaderName(int ClanID) = 0;
 	virtual const char *AdminName(int ClanID) = 0;
 	virtual const char *GetClanName(int ClanID) = 0;

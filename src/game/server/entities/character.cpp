@@ -976,8 +976,8 @@ void CCharacter::Tick()
 			{
 				m_ReloadOther = Server()->TickSpeed();
 
-				int Exp = 20+Server()->GetClan(DCHAIRHOUSE, Server()->GetTopHouse(0));
-				int Money = 500+(Server()->GetClan(DCHAIRHOUSE, Server()->GetTopHouse(0))*50);
+				int Exp = 20+Server()->GetClan(Clan::ChairLevel, Server()->GetTopHouse(0));
+				int Money = 500+(Server()->GetClan(Clan::ChairLevel, Server()->GetTopHouse(0))*50);
 
 				unsigned long int LegalExp = m_pPlayer->AccData.Exp + Exp;
 				int LegalMoney = m_pPlayer->AccData.Money + Money;
@@ -999,8 +999,8 @@ void CCharacter::Tick()
 			{
 				m_ReloadOther = Server()->TickSpeed();
 
-				int Exp = 20+Server()->GetClan(DCHAIRHOUSE, Server()->GetTopHouse(1));
-				int Money = 500+(Server()->GetClan(DCHAIRHOUSE, Server()->GetTopHouse(1))*50);
+				int Exp = 20+Server()->GetClan(Clan::ChairLevel, Server()->GetTopHouse(1));
+				int Money = 500+(Server()->GetClan(Clan::ChairLevel, Server()->GetTopHouse(1))*50);
 
 				unsigned long int LegalExp = m_pPlayer->AccData.Exp + Exp;
 				int LegalMoney = m_pPlayer->AccData.Money + Money;
@@ -1022,8 +1022,8 @@ void CCharacter::Tick()
 			{
 				m_ReloadOther = Server()->TickSpeed();
 
-				int Exp = 20+Server()->GetClan(DCHAIRHOUSE, Server()->GetTopHouse(2));
-				int Money = 500+(Server()->GetClan(DCHAIRHOUSE, Server()->GetTopHouse(2))*50);
+				int Exp = 20+Server()->GetClan(Clan::ChairLevel, Server()->GetTopHouse(2));
+				int Money = 500+(Server()->GetClan(Clan::ChairLevel, Server()->GetTopHouse(2))*50);
 
 				unsigned long int LegalExp = m_pPlayer->AccData.Exp + Exp;
 				int LegalMoney = m_pPlayer->AccData.Money + Money;
@@ -1045,8 +1045,8 @@ void CCharacter::Tick()
 			{
 				m_ReloadOther = Server()->TickSpeed();
 
-				int Exp = 20+Server()->GetClan(DCHAIRHOUSE, Server()->GetTopHouse(3));
-				int Money = 500+(Server()->GetClan(DCHAIRHOUSE, Server()->GetTopHouse(3))*50);
+				int Exp = 20+Server()->GetClan(Clan::ChairLevel, Server()->GetTopHouse(3));
+				int Money = 500+(Server()->GetClan(Clan::ChairLevel, Server()->GetTopHouse(3))*50);
 
 				unsigned long int LegalExp = m_pPlayer->AccData.Exp + Exp;
 				int LegalMoney = m_pPlayer->AccData.Money + Money;
@@ -1068,8 +1068,8 @@ void CCharacter::Tick()
 			{
 				m_ReloadOther = Server()->TickSpeed();
 
-				int Exp = 20+Server()->GetClan(DCHAIRHOUSE, Server()->GetTopHouse(4));
-				int Money = 500+(Server()->GetClan(DCHAIRHOUSE, Server()->GetTopHouse(4))*50);
+				int Exp = 20+Server()->GetClan(Clan::ChairLevel, Server()->GetTopHouse(4));
+				int Money = 500+(Server()->GetClan(Clan::ChairLevel, Server()->GetTopHouse(4))*50);
 
 				unsigned long int LegalExp = m_pPlayer->AccData.Exp + Exp;
 				int LegalMoney = m_pPlayer->AccData.Money + Money;

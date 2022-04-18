@@ -189,8 +189,7 @@ public:
 	
 	int GetNeedMana() {	return 100+(AccUpgrade.Mana*5); };
 	int GetNeedForUp();
-	int GetNeedForUpClan();
-	int GetNeedForUpgClan(int Type);
+	int GetNeedForUpgClan(Clan Type);
 	int m_MapMenuItem;
 	 
 	CTuningParams m_PrevTuningParams;

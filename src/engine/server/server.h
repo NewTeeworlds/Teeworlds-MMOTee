@@ -192,24 +192,25 @@ public:
 
 	struct _m_stClan
 	{
-		int f_id;
-		char f_name [32];
-		char f_creator [MAX_NAME_LENGTH];
-		char f_admin [MAX_NAME_LENGTH];
-		int f_level;
-		int f_exp;
-		unsigned long int f_money;
-		int f_maxnum;
-		int f_countnum;
-		int f_kd;
-		int f_upgrade[2]; // 1 EXP : 2 Money
-		bool f_openhouse;
-		bool f_spawninhouse;
-		int f_chairupgr;
+		int ID;
+		char Name [32];
+		char Creator [MAX_NAME_LENGTH];
+		char Admin [MAX_NAME_LENGTH];
+		int Level;
+		int Exp;
+		unsigned long int Money;
+		int MemberNum;
+		int MaxMemberNum;
+		int Relevance;
+		int ExpAdd;
+		int MoneyAdd;
+		bool IsHouseOpen;
+		bool IsSpawnInHouse;
+		int ChairLevel;
 	};
 	_m_stClan m_stClan[500];
 
-	virtual int GetClan(int Type, int ClanID);
+	virtual int GetClan(Clan Type, int ClanID);
 	virtual bool GetLeader(int ClientID, int ClanID);
 	virtual bool GetAdmin(int ClientID, int ClanID);
 	const char *LeaderName(int ClientID);
