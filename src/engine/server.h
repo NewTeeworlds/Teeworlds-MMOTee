@@ -568,7 +568,7 @@ public:
 	virtual void ChangeAdmin(int ClanID, const char* pName) = 0;
 	// Инициализция сохранения
 	virtual void InitClan() = 0;
-	virtual void InitClanID(int ClanID, bool Need, const char* SubType, int Price, bool Save) = 0;
+	virtual void InitClanID(int ClanID, Sign Need, const char* SubType, int Price, bool Save) = 0;
 	virtual void UpdClanCount(int ClanID) = 0;
 	
 	// ----- Инвентарь

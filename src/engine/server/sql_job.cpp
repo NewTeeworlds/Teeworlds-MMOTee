@@ -10,22 +10,28 @@ void CSqlJob::StartReadOnly()
 	Start(true);
 }
 
+
+
 void CSqlJob::Start(bool ReadOnly)
 {
-	m_ReadOnly = ReadOnly;
-	
-	void *registerThread = thread_init(CSqlJob::Exec, this);
-	thread_detach(registerThread);
+	m_ReadOnly = ReadOnly;	
+	auto ExecThread = std::thread(CSqlJob::Exec, this);
+	ExecThread.detach();
 }
 
 void CSqlJob::AddQueuedJob(CSqlJob* pJob)
 {
 	m_QueuedJobs.add(pJob);
 }
-	
-void CSqlJob::Exec(void* pDataSelf)
+
+template<typename T, typename... Args>
+std::unique_ptr<T> make_unique(Args&&... args) {
+    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+}
+
+void CSqlJob::Exec(CSqlJob* pDataSelf)
 {
-	CSqlJob* pSelf = (CSqlJob*) pDataSelf;
+	auto pSelf = pDataSelf;
 	
 	CSqlConnector connector;
 
@@ -45,7 +51,7 @@ void CSqlJob::Exec(void* pDataSelf)
 	
 	for(int i=0; i<pSelf->m_QueuedJobs.size(); i++)
 	{
-		pSelf->m_QueuedJobs[i]->ProcessParentData(pSelf->GenerateChildData());
+		// pSelf->m_QueuedJobs[i]->ProcessParentData(pSelf->GenerateChildData());
 		pSelf->m_QueuedJobs[i]->Start();
 	}
 

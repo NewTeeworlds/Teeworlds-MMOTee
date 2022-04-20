@@ -5,6 +5,7 @@
 #include <game/server/player.h>
 #include "sql_string_helpers.h"
 #include "sql_connector.h"
+#include <thread>
 
 class CSqlJob
 {
@@ -23,12 +24,13 @@ public:
 
 	void StartReadOnly();
 	void Start(bool ReadOnly=false);
-	static void Exec(void* pDataSelf);
-	
+	static void Exec(CSqlJob* pDataSelf);
 	void AddQueuedJob(CSqlJob* pJob);
+	/*
 	virtual void* GenerateChildData() { return 0x0; };
 	virtual void ProcessParentData(void* pData) {};
-	
+	*/
+
 	virtual bool Job(CSqlServer* pSqlServer) = 0;
 	virtual void CleanInstanceRef() {}
 	

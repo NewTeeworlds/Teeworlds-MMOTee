@@ -37,6 +37,8 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <thread>
+#include <memory>
 #include <engine/server/mapconverter.h>
 #include <engine/server/sql_job.h>
 #include <engine/server/crypt.h>
@@ -2122,6 +2124,7 @@ int CServer::GetClan(Clan Type, int ClanID)
 		break;
 
 	default:
+		return 0;
 		break;
 	}
 }
@@ -2635,7 +2638,7 @@ class CSqlJob_Server_InitMaterialID : public CSqlJob
 private:
 	CServer* m_pServer;
 public:
-	CSqlJob_Server_InitMaterialID(CServer* pServer)
+	explicit CSqlJob_Server_InitMaterialID(CServer* pServer)
 	{
 		m_pServer = pServer;
 	}
@@ -3642,7 +3645,7 @@ private:
 	CSqlString<64> m_sType;
 
 public:
-	CSqlJob_Server_InitClanID(CServer* pServer, int ClanID, bool Need, const char* SubType, int Price, bool Save)
+	CSqlJob_Server_InitClanID(CServer* pServer, int ClanID, Sign Need, const char* SubType, int Price, bool Save)
 	{
 		m_pServer = pServer;
 		m_ClanID = ClanID;
@@ -3796,7 +3799,7 @@ public:
 		return true;
 	}
 };
-void CServer::InitClanID(int ClanID, bool Need, const char* SubType, int Price, bool Save)
+void CServer::InitClanID(int ClanID, Sign Need, const char* SubType, int Price, bool Save)
 {
 	if(!ClanID)
 		return;

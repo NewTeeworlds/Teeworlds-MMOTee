@@ -473,7 +473,7 @@ public:
 
 	// Инициализация сохранение загрузка
 	virtual void InitClan();
-	virtual void InitClanID(int ClanID, bool Need, const char* SubType, int Price, bool Save);
+	virtual void InitClanID(int ClanID, Sign Need, const char* SubType, int Price, bool Save);
 	virtual void UpdClanCount(int ClanID);
 
 	virtual void Ban(int ClientID, int Seconds, const char* pReason);
