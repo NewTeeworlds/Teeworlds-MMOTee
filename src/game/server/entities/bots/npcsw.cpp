@@ -106,7 +106,7 @@ void CNpcWSold::TickBotAI()
 	for (int i=0; i<g_Config.m_SvMaxClients-MAX_BOTS; i++)
 	{
 		CPlayer *pPlayer = GameServer()->m_apPlayers[i];
-		if (!pPlayer || !pPlayer->GetCharacter() || (pPlayer->IsBot() && pPlayer->GetBotType() == BOT_NPC))
+		if (!pPlayer || !pPlayer->GetCharacter() || (pPlayer->IsBot() && pPlayer->GetBotType() == BOT_GUARD))
 			continue;
 
 		int Dist = distance(pPlayer->GetCharacter()->m_Pos, m_Pos);

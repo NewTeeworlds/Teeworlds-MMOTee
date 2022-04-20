@@ -113,10 +113,19 @@ void dbg_assert_imp(const char *filename, int line, int test, const char *msg)
 
 void dbg_msg(const char *sys, const char *fmt, ...)
 {
+#if defined(CONF_FAMILY_UNIX)
+	if(getenv("S"))
+	{
+		if(str_comp(sys, "datafile") == 0) 
+		{
+			return;
+		}
+	}
+#endif
 	va_list args;
+	size_t len = 0;
 	char str[1024*4];
 	char *msg;
-	int i, len;
 	char timestr[80];
 	str_timestamp_format(timestr, sizeof(timestr), FORMAT_SPACE);
 
@@ -132,7 +141,7 @@ void dbg_msg(const char *sys, const char *fmt, ...)
 #endif
 	va_end(args);
 
-	for(i = 0; i < num_loggers; i++)
+	for(int i = 0; i < num_loggers; i++)
 		loggers[i](str);
 }
 

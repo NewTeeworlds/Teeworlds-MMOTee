@@ -39,7 +39,7 @@ jobs:
       run: ctest -C ${{env.BUILD_TYPE}}
 
     - name: Make a Server Pack
-      run: cd ${{github.workspace}} && cp build/Mmotee-Server . && zip -r9 Server\ Pack.zip Mmotee-Server data docs maps other server_lang template-cn.sql Readme.md autoexec.cfg.example
+      run: cd ${{github.workspace}} && cp build/Mmotee-Server . && zip -r9 Server\ Pack.zip Mmotee-Server data docs maps other template-cn.sql Readme.md autoexec.cfg.example
 
     - name: Upload Server Binary
       uses: actions/upload-artifact@v2

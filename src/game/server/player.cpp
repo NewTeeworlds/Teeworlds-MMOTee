@@ -737,7 +737,7 @@ void CPlayer::Snap(int SnappingClient)
 			switch(GetBotType())
 			{
 				default: str_format(pSendName, sizeof(pSendName), "%d:%s[%d\%]", AccData.Level, Server()->ClientName(m_ClientID), (int)getlv);	break;
-				case BOT_NPC:
+				case BOT_GUARD:
 				case BOT_BOSSSLIME: str_format(pSendName, sizeof(pSendName), "%s[%d\%]", Server()->ClientName(m_ClientID), (int)getlv);	break;
 				case BOT_NPCW: str_format(pSendName, sizeof(pSendName), "%s", Server()->ClientName(m_ClientID));	break;
 			}
@@ -1038,7 +1038,7 @@ void CPlayer::TryRespawn()
 			if(g_Config.m_SvCityStart == 1)
 				AccUpgrade.Damage = 400;
 		}
-		else if(m_BotType == BOT_NPC)
+		else if(m_BotType == BOT_GUARD)
 		{
 			m_pCharacter = new(m_ClientID) CNpcSold(&GameServer()->m_World);
 			AccData.Level = 500+rand()%10;

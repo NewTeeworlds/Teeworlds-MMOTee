@@ -393,7 +393,6 @@ set(DEP_MD5 $<TARGET_OBJECTS:md5>)
 ########################################################################
 # COPY DATA AND DLLS
 ########################################################################
-file(COPY server_lang DESTINATION .)
 
 set(COPY_FILES
   ${ICU_COPY_FILES}

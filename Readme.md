@@ -2,7 +2,7 @@
 
 # mmotee (老版本) 来自 Kurosio   [![CMake](https://github.com/StarOnTheSky/mmotee_cn/actions/workflows/cmake.yml/badge.svg)](https://github.com/StarOnTheSky/mmotee_cn/actions/workflows/cmake.yml)
 # 新功能:
-- [ ] **重要**: 将固定在代码中的中文文本移动到 `server_lang/` 中, 让世界各地的玩家可以更方便地参与项目开发, 用自己的语言进行游玩 (注:该操作完成以后. 项目有可能会进行更名)
+- [ ] **重要**: 将固定在代码中的中文文本移动到 `data/languages` 中, 让世界各地的玩家可以更方便地参与项目开发, 用自己的语言进行游玩 (注:该操作完成以后. 项目有可能会进行更名)
 - [x] 投票界面、聊天界面的中文翻译
 - [x] 去除 Pig, Kwah, Boomer 等等怪物在右上角击杀 HUD 的显示
 - [x] **重要**: 修复在新发行版上构建失败的问题

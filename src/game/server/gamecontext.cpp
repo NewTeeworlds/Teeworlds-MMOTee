@@ -972,23 +972,6 @@ void CGameContext::OnTick()
 			m_apPlayers[i]->Tick();
 			m_apPlayers[i]->PostTick();
 			
-			if(m_InviteTick[i] > 0)
-			{
-				if(m_InviteTick[i] == 1)
-				{
-					m_InviteTick[i] = 0;
-					
-					CNetMsg_Sv_VoteSet Msg;
-					Msg.m_Timeout = 0;
-					Msg.m_pDescription = "";
-					Msg.m_pReason = "";
-					Server()->SendPackMsg(&Msg, MSGFLAG_VITAL, i);	
-				}
-				else
-				{
-					m_InviteTick[i]--;
-				}
-			}
 		}
 	}
 	
@@ -1008,16 +991,10 @@ void CGameContext::OnTick()
 				(m_BroadcastStates[i].m_NoChangeTick > Server()->TickSpeed() && strlen(m_BroadcastStates[i].m_NextMessage) > 0)
 			)
 			{
-				//dbg_msg("test","%s %s %d %d",m_BroadcastStates[i].m_PrevMessage, m_BroadcastStates[i].m_NextMessage, str_comp(m_BroadcastStates[i].m_PrevMessage, m_BroadcastStates[i].m_NextMessage), m_BroadcastStates[i].m_NoChangeTick);
 				CNetMsg_Sv_Broadcast Msg;
 				str_copy(m_BroadcastStates[i].m_PrevMessage, m_BroadcastStates[i].m_NextMessage, sizeof(m_BroadcastStates[i].m_PrevMessage));
-				//dbg_msg("test1","%s %s %d %d",m_BroadcastStates[i].m_PrevMessage, m_BroadcastStates[i].m_NextMessage, str_comp(m_BroadcastStates[i].m_PrevMessage, m_BroadcastStates[i].m_NextMessage), m_BroadcastStates[i].m_NoChangeTick);
 				Msg.m_pMessage = m_BroadcastStates[i].m_NextMessage;
-				//dbg_msg("test2","%s %s %d %d",m_BroadcastStates[i].m_PrevMessage, m_BroadcastStates[i].m_NextMessage, str_comp(m_BroadcastStates[i].m_PrevMessage, m_BroadcastStates[i].m_NextMessage), m_BroadcastStates[i].m_NoChangeTick);
 				Server()->SendPackMsg(&Msg, MSGFLAG_VITAL, i);
-				//dbg_msg("test3","%s %s %d %d",m_BroadcastStates[i].m_PrevMessage, m_BroadcastStates[i].m_NextMessage, str_comp(m_BroadcastStates[i].m_PrevMessage, m_BroadcastStates[i].m_NextMessage), m_BroadcastStates[i].m_NoChangeTick);
-				
-				//strcpy(m_BroadcastStates[i].m_PrevMessage, m_BroadcastStates[i].m_NextMessage);
 				m_BroadcastStates[i].m_NoChangeTick = 0;
 			}
 			else
@@ -1046,6 +1023,24 @@ void CGameContext::OnTick()
 			m_BroadcastStates[i].m_NextMessage[0] = 0;
 			m_BroadcastStates[i].m_TimedMessage[0] = 0;
 		}
+
+		if(m_InviteTick[i] > 0)
+			{
+				if(m_InviteTick[i] == 1)
+				{
+					m_InviteTick[i] = 0;
+					
+					CNetMsg_Sv_VoteSet Msg;
+					Msg.m_Timeout = 0;
+					Msg.m_pDescription = "";
+					Msg.m_pReason = "";
+					Server()->SendPackMsg(&Msg, MSGFLAG_VITAL, i);	
+				}
+				else
+				{
+					m_InviteTick[i]--;
+				}
+			}
 	}
 
 	if(Server()->Tick() % (1 * Server()->TickSpeed() * 520) == 0)
@@ -4634,7 +4629,7 @@ void CGameContext::OnInit(/*class IKernel *pKernel*/)
 			CreateBot(CurID, BOT_L3MONSTER, g_Config.m_SvCityStart);
 	}
 	for (int o=0; o<1; o++,CurID++)
-		CreateBot(CurID, BOT_NPC, g_Config.m_SvCityStart);
+		CreateBot(CurID, BOT_GUARD, g_Config.m_SvCityStart);
 	for (int o=0; o<3; o++, CurID++)
 		CreateBot(CurID, BOT_NPCW, o);
 
@@ -4813,7 +4808,7 @@ void CGameContext::UpdateBotInfo(int ClientID)
 		if(!BotSubType) str_copy(NameSkin, "twintri", sizeof(NameSkin));
 		else if(BotSubType == 1) str_copy(NameSkin, "coala", sizeof(NameSkin));
 	}
-	else if(BotType == BOT_NPC)
+	else if(BotType == BOT_GUARD)
 	{
 		if(!BotSubType)	str_copy(NameSkin, "cammo", sizeof(NameSkin));
 		else if(BotSubType == 1) str_copy(NameSkin, "cammostripes", sizeof(NameSkin));

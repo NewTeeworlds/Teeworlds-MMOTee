@@ -164,7 +164,8 @@ public:
 		int m_SummerHealingTimes;
 		int m_LoginID;
 
-		int m_ItemCount[7];
+		// int m_ItemCount[7];
+		std::vector<int> m_ItemCount;
 
 		// All
 		int Upgrade;

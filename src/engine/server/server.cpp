@@ -2167,7 +2167,7 @@ void CServer::ResetBotInfo(int ClientID, int BotType, int BotSubType)
 		if(!BotSubType) str_copy(m_aClients[ClientID].m_aName , "Boom", MAX_NAME_LENGTH);
 		else if(BotSubType == 1) str_copy(m_aClients[ClientID].m_aName , "Nimfie", MAX_NAME_LENGTH);
 	}
-	else if(BotType == BOT_NPC)
+	else if(BotType == BOT_GUARD)
 	{
 		if(!BotSubType) str_copy(m_aClients[ClientID].m_aName , "Guard", MAX_NAME_LENGTH);
 		else if(BotSubType == 1) str_copy(m_aClients[ClientID].m_aName , "Fighter", MAX_NAME_LENGTH);
@@ -2657,7 +2657,7 @@ public:
 				m_pServer->m_Materials[IDMAT-1] = Count;
 			}
 		}
-		catch (sql::SQLException &e)
+		catch (sql::SQLException const &e)
 		{
 			return false;
 		}
@@ -2695,7 +2695,7 @@ public:
 				, m_pServer->m_Materials[m_ID], m_ID+1);
 			pSqlServer->executeSql(aBuf);
 		}
-		catch (sql::SQLException &e)
+		catch (sql::SQLException const &e)
 		{
 			dbg_msg("sql", "Can't Save Material (MySQL Error: %s)", e.what());
 			return false;
@@ -2829,7 +2829,7 @@ public:
 				iscope++;
 			}
 		}
-		catch (sql::SQLException &e)
+		catch (sql::SQLException const &e)
 		{
 			return false;
 		}
@@ -2875,7 +2875,7 @@ public:
 						   m_pServer->m_aClients[m_ClientID].m_MailID[m_IDMail]);
 				pSqlServer->executeSql(aBuf);
 			}
-			catch (sql::SQLException &e)
+			catch (sql::SQLException const &e)
 			{
 				return false;
 			}
@@ -2943,7 +2943,7 @@ public:
 					Items[i].ItemCount = (int)pSqlServer->GetResults()->getInt("COUNT(*)");
 				}
 			}
-			catch (sql::SQLException &e)
+			catch (sql::SQLException const &e)
 			{
 				return false;
 			}
@@ -3016,7 +3016,7 @@ public:
 				m_MailCount = (int)pSqlServer->GetResults()->getInt("count(*)");
 			}
 		}
-		catch (sql::SQLException &e)
+		catch (sql::SQLException const &e)
 		{
 			return -1;
 		}
@@ -3064,7 +3064,7 @@ public:
 				, m_AuthedID, m_MailType, m_ItemID, m_ItemNum);	
 			pSqlServer->executeSql(aBuf);
 		}
-		catch (sql::SQLException &e)
+		catch (sql::SQLException const &e)
 		{
 			return false;
 		}
@@ -3134,7 +3134,7 @@ public:
 					m_pServer->m_stInv[m_ClientID][m_ItemID].i_count = (int)pSqlServer->GetResults()->getInt("item_count");
 			}
 		}
-		catch (sql::SQLException &e)
+		catch (sql::SQLException const &e)
 		{
 			return false;
 		}
@@ -3200,7 +3200,7 @@ public:
 			m_pServer->m_stInv[m_ClientID][m_ItemID].i_count = m_Count;
 			m_pServer->m_aClients[m_ClientID].m_ItemCount[m_pServer->m_stInv[m_ClientID][m_ItemID].i_type]++;
 		}
-		catch (sql::SQLException &e)
+		catch (sql::SQLException const &e)
 		{
 			// Scheme - 
 			// if(item) -> Add item if succeses -> Got resoult delete item drop -> 
@@ -3292,7 +3292,7 @@ public:
 			}
 			return true;
 		}
-		catch (sql::SQLException &e)
+		catch (sql::SQLException const &e)
 		{
 			return false;
 		}
@@ -3407,7 +3407,7 @@ public:
 			}
 			return true;
 		}
-		catch (sql::SQLException &e)
+		catch (sql::SQLException const &e)
 		{
 			return false;
 		}
@@ -3526,7 +3526,7 @@ public:
 				m_pServer->AddGameServerCmd(pCmd);
 			}
 		}
-		catch (sql::SQLException &e)
+		catch (sql::SQLException const &e)
 		{		
 			return false;
 		}
@@ -3618,7 +3618,7 @@ public:
 			dbg_msg("mmotee", "################ 加载了 %d 个公会", Num);
 			dbg_msg("mmotee", "############################################");
 		}
-		catch (sql::SQLException &e)
+		catch (sql::SQLException const &e)
 		{
 			dbg_msg("mmotee", "Fail in initialize clans");
 			return false;
@@ -3792,7 +3792,7 @@ public:
 			}	
 			return true;
 		}
-		catch (sql::SQLException &e)
+		catch (sql::SQLException const &e)
 		{
 			return false;
 		}
@@ -3882,7 +3882,7 @@ public:
 						pSqlServer->executeSql(aBuf);	// 麻了,鬼知道为啥这玩意执行以后,明明是成功的,读取到的值居然是失败的
 						//dbg_msg("test","5");
 					/*}
-					catch(sql::SQLException &e)
+					catch(sql::SQLException const &e)
 					{*/
 						//dbg_msg("test","6");
 						//dbg_msg("test","7");
@@ -3904,7 +3904,7 @@ public:
 				}
 			}
 		}
-		catch (sql::SQLException &e)
+		catch (sql::SQLException const &e)
 		{
 			//dbg_msg("test","0");
 			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("创建失败"));
@@ -3984,7 +3984,7 @@ public:
 			}
 			m_pServer->m_stClan[m_ClanID].MemberNum = Num;
 		}
-		catch (sql::SQLException &e)
+		catch (sql::SQLException const &e)
 		{
 			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("Error clan list say administrator."));
 			m_pServer->AddGameServerCmd(pCmd);
@@ -4043,7 +4043,7 @@ public:
 
 			m_pServer->m_stClan[m_ClanID].MemberNum = Num;
 		}
-		catch (sql::SQLException &e)
+		catch (sql::SQLException const &e)
 		{
 			dbg_msg("sql", "Error", e.what());
 			return false;
@@ -4104,7 +4104,7 @@ public:
 				"UPDATE %s_Users SET ClanID = %d, ClanAdded = %d WHERE Nick = '%s';", pSqlServer->GetPrefix(), ClanID, ClanID, m_sName.ClrStr());
 			pSqlServer->executeSqlQuery(aBuf);	
 		}
-		catch (sql::SQLException &e)
+		catch (sql::SQLException const &e)
 		{
 			return false;
 		}
@@ -4189,7 +4189,7 @@ public:
 			return false;
 			}			
 		}
-		catch (sql::SQLException &e)
+		catch (sql::SQLException const &e)
 		{
 			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("登录时出现错误,请报告管理员"));
 			m_pServer->AddGameServerCmd(pCmd);
@@ -4214,7 +4214,7 @@ public:
 				m_pServer->m_stInv[m_ClientID][IDitem].i_enchant = ItemEnchant;
 			}					
 		}
-		catch (sql::SQLException &e)
+		catch (sql::SQLException const &e)
 		{
 			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, "登录时出现错误,请报告管理员");
 			m_pServer->AddGameServerCmd(pCmd);
@@ -4253,7 +4253,7 @@ public:
 				m_pServer->AddGameServerCmd(pCmd1);
 			}					
 		}
-		catch (sql::SQLException &e)
+		catch (sql::SQLException const &e)
 		{
 			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, "登录时出现错误,请报告管理员");
 			m_pServer->AddGameServerCmd(pCmd);
@@ -4374,7 +4374,7 @@ public:
 					m_pServer->UpdClanCount(ClanID);
 			}
 		}
-		catch (sql::SQLException &e)
+		catch (sql::SQLException const &e)
 		{
 
 			if(str_length(e.what()) > 0)
@@ -4469,7 +4469,7 @@ public:
 				m_pServer->AddGameServerCmd(pCmd);
 			}
 		}
-		catch (sql::SQLException &e)
+		catch (sql::SQLException const &e)
 		{
 			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, "登录时出现错误,请报告管理员");
 			m_pServer->AddGameServerCmd(pCmd);
@@ -4535,7 +4535,7 @@ public:
 				m_pServer->AddGameServerCmd(pCmd);
 			}
 		}
-		catch (sql::SQLException &e)
+		catch (sql::SQLException const &e)
 		{
 			dbg_msg("sql", "Can't check newplayer security (MySQL Error: %s)", e.what());
 			return false;			
@@ -4601,7 +4601,7 @@ public:
 				return true;
 			}
 		}
-		catch (sql::SQLException &e)
+		catch (sql::SQLException const &e)
 		{
 			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("在注册账号时发生了错误"));
 			m_pServer->AddGameServerCmd(pCmd);
@@ -4621,7 +4621,7 @@ public:
 				, m_sName.ClrStr(), m_sNick.ClrStr(), m_sPasswordHash.ClrStr(), m_sEmail.ClrStr(), aAddrStr);
 			pSqlServer->executeSql(aBuf);
 		}
-		catch (sql::SQLException &e)
+		catch (sql::SQLException const &e)
 		{
 			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("在注册账号时发生了错误"));
 			m_pServer->AddGameServerCmd(pCmd);
@@ -4660,7 +4660,7 @@ public:
 				return false;
 			}
 		}
-		catch (sql::SQLException &e)
+		catch (sql::SQLException const &e)
 		{
 			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("在注册账号时发生了错误"));
 			m_pServer->AddGameServerCmd(pCmd);
@@ -4725,7 +4725,7 @@ public:
 				return false;
 			}
 		}
-		catch (sql::SQLException &e)
+		catch (sql::SQLException const &e)
 		{
 			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("更改密码失败"));
 			m_pServer->AddGameServerCmd(pCmd);
@@ -4787,7 +4787,7 @@ public:
 			pSqlServer->executeSql(aBuf);	
 			//dbg_msg("test","2");
 		}
-		catch (sql::SQLException &e)
+		catch (sql::SQLException const &e)
 		{
 			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("更改密码失败"));
 			m_pServer->AddGameServerCmd(pCmd);		
@@ -4867,7 +4867,7 @@ public:
 				Buffer.clear();
 			}
 		}
-		catch (sql::SQLException &e)
+		catch (sql::SQLException const &e)
 		{
 			dbg_msg("sql", "Can't get top10 (MySQL Error: %s)", e.what());
 			return false;
@@ -4935,7 +4935,7 @@ public:
 				Buffer.clear();
 			}
 		}
-		catch (sql::SQLException &e)
+		catch (sql::SQLException const &e)
 		{
 			dbg_msg("sql", "Can't get top10 clans (MySQL Error: %s)", e.what());
 			return false;
@@ -4995,7 +4995,7 @@ public:
 				House++;
 			} 
 		}
-		catch (sql::SQLException &e)
+		catch (sql::SQLException const &e)
 		{
 			return false;
 		}
@@ -5188,7 +5188,7 @@ public:
 			}
 				dbg_msg("user","玩家 %s 上线了", m_sNick.ClrStr());
 		}
-		catch (sql::SQLException &e)
+		catch (sql::SQLException const &e)
 		{
 			dbg_msg("sql", "在检查登录状态时发生了错误 (MySQL 错误: %s)", e.what());
 			
@@ -5275,7 +5275,7 @@ public:
 				dbg_msg("user","玩家 %s 下线了", m_sNick.ClrStr());
 				return true;
 			}
-			catch (sql::SQLException &e)
+			catch (sql::SQLException const &e)
 			{
 				dbg_msg("sql", "在检查登录状态时发生了错误 (MySQL 错误: %s)", e.what());
 
@@ -5343,7 +5343,7 @@ public:
 				m_pServer->AddGameServerCmd(pCmd);	
 				return true;
 			}
-			catch (sql::SQLException &e)
+			catch (sql::SQLException const &e)
 			{
 				dbg_msg("sql", "在写入 ban 数据时发生了错误 (MySQL 错误: %s)", e.what());
 				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("封禁失败."));
@@ -5411,7 +5411,7 @@ public:
 				return true;
 			}
 		}
-		catch (sql::SQLException &e)
+		catch (sql::SQLException const &e)
 		{
 			dbg_msg("sql", "在写入 ban 数据时发生了错误 (MySQL 错误: %s)", e.what());
 			CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("解封失败."));
@@ -5487,7 +5487,7 @@ public:
 				m_pServer->AddGameServerCmd(pCmd);
 				return true;
 			}
-			catch (sql::SQLException &e)
+			catch (sql::SQLException const &e)
 			{
 				dbg_msg("sql", "在检查登录状态时发生了错误 (MySQL 错误: %s)", e.what());
 				CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("操作失败."));
@@ -5549,7 +5549,7 @@ public:
 				//dbg_msg("user","玩家 %s 的状态更新了", m_sNick.ClrStr());
 				return true;
 			}
-			catch (sql::SQLException &e)
+			catch (sql::SQLException const &e)
 			{
 				if(str_length(e.what()) > 0)
 				dbg_msg("sql", "在更新玩家状态时发生了错误 (MySQL 错误: %s)", e.what());
@@ -5598,7 +5598,7 @@ public:
 			pSqlServer->executeSqlQuery(aBuf);
 			return true;
 		}
-		catch (sql::SQLException &e)
+		catch (sql::SQLException const &e)
 		{
 			if(str_length(e.what()) > 0)
 				dbg_msg("sql", "在更新玩家状态时发生了错误 (MySQL 错误: %s)", e.what());

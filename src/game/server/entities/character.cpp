@@ -1254,7 +1254,7 @@ void CCharacter::Tick()
 			GameServer()->SendBroadcast_LStat(m_pPlayer->GetCID(), 101, 50, EXITANTIPVP);
 		}
 		// 防止机器人(Pig, Kwah, Boomer等怪物)进入 non-PvP 区域
-		if(PlayerPos == ZONE_PVP && m_pPlayer->IsBot() && m_pPlayer->GetBotType() != BOT_NPC)
+		if(PlayerPos == ZONE_PVP && m_pPlayer->IsBot() && m_pPlayer->GetBotType() != BOT_GUARD)
 		{
 			Die_Bot(m_pPlayer->GetCID());
 		}
@@ -1372,7 +1372,7 @@ void CCharacter::Tick()
 	
 			// Если хукаешь НПС
 			// 如果玩家勾住 NPC
-			if((GameServer()->m_apPlayers[m_Core.m_HookedPlayer]->GetBotType() == BOT_NPC 
+			if((GameServer()->m_apPlayers[m_Core.m_HookedPlayer]->GetBotType() == BOT_GUARD 
 					&& GameServer()->m_apPlayers[m_Core.m_HookedPlayer]->IsBot()) || GameServer()->m_apPlayers[m_Core.m_HookedPlayer]->m_ActiveChair)
 			{
 				m_Core.m_HookedPlayer = -1;
@@ -1686,7 +1686,7 @@ void CCharacter::Die(int Killer, int Weapon)
 		if(m_pPlayer->m_Search)
 		{
 			if(pKillerPlayer && Killer != m_pPlayer->GetCID() 
-				&& (!pKillerPlayer->IsBot() || pKillerPlayer->GetBotType() == BOT_NPC))
+				&& (!pKillerPlayer->IsBot() || pKillerPlayer->GetBotType() == BOT_GUARD))
 			{
 				m_pPlayer->m_Search = false;
 				GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_HEALER, _("玩家 {str:name}, 击败玩家 {str:name1}, 并将其打入大牢"), "name", Server()->ClientName(Killer), "name1", Server()->ClientName(m_pPlayer->GetCID()), NULL);
@@ -1880,7 +1880,7 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 				
 			// Агрессия
 			// 守卫愤怒值
-			if(m_pPlayer->GetBotType() == BOT_NPC)
+			if(m_pPlayer->GetBotType() == BOT_GUARD)
 			{
 				pFrom->AccData.Rel += 10;
 				GameServer()->SendChatTarget_Localization(From, CHATCATEGORY_DEFAULT, _("交际愤怒值: {int:rel}"), "rel", &pFrom->AccData.Rel, NULL);
@@ -1894,7 +1894,7 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 
 		// Отталкивание 
 		// 霰弹枪的击退作用
-		if(m_pPlayer->GetBotType() != BOT_NPC)
+		if(m_pPlayer->GetBotType() != BOT_GUARD)
 		{
 			if(m_ActiveWeapon == WEAPON_SHOTGUN)
 				m_Core.m_Vel += Force/100;
@@ -1910,7 +1910,7 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 
 	// Тюрьма 
 	// 监狱
-	if(From >= 0 && pFrom->GetBotType() == BOT_NPC && !m_pPlayer->IsBot())
+	if(From >= 0 && pFrom->GetBotType() == BOT_GUARD && !m_pPlayer->IsBot())
 	{
 		if(m_pPlayer->m_Search)
 		{
