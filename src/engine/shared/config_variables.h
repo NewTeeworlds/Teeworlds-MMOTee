@@ -74,6 +74,7 @@ MACRO_CONFIG_INT(SvAutoDemoMax, sv_auto_demo_max, 10, 0, 1000, CFGFLAG_SERVER, "
 MACRO_CONFIG_INT(SvEventHammer, sv_event_hammer, 0, 0, 1, CFGFLAG_SERVER, "Event hammer actived")
 MACRO_CONFIG_INT(SvEventSchool, sv_event_school, 1, 0, 1, CFGFLAG_SERVER, "Event back to school")
 MACRO_CONFIG_INT(SvDonate, sv_donate, 1, 0, 1, CFGFLAG_SERVER, "Enable donate")
+MACRO_CONFIG_INT(ExitOnSQLError, exit_on_sql_error, 0, 0, 1, CFGFLAG_SERVER, "Exit if SQL Servers are unreachable")
 
 MACRO_CONFIG_INT(SvMaterExp, sv_materexp_work, 1000, 0, 10000, CFGFLAG_SERVER, "Mater exp need for up")
 MACRO_CONFIG_INT(SvFarmExp, sv_farmexp_work, 500, 0, 10000, CFGFLAG_SERVER, "Farming exp need for up")

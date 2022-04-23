@@ -131,10 +131,10 @@ void CPickup::StartFarm(int ClientID)
 		int Exp = Server()->GetItemCount(ClientID, FARMLEVEL);
 
 		float getlv = (m_Drop*100.0)/100;
-		const char *Pick = GameServer()->LevelString(100, (int)getlv, 10, ':', ' ');
+		
 		GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("专长 - 种地: {int:lvl}级: {int:exp}/{int:expneed}经验\n工具: {str:name}x{int:count} ({int:brok}/{int:brok2})\n物品 : 采集进度: {str:got} / {int:gotp}%"), 
-			"lvl", &LevelItem, "exp", &Exp, "expneed", &NeedExp, "name", ItemName, "count", &Count, "brok", &Dropable, "brok2", &Broke, "got", Pick, "gotp", &m_Drop, NULL);
-		delete Pick;
+			"lvl", &LevelItem, "exp", &Exp, "expneed", &NeedExp, "name", ItemName, "count", &Count, "brok", &Dropable, "brok2", &Broke, "got", GameServer()->LevelString(100, (int)getlv, 10, ':', ' '), "gotp", &m_Drop, NULL);
+		
 
 		if(m_Drop == 100)
 		{
@@ -231,10 +231,9 @@ void CPickup::StartFarm(int ClientID)
 		int Exp = Server()->GetItemCount(ClientID, MINEREXP);
 		
 		float getlv = (m_Drop*100.0)/100;
-		const char *Pick = GameServer()->LevelString(100, (int)getlv, 10, ':', ' ');
 		GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("专长 - 采掘: {int:lvl}级 : {int:exp}/{int:expneed}经验\n工具: {str:name}x{int:count} ({int:brok}/{int:brok2})\n挖掘进度: {str:got} / {int:gotp}%"), 
-			"lvl", &LevelItem, "exp", &Exp, "expneed", &ExpNeed, "brok", &Dropable, "brok2", &Broke, "name", ItemName, "count", &Count, "got", Pick, "gotp", &m_Drop, NULL);
-		delete Pick;
+			"lvl", &LevelItem, "exp", &Exp, "expneed", &ExpNeed, "brok", &Dropable, "brok2", &Broke, "name", ItemName, "count", &Count, "got", GameServer()->LevelString(100, (int)getlv, 10, ':', ' '), "gotp", &m_Drop, NULL);
+
 
 		if(m_Drop >= 100)
 		{
@@ -295,10 +294,9 @@ void CPickup::StartFarm(int ClientID)
 		GameServer()->CreateSound(m_Pos, 20); 
 
 		float getlv = (m_Drop*100.0)/100;
-		const char *Pick = GameServer()->LevelString(100, (int)getlv, 10, ':', ' ');
 		GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("专长 - 伐木工: (光头强不会升级)\n工具: {str:name}x{int:count} ({int:brok}/{int:brok2})\n砍伐进度: {str:got} / {int:gotp}%"), 
-			"name", ItemName, "count", &Count, "brok", &Dropable, "brok2", &Broke, "got", Pick, "gotp", &m_Drop, NULL);
-		delete Pick;
+			"name", ItemName, "count", &Count, "brok", &Dropable, "brok2", &Broke, "got", GameServer()->LevelString(100, (int)getlv, 10, ':', ' '), "gotp", &m_Drop, NULL);
+
 
 		if(m_Drop >= 100)
 		{
@@ -346,10 +344,9 @@ void CPickup::MaterFarm(int ClientID, int MaterialID)
 	int Bonus = LevelItem*3 ;
 
 	float getlv = (m_Drop*100.0)/100;
-	const char *Pick = GameServer()->LevelString(100, (int)getlv, 10, ':', ' ');
 	GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("专长 - 萃取: {int:lvl}级 : {int:exp}/{int:expneed}经验\n奖励: 25+{int:bonus} : 萃取进度: {str:got} / {int:gotp}%"), 
-		"lvl", &LevelItem, "exp", &Exp, "expneed", &NeedExp, "bonus", &Bonus, "got", Pick, "gotp", &m_Drop, NULL);
-	delete Pick;
+		"lvl", &LevelItem, "exp", &Exp, "expneed", &NeedExp, "bonus", &Bonus, "got", GameServer()->LevelString(100, (int)getlv, 10, ':', ' '), "gotp", &m_Drop, NULL);
+
 	
 	if(m_Drop >= 100)
 	{

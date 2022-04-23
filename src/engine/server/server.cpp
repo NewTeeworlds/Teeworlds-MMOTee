@@ -3456,7 +3456,7 @@ public:
 					m_pServer->m_aClients[m_ClientID].m_UserID, m_Type);
 				pSqlServer->executeSqlQuery(aBuf);
 
-				for(int i = 0; i < 7; i++)
+				for(int i = 0; i < 16; i++)
 					m_pServer->m_aClients[m_ClientID].m_ItemCount[i] = 0;
  
 				while(pSqlServer->GetResults()->next())

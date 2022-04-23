@@ -165,7 +165,7 @@ public:
 		int m_LoginID;
 
 		// int m_ItemCount[7];
-		std::vector<int> m_ItemCount;
+		std::array<int, 16> m_ItemCount;
 
 		// All
 		int Upgrade;
@@ -247,7 +247,7 @@ public:
 		int i_nprice;
 		int i_enchant;
 	};
-	_m_stInv m_stInv[MAX_NOBOT][MAX_ITEM];
+	_m_stInv m_stInv[MAX_CLIENTS][MAX_ITEM];
 	
 	struct _ItemName_en
 	{
