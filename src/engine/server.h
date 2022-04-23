@@ -20,7 +20,7 @@ enum InfWeapons
 	NB_INFWEAPON
 };
 
-enum
+enum BotType
 {
 	BOT_L1MONSTER=0,
 	BOT_L2MONSTER,
@@ -65,7 +65,7 @@ enum Menus
 	JOBSSET,
 	MAILMENU,
 	ARMORMENU,
-	MAXMENU,
+	MAXMENU
 };
 
 // items
@@ -336,8 +336,7 @@ public:
 		AUTHED_MOD,
 		AUTHED_ADMIN,
 	};
-	
-public:
+
 	/*
 		Structure: CClientInfo
 	*/
@@ -348,7 +347,7 @@ public:
 		bool m_CustClt;
 	};
 
-	virtual ~IServer() {};
+	virtual ~IServer() = default;
 	
 	inline class CLocalization* Localization() { return m_pLocalization; }
 
@@ -399,8 +398,6 @@ public:
 	virtual void SendMail(int AuthedID, int MailType, int ItemID, int ItemNum) = 0;
 	virtual void RemMail(int ClientID, int IDMail) = 0;
 	virtual void RemMail_OnlineBonus(int ClientID) = 0;
-	// virtual void RemMails(int IDOwner) = 0;
-	//virtual int GetMailCount(int ClientID) = 0;
 	virtual int GetMailRewardDell(int ClientID, int ID) = 0;
 
 	virtual void SetRewardMail(int ClientID, int ID, int ItemID, int ItemNum) = 0;
