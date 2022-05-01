@@ -73,7 +73,7 @@ void CMonster::RunAction()
 void CMonster::TickBotAI()
 {
     //Sounds
-    if (Server()->Tick() - m_BotTimeLastSound > Server()->TickSpeed()*5.0f && !(rand()%50))
+    if (Server()->Tick() - m_BotTimeLastSound > Server()->TickSpeed()*5.0f && random_prob(1/50))
     {
         PlaySound();
         m_BotTimeLastSound = Server()->Tick();
@@ -170,7 +170,7 @@ void CMonster::TickBotAI()
         else if (Action == 2)
             m_BotDir = 0;
 
-        GameServer()->SendEmoticon(m_pPlayer->GetCID(), 2+rand()%2);	
+        GameServer()->SendEmoticon(m_pPlayer->GetCID(), 2+random_int(0, 2));	
         m_BotTimeLastOption = Server()->Tick();
     
 	}
@@ -191,7 +191,7 @@ void CMonster::TickBotAI()
                 }
             	else
             	{
-            		m_BotDir = (!(rand()%2))?1:-1;
+            		m_BotDir = random_prob(1/3)?1:-1;
             		m_BotJumpTry = false;
             	}
 

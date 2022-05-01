@@ -288,7 +288,7 @@ void CPickup::StartFarm(int ClientID)
 		}
 		else
 		{
-			m_Drop += 10+rand()%25;
+			m_Drop += 10+random_int(0, 25);
 		}
 
 		GameServer()->CreateSound(m_Pos, 20); 

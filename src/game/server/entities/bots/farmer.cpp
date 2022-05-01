@@ -75,7 +75,7 @@ void CNpcFarmer::RunAction()
 void CNpcFarmer::TickBotAI()
 {
     // ЗВУКИ
-    if (Server()->Tick() - m_BotTimeLastSound > Server()->TickSpeed()*5.0f && !(rand()%50))
+    if (Server()->Tick() - m_BotTimeLastSound > Server()->TickSpeed()*5.0f && random_prob(1/50))
     {
         PlaySound();
         m_BotTimeLastSound = Server()->Tick();

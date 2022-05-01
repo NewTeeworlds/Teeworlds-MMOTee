@@ -11,7 +11,7 @@ CPizdamet::CPizdamet(CGameWorld *pGameWorld, vec2 Pos, int OwnerID)
 	
 	CPlayer *pOwner = GameServer()->m_apPlayers[m_OwnerID];
 	if(pOwner && pOwner->GetCharacter())
-		m_Cursour = vec2(pOwner->GetCharacter()->m_Core.m_Input.m_TargetX+rand()%50-rand()%100, pOwner->GetCharacter()->m_Core.m_Input.m_TargetY+rand()%50-rand()%100);
+		m_Cursour = vec2(pOwner->GetCharacter()->m_Core.m_Input.m_TargetX+random_int(-150, 50), pOwner->GetCharacter()->m_Core.m_Input.m_TargetY+random_int(-150, 50));
 
 	GameWorld()->InsertEntity(this);
 }

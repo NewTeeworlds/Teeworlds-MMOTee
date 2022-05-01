@@ -51,7 +51,7 @@ void Run(int Port, NETADDR Dest)
 	int ID = 0;
 	int Delaycounter = 0;
 
-	while(1)
+	while(true)
 	{
 		static int Lastcfg = 0;
 		int n = ((time_get()/time_freq())/m_ConfigInterval) % m_ConfigNumpingconfs;

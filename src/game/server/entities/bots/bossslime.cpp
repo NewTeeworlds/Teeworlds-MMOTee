@@ -73,7 +73,7 @@ void CBossSlime::RunAction()
 void CBossSlime::TickBotAI()
 {
     // ЗВУКИ
-    if (Server()->Tick() - m_BotTimeLastSound > Server()->TickSpeed()*5.0f && !(rand()%50))
+    if (Server()->Tick() - m_BotTimeLastSound > Server()->TickSpeed()*5.0f && random_prob(1/50))
     {
         //PlaySound();
         m_BotTimeLastSound = Server()->Tick();
@@ -199,7 +199,7 @@ void CBossSlime::TickBotAI()
                 }
             	else
             	{
-            		m_BotDir = (!(rand()%2))?1:-1;
+            		m_BotDir = random_prob(1/3)?1:-1;
             		m_BotJumpTry = false;
             	}
 

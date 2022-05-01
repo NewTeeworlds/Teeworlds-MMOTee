@@ -107,7 +107,7 @@ void CBonus::Tick()
 				}
 				else
 				{
-					TargetChr->GiveWeapon(WEAPON_SHOTGUN, rand()%8+1, true);
+					TargetChr->GiveWeapon(WEAPON_SHOTGUN, random_int(0, 8)+1, true);
 					GameServer()->CreateSound(m_Pos, SOUND_PICKUP_SHOTGUN);
 				}
 			} break; 
@@ -120,7 +120,7 @@ void CBonus::Tick()
 				}
 				else
 				{
-					TargetChr->GiveWeapon(WEAPON_GRENADE, rand()%8+1, true);
+					TargetChr->GiveWeapon(WEAPON_GRENADE, random_int(0, 8)+1, true);
 					GameServer()->CreateSound(m_Pos, SOUND_PICKUP_GRENADE);
 				}
 			} break; 
@@ -133,7 +133,7 @@ void CBonus::Tick()
 				}
 				else
 				{				
-					TargetChr->GiveWeapon(WEAPON_RIFLE, rand()%8+1, true);
+					TargetChr->GiveWeapon(WEAPON_RIFLE, random_int(0, 8)+1, true);
 					GameServer()->CreateSound(m_Pos, SOUND_PICKUP_SHOTGUN);
 				}
 			} break; 

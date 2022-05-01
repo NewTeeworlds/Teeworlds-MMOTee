@@ -1926,18 +1926,18 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 		if(m_pPlayer->AccData.Class == PLAYERCLASS_HEALER && m_pPlayer->AccUpgrade.Pasive2)
 		{
 			int RandProc = 100-m_pPlayer->AccUpgrade.Pasive2*2;
-			if(rand()%RandProc == 1)
+			if(random_prob(1/RandProc))
 			{
 				if(!Server()->GetItemSettings(m_pPlayer->GetCID(), SCHAT)) 
-					GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("Pasive skill don't get damage"), NULL);
+					GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("Passive skill don't get damage"), NULL);
 				return true;
 			}
 		}
 		
 		int getcount = pFrom->AccData.Class == PLAYERCLASS_ASSASINS ? 15-pFrom->AccUpgrade.HammerRange : 15;
-		if(rand()%getcount == 1)
+		if(random_prob(1/getcount))
 		{
-			int CritDamage = Dmg+pFrom->AccUpgrade.Damage*2+rand()%50;
+			int CritDamage = Dmg+pFrom->AccUpgrade.Damage*2+random_int(0, 50);
 			if(pFrom->AccData.Class == PLAYERCLASS_ASSASINS)
 				CritDamage += (CritDamage/100)*pFrom->AccUpgrade.Pasive2*3;
 			
@@ -2075,7 +2075,7 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 		{
 			for(int i = 0; i < MAX_NOBOT; ++i)
 			{
-				randforce = rand()%80;
+				randforce = random_int(0, 80);
 				if(GameServer()->m_apPlayers[i] && GameServer()->m_apPlayers[i]->GetCharacter())
 				{
 					if(GameServer()->m_apPlayers[i]->m_InBossed)
@@ -2660,7 +2660,7 @@ void CCharacter::CreateDropRandom(int ItemID, int Count, int Random, int HowID, 
 		new CDropItem(GameWorld(), m_Pos, Force, ItemID, Count, HowID, 0);		
 		return;
 	}
-	if(rand()%Random == 0) 
+	if(random_prob(1/Random)) 
 		new CDropItem(GameWorld(), m_Pos, Force, ItemID, Count, HowID, 0);
 }
 
@@ -2743,7 +2743,7 @@ void CCharacter::ParseEmoticionButton(int ClientID, int Emtion)
 
 		m_pPlayer->m_Mana -= 150;
 		for(int i = 0; i < 40; ++i)
-			new CBuff(GameWorld(), vec2(m_Pos.x-250+rand()%500, m_Pos.y-200+rand()%400), m_pPlayer->GetCID());
+			new CBuff(GameWorld(), vec2(m_Pos.x-250+random_int(0, 500), m_Pos.y-200+random_int(0, 400)), m_pPlayer->GetCID());
 
 		// Find other players
 		for(CCharacter *p = (CCharacter*) GameWorld()->FindFirst(CGameWorld::ENTTYPE_CHARACTER); p; p = (CCharacter *)p->TypeNext())

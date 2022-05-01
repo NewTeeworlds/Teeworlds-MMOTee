@@ -1029,7 +1029,7 @@ void CPlayer::TryRespawn()
 		else if(m_BotType == BOT_GUARD)
 		{
 			m_pCharacter = new(m_ClientID) CNpcSold(&GameServer()->m_World);
-			AccData.Level = 500+rand()%10;
+			AccData.Level = 500+random_int(0, 10);
 			AccUpgrade.Damage = (int)(AccData.Level*5);
 			AccUpgrade.Health = (int)(AccData.Level*50);
 			m_BigBot = true;

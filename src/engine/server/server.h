@@ -288,7 +288,6 @@ public:
 	virtual void SetRewardMail(int ClientID, int ID, int ItemID, int ItemNum);
 	virtual int GetRewardMail(int ClientID, int ID, int Type);
 	virtual int GetMailRewardDell(int ClientID, int ID);
-	//virtual int GetMailCount(int ClientID);
 
 	virtual void ResetBotInfo(int ClientID, int BotType, int BotSubType);
 	virtual void InitClientBot(int ClientID);

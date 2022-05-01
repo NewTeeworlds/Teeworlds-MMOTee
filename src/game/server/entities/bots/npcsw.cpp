@@ -75,7 +75,7 @@ void CNpcWSold::RunAction()
 void CNpcWSold::TickBotAI()
 {
     // ЗВУКИ
-    if (Server()->Tick() - m_BotTimeLastSound > Server()->TickSpeed()*5.0f && !(rand()%50))
+    if (Server()->Tick() - m_BotTimeLastSound > Server()->TickSpeed()*5.0f && random_prob(1/50))
     {
         PlaySound();
         m_BotTimeLastSound = Server()->Tick();
@@ -100,7 +100,7 @@ void CNpcWSold::TickBotAI()
     
 	if (Server()->Tick() % (1 * Server()->TickSpeed() * 4) == 0)
 	{
-		GameServer()->SendEmoticon(m_pPlayer->GetCID(), 2+rand()%2);
+		GameServer()->SendEmoticon(m_pPlayer->GetCID(), 2+random_int(0, 2));
     }
     
 	for (int i=0; i<g_Config.m_SvMaxClients-MAX_BOTS; i++)
@@ -124,7 +124,7 @@ void CNpcWSold::TickBotAI()
 			// ЧАТ
 			if (Server()->Tick()-m_BotTimeLastChat > 20*Server()->TickSpeed())
 			{
-				GameServer()->SendEmoticon(m_pPlayer->GetCID(), 7+rand()%4);
+				GameServer()->SendEmoticon(m_pPlayer->GetCID(), 7+random_int(0, 4));
 
 				if(Server()->GetItemSettings(i, SCHAT) != 2)
 				{
