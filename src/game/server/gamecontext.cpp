@@ -5186,5 +5186,4 @@ const char *CGameContext::GetBossName(int BossType)
 	}
 	else
 		return "(unknow)";
-
 }

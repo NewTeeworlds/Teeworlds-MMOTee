@@ -64,7 +64,6 @@ static int websocket_callback(struct libwebsocket_context *context, struct libwe
 
 	switch(reason)
 	{
-
 	case LWS_CALLBACK_ESTABLISHED:
 	{
 		int port = -1;

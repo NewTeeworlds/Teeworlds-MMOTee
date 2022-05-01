@@ -254,7 +254,6 @@ enum Clan {
 	// Non-Constant
 	MemberNum,
 	IsSpawnInHouse
-	
 };
 
 enum Player
