@@ -16,8 +16,6 @@ inline T clamp(T val, T min, T max)
 	return val;
 }
 
-inline float frandom() { return rand()/(float)(RAND_MAX); }
-
 inline float sign(float f)
 {
 	return f<0.0f?-1.0f:1.0f;

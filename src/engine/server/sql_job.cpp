@@ -46,7 +46,7 @@ void CSqlJob::Exec(CSqlJob* pDataSelf)
 	
 	for(int i=0; i<pSelf->m_QueuedJobs.size(); i++)
 	{
-		// pSelf->m_QueuedJobs[i]->ProcessParentData(pSelf->GenerateChildData());
+		pSelf->m_QueuedJobs[i]->ProcessParentData(pSelf->GenerateChildData());
 		pSelf->m_QueuedJobs[i]->Start();
 	}
 

@@ -34,6 +34,7 @@
 
 #include <cstring>
 #include <thread>
+#include <memory>
 #include <engine/server/mapconverter.h>
 #include <engine/server/sql_job.h>
 #include <engine/server/crypt.h>
@@ -601,8 +602,7 @@ int CServer::SendMsgEx(CMsgPacker *pMsg, int Flags, int ClientID, bool System)
 		if(ClientID == -1)
 		{
 			// broadcast
-			int i;
-			for(i = 0; i < MAX_NOBOT; i++)
+			for(int i = 0; i < MAX_NOBOT; i++)
 				if(m_aClients[i].m_State == CClient::STATE_INGAME)
 				{
 					Packet.m_ClientID = i;
@@ -777,8 +777,6 @@ int CServer::DelClientCallback(int ClientID, int Type, const char *pReason, void
 
 	char aAddrStr[NETADDR_MAXSTRSIZE];
 	net_addr_str(pThis->m_NetServer.ClientAddr(ClientID), aAddrStr, sizeof(aAddrStr), true);
-
-	pThis->m_aClients[ClientID].m_CanUpdate = false;
 
 	pThis->m_aClients[ClientID].m_State = CClient::STATE_EMPTY;
 	pThis->m_aClients[ClientID].m_aName[0] = 0;
@@ -2436,7 +2434,7 @@ long int CServer::GetStat(int ClientID, int Type)
 
 void CServer::UpdateStat(int ClientID, int Type, int Value)
 {
-	if(m_aClients[ClientID].m_CanUpdate)
+	if(m_aClients[ClientID].m_Level > 0)
 	{
 		switch(Type)
 		{
@@ -2482,7 +2480,7 @@ int CServer::GetUpgrade(int ClientID, int Type)
 
 void CServer::UpdateUpgrade(int ClientID, int Type, int Vaule)
 {
-	if(m_aClients[ClientID].m_CanUpdate)
+	if(m_aClients[ClientID].m_Level > 0)
 	{
 		switch(Type)
 		{
@@ -3226,6 +3224,9 @@ void CServer::GetItem(int ItemID, int ClientID, int Count, int Settings, int Enc
 {
 	CSqlJob* pJob = new CSqlJob_Server_GetItem(this, ItemID, ClientID, Count, Settings, Enchant);
 	pJob->Start();
+	//TODO I don't know why we can't use smart pointer like this :(
+	// std::unique_ptr<CSqlJob_Server_GetItem> pJob(new CSqlJob_Server_GetItem(this, ItemID, ClientID, Count, Settings, Enchant));
+	// pJob->Start();
 }
 void CServer::GiveItem(int ClientID, int ItemID, int Count, int Settings, int Enchant)
 {
@@ -3425,7 +3426,7 @@ public:
 };
 void CServer::UpdateItemSettings(int ItemID, int ClientID)
 {
-	if(!m_aClients[ClientID].m_CanUpdate) return;
+	if(m_aClients[ClientID].m_Level <= 0) return;
 	CSqlJob* pJob = new CSqlJob_Server_UpdateItemSettings(this, ItemID, ClientID);
 	pJob->Start();
 }
@@ -4410,10 +4411,7 @@ public:
 
 void CServer::UpdateStats(int ClientID, int Type)
 {
-	if(m_aClients[ClientID].m_Class < 0 || (m_aClients[ClientID].m_UserID < 0 && m_pGameServer) || !m_aClients[ClientID].m_CanUpdate)
-		return; 
-
-	if(m_aClients[ClientID].m_Level <= 0)
+	if(m_aClients[ClientID].m_Class < 0 || (m_aClients[ClientID].m_UserID < 0 && m_pGameServer) || m_aClients[ClientID].m_Level <= 0)
 		return;
 	
 	CSqlJob* pJob = new CSqlJob_Server_UpdateStat(this, ClientID, m_aClients[ClientID].m_UserID, Type);
@@ -5548,7 +5546,7 @@ public:
 			catch (sql::SQLException const &e)
 			{
 				if(str_length(e.what()) > 0)
-				dbg_msg("sql", "在更新玩家状态时发生了错误 (MySQL 错误: %s)", e.what());
+					dbg_msg("sql", "在更新玩家状态时发生了错误 (MySQL 错误: %s)", e.what());
 				return false;
 			}
 		}

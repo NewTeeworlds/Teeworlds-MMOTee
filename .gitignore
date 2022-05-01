@@ -2,6 +2,8 @@
 .vscode/**
 .idea/**
 /cmake**
+# clangd
+/.cache/**
 # 构建文件
 bam
 .bam

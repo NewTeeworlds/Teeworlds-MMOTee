@@ -26,10 +26,10 @@ public:
 	void Start(bool ReadOnly=false);
 	static void Exec(CSqlJob* pDataSelf);
 	void AddQueuedJob(CSqlJob* pJob);
-	/*
+	
 	virtual void* GenerateChildData() { return 0x0; };
 	virtual void ProcessParentData(void* pData) {};
-	*/
+	
 
 	virtual bool Job(CSqlServer* pSqlServer) = 0;
 	virtual void CleanInstanceRef() {}

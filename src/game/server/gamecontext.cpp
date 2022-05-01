@@ -949,15 +949,15 @@ void CGameContext::OnTick()
 	m_pController->Tick();
 
 	int NumActivePlayers = 0;
-	for(int i = 0; i < MAX_CLIENTS; i++)
+	for(auto & m_apPlayer : m_apPlayers)
 	{
-		if(m_apPlayers[i])
+		if(m_apPlayer)
 		{
-			if(m_apPlayers[i]->GetTeam() != TEAM_SPECTATORS)
+			if(m_apPlayer->GetTeam() != TEAM_SPECTATORS)
 				NumActivePlayers++;
 
-			m_apPlayers[i]->Tick();
-			m_apPlayers[i]->PostTick();
+			m_apPlayer->Tick();
+			m_apPlayer->PostTick();
 			
 		}
 	}
@@ -1260,7 +1260,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 		}
 		else if(MsgID == NETMSGTYPE_CL_CALLVOTE)
 		{
-			CNetMsg_Cl_CallVote *pMsg = (CNetMsg_Cl_CallVote *)pRawMsg;
+			CNetMsg_Cl_CallVote const *pMsg = (CNetMsg_Cl_CallVote *)pRawMsg;
 			const char *pReason = pMsg->m_Reason[0] ? pMsg->m_Reason : "No reason given";
 			
 			if(str_comp_nocase(pMsg->m_Type, "kick") == 0)
@@ -1287,12 +1287,6 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 			}
 			else
 			{
-				/*if(m_VoteCloseTime)
-				{
-					SendChatTarget(ClientID, "Wait for current vote to end before calling a new one.");
-					return;
-				}*/
-
 				char aDesc[VOTE_DESC_LENGTH] = {0};
 				char aCmd[VOTE_CMD_LENGTH] = {0};
 
@@ -1823,7 +1817,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 				{
 					int Get = 1;
 					if (pReason[0] && isdigit(pReason[0]))
-						Get = atoi (pReason);
+						Get = std::stoi(pReason);
 						
 					if(m_apPlayers[ClientID]->AccUpgrade.Upgrade < Get)				
 						Get = m_apPlayers[ClientID]->AccUpgrade.Upgrade;
@@ -1858,7 +1852,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_ASSASINS && m_apPlayers[ClientID]->AccUpgrade.AmmoRegen > AMAXAREGEN-1)) &&
 						Server()->GetItemCount(ClientID, SNAPAMMOREGEN) == 0)
 					{
-						//SendMail(ClientID, 4, SNAPAMMOREGEN, 1);	
+						//SendMail(ClientID, 4, SNAPAMMOREGEN, 1);
 						GiveItem(ClientID, SNAPAMMOREGEN, 1);
 						SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT,  ("恭喜你成功升到满级,这是你的奖励!"), NULL);
 					}

@@ -189,8 +189,6 @@ public:
 		char m_aUsername[MAX_NAME_LENGTH];
 		int m_SelectItem;
 		bool m_CustClt;
-
-		bool m_CanUpdate = true;
 	};
 
 	struct _m_stClan
