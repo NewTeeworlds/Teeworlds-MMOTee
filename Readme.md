@@ -1,6 +1,6 @@
 [Kurosio 的原版](https://www.teeworlds.com/forum/viewtopic.php?id=12612)  [github](https://github.com/kurosio/Teeworlds-Mmotee-Old)
 
-# mmotee (老版本) 来自 Kurosio   [![CMake](https://github.com/StarOnTheSky/mmotee_cn/actions/workflows/cmake.yml/badge.svg)](https://github.com/StarOnTheSky/mmotee_cn/actions/workflows/cmake.yml)
+# mmotee (老版本) 来自 Kurosio   [![CMake](https://github.com/StarOnTheSky/mmotee_cn/actions/workflows/cmake.yml/badge.svg)](https://github.com/StarOnTheSky/mmotee_cn/actions/workflows/cmake.yml) [![CodeFactor](https://www.codefactor.io/repository/github/staronthesky/mmotee_cn/badge)](https://www.codefactor.io/repository/github/staronthesky/mmotee_cn)
 # 新功能:
 - [ ] **重要**: 将固定在代码中的中文文本移动到 `data/languages` 中, 让世界各地的玩家可以更方便地参与项目开发, 用自己的语言进行游玩 (注:该操作完成以后. 项目有可能会进行更名)
 - [x] 投票界面、聊天界面的中文翻译
