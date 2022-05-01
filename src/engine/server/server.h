@@ -5,6 +5,8 @@
 
 #include <engine/server.h>
 #include <game/server/classes.h>
+#include <map>
+#include <vector>
 
 /* DDNET MODIFICATION START *******************************************/
 #include "engine/server/sql_connector.h"
@@ -209,7 +211,7 @@ public:
 		bool IsSpawnInHouse;
 		int ChairLevel;
 	};
-	_m_stClan m_stClan[500];
+	std::map<int, _m_stClan> m_stClan;
 
 	virtual int GetClan(Clan Type, int ClanID);
 	virtual bool GetLeader(int ClientID, int ClanID);
@@ -400,13 +402,10 @@ public:
 	virtual void *SnapNewItem(int Type, int ID, int Size);
 	void SnapSetStaticsize(int ItemType, int Size);
 
-	
-public:
 	int m_InfAmmoRegenTime[MAX_CLIENTS][NB_INFWEAPON];
 	int m_InfFireDelay[MAX_CLIENTS][NB_INFWEAPON];
 	int m_InfMaxAmmo[MAX_CLIENTS][NB_INFWEAPON];
 
-public:
 	virtual int GetClientAntiPing(int ClientID);
 	virtual void SetClientAntiPing(int ClientID, int Value);
 	

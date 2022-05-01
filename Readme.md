@@ -54,5 +54,3 @@
     cd build
     cmake ..
     ninja build.ninja
-
-
