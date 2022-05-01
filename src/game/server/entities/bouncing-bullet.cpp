@@ -106,7 +106,7 @@ void CBouncingBullet::Tick()
 			if(m_Explosive)
 				GameServer()->CreateExplosion(CurPos, m_Owner, WEAPON_SHOTGUN, false, 0);
 			else
-				TargetChr->TakeDamage(m_Direction * max(0.001f, 2.0f), (random_prob(0.33f) ? 2 : 1), m_Owner, WEAPON_SHOTGUN, TAKEDAMAGEMODE_NOINFECTION);
+				TargetChr->TakeDamage(m_Direction * max(0.001f, 2.0f), (random_prob(1/3) ? 2 : 1), m_Owner, WEAPON_SHOTGUN, TAKEDAMAGEMODE_NOINFECTION);
 		}
 
 		GameServer()->m_World.DestroyEntity(this);

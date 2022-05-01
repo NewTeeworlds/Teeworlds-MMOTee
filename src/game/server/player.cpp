@@ -97,25 +97,18 @@ void CPlayer::RandomBoxTick()
 		int getitem = 0;
 		if(m_OpenBox % 30 == 0)
 		{
-			int RandGet = rand()%100;
-			if(RandGet >= 0 && RandGet <= 95)
+			if(random_prob(0.95))
 			{
-				int RandItem = rand()%2;
-				switch(RandItem)
-				{
-					default: getitem = FOOTKWAH; break;
-					case 1: getitem = HEADBOOMER; break;
-				}
+				getitem = random_prob(0.5) ? FOOTKWAH : HEADBOOMER;
 			}
 			else
 			{
-				int RandItem = rand()%4;
-				switch(RandItem)
+				switch(random_int(0,3))
 				{
+					case 0: getitem = FORMULAFORRING; break;
+					case 1: getitem = FORMULAWEAPON; break;
+					case 2: getitem = RARESLIMEDIRT; break;
 					default: getitem = FORMULAEARRINGS; break;
-					case 1: getitem = FORMULAFORRING; break;
-					case 2: getitem = FORMULAWEAPON; break;
-					case 3: getitem = RARESLIMEDIRT; break;
 				}
 			}
 			if(m_pCharacter)
@@ -148,9 +141,7 @@ Event Box 概率：
 		int getitem = 0;
 		if(m_OpenBox % 30 == 0)
 		{
-			int RandGet = rand()%160;
-			if(RandGet >= 0 && RandGet <= 158) getitem = MONEYBAG;
-			else getitem = RAREEVENTHAMMER;
+			getitem = random_prob(99/100) ? MONEYBAG : RAREEVENTHAMMER;
 
 			if(m_pCharacter)
 				GameServer()->CreateLolText(m_pCharacter, false, vec2(0,-75), vec2 (0,-1), 10, Server()->GetItemName_en(getitem));
@@ -182,25 +173,22 @@ Farming Box 概率：
 		if(m_OpenBox % 30 == 0)
 		{
 			int Get = 1;
-			int RandGet = rand()%100;
-			if(RandGet >= 0 && RandGet <= 92)
+			if(random_prob(92/100))
 			{
-				int RandItem = rand()%3;
-				switch(RandItem)
+				switch(random_int(0, 2))
 				{
-					default: getitem = FARMLEVEL, Get = 5 * m_OpenBoxAmount; break;
-					case 1: getitem = MONEYBAG, Get = 2 * m_OpenBoxAmount; break;
-					case 2: getitem = EVENTBOX, Get = 5 * m_OpenBoxAmount; break;
+					case 0: getitem = FARMLEVEL; Get = 5 * m_OpenBoxAmount; break;
+					case 1: getitem = MONEYBAG; Get = 2 * m_OpenBoxAmount; break;
+					default: getitem = EVENTBOX; Get = 5 * m_OpenBoxAmount; break;
 				}
 			}
 			else
 			{
-				int RandItem = rand()%4;
-				switch(RandItem)
+				switch(random_int(0, 3))
 				{
-					default: getitem = JUMPIMPULS; break;
-					case 1: getitem = FREEAZER; break;
-					case 3: getitem = RARESLIMEDIRT; break;
+					case 1: getitem = JUMPIMPULS; break;
+					case 2: getitem = RARESLIMEDIRT; break;
+					default: getitem = FREEAZER; break;
 				}
 				Get = m_OpenBoxAmount;
 			}
@@ -366,7 +354,7 @@ void CPlayer::Tick()
 				if(Server()->Tick() % (1 * Server()->TickSpeed() * 1800) == 0)
 				{
 					int Type;
-					switch(rand()%9)
+					switch(random_int(0, 8))
 					{
 						case 1: Type = COOPERPIX; break;
 						case 2: Type = WOOD; break;
@@ -596,7 +584,7 @@ int CPlayer::GetNeedForUp()
 int CPlayer::GetNeedForUpgClan(Clan Type)
 {
 	int Get = Server()->GetClan(Type, Server()->GetClanID(m_ClientID));
-	if(Type != Clan::Level) {
+	if(Type != Clan::ClanLevel) {
 		return 100+Get*500;
 	}
 	else
@@ -666,7 +654,7 @@ void CPlayer::MoneyAdd(int Size, bool ClanBonus, bool MoneyDouble)
 
 	GameServer()->SendBroadcast_LStat(m_ClientID, BROADCAST_PRIORITY_GAMEANNOUNCE, 100, INADDMONEY, GetMoney);
 	AccData.Money += GetMoney;
-	if(rand()%8 == 1) 
+	if(random_prob(1/8)) 
 		GameServer()->UpdateStats(m_ClientID);
 
 	GameServer()->ResetVotes(m_ClientID, AUTH);
@@ -692,18 +680,18 @@ void CPlayer::ExpAdd(unsigned long int Size, bool Bonus)
 		GetExp = GetExp*((Server()->GetItemCount(m_ClientID, X2MONEYEXPVIP)) + 1);
 
 	if(Server()->GetClanID(m_ClientID) && 
-		Server()->GetClan(Clan::Exp, Server()->GetClanID(m_ClientID)) >= Server()->GetClan(Clan::Level, Server()->GetClanID(m_ClientID))*GetNeedForUpgClan(Clan::Level))
+		Server()->GetClan(Clan::ClanExp, Server()->GetClanID(m_ClientID)) >= Server()->GetClan(Clan::ClanLevel, Server()->GetClanID(m_ClientID))*GetNeedForUpgClan(Clan::ClanLevel))
 	{
 		GameServer()->SendChatClan(Server()->GetClanID(m_ClientID), "[公会] 您所在的公会升级了!");
 
-		int warpminus = Server()->GetClan(Clan::Level, Server()->GetClanID(m_ClientID))*GetNeedForUpgClan(Clan::Level);
+		int warpminus = Server()->GetClan(Clan::ClanLevel, Server()->GetClanID(m_ClientID))*GetNeedForUpgClan(Clan::ClanLevel);
 		Server()->InitClanID(Server()->GetClanID(m_ClientID), MINUS, "Exp", warpminus, true);
 		Server()->InitClanID(Server()->GetClanID(m_ClientID), PLUS, "Level", 1, true);
 	}
 
 	GameServer()->SendBroadcast_LStat(m_ClientID, BROADCAST_PRIORITY_GAMEANNOUNCE, 100, Server()->GetClanID(m_ClientID) > 0 ? INADDCEXP : INADDEXP, GetExp, Get);
 	AccData.Exp += GetExp;
-	if(rand()%8 == 1) 
+	if(random_prob(1/8)) 
 		GameServer()->UpdateStats(m_ClientID);
 
 	return;
@@ -966,7 +954,7 @@ void CPlayer::TryRespawn()
 	if (IsBot())
     {
 		// жирный бот рандом
-		if(rand()% 20 == 10) m_BigBot = true;
+		if(random_prob(1/10)) m_BigBot = true;
 		else m_BigBot = false;
 				
         GameServer()->UpdateBotInfo(m_ClientID);
@@ -976,13 +964,13 @@ void CPlayer::TryRespawn()
 			
 			if(g_Config.m_SvCityStart == 1)
 			{
-				AccData.Level = m_BigBot ? 280+rand()%3 : 250;
-				AccUpgrade.Health = 100+AccData.Level*2;		
+				AccData.Level = m_BigBot ? 280 + random_int(0, 3) : 250;
+				AccUpgrade.Health = 100+AccData.Level*20;		
 				AccUpgrade.Damage = AccData.Level+50;		
 			}
 			else
 			{
-				AccData.Level = m_BigBot ? 10+rand()%3 : 5;
+				AccData.Level = m_BigBot ? 10+random_int(0, 3) : 5;
 				AccUpgrade.Health = m_BigBot ? AccData.Level : 0;
 				if(m_BigBot)
 				{
@@ -998,13 +986,13 @@ void CPlayer::TryRespawn()
 			
 			if(g_Config.m_SvCityStart == 1)
 			{
-				AccData.Level = m_BigBot ? 370+rand()%3 : 350+rand()%3;
+				AccData.Level = m_BigBot ? 370+random_int(0, 3) : 350+random_int(0, 3);
 				AccUpgrade.Health = 100+AccData.Level*2;		
 				AccUpgrade.Damage = AccData.Level+50;		
 			}
 			else
 			{
-				AccData.Level = m_BigBot ? 140 : 125+rand()%3;
+				AccData.Level = m_BigBot ? 140 : 125+random_int(0, 3);
 				AccUpgrade.Health = 100+AccData.Level;
 				AccUpgrade.Damage = AccData.Level/2;
 			}
@@ -1015,13 +1003,13 @@ void CPlayer::TryRespawn()
 
 			if(g_Config.m_SvCityStart == 1)
 			{
-				AccData.Level = m_BigBot ? 510+rand()%3 : 490+rand()%15;
+				AccData.Level = m_BigBot ? 510+random_int(0, 3) : 490+random_int(0, 15);
 				AccUpgrade.Health = 100+(int)(AccData.Level*2);		
 				AccUpgrade.Damage = (int)(AccData.Level+50);		
 			}
 			else
 			{
-				AccData.Level = m_BigBot ? 250+rand()%3 : 200+rand()%3;
+				AccData.Level = m_BigBot ? 250+random_int(0, 3) : 200+random_int(0, 3);
 				AccUpgrade.Health = 100+AccData.Level;
 				AccUpgrade.Damage = AccData.Level;
 			}
@@ -1029,7 +1017,7 @@ void CPlayer::TryRespawn()
 		else if(m_BotType == BOT_BOSSSLIME)
 		{
 			m_pCharacter = new(m_ClientID) CBossSlime(&GameServer()->m_World);
-			AccData.Level = 1000+rand()%3;
+			AccData.Level = 1000+random_int(0, 3);
 			
 			m_BigBot = true;
 

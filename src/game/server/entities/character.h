@@ -70,7 +70,7 @@ public:
 	void FireWeapon();
 
 	void Die(int Killer, int Weapon);
-	void Die_Bot(int Killer);
+	void Die_Bot();
 	int SendToJail(int PlayerID, int JailLength);
 	int Unjail(int PlayerID);
 	bool TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode);

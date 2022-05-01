@@ -33,12 +33,7 @@
 #include "server.h"
 
 #include <cstring>
-#include <ctime>
-#include <fstream>
-#include <sstream>
-#include <iostream>
 #include <thread>
-#include <memory>
 #include <engine/server/mapconverter.h>
 #include <engine/server/sql_job.h>
 #include <engine/server/crypt.h>
@@ -2087,15 +2082,15 @@ int CServer::GetClan(Clan Type, int ClanID)
 {
 	switch (Type)
 	{
-	case Clan::Money:
+	case Clan::ClanMoney:
 		return m_stClan[ClanID].Money;
 		break;
 
-	case Clan::Exp:
+	case Clan::ClanExp:
 		return m_stClan[ClanID].Exp;
 		break;
 
-	case Clan::Level:
+	case Clan::ClanLevel:
 		return m_stClan[ClanID].Level;
 		break;
 
@@ -2152,57 +2147,72 @@ const char *CServer::GetClanName(int ClanID)
 
 void CServer::ResetBotInfo(int ClientID, int BotType, int BotSubType)
 {
-	if(BotType == BOT_L1MONSTER)
+	switch (BotType)
 	{
-		if(!BotSubType) str_copy(m_aClients[ClientID].m_aName , "Pig", MAX_NAME_LENGTH);
-		else if(BotSubType == 1) str_copy(m_aClients[ClientID].m_aName , "Zombie", MAX_NAME_LENGTH);
-	}
-	else if(BotType == BOT_L2MONSTER)
+	case BOT_L1MONSTER:
+		if (!BotSubType)
+			str_copy(m_aClients[ClientID].m_aName, "Pig", MAX_NAME_LENGTH);
+		else if (BotSubType == 1)
+			str_copy(m_aClients[ClientID].m_aName, "Zombie", MAX_NAME_LENGTH);
+		break;
+	case BOT_L2MONSTER:
+		if (!BotSubType)
+			str_copy(m_aClients[ClientID].m_aName, "Kwah", MAX_NAME_LENGTH);
+		else if (BotSubType == 1)
+			str_copy(m_aClients[ClientID].m_aName, "Skelet", MAX_NAME_LENGTH);
+		break;
+	case BOT_L3MONSTER:
+		if (!BotSubType)
+			str_copy(m_aClients[ClientID].m_aName, "Boom", MAX_NAME_LENGTH);
+		else if (BotSubType == 1)
+			str_copy(m_aClients[ClientID].m_aName, "Nimfie", MAX_NAME_LENGTH);
+		break;
+	case BOT_GUARD:
+		if (!BotSubType)
+			str_copy(m_aClients[ClientID].m_aName, "Guard", MAX_NAME_LENGTH);
+		else if (BotSubType == 1)
+			str_copy(m_aClients[ClientID].m_aName, "Fighter", MAX_NAME_LENGTH);
+		break;
+	case BOT_BOSSSLIME:
+		if (!BotSubType)
+			str_copy(m_aClients[ClientID].m_aName, "Slime", MAX_NAME_LENGTH);
+		else if (BotSubType == 1)
+			str_copy(m_aClients[ClientID].m_aName, "Vampir", MAX_NAME_LENGTH);
+		break;
+	case BOT_FARMER:
+		str_copy(m_aClients[ClientID].m_aName, "Nesquik", MAX_NAME_LENGTH);
+		break;
+	case BOT_NPCW:
 	{
-		if(!BotSubType) str_copy(m_aClients[ClientID].m_aName , "Kwah", MAX_NAME_LENGTH);
-		else if(BotSubType == 1) str_copy(m_aClients[ClientID].m_aName , "Skelet", MAX_NAME_LENGTH);
-	}
-	else if(BotType == BOT_L3MONSTER)
-	{
-		if(!BotSubType) str_copy(m_aClients[ClientID].m_aName , "Boom", MAX_NAME_LENGTH);
-		else if(BotSubType == 1) str_copy(m_aClients[ClientID].m_aName , "Nimfie", MAX_NAME_LENGTH);
-	}
-	else if(BotType == BOT_GUARD)
-	{
-		if(!BotSubType) str_copy(m_aClients[ClientID].m_aName , "Guard", MAX_NAME_LENGTH);
-		else if(BotSubType == 1) str_copy(m_aClients[ClientID].m_aName , "Fighter", MAX_NAME_LENGTH);
-	}
-	else if(BotType == BOT_BOSSSLIME)
-	{
-		if(!BotSubType) str_copy(m_aClients[ClientID].m_aName , "Slime", MAX_NAME_LENGTH);
-		else if(BotSubType == 1) str_copy(m_aClients[ClientID].m_aName , "Vampir", MAX_NAME_LENGTH);
-	}
-	else if(BotType == BOT_FARMER)
-	{
-		str_copy(m_aClients[ClientID].m_aName , "Nesquik", MAX_NAME_LENGTH);
-	}
-	else if(BotType == BOT_NPCW)
-	{
-		const char* Name = "Nope";
-		if(BotSubType == 0)
+		const char *Name = "Nope";
+		if (BotSubType == 0)
 		{
-			if(!g_Config.m_SvCityStart)	Name = "NPC:John";
-			else if(g_Config.m_SvCityStart == 1) Name = "NPC:Grem";
+			if (!g_Config.m_SvCityStart)
+				Name = "NPC:John";
+			else if (g_Config.m_SvCityStart == 1)
+				Name = "NPC:Grem";
 		}
-		else if(BotSubType == 1)
+		else if (BotSubType == 1)
 		{
-			if(!g_Config.m_SvCityStart) Name = "NPC:Lusi";
-			else if(g_Config.m_SvCityStart == 1) Name = "NPC:Afra";
+			if (!g_Config.m_SvCityStart)
+				Name = "NPC:Lusi";
+			else if (g_Config.m_SvCityStart == 1)
+				Name = "NPC:Afra";
 		}
 		else
 		{
-			if(!g_Config.m_SvCityStart) Name = "NPC:Miki";
-			else if(g_Config.m_SvCityStart == 1) Name = "NPC:Saki";
-		}	
-		str_copy(m_aClients[ClientID].m_aName , Name, MAX_NAME_LENGTH);
+			if (!g_Config.m_SvCityStart)
+				Name = "NPC:Miki";
+			else if (g_Config.m_SvCityStart == 1)
+				Name = "NPC:Saki";
+		}
+		str_copy(m_aClients[ClientID].m_aName, Name, MAX_NAME_LENGTH);
+		break;
 	}
-	else
-		str_copy(m_aClients[ClientID].m_aName , "Keke", MAX_NAME_LENGTH);
+	default:
+		str_copy(m_aClients[ClientID].m_aName, "Keke", MAX_NAME_LENGTH);
+		break;
+	}
 }
 
 void CServer::InitClientBot(int ClientID)
@@ -2403,22 +2413,22 @@ long int CServer::GetStat(int ClientID, int Type)
 {
 	switch(Type)
 	{
-		case DLEVEL: return m_aClients[ClientID].m_Level; break;
-		case DEXP: return m_aClients[ClientID].m_Exp; break;
-		case DMONEY: return m_aClients[ClientID].m_Money; break;
-		case DGOLD: return m_aClients[ClientID].m_Gold; break;
-		case DDONATE: return m_aClients[ClientID].m_Donate; break;
-		case DQUEST: return m_aClients[ClientID].m_Quest; break;
-		case DSECC: return m_aClients[ClientID].m_Security; break;
-		case DREL: return m_aClients[ClientID].m_Rel; break;
-		case DJAIL: return m_aClients[ClientID].m_Jail; break;
-		case DCLASS: return m_aClients[ClientID].m_Class; break;
-		case DKILL: return m_aClients[ClientID].m_Kill; break;
-		case DWINAREA: return m_aClients[ClientID].m_WinArea; break;
-		case DCLANADDED: return m_aClients[ClientID].m_ClanAdded; break;
-		case DISJAILED: return m_aClients[ClientID].m_IsJailed; break;
-		case DJAILLENGTH: return m_aClients[ClientID].m_JailLength; break;
-		case DSUMMERHEALINGTIMES: return m_aClients[ClientID].m_SummerHealingTimes; break;
+		case Player::PlayerLevel: return m_aClients[ClientID].m_Level; break;
+		case Player::PlayerExp: return m_aClients[ClientID].m_Exp; break;
+		case Player::PlayerMoney: return m_aClients[ClientID].m_Money; break;
+		case Player::Gold: return m_aClients[ClientID].m_Gold; break;
+		case Player::Donate: return m_aClients[ClientID].m_Donate; break;
+		case Player::Quest: return m_aClients[ClientID].m_Quest; break;
+		case Player::Security: return m_aClients[ClientID].m_Security; break;
+		case Player::Rel: return m_aClients[ClientID].m_Rel; break;
+		case Player::Jail: return m_aClients[ClientID].m_Jail; break;
+		case Player::Class: return m_aClients[ClientID].m_Class; break;
+		case Player::Kill: return m_aClients[ClientID].m_Kill; break;
+		case Player::AreaWins: return m_aClients[ClientID].m_WinArea; break;
+		case Player::ClanAdded: return m_aClients[ClientID].m_ClanAdded; break;
+		case Player::IsJailed: return m_aClients[ClientID].m_IsJailed; break;
+		case Player::JailLength: return m_aClients[ClientID].m_JailLength; break;
+		case Player::SHTimes: return m_aClients[ClientID].m_SummerHealingTimes; break;
 	}
 	return 0;
 }
@@ -2430,22 +2440,22 @@ void CServer::UpdateStat(int ClientID, int Type, int Value)
 	{
 		switch(Type)
 		{
-			case DLEVEL: m_aClients[ClientID].m_Level = Value; break;
-			case DEXP: m_aClients[ClientID].m_Exp = Value; break;
-			case DMONEY: m_aClients[ClientID].m_Money = Value; break;
-			case DGOLD: m_aClients[ClientID].m_Gold = Value; break;
-			case DDONATE: m_aClients[ClientID].m_Donate = Value; break;	
-			case DQUEST: m_aClients[ClientID].m_Quest = Value; break;
-			case DSECC: m_aClients[ClientID].m_Security = Value; break;
-			case DREL: m_aClients[ClientID].m_Rel = Value; break;
-			case DJAIL: m_aClients[ClientID].m_Jail = Value; break;
-			case DCLASS: m_aClients[ClientID].m_Class = Value; break;
-			case DKILL: m_aClients[ClientID].m_Kill = Value; break;
-			case DWINAREA: m_aClients[ClientID].m_WinArea = Value; break;
-			case DCLANADDED: m_aClients[ClientID].m_ClanAdded = Value; break;
-			case DISJAILED: m_aClients[ClientID].m_IsJailed = Value; break;
-			case DJAILLENGTH: m_aClients[ClientID].m_JailLength = Value; break;
-			case DSUMMERHEALINGTIMES: m_aClients[ClientID].m_SummerHealingTimes = Value; break;
+			case Player::PlayerLevel: m_aClients[ClientID].m_Level = Value; break;
+			case Player::PlayerExp: m_aClients[ClientID].m_Exp = Value; break;
+			case Player::PlayerMoney: m_aClients[ClientID].m_Money = Value; break;
+			case Player::Gold: m_aClients[ClientID].m_Gold = Value; break;
+			case Player::Donate: m_aClients[ClientID].m_Donate = Value; break;	
+			case Player::Quest: m_aClients[ClientID].m_Quest = Value; break;
+			case Player::Security: m_aClients[ClientID].m_Security = Value; break;
+			case Player::Rel: m_aClients[ClientID].m_Rel = Value; break;
+			case Player::Jail: m_aClients[ClientID].m_Jail = Value; break;
+			case Player::Class: m_aClients[ClientID].m_Class = Value; break;
+			case Player::Kill: m_aClients[ClientID].m_Kill = Value; break;
+			case Player::AreaWins: m_aClients[ClientID].m_WinArea = Value; break;
+			case Player::ClanAdded: m_aClients[ClientID].m_ClanAdded = Value; break;
+			case Player::IsJailed: m_aClients[ClientID].m_IsJailed = Value; break;
+			case Player::JailLength: m_aClients[ClientID].m_JailLength = Value; break;
+			case Player::SHTimes: m_aClients[ClientID].m_SummerHealingTimes = Value; break;
 		}
 	}
 }
@@ -2454,18 +2464,18 @@ int CServer::GetUpgrade(int ClientID, int Type)
 {
 	switch(Type)
 	{
-		case SUPGRADE: return m_aClients[ClientID].Upgrade; break;
-		case SKILLPOINT: return m_aClients[ClientID].SkillPoint; break;
-		case ASPEED: return m_aClients[ClientID].Speed; break;
-		case BDAMAGE: return m_aClients[ClientID].Damage; break;
-		case HHEALTH: return m_aClients[ClientID].Health; break;
-		case HPREGEN: return m_aClients[ClientID].HPRegen; break;
-		case AMMOREGEN: return m_aClients[ClientID].AmmoRegen; break;
-		case AMMO: return m_aClients[ClientID].Ammo; break;
-		case SPRAY: return m_aClients[ClientID].Spray; break;
-		case MANA: return m_aClients[ClientID].Mana; break;
-		case UHAMMERRANGE: return m_aClients[ClientID].m_HammerRange; break;
-		case PASIVE2: return m_aClients[ClientID].m_Pasive2; break;
+		case Player::UpgradePoint: return m_aClients[ClientID].Upgrade; break;
+		case Player::SkillPoint: return m_aClients[ClientID].SkillPoint; break;
+		case Player::Speed: return m_aClients[ClientID].Speed; break;
+		case Player::Damage: return m_aClients[ClientID].Damage; break;
+		case Player::Health: return m_aClients[ClientID].Health; break;
+		case Player::HealthRegen: return m_aClients[ClientID].HPRegen; break;
+		case Player::AmmoRegen: return m_aClients[ClientID].AmmoRegen; break;
+		case Player::Ammo: return m_aClients[ClientID].Ammo; break;
+		case Player::Spray: return m_aClients[ClientID].Spray; break;
+		case Player::Mana: return m_aClients[ClientID].Mana; break;
+		case Player::Skill1: return m_aClients[ClientID].m_HammerRange; break;
+		case Player::Skill2: return m_aClients[ClientID].m_Pasive2; break;
 	}
 	return 0;
 }
@@ -2476,18 +2486,18 @@ void CServer::UpdateUpgrade(int ClientID, int Type, int Vaule)
 	{
 		switch(Type)
 		{
-			case SUPGRADE: m_aClients[ClientID].Upgrade = Vaule; break;
-			case SKILLPOINT: m_aClients[ClientID].SkillPoint = Vaule; break;
-			case ASPEED: m_aClients[ClientID].Speed = Vaule; break;
-			case BDAMAGE: m_aClients[ClientID].Damage = Vaule; break;
-			case HHEALTH: m_aClients[ClientID].Health = Vaule; break;
-			case HPREGEN: m_aClients[ClientID].HPRegen = Vaule; break;
-			case AMMOREGEN: m_aClients[ClientID].AmmoRegen = Vaule; break;
-			case AMMO: m_aClients[ClientID].Ammo = Vaule; break;
-			case SPRAY: m_aClients[ClientID].Spray = Vaule; break;
-			case MANA: m_aClients[ClientID].Mana = Vaule; break;
-			case UHAMMERRANGE: m_aClients[ClientID].m_HammerRange = Vaule; break;
-			case PASIVE2: m_aClients[ClientID].m_Pasive2 = Vaule; break;
+			case Player::UpgradePoint: m_aClients[ClientID].Upgrade = Vaule; break;
+			case Player::SkillPoint: m_aClients[ClientID].SkillPoint = Vaule; break;
+			case Player::Speed: m_aClients[ClientID].Speed = Vaule; break;
+			case Player::Damage: m_aClients[ClientID].Damage = Vaule; break;
+			case Player::Health: m_aClients[ClientID].Health = Vaule; break;
+			case Player::HealthRegen: m_aClients[ClientID].HPRegen = Vaule; break;
+			case Player::AmmoRegen: m_aClients[ClientID].AmmoRegen = Vaule; break;
+			case Player::Ammo: m_aClients[ClientID].Ammo = Vaule; break;
+			case Player::Spray: m_aClients[ClientID].Spray = Vaule; break;
+			case Player::Mana: m_aClients[ClientID].Mana = Vaule; break;
+			case Player::Skill1: m_aClients[ClientID].m_HammerRange = Vaule; break;
+			case Player::Skill2: m_aClients[ClientID].m_Pasive2 = Vaule; break;
 		}
 	}
 }
@@ -2512,7 +2522,6 @@ const char *CServer::GetItemName_en(int ItemID)
 	}
 	else
 	{
-		//dbg_msg("sql",ItemName_en[ClientID][ItemID].i_name);
 		return ItemName_en[ItemID].i_name;
 	}
 }
@@ -4153,22 +4162,22 @@ public:
 
 			if(pSqlServer->GetResults()->next())
 			{
-				m_pServer->m_aClients[m_ClientID].m_Level = (int)pSqlServer->GetResults()->getInt("Level");
-				m_pServer->m_aClients[m_ClientID].m_Exp = (int)pSqlServer->GetResults()->getInt("Exp");
-				m_pServer->m_aClients[m_ClientID].m_Money = (int)pSqlServer->GetResults()->getInt("Money");
-				m_pServer->m_aClients[m_ClientID].m_Gold = (int)pSqlServer->GetResults()->getInt("Gold");
-				m_pServer->m_aClients[m_ClientID].m_Donate = (int)pSqlServer->GetResults()->getInt("Donate");
-				m_pServer->m_aClients[m_ClientID].m_Jail = (int)pSqlServer->GetResults()->getInt("Jail");
-				m_pServer->m_aClients[m_ClientID].m_Rel = (int)pSqlServer->GetResults()->getInt("Rel");
-				m_pServer->m_aClients[m_ClientID].m_Class = (int)pSqlServer->GetResults()->getInt("Class");
-				m_pServer->m_aClients[m_ClientID].m_ClanID = (int)pSqlServer->GetResults()->getInt("ClanID");
-				m_pServer->m_aClients[m_ClientID].m_Quest = (int)pSqlServer->GetResults()->getInt("Quest");
-				m_pServer->m_aClients[m_ClientID].m_Kill = (int)pSqlServer->GetResults()->getInt("Killing");
-				m_pServer->m_aClients[m_ClientID].m_WinArea = (int)pSqlServer->GetResults()->getInt("WinArea");
-				m_pServer->m_aClients[m_ClientID].m_IsJailed = (int)pSqlServer->GetResults()->getInt("IsJailed");
-				m_pServer->m_aClients[m_ClientID].m_JailLength = (int)pSqlServer->GetResults()->getInt("JailLength");
-				m_pServer->m_aClients[m_ClientID].m_SummerHealingTimes = (int)pSqlServer->GetResults()->getInt("SummerHealingTimes");
-				m_pServer->m_aClients[m_ClientID].m_ClanAdded = m_pServer->m_aClients[m_ClientID].m_ClanID > 0 ? (int)pSqlServer->GetResults()->getInt("ClanAdded") : 0;
+				m_pServer->m_aClients[m_ClientID].m_Level = pSqlServer->GetResults()->getInt("Level");
+				m_pServer->m_aClients[m_ClientID].m_Exp = pSqlServer->GetResults()->getInt("Exp");
+				m_pServer->m_aClients[m_ClientID].m_Money = pSqlServer->GetResults()->getInt("Money");
+				m_pServer->m_aClients[m_ClientID].m_Gold = pSqlServer->GetResults()->getInt("Gold");
+				m_pServer->m_aClients[m_ClientID].m_Donate = pSqlServer->GetResults()->getInt("Donate");
+				m_pServer->m_aClients[m_ClientID].m_Jail = pSqlServer->GetResults()->getInt("Jail");
+				m_pServer->m_aClients[m_ClientID].m_Rel = pSqlServer->GetResults()->getInt("Rel");
+				m_pServer->m_aClients[m_ClientID].m_Class = pSqlServer->GetResults()->getInt("Class");
+				m_pServer->m_aClients[m_ClientID].m_ClanID = pSqlServer->GetResults()->getInt("ClanID");
+				m_pServer->m_aClients[m_ClientID].m_Quest = pSqlServer->GetResults()->getInt("Quest");
+				m_pServer->m_aClients[m_ClientID].m_Kill = pSqlServer->GetResults()->getInt("Killing");
+				m_pServer->m_aClients[m_ClientID].m_WinArea = pSqlServer->GetResults()->getInt("WinArea");
+				m_pServer->m_aClients[m_ClientID].m_IsJailed = pSqlServer->GetResults()->getInt("IsJailed");
+				m_pServer->m_aClients[m_ClientID].m_JailLength = pSqlServer->GetResults()->getInt("JailLength");
+				m_pServer->m_aClients[m_ClientID].m_SummerHealingTimes = pSqlServer->GetResults()->getInt("SummerHealingTimes");
+				m_pServer->m_aClients[m_ClientID].m_ClanAdded = m_pServer->m_aClients[m_ClientID].m_ClanID > 0 ? pSqlServer->GetResults()->getInt("ClanAdded") : 0;
 	
 				str_copy(m_pServer->m_aClients[m_ClientID].m_aUsername, pSqlServer->GetResults()->getString("Nick").c_str(), sizeof(m_pServer->m_aClients[m_ClientID].m_aUsername));
 				if(m_pServer->m_aClients[m_ClientID].m_Level <= 0 || m_pServer->m_aClients[m_ClientID].m_Class == -1 ) 
@@ -4206,10 +4215,10 @@ public:
 
 			while(pSqlServer->GetResults()->next())
 			{
-				int IDitem = (int)pSqlServer->GetResults()->getInt("il_id");
-				int ItemSettings = (int)pSqlServer->GetResults()->getInt("item_settings");
-				int ItemEnchant = (int)pSqlServer->GetResults()->getInt("item_enchant");
-				m_pServer->m_stInv[m_ClientID][IDitem].i_count = (int)pSqlServer->GetResults()->getInt("item_count");
+				int IDitem = pSqlServer->GetResults()->getInt("il_id");
+				int ItemSettings = pSqlServer->GetResults()->getInt("item_settings");
+				int ItemEnchant = pSqlServer->GetResults()->getInt("item_enchant");
+				m_pServer->m_stInv[m_ClientID][IDitem].i_count = pSqlServer->GetResults()->getInt("item_count");
 				m_pServer->m_stInv[m_ClientID][IDitem].i_settings = ItemSettings;			
 				m_pServer->m_stInv[m_ClientID][IDitem].i_enchant = ItemEnchant;
 			}					
@@ -4233,18 +4242,18 @@ public:
 
 			if(pSqlServer->GetResults()->next())
 			{				
-				m_pServer->m_aClients[m_ClientID].Upgrade = (int)pSqlServer->GetResults()->getInt("Upgrade");
-				m_pServer->m_aClients[m_ClientID].SkillPoint = (int)pSqlServer->GetResults()->getInt("SkillPoint");
-				m_pServer->m_aClients[m_ClientID].Damage = (int)pSqlServer->GetResults()->getInt("Damage");
-				m_pServer->m_aClients[m_ClientID].Speed = (int)pSqlServer->GetResults()->getInt("Speed");
-				m_pServer->m_aClients[m_ClientID].Health = (int)pSqlServer->GetResults()->getInt("Health");
-				m_pServer->m_aClients[m_ClientID].HPRegen = (int)pSqlServer->GetResults()->getInt("HPRegen");
-				m_pServer->m_aClients[m_ClientID].AmmoRegen = (int)pSqlServer->GetResults()->getInt("AmmoRegen");
-				m_pServer->m_aClients[m_ClientID].Ammo = (int)pSqlServer->GetResults()->getInt("Ammo");
-				m_pServer->m_aClients[m_ClientID].Spray = (int)pSqlServer->GetResults()->getInt("Spray");
-				m_pServer->m_aClients[m_ClientID].Mana = (int)pSqlServer->GetResults()->getInt("Mana");
-				m_pServer->m_aClients[m_ClientID].m_HammerRange = (int)pSqlServer->GetResults()->getInt("HammerRange");
-				m_pServer->m_aClients[m_ClientID].m_Pasive2 = (int)pSqlServer->GetResults()->getInt("Pasive2");
+				m_pServer->m_aClients[m_ClientID].Upgrade = pSqlServer->GetResults()->getInt("Upgrade");
+				m_pServer->m_aClients[m_ClientID].SkillPoint = pSqlServer->GetResults()->getInt("SkillPoint");
+				m_pServer->m_aClients[m_ClientID].Damage = pSqlServer->GetResults()->getInt("Damage");
+				m_pServer->m_aClients[m_ClientID].Speed = pSqlServer->GetResults()->getInt("Speed");
+				m_pServer->m_aClients[m_ClientID].Health = pSqlServer->GetResults()->getInt("Health");
+				m_pServer->m_aClients[m_ClientID].HPRegen = pSqlServer->GetResults()->getInt("HPRegen");
+				m_pServer->m_aClients[m_ClientID].AmmoRegen = pSqlServer->GetResults()->getInt("AmmoRegen");
+				m_pServer->m_aClients[m_ClientID].Ammo = pSqlServer->GetResults()->getInt("Ammo");
+				m_pServer->m_aClients[m_ClientID].Spray = pSqlServer->GetResults()->getInt("Spray");
+				m_pServer->m_aClients[m_ClientID].Mana = pSqlServer->GetResults()->getInt("Mana");
+				m_pServer->m_aClients[m_ClientID].m_HammerRange = pSqlServer->GetResults()->getInt("HammerRange");
+				m_pServer->m_aClients[m_ClientID].m_Pasive2 = pSqlServer->GetResults()->getInt("Pasive2");
 
 				//CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("你已登录.欢迎."));
 				//m_pServer->AddGameServerCmd(pCmd);
@@ -5241,9 +5250,6 @@ public:
 	virtual bool Job(CSqlServer* pSqlServer)
 	{
 		char aBuf[512];
-		//char aAddrStr[64];
-		//net_addr_str(m_pServer->m_NetServer.ClientAddr(m_ClientID), aAddrStr, sizeof(aAddrStr), false);
-		//dbg_msg("ID","%d",m_UserID);
 		if(m_UserStatusID >= 0)
 		{
 			try
@@ -5254,7 +5260,6 @@ public:
 					, pSqlServer->GetPrefix()
 					, m_UserStatusID);
 				pSqlServer->executeSqlQuery(aBuf);
-				//dbg_msg("test","1 %s",aBuf);
 				if(pSqlServer->GetResults()->next())
 				{
 					str_format(aBuf, sizeof(aBuf), 
@@ -5262,16 +5267,7 @@ public:
 						, pSqlServer->GetPrefix()
 						, m_UserStatusID);
 					pSqlServer->executeSql(aBuf);
-					//dbg_msg("test","2 %s", aBuf);
 				}
-				/*else
-				{
-					str_format(aBuf, sizeof(aBuf),
-					"INSERT INTO tw_UserStatus (IP, Nick, online) VALUES ('%s', '%s', '0');",
-				 	aAddrStr, m_sNick.ClrStr());
-				 	//dbg_msg("test","3 %s",aBuf);
-					pSqlServer->executeSql(aBuf);
-				}*/
 				dbg_msg("user","玩家 %s 下线了", m_sNick.ClrStr());
 				return true;
 			}

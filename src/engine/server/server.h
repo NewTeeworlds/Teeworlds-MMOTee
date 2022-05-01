@@ -26,13 +26,13 @@ class CSnapIDPool
 		int m_Timeout;
 	};
 
-	CID m_aIDs[MAX_IDS];
+	CID m_aIDs[MAX_IDS]{};
 
-	int m_FirstFree;
-	int m_FirstTimed;
-	int m_LastTimed;
-	int m_Usage;
-	int m_InUsage;
+	int m_FirstFree{};
+	int m_FirstTimed{};
+	int m_LastTimed{};
+	int m_Usage{};
+	int m_InUsage{};
 
 public:
 

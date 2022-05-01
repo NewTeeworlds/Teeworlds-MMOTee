@@ -36,9 +36,16 @@ inline T mix(const T a, const T b, TB amount)
 	return a + (b-a)*amount;
 }
 
+// Get a random number type float between 0 and 1
 float random_float();
+
+// True for f possibility
 bool random_prob(float f);
+
+// Get a random number type int between Min and Max
 int random_int(int Min, int Max);
+
+// Get a random number type double between pProbe and pProbe2
 int random_distribution(double* pProb, double* pProb2);
 
 // float to fixed

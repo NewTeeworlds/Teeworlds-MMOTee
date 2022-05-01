@@ -94,7 +94,7 @@ void CBonus::Tick()
 			} break; 
 			case 1:
 			{
-				int Get = (int)((m_GetLevel/100)/2);
+				int Get = (m_GetLevel/100)/2;
 				TargetChr->GetPlayer()->ExpAdd(Get);
 				GameServer()->CreateSound(m_Pos, SOUND_PICKUP_ARMOR);
 			} break; 

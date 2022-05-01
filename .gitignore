@@ -1,4 +1,8 @@
+# IDE
 .vscode/**
+.idea/**
+/cmake**
+# 构建文件
 bam
 .bam
 /config.lua
@@ -22,6 +26,5 @@ build/**
 /infclass_srv*
 /infclass_editor*
 /autoexec.cfg*
-.idea/**
 
 /mmo_*

@@ -31,7 +31,7 @@ CMoneyBag::~CMoneyBag()
 
 void CMoneyBag::Reset()
 {
-	Picking(300+rand()%2000);
+	Picking(300+random_int(0, 2000));
 }
 
 void CMoneyBag::Tick() 
@@ -60,11 +60,11 @@ void CMoneyBag::Tick()
 				case 0:
 					if(m_SubType != 3)
 					{
-						int Count = 4+rand()%4;
+						int Count = 4+random_int(0, 4);
 						GameServer()->SendChatTarget_Localization(-1, -1, _("{str:name} 捡到钱袋了! 拿到了 {int:got} + {int:bonus} 个钱袋!"), "name", Server()->ClientName(p->GetPlayer()->GetCID()), "got", &Count, "bonus", &m_TimeActive, NULL);
 						GameServer()->CreateSound(m_Pos, SOUND_PICKUP_HEALTH);
 						GameServer()->GiveItem(p->GetPlayer()->GetCID(), MONEYBAG, Count+m_TimeActive);
-						Picking(300+rand()%2000);
+						Picking(300+random_int(0, 2000));
 					}
 					break;
 			};

@@ -138,9 +138,9 @@ void CPickup::StartFarm(int ClientID)
 
 		if(m_Drop == 100)
 		{
-			if(rand()%2 == 0) Server()->SetMaterials(2, Server()->GetMaterials(2)+1);
+			if(random_prob(1/2)) Server()->SetMaterials(2, Server()->GetMaterials(2)+1);
 
-			switch(rand()%5)
+			switch(random_int(0, 4))
 			{
 				case 0:	GameServer()->GiveItem(ClientID, TOMATE, LevelItem); break; 
 				case 1: GameServer()->GiveItem(ClientID, POTATO, LevelItem); break;
@@ -152,7 +152,7 @@ void CPickup::StartFarm(int ClientID)
 				GameServer()->SendChatTarget_Localization(ClientID, -1, _("~ 种地等级提升~ 获得了农耕盲盒"), NULL);
 				GameServer()->GiveItem(ClientID, FARMBOX, 1);
 			}
-			if(rand()%120 == 0)
+			if(random_prob(1/120))
 				GameServer()->GiveItem(ClientID, FARMBOX, 1);
 
 			GameServer()->GiveItem(ClientID, FARMLEVEL, 1);
@@ -245,7 +245,7 @@ void CPickup::StartFarm(int ClientID)
 			{
 				DragonOre = 6;
 			}
-			switch(rand()%ItemDrop)
+			switch(random_int(0, ItemDrop))
 			{
 				case 3: GameServer()->GiveItem(ClientID, IRONORE, 1+LevelItem/15); break; 
 				case 4: GameServer()->GiveItem(ClientID, GOLDORE, 1+LevelItem/15); break; 
@@ -255,7 +255,7 @@ void CPickup::StartFarm(int ClientID)
 			}
 			GameServer()->GiveItem(ClientID, MINEREXP, 1);
 			
-			if(rand()%500==1)
+			if(random_prob(1/5000))
 				GameServer()->GiveItem(ClientID, STANNUM, 1);
 
 			

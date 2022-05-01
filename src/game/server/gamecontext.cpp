@@ -12,7 +12,6 @@
 #include <game/version.h>
 #include <game/collision.h>
 #include <game/gamecore.h>
-#include <iostream>
 #include "gamemodes/mod.h"  
 #include <game/server/entities/loltext.h>
 
@@ -867,7 +866,7 @@ void CGameContext::AreaTick()
 						if(m_apPlayers[i]->GetCharacter())
 							m_apPlayers[i]->GetCharacter()->Die(i, WEAPON_WORLD);					
 					}
-				}				
+				}
 			}
 			else
 			{
@@ -916,18 +915,20 @@ void CGameContext::AreaTick()
 							{
 								GiveItem(i, MONEYBAG, 10);
 								
-								int RandGet = rand()%2;
-								if(RandGet == 1)
+								
+								if(random_prob(1/2))
 									SendMail(i, 1, RELRINGS, 1);						
 							} break;
 							case 2: 
 							{
 								GiveItem(i, MONEYBAG, 10);
 								
-								int RandGet = rand()%20;
-								if(RandGet == 1)
+								
+								if(random_prob(1/20))
 									SendMail(i, 1, FREEAZER, 1);	
 							} break;
+							default:
+								break;
 						}					
 					}
 				}
@@ -936,13 +937,6 @@ void CGameContext::AreaTick()
 			m_AreaEndGame = 0;
 		}
 	}
-	//用聊天命令启动
-	/*
-	// старт арены 
-	// 生存活动开始
-	if(Server()->Tick() % (1 * Server()->TickSpeed() * 600) == 0)
-		StartArea(120, rand()%2+1);
-		*/
 }
 
 void CGameContext::OnTick()
@@ -1053,7 +1047,7 @@ void CGameContext::OnTick()
 	// вывод топ листа раз в 5 минут
 	/*if(Server()->Tick() % (1 * Server()->TickSpeed() * 440) == 0)
 	{
-		switch(rand()%7)
+		switch(random_int(0, 6))
 		{
 			case 0:
 				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("(* ^ ω ^) 玩家排行榜前五名:{str:name}:"), "name", "等级", NULL);	
@@ -1303,7 +1297,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 				char aCmd[VOTE_CMD_LENGTH] = {0};
 
 				
-
+				//TODO
 				if(str_comp_nocase(pMsg->m_Type, "option") == 0)
 				{
 					for (int i = 0; i < m_PlayerVotes[ClientID].size(); ++i)
@@ -2247,7 +2241,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("需要 1000 材料(material)"), NULL); 	
 
 					Server()->RemItem(ClientID, MATERIAL, 1000, -1);
-					if(rand()%(1+(Server()->GetItemEnchant(ClientID, SelectItem))) == 0)
+					if(random_prob(1 / (1 + Server()->GetItemEnchant(ClientID, SelectItem))))
 					{
 						Server()->SetItemEnchant(ClientID, SelectItem, Server()->GetItemEnchant(ClientID, SelectItem)+1);
 
@@ -2658,7 +2652,7 @@ void CGameContext::BuyUpgradeClan(int ClientID, int Money, int Type, const char*
 		return;
 	
 	if((Server()->GetLeader(ClientID, Server()->GetClanID(ClientID)) || Server()->GetAdmin(ClientID, Server()->GetClanID(ClientID))) 
-		&& Server()->GetClan(Clan::Money, Server()->GetClanID(ClientID)) >= Money)
+		&& Server()->GetClan(Clan::ClanMoney, Server()->GetClanID(ClientID)) >= Money)
 	{
 		Server()->InitClanID(Server()->GetClanID(ClientID), MINUS, "Money", Money, true);
 		Server()->InitClanID(Server()->GetClanID(ClientID), PLUS, SubType, 1, true);
@@ -2946,7 +2940,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 				return;
 			}
 			Server()->RemItem(ClientID, ESUMMER, 20, -1);
-			if(rand()%100 < 96 && m_apPlayers[ClientID]->AccData.SummerHealingTimes < 15)
+			if(random_prob(1/25) && m_apPlayers[ClientID]->AccData.SummerHealingTimes < 15)
 			{
 				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 在合成 {str:item}x{int:coun} 的时候失败了"), "name", Server()->ClientName(ClientID), "item", Server()->GetItemName(ClientID, ItemID, false), "coun", &Count ,NULL);				
 				m_apPlayers[ClientID]->AccData.SummerHealingTimes++;
@@ -2957,7 +2951,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 			{
 				GiveItem(ClientID, TITLESUMMER, 1);
 			}
-			Server()->UpdateStat(ClientID, DSUMMERHEALINGTIMES, 0);
+			Server()->UpdateStat(ClientID, Player::SHTimes, 0);
 		} break;
 		case JUMPIMPULS: 
 		{
@@ -3291,6 +3285,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 	if(m_apPlayers[ClientID]->GetCharacter() && Type > AUTH)
 		CreateSound(m_apPlayers[ClientID]->GetCharacter()->m_Pos, 25);
 	
+	//TODO
 	// ############################### Основное не авторизированных
 	if(Type == NOAUTH)
 	{
@@ -3672,7 +3667,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 	{
 		m_apPlayers[ClientID]->m_LastVotelist = AUTH;
 		int ID = Server()->GetClanID(ClientID);
-		int Bank = Server()->GetClan(Clan::Money, Server()->GetClanID(ClientID));
+		int Bank = Server()->GetClan(Clan::ClanMoney, Server()->GetClanID(ClientID));
 		int Count = Server()->GetClan(Clan::MemberNum, Server()->GetClanID(ClientID));
 		int Relevante = Server()->GetClan(Clan::Relevance, Server()->GetClanID(ClientID));
 		int MaxCount = Server()->GetClan(Clan::MaxMemberNum, Server()->GetClanID(ClientID));
@@ -3686,11 +3681,11 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote_Localization(ClientID, "null", "关联: {int:revl}", "revl", &Relevante);
 		AddVote_Localization(ClientID, "null", "公会人数: {int:count}/{int:maxcount}", "count", &Count , "maxcount", &MaxCount);
 
-		int exp = Server()->GetClan(Clan::Exp, Server()->GetClanID(ClientID));
+		int exp = Server()->GetClan(Clan::ClanExp, Server()->GetClanID(ClientID));
 		int bonus = Server()->GetClan(Clan::ExpAdd, Server()->GetClanID(ClientID));
-		int level = Server()->GetClan(Clan::Level, Server()->GetClanID(ClientID));
+		int level = Server()->GetClan(Clan::ClanLevel, Server()->GetClanID(ClientID));
 		int dlvl = Server()->GetClan(Clan::MoneyAdd, Server()->GetClanID(ClientID))*100;
-		int maxneed = Server()->GetClan(Clan::Level, Server()->GetClanID(ClientID))*m_apPlayers[ClientID]->GetNeedForUpgClan(Clan::Level);
+		int maxneed = Server()->GetClan(Clan::ClanLevel, Server()->GetClanID(ClientID))*m_apPlayers[ClientID]->GetNeedForUpgClan(Clan::ClanLevel);
 		AddVote_Localization(ClientID, "null", "等级: {int:lvl} 经验 ({int:exp}/{int:maxneed})", "lvl", &level, "exp", &exp , "maxneed", &maxneed);
 		AddVote_Localization(ClientID, "null", "奖金: +{int:exp} 经验. +{int:money} 黄金", "exp", &bonus, "money", &dlvl);
 		AddVote("", "null", ClientID);
@@ -4467,7 +4462,7 @@ bool CGameContext::PrivateMessage(const char* pStr, int ClientID, bool TeamChat)
 		{
 			if(i != ClientID)
 			{
-				if(CheckID >= 0 && !(i == CheckID))
+				if(CheckID >= 0 && i != CheckID)
 					continue;
 				
 				if(CheckClan >= 0 && !(Server()->GetClanID(i) == CheckClan))
@@ -4675,42 +4670,42 @@ void CGameContext::OnSnap(int ClientID)
 // ---------------------------- СТАТЫ
 void CGameContext::GetStat(int ClientID) //set stat mysql pdata
 {
-	m_apPlayers[ClientID]->AccData.Level =  Server()->GetStat(ClientID, DLEVEL);
-	m_apPlayers[ClientID]->AccData.Exp =  Server()->GetStat(ClientID, DEXP);
-	m_apPlayers[ClientID]->AccData.Money =  Server()->GetStat(ClientID, DMONEY);
-	m_apPlayers[ClientID]->AccData.Gold =  Server()->GetStat(ClientID, DGOLD);
-	m_apPlayers[ClientID]->AccData.Donate =  Server()->GetStat(ClientID, DDONATE);
-	m_apPlayers[ClientID]->AccData.Rel =  Server()->GetStat(ClientID, DREL);
-	m_apPlayers[ClientID]->AccData.Jail =  Server()->GetStat(ClientID, DJAIL);
-	m_apPlayers[ClientID]->AccData.Class =  Server()->GetStat(ClientID, DCLASS);
-	m_apPlayers[ClientID]->AccData.Quest =  Server()->GetStat(ClientID, DQUEST);
-	m_apPlayers[ClientID]->AccData.Kill =  Server()->GetStat(ClientID, DKILL);
-	m_apPlayers[ClientID]->AccData.WinArea =  Server()->GetStat(ClientID, DWINAREA);
-	m_apPlayers[ClientID]->AccData.ClanAdded =  Server()->GetStat(ClientID, DCLANADDED);
-	m_apPlayers[ClientID]->AccData.IsJailed =  Server()->GetStat(ClientID, DISJAILED);
-	m_apPlayers[ClientID]->AccData.JailLength =  Server()->GetStat(ClientID, DJAILLENGTH);
-	m_apPlayers[ClientID]->AccData.SummerHealingTimes =  Server()->GetStat(ClientID, DSUMMERHEALINGTIMES);
+	m_apPlayers[ClientID]->AccData.Level =  Server()->GetStat(ClientID, Player::PlayerLevel);
+	m_apPlayers[ClientID]->AccData.Exp =  Server()->GetStat(ClientID, Player::PlayerExp);
+	m_apPlayers[ClientID]->AccData.Money =  Server()->GetStat(ClientID, Player::PlayerMoney);
+	m_apPlayers[ClientID]->AccData.Gold =  Server()->GetStat(ClientID, Player::Gold);
+	m_apPlayers[ClientID]->AccData.Donate =  Server()->GetStat(ClientID, Player::Donate);
+	m_apPlayers[ClientID]->AccData.Rel =  Server()->GetStat(ClientID, Player::Rel);
+	m_apPlayers[ClientID]->AccData.Jail =  Server()->GetStat(ClientID, Player::Jail);
+	m_apPlayers[ClientID]->AccData.Class =  Server()->GetStat(ClientID, Player::Class);
+	m_apPlayers[ClientID]->AccData.Quest =  Server()->GetStat(ClientID, Player::Quest);
+	m_apPlayers[ClientID]->AccData.Kill =  Server()->GetStat(ClientID, Player::Kill);
+	m_apPlayers[ClientID]->AccData.WinArea =  Server()->GetStat(ClientID, Player::AreaWins);
+	m_apPlayers[ClientID]->AccData.ClanAdded =  Server()->GetStat(ClientID, Player::ClanAdded);
+	m_apPlayers[ClientID]->AccData.IsJailed =  Server()->GetStat(ClientID, Player::IsJailed);
+	m_apPlayers[ClientID]->AccData.JailLength =  Server()->GetStat(ClientID, Player::JailLength);
+	m_apPlayers[ClientID]->AccData.SummerHealingTimes =  Server()->GetStat(ClientID, Player::SHTimes);
 	return;
 }
 void CGameContext::UpdateStat(int ClientID) //update stat mysql pdata
 {
 	if (m_apPlayers[ClientID]->AccData.Level > 0)
 	{
-		Server()->UpdateStat(ClientID, DLEVEL, m_apPlayers[ClientID]->AccData.Level);
-		Server()->UpdateStat(ClientID, DEXP, m_apPlayers[ClientID]->AccData.Exp);
-		Server()->UpdateStat(ClientID, DMONEY, m_apPlayers[ClientID]->AccData.Money);
-		Server()->UpdateStat(ClientID, DGOLD, m_apPlayers[ClientID]->AccData.Gold);
-		Server()->UpdateStat(ClientID, DDONATE, m_apPlayers[ClientID]->AccData.Donate);
-		Server()->UpdateStat(ClientID, DREL, m_apPlayers[ClientID]->AccData.Rel);
-		Server()->UpdateStat(ClientID, DJAIL, m_apPlayers[ClientID]->AccData.Jail);
-		Server()->UpdateStat(ClientID, DCLASS, m_apPlayers[ClientID]->AccData.Class);
-		Server()->UpdateStat(ClientID, DQUEST, m_apPlayers[ClientID]->AccData.Quest);
-		Server()->UpdateStat(ClientID, DKILL, m_apPlayers[ClientID]->AccData.Kill);
-		Server()->UpdateStat(ClientID, DWINAREA, m_apPlayers[ClientID]->AccData.WinArea);
-		Server()->UpdateStat(ClientID, DCLANADDED, m_apPlayers[ClientID]->AccData.ClanAdded);
-		Server()->UpdateStat(ClientID, DISJAILED, m_apPlayers[ClientID]->AccData.IsJailed);
-		Server()->UpdateStat(ClientID, DJAILLENGTH, m_apPlayers[ClientID]->AccData.JailLength);
-		Server()->UpdateStat(ClientID, DSUMMERHEALINGTIMES, m_apPlayers[ClientID]->AccData.SummerHealingTimes);
+		Server()->UpdateStat(ClientID, Player::PlayerLevel, m_apPlayers[ClientID]->AccData.Level);
+		Server()->UpdateStat(ClientID, Player::PlayerExp, m_apPlayers[ClientID]->AccData.Exp);
+		Server()->UpdateStat(ClientID, Player::PlayerMoney, m_apPlayers[ClientID]->AccData.Money);
+		Server()->UpdateStat(ClientID, Player::Gold, m_apPlayers[ClientID]->AccData.Gold);
+		Server()->UpdateStat(ClientID, Player::Donate, m_apPlayers[ClientID]->AccData.Donate);
+		Server()->UpdateStat(ClientID, Player::Rel, m_apPlayers[ClientID]->AccData.Rel);
+		Server()->UpdateStat(ClientID, Player::Jail, m_apPlayers[ClientID]->AccData.Jail);
+		Server()->UpdateStat(ClientID, Player::Class, m_apPlayers[ClientID]->AccData.Class);
+		Server()->UpdateStat(ClientID, Player::Quest, m_apPlayers[ClientID]->AccData.Quest);
+		Server()->UpdateStat(ClientID, Player::Kill, m_apPlayers[ClientID]->AccData.Kill);
+		Server()->UpdateStat(ClientID, Player::AreaWins, m_apPlayers[ClientID]->AccData.WinArea);
+		Server()->UpdateStat(ClientID, Player::ClanAdded, m_apPlayers[ClientID]->AccData.ClanAdded);
+		Server()->UpdateStat(ClientID, Player::IsJailed, m_apPlayers[ClientID]->AccData.IsJailed);
+		Server()->UpdateStat(ClientID, Player::JailLength, m_apPlayers[ClientID]->AccData.JailLength);
+		Server()->UpdateStat(ClientID, Player::SHTimes, m_apPlayers[ClientID]->AccData.SummerHealingTimes);
 		return;
 	}
 }
@@ -4722,34 +4717,34 @@ void CGameContext::UpdateStats(int ClientID)
 
 void CGameContext::GetUpgrade(int ClientID) //set stat mysql pdata
 {
-	m_apPlayers[ClientID]->AccUpgrade.Upgrade = Server()->GetUpgrade(ClientID, SUPGRADE);
-	m_apPlayers[ClientID]->AccUpgrade.SkillPoint = Server()->GetUpgrade(ClientID, SKILLPOINT);
-	m_apPlayers[ClientID]->AccUpgrade.Speed = Server()->GetUpgrade(ClientID, ASPEED);
-	m_apPlayers[ClientID]->AccUpgrade.Damage = Server()->GetUpgrade(ClientID, BDAMAGE);
-	m_apPlayers[ClientID]->AccUpgrade.Health = Server()->GetUpgrade(ClientID, HHEALTH);
-	m_apPlayers[ClientID]->AccUpgrade.HPRegen = Server()->GetUpgrade(ClientID, HPREGEN);
-	m_apPlayers[ClientID]->AccUpgrade.AmmoRegen = Server()->GetUpgrade(ClientID, AMMOREGEN);
-	m_apPlayers[ClientID]->AccUpgrade.Ammo = Server()->GetUpgrade(ClientID, AMMO);
-	m_apPlayers[ClientID]->AccUpgrade.Spray = Server()->GetUpgrade(ClientID, SPRAY);
-	m_apPlayers[ClientID]->AccUpgrade.Mana = Server()->GetUpgrade(ClientID, MANA);
-	m_apPlayers[ClientID]->AccUpgrade.HammerRange = Server()->GetUpgrade(ClientID, UHAMMERRANGE);
-	m_apPlayers[ClientID]->AccUpgrade.Pasive2 = Server()->GetUpgrade(ClientID, PASIVE2);
+	m_apPlayers[ClientID]->AccUpgrade.Upgrade = Server()->GetUpgrade(ClientID, Player::UpgradePoint);
+	m_apPlayers[ClientID]->AccUpgrade.SkillPoint = Server()->GetUpgrade(ClientID, Player::SkillPoint);
+	m_apPlayers[ClientID]->AccUpgrade.Speed = Server()->GetUpgrade(ClientID, Player::Speed);
+	m_apPlayers[ClientID]->AccUpgrade.Damage = Server()->GetUpgrade(ClientID, Player::Damage);
+	m_apPlayers[ClientID]->AccUpgrade.Health = Server()->GetUpgrade(ClientID, Player::Health);
+	m_apPlayers[ClientID]->AccUpgrade.HPRegen = Server()->GetUpgrade(ClientID, Player::HealthRegen);
+	m_apPlayers[ClientID]->AccUpgrade.AmmoRegen = Server()->GetUpgrade(ClientID, Player::AmmoRegen);
+	m_apPlayers[ClientID]->AccUpgrade.Ammo = Server()->GetUpgrade(ClientID, Player::Ammo);
+	m_apPlayers[ClientID]->AccUpgrade.Spray = Server()->GetUpgrade(ClientID, Player::Spray);
+	m_apPlayers[ClientID]->AccUpgrade.Mana = Server()->GetUpgrade(ClientID, Player::Mana);
+	m_apPlayers[ClientID]->AccUpgrade.HammerRange = Server()->GetUpgrade(ClientID, Player::Skill1);
+	m_apPlayers[ClientID]->AccUpgrade.Pasive2 = Server()->GetUpgrade(ClientID, Player::Skill2);
 	return;
 }
 void CGameContext::UpdateUpgrade(int ClientID) //update stat mysql pdata
 {
-	Server()->UpdateUpgrade(ClientID, SUPGRADE, m_apPlayers[ClientID]->AccUpgrade.Upgrade);
-	Server()->UpdateUpgrade(ClientID, SKILLPOINT, m_apPlayers[ClientID]->AccUpgrade.SkillPoint);
-	Server()->UpdateUpgrade(ClientID, ASPEED, m_apPlayers[ClientID]->AccUpgrade.Speed);
-	Server()->UpdateUpgrade(ClientID, BDAMAGE, m_apPlayers[ClientID]->AccUpgrade.Damage);
-	Server()->UpdateUpgrade(ClientID, HHEALTH, m_apPlayers[ClientID]->AccUpgrade.Health);
-	Server()->UpdateUpgrade(ClientID, HPREGEN, m_apPlayers[ClientID]->AccUpgrade.HPRegen);
-	Server()->UpdateUpgrade(ClientID, AMMOREGEN, m_apPlayers[ClientID]->AccUpgrade.AmmoRegen);
-	Server()->UpdateUpgrade(ClientID, AMMO, m_apPlayers[ClientID]->AccUpgrade.Ammo);
-	Server()->UpdateUpgrade(ClientID, SPRAY, m_apPlayers[ClientID]->AccUpgrade.Spray);
-	Server()->UpdateUpgrade(ClientID, MANA, m_apPlayers[ClientID]->AccUpgrade.Mana);
-	Server()->UpdateUpgrade(ClientID, UHAMMERRANGE, m_apPlayers[ClientID]->AccUpgrade.HammerRange);
-	Server()->UpdateUpgrade(ClientID, PASIVE2, m_apPlayers[ClientID]->AccUpgrade.Pasive2);
+	Server()->UpdateUpgrade(ClientID, Player::UpgradePoint, m_apPlayers[ClientID]->AccUpgrade.Upgrade);
+	Server()->UpdateUpgrade(ClientID, Player::SkillPoint, m_apPlayers[ClientID]->AccUpgrade.SkillPoint);
+	Server()->UpdateUpgrade(ClientID, Player::Speed, m_apPlayers[ClientID]->AccUpgrade.Speed);
+	Server()->UpdateUpgrade(ClientID, Player::Damage, m_apPlayers[ClientID]->AccUpgrade.Damage);
+	Server()->UpdateUpgrade(ClientID, Player::Health, m_apPlayers[ClientID]->AccUpgrade.Health);
+	Server()->UpdateUpgrade(ClientID, Player::HealthRegen, m_apPlayers[ClientID]->AccUpgrade.HPRegen);
+	Server()->UpdateUpgrade(ClientID, Player::AmmoRegen, m_apPlayers[ClientID]->AccUpgrade.AmmoRegen);
+	Server()->UpdateUpgrade(ClientID, Player::Ammo, m_apPlayers[ClientID]->AccUpgrade.Ammo);
+	Server()->UpdateUpgrade(ClientID, Player::Spray, m_apPlayers[ClientID]->AccUpgrade.Spray);
+	Server()->UpdateUpgrade(ClientID, Player::Mana, m_apPlayers[ClientID]->AccUpgrade.Mana);
+	Server()->UpdateUpgrade(ClientID, Player::Skill1, m_apPlayers[ClientID]->AccUpgrade.HammerRange);
+	Server()->UpdateUpgrade(ClientID, Player::Skill2, m_apPlayers[ClientID]->AccUpgrade.Pasive2);
 	return;
 }
 void CGameContext::UpdateUpgrades(int ClientID)
@@ -4918,7 +4913,7 @@ void CGameContext::UseItem(int ClientID, int ItemID, int Count, int Type)
 		{
 			for(int i = 0;i < Count;i++)
 			{
-				PackOne += rand()%20000+5;
+				PackOne += random_int(0, 20000) + 5;
 				if(i == Count-1)
 				{
 					int GetGold = PackOne/10000;
@@ -4970,7 +4965,7 @@ void CGameContext::UseItem(int ClientID, int ItemID, int Count, int Type)
 			if(!Server()->GetClanID(ClientID)) 
 			for(int i = 0;i < Count;i++)
 			{
-				PackOne += rand()%20000+5;
+				PackOne += random_int(0, 20000)+5;
 				if(i == Count-1)
 				{
 					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你使用了物品:{str:items}x{int:num}"), "items", Server()->GetItemName(ClientID, ItemID), "num", &Count, NULL);

@@ -1,4 +1,6 @@
 #include "math.h"
+#include <algorithm>
+#include <random>
 
 static std::random_device RandomDevice;
 static std::mt19937 RandomEngine(RandomDevice());
@@ -9,10 +11,12 @@ float random_float()
 	return DistributionFloat(RandomEngine);
 }
 
+
 bool random_prob(float f)
 {
 	return (random_float() < f);
 }
+
 
 int random_int(int Min, int Max)
 {

@@ -242,9 +242,9 @@ enum Clan {
 	Name,
 	Creator,
 	Admin,
-	Level,
-	Exp,
-	Money,
+	ClanLevel,
+	ClanExp,
+	ClanMoney,
 	MaxMemberNum,
 	Relevance,
 	ChairLevel,
@@ -257,40 +257,40 @@ enum Clan {
 	
 };
 
-enum PlayerVars
+enum Player
 {
-	DLEVEL,
-	DEXP,
-	DMONEY,
-	DDONATE,
-	DGOLD,
-	DREL,
-	DJAIL,
-	DUSERNAME,
-	DCLASS,
-	DQUEST,
-	DSECC,
-	DKILL,
-	DWINAREA,
-	DCLANADDED,
+	// All Constant
+	PlayerLevel,
+	PlayerExp,
+	PlayerMoney,
+	Donate,
+	Gold,
+	Rel,
+	Jail,
+	Class,
+	Quest,
+	Security,
+	Kill,
+	AreaWins,
+	ClanAdded,
 
-	DISJAILED,
-	DJAILLENGTH,
-	DSUMMERHEALINGTIMES,
+	IsJailed,
+	JailLength,
+	SHTimes,  // summer healing times
 	
-	UHAMMERRANGE,
-	PASIVE2,
-	SUPGRADE,
-	SKILLPOINT,
+	Skill1,
+	Skill2,
+	UpgradePoint,
+	SkillPoint,
 	
-	HHEALTH,
-	BDAMAGE,
-	ASPEED,
-	HPREGEN,
-	AMMOREGEN,
-	AMMO,
-	SPRAY,
-	MANA,
+	Health,
+	Damage,
+	Speed,
+	HealthRegen,
+	AmmoRegen,
+	Ammo,
+	Spray,
+	Mana,
 };
 
 enum Sign

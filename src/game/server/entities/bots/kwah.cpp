@@ -94,7 +94,7 @@ void CKwah::TickBotAI()
     bool PlayerFound = false;
     bool PlayerNFound = false;
     float LessDist = 500.0f;
-	int Action = rand()%3;
+	int Action = random_int(0, 3);
 
     m_BotClientIDFix = -1;
     

@@ -95,12 +95,12 @@ void CNpcSold::TickBotAI()
     bool PlayerFound = false;
     bool PlayerNFound = false;
     float LessDist = 500.0f;
-	int Action = rand()%3;
+	int Action = random_int(0, 3);
 
     m_BotClientIDFix = -1;
     
    
-	int Dists = distance(LockBotPos, m_Pos);
+	auto Dists = distance(LockBotPos, m_Pos);
 	if (Dists < LessDist)
 		LessDist = Dists;
 
@@ -214,7 +214,7 @@ void CNpcSold::TickBotAI()
 							"[守卫] {str:name}. 你觉得我们会得救吗?",
 							"[守卫] {str:name}. 总是躲在首都不出来. 你这小坏蛋...",
 						};
-						GameServer()->SendChatTarget_Localization(i, CHATCATEGORY_ACCUSATION, _(pPhrases[rand()%3]), "name", Server()->ClientName(i), NULL);
+						GameServer()->SendChatTarget_Localization(i, CHATCATEGORY_ACCUSATION, _(pPhrases[random_int(0, 2)]), "name", Server()->ClientName(i), NULL);
 					}
 					m_BotTimeLastChat = Server()->Tick();
 				}

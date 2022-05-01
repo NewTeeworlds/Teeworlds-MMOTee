@@ -112,7 +112,7 @@ void Run(int Port, NETADDR Dest)
 				p->m_aData[6+(rand()%(Bytes-6))] = rand()&255; // modify a byte
 				if((rand()%10) == 0)
 				{
-					p->m_DataSize -= rand()%32;
+					p->m_DataSize -= random_int(0, 32);
 					if(p->m_DataSize < 6)
 						p->m_DataSize = 6;
 				}

@@ -153,7 +153,7 @@ void CBoomer::TickBotAI()
 	{
         if (Server()->Tick()-m_BotTimeLastOption > Server()->TickSpeed()*10.0f)
         {
-            int Action = rand()%3;
+            int Action = random_int(0, 3);
             if (Action == 0)
                 m_BotDir = -1;
             else if (Action == 1)

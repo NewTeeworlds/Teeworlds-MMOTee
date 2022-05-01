@@ -8,7 +8,6 @@
 #include <engine/server/mapconverter.h>
 #include <game/server/gamecontext.h>
 #include <game/mapitems.h>
-#include <iostream>
 
 #include "character.h"
 #include "projectile.h"
@@ -470,7 +469,7 @@ void CCharacter::FireWeapon()
 	{
 		case WEAPON_HAMMER:
 		{
-			for(CPickup *pPick = (CPickup*) GameWorld()->FindFirst(CGameWorld::ENTTYPE_PICKUP); pPick; pPick = (CPickup*) pPick->TypeNext())
+			for(auto *pPick = (CPickup*) GameWorld()->FindFirst(CGameWorld::ENTTYPE_PICKUP); pPick; pPick = (CPickup*) pPick->TypeNext())
 			{
 				if(distance(pPick->m_Pos, m_Pos) < 30.0f && pPick->m_SpawnTick == -1)
 				{
@@ -540,7 +539,7 @@ void CCharacter::FireWeapon()
 
 		case WEAPON_GUN:
 		{
-			bool Explode = Server()->GetItemSettings(m_pPlayer->GetCID(), EXGUN) ? true : false;
+			bool Explode = Server()->GetItemSettings(m_pPlayer->GetCID(), EXGUN) != 0;
 			
 			if(Server()->GetItemSettings(m_pPlayer->GetCID(), GUNBOUNCE))
 				new CBouncingBullet(GameWorld(), m_pPlayer->GetCID(), ProjStartPos, Direction, Explode, WEAPON_GUN, 80);
@@ -557,7 +556,7 @@ void CCharacter::FireWeapon()
 
 		case WEAPON_SHOTGUN: 
 		{
-			bool Explode = Server()->GetItemSettings(m_pPlayer->GetCID(), EXSHOTGUN) ? true : false;
+			bool Explode = Server()->GetItemSettings(m_pPlayer->GetCID(), EXSHOTGUN) != 0;
 			
 			int ShotSpread = 5 + m_pPlayer->AccUpgrade.Spray;
 			if(ShotSpread > 36)
@@ -603,7 +602,7 @@ void CCharacter::FireWeapon()
 		{
 			if(Server()->GetItemSettings(m_pPlayer->GetCID(), PIZDAMET))
 			{
-				if(rand()%2 == 0)
+				if(random_prob(1/2))
 					m_pPlayer->m_Mana--;
 
 				m_aWeapons[m_ActiveWeapon].m_Ammo++;
@@ -650,7 +649,7 @@ void CCharacter::FireWeapon()
 
 		case WEAPON_RIFLE:
 		{
-			bool Explode = Server()->GetItemSettings(m_pPlayer->GetCID(), EXLASER) ? true : false;
+			bool Explode = Server()->GetItemSettings(m_pPlayer->GetCID(), EXLASER) != 0;
 						
 			int ShotSpread = m_pPlayer->m_InArea ? 2 : 2 + m_pPlayer->AccUpgrade.Spray/3;
 			if(ShotSpread > 10)
@@ -1195,36 +1194,42 @@ void CCharacter::Tick()
 				InShop = true;
 				GameServer()->SendBroadcast_LStat(m_pPlayer->GetCID(), 101, 100, INSHOP);
 				GameServer()->ResetVotes(m_pPlayer->GetCID(), AUTH);
+				break;
 			}
 			else if (PlayerPos != ZONE_SHOP && InShop)
 			{
 				InShop = false;
 				GameServer()->SendBroadcast_LStat(m_pPlayer->GetCID(), 101, 50, EXITSHOP);
 				GameServer()->ResetVotes(m_pPlayer->GetCID(), AUTH);
+				break;
 			}
 			if (PlayerPos == ZONE_CRAFT && !m_InCrafted)
 			{
 				m_InCrafted = true;
 				GameServer()->SendBroadcast_LStat(m_pPlayer->GetCID(), 101, 50, INCRAFT);
 				GameServer()->ResetVotes(m_pPlayer->GetCID(), AUTH);
+				break;
 			}
 			else if (PlayerPos != ZONE_CRAFT && m_InCrafted)
 			{
 				m_InCrafted = false;
 				GameServer()->SendBroadcast_LStat(m_pPlayer->GetCID(), 101, 50, EXITSHOP);
 				GameServer()->ResetVotes(m_pPlayer->GetCID(), AUTH);
+				break;
 			}
 			if (PlayerPos == ZONE_QUESTROOM && !m_InQuest)
 			{
 				m_InQuest = true;
 				GameServer()->SendBroadcast_LStat(m_pPlayer->GetCID(), 101, 50, INQUEST);
 				GameServer()->ResetVotes(m_pPlayer->GetCID(), AUTH);
+				break;
 			}
 			else if (PlayerPos != ZONE_QUESTROOM && m_InQuest)
 			{
 				m_InQuest = false;
 				GameServer()->SendBroadcast_LStat(m_pPlayer->GetCID(), 101, 50, EXITSHOP);
 				GameServer()->ResetVotes(m_pPlayer->GetCID(), AUTH);
+				break;
 			}
 
 			if (PlayerPos == ZONE_WATER && !m_InWater)
@@ -1232,16 +1237,17 @@ void CCharacter::Tick()
 				GameServer()->CreateSound(m_Pos, 11);
 				GameServer()->CreateDeath(m_Pos, m_pPlayer->GetCID());
 				m_InWater = true;
+				break;
 			}
 			else if (PlayerPos != ZONE_WATER && m_InWater)
 			{
 				GameServer()->CreateSound(m_Pos, 11);
 				GameServer()->CreateDeath(m_Pos, m_pPlayer->GetCID());
 				m_InWater = false;
+				break;
 			}
 			break;
 		}
-
 
 		// ------------------- PvP 区域伤害开关
 		if(PlayerPos == ZONE_ANTIPVP && !m_AntiPVP) {
@@ -1256,10 +1262,8 @@ void CCharacter::Tick()
 		// 防止机器人(Pig, Kwah, Boomer等怪物)进入 non-PvP 区域
 		if(PlayerPos == ZONE_PVP && m_pPlayer->IsBot() && m_pPlayer->GetBotType() != BOT_GUARD)
 		{
-			Die_Bot(m_pPlayer->GetCID());
+			Die_Bot();
 		}
-		
-		
 	}
 	
 	if(m_PositionLockTick > 0)
@@ -1269,9 +1273,10 @@ void CCharacter::Tick()
 			m_PositionLocked = false;
 	}
 	
-	--m_FrozenTime;
+
 	if(m_IsFrozen)
 	{
+		--m_FrozenTime;
 		if(m_FrozenTime <= 0)
 			Unfreeze();
 		else
@@ -1325,13 +1330,7 @@ void CCharacter::Tick()
 		m_PositionLockAvailable = true;
 	}
 	
-	if(m_IsFrozen)
-	{
-		m_Input.m_Jump = 0;
-		m_Input.m_Direction = 0;
-		m_Input.m_Hook = 0;
-	}
-	else if(GetClass() == PLAYERCLASS_ASSASINS && m_PositionLocked)
+	if(m_IsFrozen || (GetClass() == PLAYERCLASS_ASSASINS && m_PositionLocked))
 	{
 		m_Input.m_Jump = 0;
 		m_Input.m_Direction = 0;
@@ -1418,12 +1417,11 @@ void CCharacter::Tick()
 							GameServer()->SendBroadcast_Localization(m_pPlayer->GetCID(), BROADCAST_PRIORITY_INTERFACE, BROADCAST_DURATION_REALTIME, _("医师"), NULL);
 							Broadcast = true;
 							break;
+						default:
+							m_pPlayer->m_MapMenuItem = -1;
+							GameServer()->SendBroadcast_Localization(m_pPlayer->GetCID(), BROADCAST_PRIORITY_INTERFACE, BROADCAST_DURATION_REALTIME, _("你需要选择一个职业."), NULL);
+							break;
 					}
-				}
-				if(!Broadcast)
-				{
-					m_pPlayer->m_MapMenuItem = -1;
-					GameServer()->SendBroadcast_Localization(m_pPlayer->GetCID(), BROADCAST_PRIORITY_INTERFACE, BROADCAST_DURATION_REALTIME, _("你需要选择一个职业."), NULL);
 				}
 				
 				if(m_Input.m_Fire&1 && m_pPlayer->m_MapMenuItem >= 0)
@@ -1442,7 +1440,6 @@ void CCharacter::Tick()
 							break;
 					}
 					
-					//if(NewClass >= 0 && GameServer()->m_pController->IsChoosableClass(NewClass))
 					if(NewClass >= 0)
 					{
 						m_AntiFireTick = Server()->Tick();
@@ -1644,15 +1641,12 @@ void CCharacter::Die(int Killer, int Weapon)
 	}
 
 	// 竞技场
-	if(GameServer()->m_AreaEndGame && m_pPlayer->m_InArea)
-	{		
+	if (GameServer()->m_AreaEndGame && m_pPlayer->m_InArea)
+	{
 		// если игрок погиб он уже окончательно вышел с арены
 		// 如果玩家死亡，他就会离开竞技场
-		if(m_pPlayer->m_InArea)
-		{	
-			m_pPlayer->m_InArea = false;
-			GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("你被击败了."), NULL);
-		}	
+		m_pPlayer->m_InArea = false;
+		GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("你被击败了."), NULL);
 	}
 
 	// this is for auto respawn after 3 secs
@@ -1707,23 +1701,12 @@ void CCharacter::Die(int Killer, int Weapon)
 }
 
 
-void CCharacter::Die_Bot(int Killer) //机器人(如 Pig)因为进入 non-PvP 区域而判定死亡，不在 HUD 中显示
+void CCharacter::Die_Bot() //机器人(如 Pig)因为进入 non-PvP 区域而判定死亡，不在 HUD 中显示
 {
 	DestroyChildEntities();
 
 	// we got to wait 0.5 secs before respawning
 	m_pPlayer->m_RespawnTick = Server()->Tick()+Server()->TickSpeed()/2;
-	//int ModeSpecial = GameServer()->m_pController->OnCharacterDeath(this, GameServer()->m_apPlayers[Killer], Weapon);
-
-	/*
-	// send the kill message
-	CNetMsg_Sv_KillMsg Msg;
-	Msg.m_Killer = Killer;
-	Msg.m_Victim = m_pPlayer->GetCID();
-	Msg.m_Weapon = Weapon;
-	Msg.m_ModeSpecial = ModeSpecial;
-	Server()->SendPackMsg(&Msg, MSGFLAG_VITAL, -1);
-	*/
 
 	// a nice sound
 	GameServer()->CreateSound(m_Pos, SOUND_PLAYER_DIE);
@@ -1927,13 +1910,13 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 	m_DamageTaken++;
 	
 	if(From >= 0 && pFrom && pFrom->GetCharacter())
-	{		
+	{
+		//TODO
 		if(Server()->GetItemCount(From, FREEAZER))
 		{
 			int probability = 200-Server()->GetItemCount(From, FREEAZER)*5;
 			if (probability <= 5) probability = 5;
-			int randget = rand()%probability;
-			if(randget == 1)
+			if(random_prob(1/probability))
 			{
 				if(m_pPlayer->GetBotType() == BOT_BOSSSLIME) Freeze(2);
 				else Freeze(1);
@@ -2032,7 +2015,7 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 	// check for death
 	if(m_Health <= 0)
 	{
-		int randforce = rand()%30;
+		int randforce = random_int(0, 30);
 		if(pFrom)
 		{
 			if(g_Config.m_SvEventHammer)
@@ -2105,7 +2088,7 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 						
 						if(!g_Config.m_SvCityStart)
 						{
-							CreateDropRandom(MONEYBAG, 100+rand()%200+1, false, i, Force/(50+randforce));
+							CreateDropRandom(MONEYBAG, 100+random_int(0, 200), false, i, Force/(50+randforce));
 							CreateDropRandom(RARESLIMEDIRT, 1, 90, i, Force/(45+randforce));
 							CreateDropRandom(FORMULAFORRING, 1, 90, i, Force/(40+randforce));
 							CreateDropRandom(FORMULAEARRINGS, 1, 90, i, Force/(35+randforce));
@@ -2114,7 +2097,7 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 						}
 						else if(g_Config.m_SvCityStart == 1)
 						{
-							CreateDropRandom(MONEYBAG, 300+rand()%200+1, false, i, Force/(50+randforce));
+							CreateDropRandom(MONEYBAG, 300+random_int(0, 200), false, i, Force/(50+randforce));
 							CreateDropRandom(BOOKEXPMIN, 1, 15, i, Force/(45+randforce));
 							CreateDropRandom(BOOKMONEYMIN, 1, 80, i, Force/(45+randforce));
 							CreateDropRandom(CLANBOXEXP, 1, 50, i, Force/(45+randforce));
@@ -2127,16 +2110,16 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 		{
 			for(int i = 0; i < g_Config.m_SvDropDance; ++i)
 			{
-				switch(rand()%10)
+				switch(random_int(0, 10))
 				{
-					case 1: new CBonus(GameWorld(), m_Pos, Force/(50+rand()%30), 2, -1); break;
-					case 4: new CBonus(GameWorld(), m_Pos, Force/(50+rand()%30), 3, -1); break;
-					case 8: new CBonus(GameWorld(), m_Pos, Force/(50+rand()%30), 4, -1);
+					case 1: new CBonus(GameWorld(), m_Pos, Force/(50+random_int(0, 30)), 2, -1); break;
+					case 4: new CBonus(GameWorld(), m_Pos, Force/(50+random_int(0, 30)), 3, -1); break;
+					case 8: new CBonus(GameWorld(), m_Pos, Force/(50+random_int(0, 30)), 4, -1);
 				}
-				if(rand()%3 == 1)
-					new CBonus(GameWorld(), m_Pos, Force/(40+rand()%30), 1, m_pPlayer->GetCID());
+				if(random_int(0, 3) == 1)
+					new CBonus(GameWorld(), m_Pos, Force/(40+random_int(0, 30)), 1, m_pPlayer->GetCID());
 					
-				new CBonus(GameWorld(), m_Pos, Force/(30+rand()%30), 0, m_pPlayer->GetCID());
+				new CBonus(GameWorld(), m_Pos, Force/(30+random_int(0, 30)), 0, m_pPlayer->GetCID());
 			}
 		}
 		
@@ -2686,22 +2669,17 @@ void CCharacter::TakeItemChar(int ClientID)
 	if(!IsAlive() || m_ReloadTimer || m_pPlayer->IsBot())
 		return;
 
-	for(CDropItem *pDrop = (CDropItem*) GameWorld()->FindFirst(CGameWorld::ENTTYPE_DROPITEM); pDrop; pDrop = (CDropItem*) pDrop->TypeNext())
-	{
-		if (pDrop)
-		{
-			if(distance(pDrop->m_Pos, m_Pos) < 40)
-			{
-				m_ReloadTimer = Server()->TickSpeed();
-				if(pDrop->TakeItem(ClientID))
-				{
-					pDrop->Reset();
-					return;
-				}
-			}
-		}
-	}
-	return;
+	for(auto *pDrop = (CDropItem*) GameWorld()->FindFirst(CGameWorld::ENTTYPE_DROPITEM); pDrop; pDrop = (CDropItem*) pDrop->TypeNext()) {
+        if (pDrop) {
+            if (distance(pDrop->m_Pos, m_Pos) < 40) {
+                m_ReloadTimer = Server()->TickSpeed();
+                if (pDrop->TakeItem(ClientID)) {
+                    pDrop->Reset();
+                    return;
+                }
+            }
+        }
+    }
 }
 
 void CCharacter::ParseEmoticionButton(int ClientID, int Emtion)
@@ -2722,7 +2700,7 @@ void CCharacter::ParseEmoticionButton(int ClientID, int Emtion)
 			m_pPlayer->m_Mana -= 30;
 
 			int NumMines = 0;
-			for(CBiologistMine *pMine = (CBiologistMine*) GameWorld()->FindFirst(CGameWorld::ENTTYPE_BIOLOGIST_MINE); pMine; pMine = (CBiologistMine*) pMine->TypeNext())
+			for(auto *pMine = (CBiologistMine*) GameWorld()->FindFirst(CGameWorld::ENTTYPE_BIOLOGIST_MINE); pMine; pMine = (CBiologistMine*) pMine->TypeNext())
 			{
 				if(pMine->m_Owner == m_pPlayer->GetCID())
 					NumMines++;
@@ -2738,7 +2716,7 @@ void CCharacter::ParseEmoticionButton(int ClientID, int Emtion)
 
 		m_pPlayer->m_Mana -= 50;
 		m_ReloadTimer = Server()->TickSpeed()/3;
-		for(CHealthHealer *pHeal = (CHealthHealer*) GameWorld()->FindFirst(CGameWorld::ENTTYPE_HEALTHHEALER); pHeal; pHeal = (CHealthHealer*) pHeal->TypeNext())
+		for(auto *pHeal = (CHealthHealer*) GameWorld()->FindFirst(CGameWorld::ENTTYPE_HEALTHHEALER); pHeal; pHeal = (CHealthHealer*) pHeal->TypeNext())
 		{
 			if(pHeal->m_Owner == m_pPlayer->GetCID())
 				pHeal->Reset();
@@ -2747,7 +2725,7 @@ void CCharacter::ParseEmoticionButton(int ClientID, int Emtion)
 	}
 	else if(Server()->GetItemCount(ClientID, SSWORD) && Server()->GetItemSettings(ClientID, SSWORD) == Emtion)
 	{
-		for(CSword *pSword = (CSword*) GameWorld()->FindFirst(CGameWorld::ENTTYPE_SWORD); pSword; pSword = (CSword*) pSword->TypeNext())
+		for(auto *pSword = (CSword*) GameWorld()->FindFirst(CGameWorld::ENTTYPE_SWORD); pSword; pSword = (CSword*) pSword->TypeNext())
 		{
 			if(pSword->m_Owner == m_pPlayer->GetCID())
 			{
