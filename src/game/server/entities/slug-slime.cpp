@@ -44,7 +44,7 @@ void CSlugSlime::Tick()
 		p->Poison(g_Config.m_InfSlimePoisonDuration, m_Owner); 
 	}
 	
-	if(random_prob(1/5))
+	if(random_prob(0.2f))
 	{
 		GameServer()->CreateDeath(m_Pos, m_Owner);
 	}

@@ -73,7 +73,7 @@ void CMonster::RunAction()
 void CMonster::TickBotAI()
 {
     //Sounds
-    if (Server()->Tick() - m_BotTimeLastSound > Server()->TickSpeed()*5.0f && random_prob(1/50))
+    if (Server()->Tick() - m_BotTimeLastSound > Server()->TickSpeed()*5.0f && random_prob(0.02f))
     {
         PlaySound();
         m_BotTimeLastSound = Server()->Tick();
@@ -191,7 +191,7 @@ void CMonster::TickBotAI()
                 }
             	else
             	{
-            		m_BotDir = random_prob(1/3)?1:-1;
+            		m_BotDir = random_prob(0.3333333333f)?1:-1;
             		m_BotJumpTry = false;
             	}
 

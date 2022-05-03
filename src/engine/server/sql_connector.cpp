@@ -32,11 +32,14 @@ bool CSqlConnector::ConnectSqlServer(bool ReadOnly)
 			dbg_msg("sql", "Warning: Unable to connect to Sql%sServer %d ('%s'), trying next...", ReadOnly ? "Read" : "Write", ID, SqlServer(ID, ReadOnly)->GetIP());
 	}
 	dbg_msg("sql", "FATAL ERROR: No Sql%sServers available", ReadOnly ? "Read" : "Write");
+	//TODO
+	/*
 	if(g_Config.m_ExitOnSQLError)
 	{
 		// Exit on SQL Error
 		exit(1);
 	}
+	*/
 	m_pSqlServer = 0;
 	return false;
 }

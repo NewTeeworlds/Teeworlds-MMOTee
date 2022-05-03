@@ -138,7 +138,7 @@ void CPickup::StartFarm(int ClientID)
 
 		if(m_Drop == 100)
 		{
-			if(random_prob(1/2)) Server()->SetMaterials(2, Server()->GetMaterials(2)+1);
+			if(random_prob(0.5f)) Server()->SetMaterials(2, Server()->GetMaterials(2)+1);
 
 			switch(random_int(0, 4))
 			{
@@ -152,7 +152,7 @@ void CPickup::StartFarm(int ClientID)
 				GameServer()->SendChatTarget_Localization(ClientID, -1, _("~ 种地等级提升~ 获得了农耕盲盒"), NULL);
 				GameServer()->GiveItem(ClientID, FARMBOX, 1);
 			}
-			if(random_prob(1/120))
+			if(random_prob(0.008333f)) // 1/120
 				GameServer()->GiveItem(ClientID, FARMBOX, 1);
 
 			GameServer()->GiveItem(ClientID, FARMLEVEL, 1);
@@ -255,7 +255,7 @@ void CPickup::StartFarm(int ClientID)
 			}
 			GameServer()->GiveItem(ClientID, MINEREXP, 1);
 			
-			if(random_prob(1/5000))
+			if(random_prob(0.0002f))
 				GameServer()->GiveItem(ClientID, STANNUM, 1);
 
 			

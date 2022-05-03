@@ -10,6 +10,7 @@
 #include <game/mapitems.h>
 
 #include "character.h"
+#include "engine/server.h"
 #include "projectile.h"
 #include "flyingpoint.h"
 #include "biologist-laser.h"
@@ -412,7 +413,10 @@ void CCharacter::FireWeapon()
 	//Wait 1 second after spawning
 	if(Server()->Tick() - m_AntiFireTick < Server()->TickSpeed())
 		return;
-	
+
+	if(m_pPlayer->m_JailTick > 0)
+		return;
+
 	if(InShop)
 		return;
 	
@@ -602,7 +606,7 @@ void CCharacter::FireWeapon()
 		{
 			if(Server()->GetItemSettings(m_pPlayer->GetCID(), PIZDAMET))
 			{
-				if(random_prob(1/2))
+				if(random_prob(0.5f))
 					m_pPlayer->m_Mana--;
 
 				m_aWeapons[m_ActiveWeapon].m_Ammo++;
@@ -1914,9 +1918,9 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 		//TODO
 		if(Server()->GetItemCount(From, FREEAZER))
 		{
-			int probability = 200-Server()->GetItemCount(From, FREEAZER)*5;
-			if (probability <= 5) probability = 5;
-			if(random_prob(1/probability))
+			auto probability = (float)(200-Server()->GetItemCount(From, FREEAZER)*5);
+			if (probability <= 5.0f) probability = 5.0f;
+			if(random_prob(1.0f/probability))
 			{
 				if(m_pPlayer->GetBotType() == BOT_BOSSSLIME) Freeze(2);
 				else Freeze(1);
@@ -1925,8 +1929,8 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 		
 		if(m_pPlayer->AccData.Class == PLAYERCLASS_HEALER && m_pPlayer->AccUpgrade.Pasive2)
 		{
-			int RandProc = 100-m_pPlayer->AccUpgrade.Pasive2*2;
-			if(random_prob(1/RandProc))
+			auto RandProc = (float)(100-m_pPlayer->AccUpgrade.Pasive2*2);
+			if(random_prob(1.0f/RandProc))
 			{
 				if(!Server()->GetItemSettings(m_pPlayer->GetCID(), SCHAT)) 
 					GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_DEFAULT, _("Passive skill don't get damage"), NULL);
@@ -1934,8 +1938,8 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 			}
 		}
 		
-		int getcount = pFrom->AccData.Class == PLAYERCLASS_ASSASINS ? 15-pFrom->AccUpgrade.HammerRange : 15;
-		if(random_prob(1/getcount))
+		auto getcount = (float)(pFrom->AccData.Class == PLAYERCLASS_ASSASINS ? 15-pFrom->AccUpgrade.HammerRange : 15.0f);
+		if(random_prob(1.0f/getcount))
 		{
 			int CritDamage = Dmg+pFrom->AccUpgrade.Damage*2+random_int(0, 50);
 			if(pFrom->AccData.Class == PLAYERCLASS_ASSASINS)
@@ -2660,7 +2664,7 @@ void CCharacter::CreateDropRandom(int ItemID, int Count, int Random, int HowID, 
 		new CDropItem(GameWorld(), m_Pos, Force, ItemID, Count, HowID, 0);		
 		return;
 	}
-	if(random_prob(1/Random)) 
+	if(random_prob(1.0f/(float)Random)) 
 		new CDropItem(GameWorld(), m_Pos, Force, ItemID, Count, HowID, 0);
 }
 

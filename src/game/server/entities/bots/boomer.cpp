@@ -73,7 +73,7 @@ void CBoomer::RunAction()
 void CBoomer::TickBotAI()
 {
     //Sounds
-    if (Server()->Tick() - m_BotTimeLastSound > Server()->TickSpeed()*5.0f && random_prob(1/50))
+    if (Server()->Tick() - m_BotTimeLastSound > Server()->TickSpeed()*5.0f && random_prob(0.02f))
     {
         PlaySound();
         m_BotTimeLastSound = Server()->Tick();

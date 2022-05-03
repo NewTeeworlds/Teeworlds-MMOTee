@@ -97,9 +97,9 @@ void CPlayer::RandomBoxTick()
 		int getitem = 0;
 		if(m_OpenBox % 30 == 0)
 		{
-			if(random_prob(0.95))
+			if(random_prob(0.95f))
 			{
-				getitem = random_prob(0.5) ? FOOTKWAH : HEADBOOMER;
+				getitem = random_prob(0.5f) ? FOOTKWAH : HEADBOOMER;
 			}
 			else
 			{
@@ -141,7 +141,7 @@ Event Box 概率：
 		int getitem = 0;
 		if(m_OpenBox % 30 == 0)
 		{
-			getitem = random_prob(99/100) ? MONEYBAG : RAREEVENTHAMMER;
+			getitem = random_prob(0.995f) ? MONEYBAG : RAREEVENTHAMMER;
 
 			if(m_pCharacter)
 				GameServer()->CreateLolText(m_pCharacter, false, vec2(0,-75), vec2 (0,-1), 10, Server()->GetItemName_en(getitem));
@@ -173,7 +173,7 @@ Farming Box 概率：
 		if(m_OpenBox % 30 == 0)
 		{
 			int Get = 1;
-			if(random_prob(92/100))
+			if(random_prob(0.92f))
 			{
 				switch(random_int(0, 2))
 				{
@@ -237,7 +237,7 @@ void CPlayer::BasicAuthedTick()
 				SetMoveChar();		
 		}
 	}
-	//TODO 修复 bug 
+
 	if(Server()->GetItemCount(m_ClientID, PIGPORNO) > 1000 && !Server()->GetItemCount(m_ClientID, PIGPIG))
 	{
 		GameServer()->SendMail(m_ClientID, 3, PIGPIG, 1);
@@ -247,7 +247,7 @@ void CPlayer::BasicAuthedTick()
 	if(AccData.Money >= 10000)
 	{
 		AccData.Gold += AccData.Money/10000;
-		int Got = (int)(AccData.Money/10000);
+		int Got = AccData.Money/10000;
 		
 		AccData.Money -= Got*10000;
 	}
@@ -654,7 +654,7 @@ void CPlayer::MoneyAdd(int Size, bool ClanBonus, bool MoneyDouble)
 
 	GameServer()->SendBroadcast_LStat(m_ClientID, BROADCAST_PRIORITY_GAMEANNOUNCE, 100, INADDMONEY, GetMoney);
 	AccData.Money += GetMoney;
-	if(random_prob(1/8)) 
+	if(random_prob(0.125f)) 
 		GameServer()->UpdateStats(m_ClientID);
 
 	GameServer()->ResetVotes(m_ClientID, AUTH);
@@ -691,7 +691,7 @@ void CPlayer::ExpAdd(unsigned long int Size, bool Bonus)
 
 	GameServer()->SendBroadcast_LStat(m_ClientID, BROADCAST_PRIORITY_GAMEANNOUNCE, 100, Server()->GetClanID(m_ClientID) > 0 ? INADDCEXP : INADDEXP, GetExp, Get);
 	AccData.Exp += GetExp;
-	if(random_prob(1/8)) 
+	if(random_prob(0.125f)) 
 		GameServer()->UpdateStats(m_ClientID);
 
 	return;
@@ -954,7 +954,7 @@ void CPlayer::TryRespawn()
 	if (IsBot())
     {
 		// жирный бот рандом
-		if(random_prob(1/10)) m_BigBot = true;
+		if(random_prob(0.1f)) m_BigBot = true;
 		else m_BigBot = false;
 				
         GameServer()->UpdateBotInfo(m_ClientID);

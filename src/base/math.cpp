@@ -1,31 +1,28 @@
 #include "math.h"
 #include <algorithm>
+#include <cmath>
+#include <cstdlib>
 #include <random>
 
-static std::random_device RandomDevice;
-static std::mt19937 RandomEngine(RandomDevice());
-static std::uniform_real_distribution<float> DistributionFloat(0.0f, 1.0f);
+std::random_device RandomDevice;
+std::mt19937_64 RandomEngine(RandomDevice());
 
-float random_float()
-{
-	return DistributionFloat(RandomEngine);
+float random_float() {
+	std::uniform_real_distribution<float> Distribution(0.0f, 1.0f);
+	return Distribution(RandomEngine);
 }
 
-
-bool random_prob(float f)
-{
-	return (random_float() < f);
+bool random_prob(float f) {
+	std::uniform_real_distribution<float> Distribution(0.0f, 1.0f);
+	return (Distribution(RandomEngine) <= f);
 }
 
-
-int random_int(int Min, int Max)
-{
+int random_int(int Min, int Max) {
 	std::uniform_int_distribution<int> Distribution(Min, Max);
 	return Distribution(RandomEngine);
 }
 
-int random_distribution(double* pProb, double* pProb2)
-{
+int random_distribution(double *pProb, double *pProb2) {
 	std::discrete_distribution<int> Distribution(pProb, pProb2);
 	return Distribution(RandomEngine);
 }

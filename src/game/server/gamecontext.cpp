@@ -916,7 +916,7 @@ void CGameContext::AreaTick()
 								GiveItem(i, MONEYBAG, 10);
 								
 								
-								if(random_prob(1/2))
+								if(random_prob(0.5f))
 									SendMail(i, 1, RELRINGS, 1);						
 							} break;
 							case 2: 
@@ -924,7 +924,7 @@ void CGameContext::AreaTick()
 								GiveItem(i, MONEYBAG, 10);
 								
 								
-								if(random_prob(1/20))
+								if(random_prob(0.05f))
 									SendMail(i, 1, FREEAZER, 1);	
 							} break;
 							default:
@@ -2235,7 +2235,10 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("需要 1000 材料(material)"), NULL); 	
 
 					Server()->RemItem(ClientID, MATERIAL, 1000, -1);
-					if(random_prob(1 / (1 + Server()->GetItemEnchant(ClientID, SelectItem))))
+
+					auto p = (float)(1.0f / (1 + Server()->GetItemEnchant(ClientID, SelectItem)));
+					//TODO
+					if(random_prob(p))
 					{
 						Server()->SetItemEnchant(ClientID, SelectItem, Server()->GetItemEnchant(ClientID, SelectItem)+1);
 
@@ -2934,7 +2937,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 				return;
 			}
 			Server()->RemItem(ClientID, ESUMMER, 20, -1);
-			if(random_prob(1/25) && m_apPlayers[ClientID]->AccData.SummerHealingTimes < 15)
+			if(random_prob(0.04f) && m_apPlayers[ClientID]->AccData.SummerHealingTimes < 15)
 			{
 				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 在合成 {str:item}x{int:coun} 的时候失败了"), "name", Server()->ClientName(ClientID), "item", Server()->GetItemName(ClientID, ItemID, false), "coun", &Count ,NULL);				
 				m_apPlayers[ClientID]->AccData.SummerHealingTimes++;
