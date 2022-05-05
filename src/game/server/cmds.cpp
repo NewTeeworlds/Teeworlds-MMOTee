@@ -73,14 +73,6 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		}
 		return;
 	}
-	/*else if(!strncmp(Msg->m_pMessage, "/health", 7))
-	{	
-		if(GameServer()->Server()->Tick() % (1 * GameServer()->Server()->TickSpeed() * 2) == 0)
-		{
-			GameServer()->SendBroadcast_LStat(ClientID, 106, 50, -1);
-		}
-		return;
-	}*/
 	else if(!strncmp(Msg->m_pMessage, "/register", 9))
 	{
 		LastChat();

@@ -496,10 +496,10 @@ public:
 	virtual void SetCustClt(int ClientID);
 	
 	//virtual int GetStat(int ClientID, int Type);
-	virtual long int GetStat(int ClientID, int Type);
-	virtual int GetUpgrade(int ClientID, int Type);
-	virtual void UpdateStat(int ClientID, int Type, int Value);
-	virtual void UpdateUpgrade(int ClientID, int Type, int Size);
+	virtual long int GetStat(int ClientID, Player Type);
+	virtual int GetUpgrade(int ClientID, Player Type);
+	virtual void UpdateStat(int ClientID, Player Type, int Value);
+	virtual void UpdateUpgrade(int ClientID, Player Type, int Size);
 
 };
 

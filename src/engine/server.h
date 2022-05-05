@@ -237,14 +237,14 @@ enum Items
 };
 
 
-enum Clan {
+enum class Clan {
 	// Constant
 	Name,
 	Creator,
 	Admin,
-	ClanLevel,
-	ClanExp,
-	ClanMoney,
+	Level,
+	Exp,
+	Money,
 	MaxMemberNum,
 	Relevance,
 	ChairLevel,
@@ -256,12 +256,12 @@ enum Clan {
 	IsSpawnInHouse
 };
 
-enum Player
+enum class Player
 {
 	// All Constant
-	PlayerLevel,
-	PlayerExp,
-	PlayerMoney,
+	Level,
+	Exp,
+	Money,
 	Donate,
 	Gold,
 	Rel,
@@ -542,10 +542,10 @@ public:
 	virtual void SetSecurity(int ClientID, int n) = 0;
 	
 	//virtual int GetStat(int ClientID, int Type) = 0;
-	virtual long int GetStat(int ClientID, int Type) = 0;
-	virtual int GetUpgrade(int ClientID, int Type) = 0;
-	virtual void UpdateStat(int ClientID, int Type, int Value) = 0;
-	virtual void UpdateUpgrade(int ClientID, int Type, int Size) = 0;
+	virtual long int GetStat(int ClientID, Player Type) = 0;
+	virtual int GetUpgrade(int ClientID, Player Type) = 0;
+	virtual void UpdateStat(int ClientID, Player Type, int Value) = 0;
+	virtual void UpdateUpgrade(int ClientID, Player Type, int Size) = 0;
 
 	virtual bool IsClientLogged(int ClientID) = 0;
 	virtual int GetClanID(int ClientID) = 0;

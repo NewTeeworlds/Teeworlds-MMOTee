@@ -584,7 +584,7 @@ int CPlayer::GetNeedForUp()
 int CPlayer::GetNeedForUpgClan(Clan Type)
 {
 	int Get = Server()->GetClan(Type, Server()->GetClanID(m_ClientID));
-	if(Type != Clan::ClanLevel) {
+	if(Type != Clan::Level) {
 		return 100+Get*500;
 	}
 	else
@@ -680,11 +680,11 @@ void CPlayer::ExpAdd(unsigned long int Size, bool Bonus)
 		GetExp = GetExp*((Server()->GetItemCount(m_ClientID, X2MONEYEXPVIP)) + 1);
 
 	if(Server()->GetClanID(m_ClientID) && 
-		Server()->GetClan(Clan::ClanExp, Server()->GetClanID(m_ClientID)) >= Server()->GetClan(Clan::ClanLevel, Server()->GetClanID(m_ClientID))*GetNeedForUpgClan(Clan::ClanLevel))
+		Server()->GetClan(Clan::Exp, Server()->GetClanID(m_ClientID)) >= Server()->GetClan(Clan::Level, Server()->GetClanID(m_ClientID))*GetNeedForUpgClan(Clan::Level))
 	{
 		GameServer()->SendChatClan(Server()->GetClanID(m_ClientID), "[公会] 您所在的公会升级了!");
 
-		int warpminus = Server()->GetClan(Clan::ClanLevel, Server()->GetClanID(m_ClientID))*GetNeedForUpgClan(Clan::ClanLevel);
+		int warpminus = Server()->GetClan(Clan::Level, Server()->GetClanID(m_ClientID))*GetNeedForUpgClan(Clan::Level);
 		Server()->InitClanID(Server()->GetClanID(m_ClientID), MINUS, "Exp", warpminus, true);
 		Server()->InitClanID(Server()->GetClanID(m_ClientID), PLUS, "Level", 1, true);
 	}
@@ -958,97 +958,96 @@ void CPlayer::TryRespawn()
 		else m_BigBot = false;
 				
         GameServer()->UpdateBotInfo(m_ClientID);
-		if(m_BotType == BOT_L1MONSTER)
+		switch (m_BotType)
 		{
-			m_pCharacter = new(m_ClientID) CMonster(&GameServer()->m_World);
-			
-			if(g_Config.m_SvCityStart == 1)
+		case BOT_L1MONSTER:
+			m_pCharacter = new (m_ClientID) CMonster(&GameServer()->m_World);
+
+			if (g_Config.m_SvCityStart == 1)
 			{
 				AccData.Level = m_BigBot ? 280 + random_int(0, 3) : 250;
-				AccUpgrade.Health = 100+AccData.Level*20;		
-				AccUpgrade.Damage = AccData.Level+50;		
+				AccUpgrade.Health = 100 + AccData.Level * 20;
+				AccUpgrade.Damage = AccData.Level + 50;
 			}
 			else
 			{
-				AccData.Level = m_BigBot ? 10+random_int(0, 3) : 5;
+				AccData.Level = m_BigBot ? 10 + random_int(0, 3) : 5;
 				AccUpgrade.Health = m_BigBot ? AccData.Level : 0;
-				if(m_BigBot)
+				if (m_BigBot)
 				{
 					Server()->SetMaxAmmo(m_ClientID, INFWEAPON_GUN, 10);
 					Server()->SetAmmoRegenTime(m_ClientID, INFWEAPON_GUN, 100);
-					Server()->SetFireDelay(m_ClientID, INFWEAPON_GUN, 800);					
+					Server()->SetFireDelay(m_ClientID, INFWEAPON_GUN, 800);
 				}
 			}
-		}
-		else if(m_BotType == BOT_L2MONSTER)
-		{
-			m_pCharacter = new(m_ClientID) CKwah(&GameServer()->m_World);
-			
-			if(g_Config.m_SvCityStart == 1)
-			{
-				AccData.Level = m_BigBot ? 370+random_int(0, 3) : 350+random_int(0, 3);
-				AccUpgrade.Health = 100+AccData.Level*2;		
-				AccUpgrade.Damage = AccData.Level+50;		
-			}
-			else
-			{
-				AccData.Level = m_BigBot ? 140 : 125+random_int(0, 3);
-				AccUpgrade.Health = 100+AccData.Level;
-				AccUpgrade.Damage = AccData.Level/2;
-			}
-		}
-		else if(m_BotType == BOT_L3MONSTER)
-		{
-			m_pCharacter = new(m_ClientID) CBoomer(&GameServer()->m_World);
+			break;
+		case BOT_L2MONSTER:
+			m_pCharacter = new (m_ClientID) CKwah(&GameServer()->m_World);
 
-			if(g_Config.m_SvCityStart == 1)
+			if (g_Config.m_SvCityStart == 1)
 			{
-				AccData.Level = m_BigBot ? 510+random_int(0, 3) : 490+random_int(0, 15);
-				AccUpgrade.Health = 100+(int)(AccData.Level*2);		
-				AccUpgrade.Damage = (int)(AccData.Level+50);		
+				AccData.Level = m_BigBot ? 370 + random_int(0, 3) : 350 + random_int(0, 3);
+				AccUpgrade.Health = 100 + AccData.Level * 2;
+				AccUpgrade.Damage = AccData.Level + 50;
 			}
 			else
 			{
-				AccData.Level = m_BigBot ? 250+random_int(0, 3) : 200+random_int(0, 3);
-				AccUpgrade.Health = 100+AccData.Level;
+				AccData.Level = m_BigBot ? 140 : 125 + random_int(0, 3);
+				AccUpgrade.Health = 100 + AccData.Level;
+				AccUpgrade.Damage = AccData.Level / 2;
+			}
+			break;
+		case BOT_L3MONSTER:
+			m_pCharacter = new (m_ClientID) CBoomer(&GameServer()->m_World);
+
+			if (g_Config.m_SvCityStart == 1)
+			{
+				AccData.Level = m_BigBot ? 510 + random_int(0, 3) : 490 + random_int(0, 15);
+				AccUpgrade.Health = 100 + (int)(AccData.Level * 2);
+				AccUpgrade.Damage = (int)(AccData.Level + 50);
+			}
+			else
+			{
+				AccData.Level = m_BigBot ? 250 + random_int(0, 3) : 200 + random_int(0, 3);
+				AccUpgrade.Health = 100 + AccData.Level;
 				AccUpgrade.Damage = AccData.Level;
 			}
-		}
-		else if(m_BotType == BOT_BOSSSLIME)
-		{
-			m_pCharacter = new(m_ClientID) CBossSlime(&GameServer()->m_World);
-			AccData.Level = 1000+random_int(0, 3);
-			
+			break;
+		case BOT_BOSSSLIME:
+			m_pCharacter = new (m_ClientID) CBossSlime(&GameServer()->m_World);
+			AccData.Level = 1000 + random_int(0, 3);
+
 			m_BigBot = true;
 
-			AccUpgrade.Health = (int)(AccData.Level/3);
+			AccUpgrade.Health = (int)(AccData.Level / 3);
 			AccUpgrade.Damage = 100;
-			if(g_Config.m_SvCityStart == 1)
+			if (g_Config.m_SvCityStart == 1)
 				AccUpgrade.Damage = 400;
-		}
-		else if(m_BotType == BOT_GUARD)
-		{
-			m_pCharacter = new(m_ClientID) CNpcSold(&GameServer()->m_World);
-			AccData.Level = 500+random_int(0, 10);
-			AccUpgrade.Damage = (int)(AccData.Level*5);
-			AccUpgrade.Health = (int)(AccData.Level*50);
+			break;
+		case BOT_GUARD:
+			m_pCharacter = new (m_ClientID) CNpcSold(&GameServer()->m_World);
+			AccData.Level = 500 + random_int(0, 10);
+			AccUpgrade.Damage = (int)(AccData.Level * 5);
+			AccUpgrade.Health = (int)(AccData.Level * 50);
 			m_BigBot = true;
-		}
-		else if(m_BotType == BOT_NPCW)
-		{
-			m_pCharacter = new(m_ClientID) CNpcWSold(&GameServer()->m_World);
+			break;
+		case BOT_NPCW:
+			m_pCharacter = new (m_ClientID) CNpcWSold(&GameServer()->m_World);
 			AccData.Level = 3;
-			AccUpgrade.Damage = (int)(AccData.Level*5);
-			AccUpgrade.Health = (int)(AccData.Level*2);
+			AccUpgrade.Damage = (int)(AccData.Level * 5);
+			AccUpgrade.Health = (int)(AccData.Level * 2);
 			m_BigBot = true;
-		}	
-		else if(m_BotType == BOT_FARMER)
-		{
-			m_pCharacter = new(m_ClientID) CNpcFarmer(&GameServer()->m_World);
+			break;
+		case BOT_FARMER:
+			m_pCharacter = new (m_ClientID) CNpcFarmer(&GameServer()->m_World);
 			AccData.Level = 3;
-			AccUpgrade.Damage = (int)(AccData.Level*5);
-			AccUpgrade.Health = (int)(AccData.Level*2);
+			AccUpgrade.Damage = (int)(AccData.Level * 5);
+			AccUpgrade.Health = (int)(AccData.Level * 2);
 			m_BigBot = true;
+			break;
+		default: 
+			dbg_msg("sys", "Invalid value %d in %s:%d", m_BotType, __FILE__, __LINE__); 
+			break;
 		}
 		Server()->SetMaxAmmo(m_ClientID, INFWEAPON_HAMMER, -1);
 		Server()->SetAmmoRegenTime(m_ClientID, INFWEAPON_HAMMER, 0);

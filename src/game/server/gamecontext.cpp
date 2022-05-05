@@ -1327,7 +1327,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					return;
 				}			
 
-				else if(str_comp(aCmd, "rrul") == 0)
+				else if(str_comp(aCmd, "rules") == 0)
 				{
 					SendChatTarget(ClientID, "------- {Rules} -------");
 					SendChatTarget(ClientID, "禁止使用游戏漏洞!");
@@ -1532,18 +1532,18 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					if(Server()->GetClan(Clan::MaxMemberNum, Server()->GetClanID(ClientID)) >= 25)
 						return 	SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("人数已达到最大值"), NULL);
 
-					BuyUpgradeClan(ClientID, (m_apPlayers[ClientID]->GetNeedForUpgClan(Clan::MaxMemberNum))*4, Clan::MaxMemberNum,"MaxNum");	
+					BuyUpgradeClan(ClientID, (m_apPlayers[ClientID]->GetNeedForUpgClan(Clan::MaxMemberNum))*4, Clan::MaxMemberNum,"MaxNum");
 					return;
 				}	
 				else if(str_comp(aCmd, "uaddexp") == 0)
-					BuyUpgradeClan(ClientID, m_apPlayers[ClientID]->GetNeedForUpgClan(Clan::ExpAdd), Clan::ExpAdd,"ExpAdd");							
+					BuyUpgradeClan(ClientID, m_apPlayers[ClientID]->GetNeedForUpgClan(Clan::ExpAdd), Clan::ExpAdd,"ExpAdd");
 
 				else if(str_comp(aCmd, "uchair") == 0)
 				{
 					if(!Server()->GetHouse(ClientID))
 						return 	SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你所在的公会没有房屋!"), NULL);
 
-					BuyUpgradeClan(ClientID, m_apPlayers[ClientID]->GetNeedForUpgClan(Clan::ChairLevel)*2, Clan::ChairLevel,"ChairHouse");							
+					BuyUpgradeClan(ClientID, m_apPlayers[ClientID]->GetNeedForUpgClan(Clan::ChairLevel)*2, Clan::ChairLevel,"ChairHouse");
 				}
 
 				else if(str_comp(aCmd, "uspawnhouse") == 0)
@@ -2643,13 +2643,13 @@ void CGameContext::BuyItem(int ItemType, int ClientID, int Type)
 
 }
 
-void CGameContext::BuyUpgradeClan(int ClientID, int Money, int Type, const char* SubType)
+void CGameContext::BuyUpgradeClan(int ClientID, int Money, Clan Type, const char* SubType)
 {
 	if(!m_apPlayers[ClientID] || !m_apPlayers[ClientID]->GetCharacter())
 		return;
 	
 	if((Server()->GetLeader(ClientID, Server()->GetClanID(ClientID)) || Server()->GetAdmin(ClientID, Server()->GetClanID(ClientID))) 
-		&& Server()->GetClan(Clan::ClanMoney, Server()->GetClanID(ClientID)) >= Money)
+		&& Server()->GetClan(Clan::Money, Server()->GetClanID(ClientID)) >= Money)
 	{
 		Server()->InitClanID(Server()->GetClanID(ClientID), MINUS, "Money", Money, true);
 		Server()->InitClanID(Server()->GetClanID(ClientID), PLUS, SubType, 1, true);
@@ -2697,7 +2697,7 @@ bool CGameContext::ConTuneDump(IConsole::IResult *pResult, void *pUserData)
 	{
 		float v;
 		pSelf->Tuning()->Get(i, &v);
-		str_format(aBuf, sizeof(aBuf), "%s %.2f", pSelf->Tuning()->m_apNames[i], v);
+		str_format(aBuf, sizeof(aBuf), "%s %.2f", CTuningParams::m_apNames[i], v);
 		pSelf->Console()->Print(IConsole::OUTPUT_LEVEL_STANDARD, "tuning", aBuf);
 	}
 	
@@ -2775,12 +2775,8 @@ void CGameContext::GiveItem(int ClientID, int ItemID, int Count, int Enchant)
 	}
 	if(Server()->GetItemType(ClientID, ItemID) == 10)
 	{
-		if(ItemID == FARMLEVEL)
-			SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("[专长] {str:items}"), "items", Server()->GetItemName(ClientID, ItemID), NULL);				
-		else if(ItemID == MINEREXP)
-			SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("[专长] {str:items}"), "items", Server()->GetItemName(ClientID, ItemID), NULL);				
-		else if(ItemID == LOADEREXP)
-			SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("[专长] {str:items}"), "items", Server()->GetItemName(ClientID, ItemID), NULL);				
+		if(ItemID == FARMLEVEL || ItemID == MINEREXP || ItemID == LOADEREXP)
+			SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("[专长] {str:items}"), "items", Server()->GetItemName(ClientID, ItemID), NULL);							
 		else
 			SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 获得了 {str:items}"), "name", Server()->ClientName(ClientID), "items", Server()->GetItemName(ClientID, ItemID), NULL);				
 	}
@@ -2788,13 +2784,16 @@ void CGameContext::GiveItem(int ClientID, int ItemID, int Count, int Enchant)
 		SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("你获得了 {str:items}x{int:counts}"), "items", Server()->GetItemName(ClientID, ItemID), "counts", &Count, NULL);				
 
 	int Settings = 0;
-	if(ItemID == COOPERPIX) Settings = 180*Count;
-	if(ItemID == IRONPIX) Settings = 211*Count;
-	if(ItemID == GOLDPIX) Settings = 491*Count;
-	if(ItemID == DIAMONDPIX) Settings = 699*Count;
-	if(ItemID == DRAGONAXE) Settings = 10000*Count;
-	if(ItemID == DRAGONHOE) Settings = 8000*Count;
-
+	switch (ItemID)
+	{
+		case COOPERPIX: Settings = 180*Count; break;
+		case IRONPIX: Settings = 211*Count; break;
+		case GOLDPIX: Settings = 491*Count; break;
+		case DIAMONDPIX: Settings = 699*Count; break;
+		case DRAGONAXE: Settings = 10000*Count; break;
+		case DRAGONHOE: Settings = 8000*Count; break;
+		default: break;
+	}
 	Server()->GiveItem(ClientID, ItemID, Count, Settings, Enchant);
 }
 
@@ -2939,7 +2938,8 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 			Server()->RemItem(ClientID, ESUMMER, 20, -1);
 			if(random_prob(0.04f) && m_apPlayers[ClientID]->AccData.SummerHealingTimes < 15)
 			{
-				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 在合成 {str:item}x{int:coun} 的时候失败了"), "name", Server()->ClientName(ClientID), "item", Server()->GetItemName(ClientID, ItemID, false), "coun", &Count ,NULL);				
+				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 在合成 {str:item}x{int:coun} 的时候失败了"), 
+						"name", Server()->ClientName(ClientID), "item", Server()->GetItemName(ClientID, ItemID, false), "coun", &Count ,NULL);				
 				m_apPlayers[ClientID]->AccData.SummerHealingTimes++;
 				
 				return;
@@ -3206,8 +3206,8 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 			UpdateStats(ClientID);
 		} break;
 	}
-	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 合成了物品 {str:item}x{int:coun}"), "name", Server()->ClientName(ClientID), "item", Server()->GetItemName(ClientID, ItemID, false), "coun", &Count ,NULL);				
-	//SendMail(ClientID, 7, ItemID, Count);
+	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 合成了物品 {str:item}x{int:coun}"), 
+			"name", Server()->ClientName(ClientID), "item", Server()->GetItemName(ClientID, ItemID, false), "coun", &Count ,NULL);
 	GiveItem(ClientID, ItemID, Count,0);
 }
 
@@ -3310,7 +3310,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote("······················· ", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "# {str:psevdo}", "psevdo", LocalizeText(ClientID, "子菜单--信息"));
 		AddVote_Localization(ClientID, "info", "☞ {str:chat}", "chat", "QQ群: 736636701");
-		AddVote_Localization(ClientID, "rrul", "☞ 注意事项");
+		AddVote_Localization(ClientID, "rules", "☞ 注意事项");
 		AddVoteMenu_Localization(ClientID, RESLIST, MENUONLY, "☞ 通缉犯");
 		AddVoteMenu_Localization(ClientID, EVENTLIST, MENUONLY, "☞ 事件与奖金");
 		AddVoteMenu_Localization(ClientID, JOBSSET, MENUONLY, "☞ 工作与专长");
@@ -3664,7 +3664,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 	{
 		m_apPlayers[ClientID]->m_LastVotelist = AUTH;
 		int ID = Server()->GetClanID(ClientID);
-		int Bank = Server()->GetClan(Clan::ClanMoney, Server()->GetClanID(ClientID));
+		int Bank = Server()->GetClan(Clan::Money, Server()->GetClanID(ClientID));
 		int Count = Server()->GetClan(Clan::MemberNum, Server()->GetClanID(ClientID));
 		int Relevante = Server()->GetClan(Clan::Relevance, Server()->GetClanID(ClientID));
 		int MaxCount = Server()->GetClan(Clan::MaxMemberNum, Server()->GetClanID(ClientID));
@@ -3678,11 +3678,11 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote_Localization(ClientID, "null", "关联: {int:revl}", "revl", &Relevante);
 		AddVote_Localization(ClientID, "null", "公会人数: {int:count}/{int:maxcount}", "count", &Count , "maxcount", &MaxCount);
 
-		int exp = Server()->GetClan(Clan::ClanExp, Server()->GetClanID(ClientID));
+		int exp = Server()->GetClan(Clan::Exp, Server()->GetClanID(ClientID));
 		int bonus = Server()->GetClan(Clan::ExpAdd, Server()->GetClanID(ClientID));
-		int level = Server()->GetClan(Clan::ClanLevel, Server()->GetClanID(ClientID));
+		int level = Server()->GetClan(Clan::Level, Server()->GetClanID(ClientID));
 		int dlvl = Server()->GetClan(Clan::MoneyAdd, Server()->GetClanID(ClientID))*100;
-		int maxneed = Server()->GetClan(Clan::ClanLevel, Server()->GetClanID(ClientID))*m_apPlayers[ClientID]->GetNeedForUpgClan(Clan::ClanLevel);
+		int maxneed = Server()->GetClan(Clan::Level, Server()->GetClanID(ClientID))*m_apPlayers[ClientID]->GetNeedForUpgClan(Clan::Level);
 		AddVote_Localization(ClientID, "null", "等级: {int:lvl} 经验 ({int:exp}/{int:maxneed})", "lvl", &level, "exp", &exp , "maxneed", &maxneed);
 		AddVote_Localization(ClientID, "null", "奖金: +{int:exp} 经验. +{int:money} 黄金", "exp", &bonus, "money", &dlvl);
 		AddVote("", "null", ClientID);
@@ -4667,9 +4667,9 @@ void CGameContext::OnSnap(int ClientID)
 // ---------------------------- СТАТЫ
 void CGameContext::GetStat(int ClientID) //set stat mysql pdata
 {
-	m_apPlayers[ClientID]->AccData.Level =  Server()->GetStat(ClientID, Player::PlayerLevel);
-	m_apPlayers[ClientID]->AccData.Exp =  Server()->GetStat(ClientID, Player::PlayerExp);
-	m_apPlayers[ClientID]->AccData.Money =  Server()->GetStat(ClientID, Player::PlayerMoney);
+	m_apPlayers[ClientID]->AccData.Level =  Server()->GetStat(ClientID, Player::Level);
+	m_apPlayers[ClientID]->AccData.Exp =  Server()->GetStat(ClientID, Player::Exp);
+	m_apPlayers[ClientID]->AccData.Money =  Server()->GetStat(ClientID, Player::Money);
 	m_apPlayers[ClientID]->AccData.Gold =  Server()->GetStat(ClientID, Player::Gold);
 	m_apPlayers[ClientID]->AccData.Donate =  Server()->GetStat(ClientID, Player::Donate);
 	m_apPlayers[ClientID]->AccData.Rel =  Server()->GetStat(ClientID, Player::Rel);
@@ -4688,9 +4688,9 @@ void CGameContext::UpdateStat(int ClientID) //update stat mysql pdata
 {
 	if (m_apPlayers[ClientID]->AccData.Level > 0)
 	{
-		Server()->UpdateStat(ClientID, Player::PlayerLevel, m_apPlayers[ClientID]->AccData.Level);
-		Server()->UpdateStat(ClientID, Player::PlayerExp, m_apPlayers[ClientID]->AccData.Exp);
-		Server()->UpdateStat(ClientID, Player::PlayerMoney, m_apPlayers[ClientID]->AccData.Money);
+		Server()->UpdateStat(ClientID, Player::Level, m_apPlayers[ClientID]->AccData.Level);
+		Server()->UpdateStat(ClientID, Player::Exp, m_apPlayers[ClientID]->AccData.Exp);
+		Server()->UpdateStat(ClientID, Player::Money, m_apPlayers[ClientID]->AccData.Money);
 		Server()->UpdateStat(ClientID, Player::Gold, m_apPlayers[ClientID]->AccData.Gold);
 		Server()->UpdateStat(ClientID, Player::Donate, m_apPlayers[ClientID]->AccData.Donate);
 		Server()->UpdateStat(ClientID, Player::Rel, m_apPlayers[ClientID]->AccData.Rel);

@@ -2080,45 +2080,16 @@ int CServer::GetClan(Clan Type, int ClanID)
 {
 	switch (Type)
 	{
-	case Clan::ClanMoney:
-		return m_stClan[ClanID].Money;
-		break;
-
-	case Clan::ClanExp:
-		return m_stClan[ClanID].Exp;
-		break;
-
-	case Clan::ClanLevel:
-		return m_stClan[ClanID].Level;
-		break;
-
-	case Clan::MaxMemberNum:
-		return m_stClan[ClanID].MaxMemberNum;
-		break;
-
-	case Clan::MemberNum:
-		return m_stClan[ClanID].MemberNum;
-		break;
-
-	case Clan::Relevance:
-		return m_stClan[ClanID].Relevance;
-		break;
-
-	case Clan::ExpAdd:
-		return m_stClan[ClanID].ExpAdd;
-		break;
-
-	case Clan::MoneyAdd:
-		return m_stClan[ClanID].MoneyAdd;
-		break;
-
-	case Clan::ChairLevel:
-		return m_stClan[ClanID].ChairLevel;
-		break;
-
-	default:
-		return 0;
-		break;
+	case Clan::Money: return m_stClan[ClanID].Money; break;
+	case Clan::Exp: return m_stClan[ClanID].Exp; break;
+	case Clan::Level: return m_stClan[ClanID].Level; break;
+	case Clan::MaxMemberNum: return m_stClan[ClanID].MaxMemberNum; break;
+	case Clan::MemberNum: return m_stClan[ClanID].MemberNum; break;
+	case Clan::Relevance: return m_stClan[ClanID].Relevance; break;
+	case Clan::ExpAdd: return m_stClan[ClanID].ExpAdd; break;
+	case Clan::MoneyAdd: return m_stClan[ClanID].MoneyAdd; break;
+	case Clan::ChairLevel: return m_stClan[ClanID].ChairLevel; break;
+	default: dbg_msg("sys", "Invalid value %d in %s:%d", Type, __FILE__, __LINE__); return 0; break;
 	}
 }
 
@@ -2407,13 +2378,13 @@ public:
 	}
 };
 
-long int CServer::GetStat(int ClientID, int Type)
+long int CServer::GetStat(int ClientID, Player Type)
 {
 	switch(Type)
 	{
-		case Player::PlayerLevel: return m_aClients[ClientID].m_Level; break;
-		case Player::PlayerExp: return m_aClients[ClientID].m_Exp; break;
-		case Player::PlayerMoney: return m_aClients[ClientID].m_Money; break;
+		case Player::Level: return m_aClients[ClientID].m_Level; break;
+		case Player::Exp: return m_aClients[ClientID].m_Exp; break;
+		case Player::Money: return m_aClients[ClientID].m_Money; break;
 		case Player::Gold: return m_aClients[ClientID].m_Gold; break;
 		case Player::Donate: return m_aClients[ClientID].m_Donate; break;
 		case Player::Quest: return m_aClients[ClientID].m_Quest; break;
@@ -2427,20 +2398,21 @@ long int CServer::GetStat(int ClientID, int Type)
 		case Player::IsJailed: return m_aClients[ClientID].m_IsJailed; break;
 		case Player::JailLength: return m_aClients[ClientID].m_JailLength; break;
 		case Player::SHTimes: return m_aClients[ClientID].m_SummerHealingTimes; break;
+		default: dbg_msg("sys", "Invalid value %d in %s:%d", Type, __FILE__, __LINE__); break;
 	}
 	return 0;
 }
 
 
-void CServer::UpdateStat(int ClientID, int Type, int Value)
+void CServer::UpdateStat(int ClientID, Player Type, int Value)
 {
 	if(m_aClients[ClientID].m_Level > 0)
 	{
 		switch(Type)
 		{
-			case Player::PlayerLevel: m_aClients[ClientID].m_Level = Value; break;
-			case Player::PlayerExp: m_aClients[ClientID].m_Exp = Value; break;
-			case Player::PlayerMoney: m_aClients[ClientID].m_Money = Value; break;
+			case Player::Level: m_aClients[ClientID].m_Level = Value; break;
+			case Player::Exp: m_aClients[ClientID].m_Exp = Value; break;
+			case Player::Money: m_aClients[ClientID].m_Money = Value; break;
 			case Player::Gold: m_aClients[ClientID].m_Gold = Value; break;
 			case Player::Donate: m_aClients[ClientID].m_Donate = Value; break;	
 			case Player::Quest: m_aClients[ClientID].m_Quest = Value; break;
@@ -2454,11 +2426,12 @@ void CServer::UpdateStat(int ClientID, int Type, int Value)
 			case Player::IsJailed: m_aClients[ClientID].m_IsJailed = Value; break;
 			case Player::JailLength: m_aClients[ClientID].m_JailLength = Value; break;
 			case Player::SHTimes: m_aClients[ClientID].m_SummerHealingTimes = Value; break;
+			default: dbg_msg("sys", "Invalid value %d in %s:%d", Type, __FILE__, __LINE__); break;
 		}
 	}
 }
 
-int CServer::GetUpgrade(int ClientID, int Type)
+int CServer::GetUpgrade(int ClientID, Player Type)
 {
 	switch(Type)
 	{
@@ -2474,11 +2447,12 @@ int CServer::GetUpgrade(int ClientID, int Type)
 		case Player::Mana: return m_aClients[ClientID].Mana; break;
 		case Player::Skill1: return m_aClients[ClientID].m_HammerRange; break;
 		case Player::Skill2: return m_aClients[ClientID].m_Pasive2; break;
+		default: dbg_msg("sys", "Invalid value %d in %s:%d", Type, __FILE__, __LINE__); break;
 	}
 	return 0;
 }
 
-void CServer::UpdateUpgrade(int ClientID, int Type, int Vaule)
+void CServer::UpdateUpgrade(int ClientID, Player Type, int Vaule)
 {
 	if(m_aClients[ClientID].m_Level > 0)
 	{
@@ -2496,6 +2470,7 @@ void CServer::UpdateUpgrade(int ClientID, int Type, int Vaule)
 			case Player::Mana: m_aClients[ClientID].Mana = Vaule; break;
 			case Player::Skill1: m_aClients[ClientID].m_HammerRange = Vaule; break;
 			case Player::Skill2: m_aClients[ClientID].m_Pasive2 = Vaule; break;
+			default: dbg_msg("sys", "Invalid value %d in %s:%d", Type, __FILE__, __LINE__); break;
 		}
 	}
 }
@@ -2504,7 +2479,7 @@ void CServer::UpdateUpgrade(int ClientID, int Type, int Vaule)
 //#####################################################################
 const char *CServer::GetItemName(int ClientID, int ItemID, bool ntlang)
 {
-	if(ItemID < 0 || ItemID >= 200)
+	if(ItemID < 0 || ItemID >= MAX_ITEM)
 		return "(nope)";
 	else
 	{
@@ -2514,7 +2489,7 @@ const char *CServer::GetItemName(int ClientID, int ItemID, bool ntlang)
 }
 const char *CServer::GetItemName_en(int ItemID)
 {
-	if(ItemID < 0 || ItemID >= 200)
+	if(ItemID < 0 || ItemID >= MAX_ITEM)
 	{
 		return "(nope)";
 	}
@@ -2560,35 +2535,29 @@ int CServer::GetBonusEnchant(int ClientID, int ItemID, int Armor)
 {
 	if(Armor == 15)
 	{
-		if(ItemID == LEATHERBODY)
-			return 100*(m_stInv[ClientID][ItemID].i_enchant+1);
-		else if(ItemID == COOPERBODY)
-			return 150*(m_stInv[ClientID][ItemID].i_enchant+1);
-		else if(ItemID == IRONBODY)
-			return 200*(m_stInv[ClientID][ItemID].i_enchant+1);
-		else if(ItemID == GOLDBODY)
-			return 250*(m_stInv[ClientID][ItemID].i_enchant+1);
-		else if(ItemID == DIAMONDBODY)
-			return 300*(m_stInv[ClientID][ItemID].i_enchant+1);
-		else if(ItemID == DRAGONBODY)
-			return 500*(m_stInv[ClientID][ItemID].i_enchant+1);
-		return 0;
+		switch (ItemID)
+		{
+			case LEATHERBODY: return 100*(m_stInv[ClientID][ItemID].i_enchant+1);
+			case COOPERBODY: return 150*(m_stInv[ClientID][ItemID].i_enchant+1);
+			case IRONBODY: return 200*(m_stInv[ClientID][ItemID].i_enchant+1);
+			case GOLDBODY: return 250*(m_stInv[ClientID][ItemID].i_enchant+1);
+			case DIAMONDBODY: return 300*(m_stInv[ClientID][ItemID].i_enchant+1);
+			case DRAGONBODY: return 500*(m_stInv[ClientID][ItemID].i_enchant+1);
+			default: return 0;
+		}
 	}
 	else if(Armor == 16)
 	{
-		if(ItemID == LEATHERFEET)
-			return 50*(m_stInv[ClientID][ItemID].i_enchant+1);
-		else if(ItemID == COOPERFEET)
-			return 100*(m_stInv[ClientID][ItemID].i_enchant+1);
-		else if(ItemID == IRONFEET)
-			return 150*(m_stInv[ClientID][ItemID].i_enchant+1);
-		else if(ItemID == GOLDFEET)
-			return 200*(m_stInv[ClientID][ItemID].i_enchant+1);
-		else if(ItemID == DIAMONDFEET)
-			return 250*(m_stInv[ClientID][ItemID].i_enchant+1);
-		else if(ItemID == DRAGONFEET)
-			return 400*(m_stInv[ClientID][ItemID].i_enchant+1);
-		else return 0;		
+		switch (ItemID)
+		{
+			case LEATHERFEET: return 50*(m_stInv[ClientID][ItemID].i_enchant+1);
+			case COOPERFEET: return 100*(m_stInv[ClientID][ItemID].i_enchant+1);
+			case IRONFEET: return 150*(m_stInv[ClientID][ItemID].i_enchant+1);
+			case GOLDFEET: return 200*(m_stInv[ClientID][ItemID].i_enchant+1);
+			case DIAMONDFEET: return 250*(m_stInv[ClientID][ItemID].i_enchant+1);
+			case DRAGONFEET: return 400*(m_stInv[ClientID][ItemID].i_enchant+1);
+			default: return 0;
+		}
 	}
 	else if(Armor == 17)
 	{
@@ -2601,7 +2570,7 @@ int CServer::GetBonusEnchant(int ClientID, int ItemID, int Armor)
 
 void CServer::SetItemPrice(int ClientID, int ItemID, int Level, int Price)
 {
-	if(ItemID < 0 || ItemID >= 200)
+	if(ItemID < 0 || ItemID >= MAX_ITEM)
 		return;
 	
 	if(IsClientLogged(ClientID) && GetItemSettings(ClientID, PIGPIG) && Price > 10)
@@ -4255,9 +4224,6 @@ public:
 				m_pServer->m_aClients[m_ClientID].Mana = pSqlServer->GetResults()->getInt("Mana");
 				m_pServer->m_aClients[m_ClientID].m_HammerRange = pSqlServer->GetResults()->getInt("HammerRange");
 				m_pServer->m_aClients[m_ClientID].m_Pasive2 = pSqlServer->GetResults()->getInt("Pasive2");
-
-				//CServer::CGameServerCmd* pCmd = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("你已登录.欢迎."));
-				//m_pServer->AddGameServerCmd(pCmd);
 
 				CServer::CGameServerCmd *pCmd1 = new CGameServerCmd_SendChatTarget_Language(m_ClientID, CHATCATEGORY_DEFAULT, _("登录成功.按下esc界面中的“开始游戏”进入."));
 				m_pServer->AddGameServerCmd(pCmd1);

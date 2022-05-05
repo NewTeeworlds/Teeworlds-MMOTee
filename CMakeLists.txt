@@ -195,7 +195,7 @@ if(NOT MSVC)
   add_cxx_compiler_flag_if_supported(OUR_CXX_FLAGS_OWN -Wno-deprecated-copy)
   add_cxx_compiler_flag_if_supported(OUR_CXX_FLAGS_OWN -Wno-ignored-qualifiers)
   add_cxx_compiler_flag_if_supported(OUR_CXX_FLAGS_OWN -Wno-cast-function-type)
-  add_cxx_compiler_flag_if_supported(OUR_CXX_FLAGS_OWN -std=c++20)
+  add_cxx_compiler_flag_if_supported(OUR_CXX_FLAGS_OWN -std=c++2a)
   
   if(OUR_CXX_FLAGS_OWN)
     if(CMAKE_CXX_FLAGS)
