@@ -2936,7 +2936,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 				return;
 			}
 			Server()->RemItem(ClientID, ESUMMER, 20, -1);
-			if(random_prob(0.04f) && m_apPlayers[ClientID]->AccData.SummerHealingTimes < 15)
+			if(random_prob(0.96f) && m_apPlayers[ClientID]->AccData.SummerHealingTimes < 15)
 			{
 				SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} 在合成 {str:item}x{int:coun} 的时候失败了"), 
 						"name", Server()->ClientName(ClientID), "item", Server()->GetItemName(ClientID, ItemID, false), "coun", &Count ,NULL);				
