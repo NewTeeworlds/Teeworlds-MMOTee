@@ -327,6 +327,7 @@ protected:
 
 public:
 	class CLocalization* m_pLocalization;
+	virtual int GetTimeShiftUnit() const = 0; //In ms
 
 public:
 	enum AuthType

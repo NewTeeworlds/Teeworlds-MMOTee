@@ -71,7 +71,9 @@ class CServer : public IServer
 	class IStorage *m_pStorage;
 	CSqlServer* m_apSqlReadServers[MAX_SQLSERVERS];
 	CSqlServer* m_apSqlWriteServers[MAX_SQLSERVERS];
-	
+
+private:
+	int m_TimeShiftUnit;
 public:
 	class IGameServer *GameServer() { return m_pGameServer; }
 	class IConsole *Console() { return m_pConsole; }
@@ -501,6 +503,7 @@ public:
 	virtual void UpdateStat(int ClientID, Player Type, int Value);
 	virtual void UpdateUpgrade(int ClientID, Player Type, int Size);
 
+	virtual int GetTimeShiftUnit() const { return m_TimeShiftUnit; } //In ms
 };
 
 #endif

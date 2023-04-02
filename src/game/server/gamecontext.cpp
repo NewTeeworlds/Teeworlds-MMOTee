@@ -625,7 +625,7 @@ void CGameContext::SendBroadcast_LStat(int To, int Priority, int LifeSpan, int T
 		default: Buffer.clear();
 	}
 		
-	SendBroadcast_Localization(To, Priority, LifeSpan, " \n\n等级: {int:lvl} | 经验: {int:exp}/{int:expl}\n----------------------\n{str:sdata} {int:getl}%\n{str:dataang} 怒气\n----------------------\n{str:mana} 魔能\n生命值: {int:hp}/{int:hpstart}\n\n\n\n\n\n\n\n\n\n\n\n{str:buff}{str:emp}", 
+	SendBroadcast_Localization(To, Priority, LifeSpan, _(" \n\n等级: {int:lvl} | 经验: {int:exp}/{int:expl}\n----------------------\n{str:sdata} {int:getl}%\n{str:dataang} 怒气\n----------------------\n{str:mana} 魔能\n生命值: {int:hp}/{int:hpstart}\n\n\n\n\n\n\n\n\n\n\n\n{str:buff}{str:emp}"), 
 		"lvl", &m_apPlayers[To]->AccData.Level, 
 		"exp", &m_apPlayers[To]->AccData.Exp, 
 		"expl", &Optmem, 
@@ -652,7 +652,7 @@ void CGameContext::SendBroadcast_LChair(int To, int SizeExp, int SizeMoney)
 	int getl = (int)getlv;
 	
 	dynamic_string Buffer;		
-	SendBroadcast_Localization(To, 105, 100, "{str:buff}{str:sdata}({int:getl}%)\n经验: {int:exp}/{int:expl} +{int:exps}\n白银: {int:money} +{int:moneys}", 
+	SendBroadcast_Localization(To, 105, 100, _("{str:buff}{str:sdata}({int:getl}%)\n经验: {int:exp}/{int:expl} +{int:exps}\n白银: {int:money} +{int:moneys}"), 
 		"buff", Buffer.buffer(), "sdata", LevelString(100, (int)getlv, 5, '*', ' '), "getl", &getl, "exp", &m_apPlayers[To]->AccData.Exp, "expl", &Optmem, "exps", &SizeExp, "money", &m_apPlayers[To]->AccData.Money, "moneys", &SizeMoney);
 	Buffer.clear();
 	return;
@@ -674,11 +674,11 @@ void CGameContext::SendBroadcast_LBossed(int To, int Priority, int LifeSpan)
 		float getlv = (Optexp*100.0)/Optmem;
 		int getl = (int)getlv;
 			
-		SendBroadcast_Localization(To, Priority, LifeSpan, "{str:sdata}\n({int:getl}%)\nBoss: {str:name} 生命值: {int:hp}/{int:hpstart}\n我的生命值 {int:yhp}/{int:yhps}", 
+		SendBroadcast_Localization(To, Priority, LifeSpan, _("{str:sdata}\n({int:getl}%)\nBoss: {str:name} 生命值: {int:hp}/{int:hpstart}\n我的生命值 {int:yhp}/{int:yhps}"), 
 			"sdata", LevelString(100, (int)getlv, 5, ':', ' '), "getl", &getl, "name", GetBossName(m_BossType), "hp", &Optexp, "hpstart", &Optmem, "yhp", &m_apPlayers[To]->m_Health, "yhps", &m_apPlayers[To]->m_HealthStart ,NULL);
 	}
 	else
-		SendBroadcast_Localization(To, Priority, LifeSpan, "太棒了! 玩家最终取得了胜利! Boss {str:name} 已经倒下!", "name", GetBossName(m_BossType), NULL);
+		SendBroadcast_Localization(To, Priority, LifeSpan, _("太棒了! 玩家最终取得了胜利! Boss {str:name} 已经倒下!"), "name", GetBossName(m_BossType), NULL);
 }
 
 void CGameContext::SendBroadcast_Localization_P(int To, int Priority, int LifeSpan, int Number, const char* pText, ...)

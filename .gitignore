@@ -30,3 +30,10 @@ build/**
 /autoexec.cfg*
 
 /mmo_*
+
+CMakeCache.txt
+CPackConfig.cmake
+CPackSourceConfig.cmake
+Makefile
+CMakeFiles/
+Mmotee-Server

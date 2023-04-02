@@ -1418,6 +1418,8 @@ int CServer::LoadMap(const char *pMapName)
 		if(!MapConverter.Load())
 			return 0;
 		
+		m_TimeShiftUnit = MapConverter.GetTimeShiftUnit();
+
 		CDataFileReader dfClientMap;
 		//The map is already converted
 		if(dfClientMap.Open(Storage(), pMapName, IStorage::TYPE_ALL))

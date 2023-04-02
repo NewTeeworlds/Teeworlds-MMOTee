@@ -160,8 +160,13 @@ void CGameControllerMOD::Snap(int SnappingClient)
 	pGameInfoObj->m_RoundNum = (str_length(g_Config.m_SvMaprotation) && g_Config.m_SvRoundsPerMap) ? g_Config.m_SvRoundsPerMap : 0;
 	pGameInfoObj->m_RoundCurrent = m_RoundCount+1;
 
+	int ClassMask = 0;
+	ClassMask |= CMapConverter::MASK_DEFENDER;
+	ClassMask |= CMapConverter::MASK_MEDIC;
+	ClassMask |= CMapConverter::MASK_HERO;
+	ClassMask |= CMapConverter::MASK_SUPPORT;
 
-	/*if(GameServer()->m_apPlayers[SnappingClient])
+	if(GameServer()->m_apPlayers[SnappingClient])
 	{
 		if(GameServer()->m_apPlayers[SnappingClient]->AccData.Class == PLAYERCLASS_NONE && !GameServer()->m_apPlayers[SnappingClient]->IsBot())
 		{
@@ -183,7 +188,7 @@ void CGameControllerMOD::Snap(int SnappingClient)
 				pGameInfoObj->m_TimeLimit += (TimeShift/(Server()->TickSpeed()/20))/60;
 			}
 		}
-	}*/
+	}
 	
 
 }
