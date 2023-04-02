@@ -55,7 +55,7 @@ bool CMapConverter::Load()
 	
 	if(!pPhysicsLayer)
 	{
-		Console()->Print(IConsole::OUTPUT_LEVEL_STANDARD, "mmotee", "no physics layer in loaded map");
+		Console()->Print(IConsole::OUTPUT_LEVEL_STANDARD, "MMOTee", "no physics layer in loaded map");
 		return false;
 	}
 		
@@ -234,7 +234,7 @@ void CMapConverter::AddImageQuad(const char* pName, int ImageID, int GridX, int 
 	m_DataFile.AddItem(MAPITEMTYPE_LAYER, m_NumLayers++, sizeof(Item), &Item);
 }
 
-void CMapConverter::AddTeeLayer(const char* pName, int ImageID, vec2 Pos, float Size, int Env, bool Black, bool Feet)
+void CMapConverter::AddTeeLayer(const char* pName, int ImageID, vec2 Pos, float Size, int Env, bool Black)
 {
 	array<CQuad> aQuads;
 	CQuad Quad;
@@ -248,8 +248,6 @@ void CMapConverter::AddTeeLayer(const char* pName, int ImageID, vec2 Pos, float 
 	Quad.m_aTexcoords[2].y = Quad.m_aTexcoords[3].y = f2fx(96.0f/128.0f);
 	aQuads.add(Quad);
 	
-	if(Feet)
-	{
 		//BackFeet, Shadow
 		InitQuad(&Quad, Pos+vec2(-7.0f, 10.0f), vec2(Size, Size/2.0f));
 		Quad.m_ColorEnv = Env;
@@ -267,7 +265,6 @@ void CMapConverter::AddTeeLayer(const char* pName, int ImageID, vec2 Pos, float 
 		Quad.m_aTexcoords[0].y = Quad.m_aTexcoords[1].y = 1024.0f*64.0f/128.0f;
 		Quad.m_aTexcoords[2].y = Quad.m_aTexcoords[3].y = 1024.0f*96.0f/128.0f;
 		aQuads.add(Quad);
-	}
 	
 	//BackFeet, Color
 	if(!Black)
@@ -289,8 +286,6 @@ void CMapConverter::AddTeeLayer(const char* pName, int ImageID, vec2 Pos, float 
 		Quad.m_aTexcoords[2].y = Quad.m_aTexcoords[3].y = 1024.0f*96.0f/128.0f;
 		aQuads.add(Quad);
 		
-		if(Feet)
-		{
 			//FrontFeet, Color
 			InitQuad(&Quad, Pos+vec2(7.0f, 10.0f), vec2(Size, Size/2.0f));
 			Quad.m_ColorEnv = Env;
@@ -299,7 +294,7 @@ void CMapConverter::AddTeeLayer(const char* pName, int ImageID, vec2 Pos, float 
 			Quad.m_aTexcoords[0].y = Quad.m_aTexcoords[1].y = 1024.0f*32.0f/128.0f;
 			Quad.m_aTexcoords[2].y = Quad.m_aTexcoords[3].y = 1024.0f*64.0f/128.0f;
 			aQuads.add(Quad);
-		}
+		
 		//Eyes
 		vec2 Direction = normalize(vec2(1.0f, -0.5f));
 		float EyeSeparation = (0.075f - 0.010f*absolute(Direction.x))*Size;
@@ -561,17 +556,13 @@ int CMapConverter::AddExternalImage(const char* pImageName, int Width, int Heigh
 
 void CMapConverter::Finalize()
 {
-	//int EngineerImageID = AddExternalImage("../skins/limekitty", 256, 128);
-	int SoldierImageID = AddExternalImage("skins/brownbear", 256, 128);
-	//int ScientistImageID = AddExternalImage("../skins/toptri", 256, 128);
-	//int BiologistImageID = AddExternalImage("../skins/twintri", 256, 128);
-	//int MedicImageID = AddExternalImage("../skins/twinbop", 256, 128);
-	int HeroImageID = AddExternalImage("skins/redstripe", 256, 128);
-	int NinjaImageID = AddExternalImage("skins/x_ninja", 256, 128);
+	int SoldierImageID = AddExternalImage("../skins/brownbear", 256, 128);
+	int HeroImageID = AddExternalImage("../skins/redstripe", 256, 128);
+	int NinjaImageID = AddExternalImage("../skins/x_ninja", 256, 128);
 
 	//Menu
 	
-	const float MenuRadius = 228.0f;
+	const float MenuRadius = 196.0f;
 	const float MenuAngleStart = -pi/2.0f;
 	
 	{
@@ -586,7 +577,7 @@ void CMapConverter::Finalize()
 			Item.m_OffsetX = 0;
 			Item.m_OffsetY = 0;
 			Item.m_StartLayer = m_NumLayers;
-			Item.m_NumLayers = 4;
+			Item.m_NumLayers = 11;
 			Item.m_UseClipping = 0;
 			Item.m_ClipX = 0;
 			Item.m_ClipY = 0;
@@ -640,11 +631,21 @@ void CMapConverter::Finalize()
 				for(int i=0; i<NUM_MENUCLASS; i++) 
 				{
 					int ClassMask = 0;
-					if(i <= MENUCLASS_BERSERK) ClassMask = MASK_DEFENDER;
-					else if(i == MENUCLASS_HEALER) ClassMask = MASK_MEDIC;
-					else if(i == MENUCLASS_ASSASINS) ClassMask = MASK_HERO;
-					else ClassMask = MASK_SUPPORT;
 
+					switch(i)
+					{
+						case MENUCLASS_HEALER:
+							ClassMask = MASK_DEFENDER;
+							break;
+						case MENUCLASS_BERSERK:
+							ClassMask = MASK_MEDIC;
+							break;
+						case MENUCLASS_ASSASINS:
+							ClassMask = MASK_HERO;
+							break;
+						default:
+							ClassMask = MASK_SUPPORT;
+					}
 					
 					//Create Animation for enable/disable simulation
 					{
@@ -683,10 +684,10 @@ void CMapConverter::Finalize()
 									CEnvPoint Point;
 									Point.m_Time = (TIMESHIFT_MENUCLASS+3*((i+1)+j*TIMESHIFT_MENUCLASS_MASK))*m_TimeShiftUnit;
 									Point.m_Curvetype = 0;
-									Point.m_aValues[0] = HiddenValues[0];
-									Point.m_aValues[1] = HiddenValues[1];
-									Point.m_aValues[2] = HiddenValues[2];
-									Point.m_aValues[3] = HiddenValues[3];
+									Point.m_aValues[0] = HighlightValues[0];
+									Point.m_aValues[1] = HighlightValues[1];
+									Point.m_aValues[2] = HighlightValues[2];
+									Point.m_aValues[3] = HighlightValues[3];
 									m_lEnvPoints.add(Point);
 									NbPoints++;
 								}
@@ -694,10 +695,10 @@ void CMapConverter::Finalize()
 									CEnvPoint Point;
 									Point.m_Time = (TIMESHIFT_MENUCLASS+3*((i+2)+j*TIMESHIFT_MENUCLASS_MASK))*m_TimeShiftUnit;
 									Point.m_Curvetype = 0;
-									Point.m_aValues[0] = HiddenValues[0];
-									Point.m_aValues[1] = HiddenValues[1];
-									Point.m_aValues[2] = HiddenValues[2];
-									Point.m_aValues[3] = HiddenValues[3];
+									Point.m_aValues[0] = NormalValues[0];
+									Point.m_aValues[1] = NormalValues[1];
+									Point.m_aValues[2] = NormalValues[2];
+									Point.m_aValues[3] = NormalValues[3];
 									m_lEnvPoints.add(Point);
 									NbPoints++;
 								}
@@ -706,7 +707,7 @@ void CMapConverter::Finalize()
 							{
 								{
 									CEnvPoint Point;
-									Point.m_Time = 0;
+									Point.m_Time = (TIMESHIFT_MENUCLASS+3*(j*TIMESHIFT_MENUCLASS_MASK))*m_TimeShiftUnit;
 									Point.m_Curvetype = 0;
 									Point.m_aValues[0] = HiddenValues[0];
 									Point.m_aValues[1] = HiddenValues[1];
@@ -719,10 +720,10 @@ void CMapConverter::Finalize()
 									CEnvPoint Point;
 									Point.m_Time = (TIMESHIFT_MENUCLASS+3*((j+1)*TIMESHIFT_MENUCLASS_MASK))*m_TimeShiftUnit;
 									Point.m_Curvetype = 0;
-									Point.m_aValues[0] = HiddenValues[0];
-									Point.m_aValues[1] = HiddenValues[1];
-									Point.m_aValues[2] = HiddenValues[2];
-									Point.m_aValues[3] = HiddenValues[3];
+									Point.m_aValues[0] = NormalValues[0];
+									Point.m_aValues[1] = NormalValues[1];
+									Point.m_aValues[2] = NormalValues[2];
+									Point.m_aValues[3] = NormalValues[3];
 									m_lEnvPoints.add(Point);
 									NbPoints++;
 								}
@@ -732,10 +733,10 @@ void CMapConverter::Finalize()
 							CEnvPoint Point;
 							Point.m_Time = (TIMESHIFT_MENUCLASS+3*((MASK_ALL+1)*TIMESHIFT_MENUCLASS_MASK))*m_TimeShiftUnit;
 							Point.m_Curvetype = 0;
-							Point.m_aValues[0] = HiddenValues[0];
-							Point.m_aValues[1] = HiddenValues[1];
-							Point.m_aValues[2] = HiddenValues[2];
-							Point.m_aValues[3] = HiddenValues[3];
+							Point.m_aValues[0] = NormalValues[0];
+							Point.m_aValues[1] = NormalValues[1];
+							Point.m_aValues[2] = NormalValues[2];
+							Point.m_aValues[3] = NormalValues[3];
 							m_lEnvPoints.add(Point);
 							NbPoints++;
 						}
@@ -764,7 +765,7 @@ void CMapConverter::Finalize()
 					//Create Circle
 					if(pass == 0)
 					{
-						CreateCircle(&aQuads, m_MenuPosition+rotate(vec2(MenuRadius, 0.0f), MenuAngleStart+MenuAngleStep*i), 100.0f, vec4(255.0f, 22.0f, 1.0f, 0.2f), m_NumEnvs-1);
+						CreateCircle(&aQuads, m_MenuPosition+rotate(vec2(MenuRadius, 0.0f), MenuAngleStart+MenuAngleStep*i), 96.0f, vec4(1.0f, 1.0f, 1.0f, 0.5f), m_NumEnvs-1);
 					}
 					else
 					{
@@ -808,7 +809,7 @@ bool CMapConverter::CreateMap(const char* pFilename)
 	if(!m_DataFile.Open(Storage(), pFilename))
 	{
 		str_format(aBuf, sizeof(aBuf), "failed to open file '%s'...", pFilename);
-		Console()->Print(IConsole::OUTPUT_LEVEL_STANDARD, "mmotee", aBuf);
+		Console()->Print(IConsole::OUTPUT_LEVEL_STANDARD, "MMOTee", aBuf);
 		return false;
 	}
 	
@@ -841,11 +842,11 @@ bool CMapConverter::CreateMap(const char* pFilename)
 	
 	CopyLayers();
 	
-	//Finalize();
+	Finalize();
 	
 	m_DataFile.AddItem(MAPITEMTYPE_ENVPOINTS, 0, m_lEnvPoints.size()*sizeof(CEnvPoint), m_lEnvPoints.base_ptr());
 	m_DataFile.Finish();
 	
-	Console()->Print(IConsole::OUTPUT_LEVEL_ADDINFO, "mmotee", "highres map created");
+	Console()->Print(IConsole::OUTPUT_LEVEL_ADDINFO, "MMOTee", "highres map created");
 	return true;
 }

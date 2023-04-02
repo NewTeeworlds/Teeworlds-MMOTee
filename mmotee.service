@@ -1,6 +1,6 @@
 [Unit]
 Description=MMOTee Service
-Documentation=https://github.com/staronthesky/mmotee_cn
+Documentation=https://github.com/StarOnTheSky/mmotee_cn
 After=network.target nss-lookup.target
 
 [Service]
