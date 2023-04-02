@@ -329,7 +329,6 @@ void CGameContext::SendChatTarget_Localization(int To, int Category, const char*
 	va_end(VarArgs);
 }
 
-
 void CGameContext::AddVote_Localization(int To, const char* aCmd, const char* pText, ...)
 {
 	int Start = (To < 0 ? 0 : To);
