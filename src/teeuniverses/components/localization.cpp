@@ -292,7 +292,7 @@ CLocalization::~CLocalization()
 /* BEGIN EDIT *********************************************************/
 bool CLocalization::InitConfig(int argc, const char** argv)
 {
-	m_Cfg_MainLanguage.copy("zh");
+	m_Cfg_MainLanguage.copy("en");
 	
 	return true;
 }
@@ -328,8 +328,8 @@ bool CLocalization::Init()
 	json_settings JsonSettings;
 	mem_zero(&JsonSettings, sizeof(JsonSettings));
 	char aError[256];
-	size_t Length;
-	json_value *pJsonData = json_parse_ex(&JsonSettings, pFileData, Length, aError);
+	size_t aLength;
+	json_value *pJsonData = json_parse_ex(&JsonSettings, pFileData, aLength, aError);
 	if(pJsonData == 0)
 	{
 		delete[] pFileData;
