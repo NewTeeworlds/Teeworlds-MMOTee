@@ -296,7 +296,7 @@ void CServer::CClient::Reset(bool ResetScore)
 		m_UserID = -1;
 
 		m_AntiPing = 0;
-		str_copy(m_aLanguage, "zh", sizeof(m_aLanguage));
+		str_copy(m_aLanguage, "en", sizeof(m_aLanguage));
 
 		m_WaitingTime = 0;
 	}
@@ -2159,7 +2159,7 @@ void CServer::ResetBotInfo(int ClientID, int BotType, int BotSubType)
 		if (BotSubType == 0)
 		{
 			if (!g_Config.m_SvCityStart)
-				Name = "NPC:John";
+				Name = "NPC:J.Johan";
 			else if (g_Config.m_SvCityStart == 1)
 				Name = "NPC:Grem";
 		}
