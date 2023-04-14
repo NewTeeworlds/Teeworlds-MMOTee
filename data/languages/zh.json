@@ -1,2048 +1,636 @@
-{
-	"translation": [
-		{
-			"value": "这个名称已被使用",
-			"key": "This name has already been used"
-		},
-		{
-			"value": "这个名称含有中文。为了避免粒子错误，公会名不允许中文",
-			"key": "null"
-		},
-		{
-			"value": "创建成功,公会票已使用",
-			"key": "Clan created successfully, ticket has been used"
-		},
-		{
-			"value": "创建失败",
-			"key": "Clan create failed, please contact admin"
-		},
-		{
-			"value": "▹ 等级 %d:%s(ID:%d)",
-			"key": "▹ Level %d:%s(ID:%d)"
-		},
-		{
-			"value": "为公会贡献了 %d 黄金",
-			"key": "Donated %d Gold to the clan"
-		},
-		{
-			"value": "公会列表错误.请报告管理员.",
-			"key": "There is a problem with Clan List, please contact admin"
-		},
-		{
-			"value": "登录时出现错误,请报告管理员",
-			"key": "There is a problem with your login, please contact admin"
-		},
-		{
-			"value": "登录成功.按下esc界面中的“开始游戏”进入.",
-			"key": "Logged in, Press 'Start Gaming' to enter."
-		},
-		{
-			"value": "用户名或密码错误,或是您的账户不属于该昵称.",
-			"key": "Wrong username or password, or your account doesn't belong to this nickname"
-		},
-		{
-			"value": "欢迎新玩家!",
-			"key": "Welcome new player!"
-		},
-		{
-			"value": "这个用户名/昵称已被占用",
-			"key": "This username or nickname has already been registered"
-		},
-		{
-			"value": "在注册账号时发生了错误",
-			"key": "There's a problem with your registration, please contact admin"
-		},
-		{
-			"value": "账户注册成功.请使用/login <密码> 登录.",
-			"key": "Registered successfully, please enter '/login <passwd>' to login"
-		},
-		{
-			"value": "找不到用户",
-			"key": "User not found"
-		},
-		{
-			"value": "成功更改密码",
-			"key": "Password updated successfully"
-		},
-		{
-			"value": "更改密码失败",
-			"key": "Failed to change your password"
-		},
-		{
-			"value": "[房屋#%d] 公会 %s 得到房屋,公会 %s 失去了它!",
-			"key": "[House #%d] Clan %s get the house, and clan %s lost it!"
-		},
-		{
-			"value": "[房屋#%d] 公会 %s 守住了房屋!",
-			"key": "[House #%d] Clan %s "
-		},
-		{
-			"value": "封禁成功.",
-			"key": "Banned successfully"
-		},
-		{
-			"value": "封禁失败.",
-			"key": "Failed to ban"
-		},
-		{
-			"value": "解封成功.",
-			"key": "Unbanned successfully"
-		},
-		{
-			"value": "未找到该用户或该用户未被封禁.",
-			"key": "User not found, or this user is not banned"
-		},
-		{
-			"value": "解封失败.",
-			"key": "Failed to unban"
-		},
-		{
-			"value": "成功将玩家 %s 设置为下线.",
-			"key": "Successfully set the status of player %s to offline"
-		},
-		{
-			"value": "操作失败.",
-			"key": "Operation failed"
-		},
-		{
-			"value": "# 为防止错误输入导致的账号密码泄露，系统已禁止聊天内容以“、”开头",
-			"key": ""
-		},
-		{
-			"value": "你已登录",
-			"key": "You have already logged in"
-		},
-		{
-			"value": "这个账户启用了安全设置,需要用户名与密码!",
-			"key": "This account has activated Security Settings. Both username and password are required."
-		},
-		{
-			"value": "登录方法: /login <用户名> <密码>",
-			"key": "Login: '/login <Username> <Password>'"
-		},
-		{
-			"value": "这个账户未启用安全设置,只需要密码",
-			"key": "This account has not activated Security Settings. Only password is required."
-		},
-		{
-			"value": "登录方法: /login <密码>",
-			"key": "Login: '/login <Password>'"
-		},
-		{
-			"value": "命令方法: /giveitem <玩家id> <物品id> <物品数量> (附魔等级)",
-			"key": "Usage: /giveitem <ClientID> <ItemID> <Quantity> (Enchant_Level)"
-		},
-		{
-			"value": "输入的 ID 无效.",
-			"key": "Invalid ID"
-		},
-		{
-			"value": "命令方法: /giveitem <玩家id> <物品id> <物品数量>",
-			"key": "Usage: /giveitem <ClientID> <ItemID> <Quantity>"
-		},
-		{
-			"value": "命令方法: /sendmail <玩家id> <物品id> <物品数量>",
-			"key": "Usage: /sendmail <ClientID> <ItemID> <Quantity>"
-		},
-		{
-			"value": "命令方法: /givedonate <玩家id> <点券>",
-			"key": "Usage: /givedonate <ClientID> <Donate_amount>"
-		},
-		{
-			"value": "成功给予点券.",
-			"key": "Donate credit given successfully"
-		},
-		{
-			"value": "你的点券余额增加了.",
-			"key": "Your Donate Credit has been added"
-		},
-		{
-			"value": "请在 1-250 服务器上注册",
-			"key": "Please register on 1-250 server"
-		},
-		{
-			"value": "使用方法: /register <用户名> <密码>",
-			"key": "Usage: /register <Username> <Password>"
-		},
-		{
-			"value": "用户名 / 密码必须包含 2-15 个字符",
-			"key": ""
-		},
-		{
-			"value": "# 你已经加入一个公会了!",
-			"key": ""
-		},
-		{
-			"value": "使用方法: /newclan <公会名称>",
-			"key": ""
-		},
-		{
-			"value": "公会名称长度必须在 1~12 个字符之间",
-			"key": ""
-		},
-		{
-			"value": "你没有公会票,请前往商店购买",
-			"key": ""
-		},
-		{
-			"value": "# 你不是公会会长或者管理员!",
-			"key": ""
-		},
-		{
-			"value": "公会人数已达到上限",
-			"key": ""
-		},
-		{
-			"value": "用法: /invite <玩家昵称>",
-			"key": ""
-		},
-		{
-			"value": "是否加入公会?",
-			"key": ""
-		},
-		{
-			"value": "玩家 {str:name} 邀请你加入 {str:cname} 公会!",
-			"key": ""
-		},
-		{
-			"value": "玩家未找到或玩家已在公会!",
-			"key": ""
-		},
-		{
-			"value": "玩家已找到,请求已发送.",
-			"key": ""
-		},
-		{
-			"value": "? ---- 命令列表",
-			"key": ""
-		},
-		{
-			"value": "/invite <玩家昵称>, /createboss, /cmdlist, /lang <语言>",
-			"key": ""
-		},
-		{
-			"value": "/login (用户名) <密码>, /register <用户名> <密码>",
-			"key": ""
-		},
-		{
-			"value": "/newclan <公会名称>, /password <密码> <重复密码>",
-			"key": ""
-		},
-		{
-			"value": "Sorry, currently we have not finished translation yet. \nFor more info, see https://github.com/StarOnTheSky/mmotee_cn .",
-			"key": ""
-		},
-		{
-			"value": "使用: /jail <玩家id> <入狱时长>",
-			"key": ""
-		},
-		{
-			"value": "成功将 {str:name} 关进监狱",
-			"key": ""
-		},
-		{
-			"value": "使用: /unjail <玩家id>",
-			"key": ""
-		},
-		{
-			"value": "成功将 {str:name} 放出监狱",
-			"key": ""
-		},
-		{
-			"value": "# 请先登录",
-			"key": ""
-		},
-		{
-			"value": "修改密码: /password <密码> <重复密码>",
-			"key": ""
-		},
-		{
-			"value": "两次密码不一致",
-			"key": ""
-		},
-		{
-			"value": "密码必须包含 2~15 个字符",
-			"key": ""
-		},
-		{
-			"value": "修改密码(管理员): /chpw <昵称> <密码> ",
-			"key": ""
-		},
-		{
-			"value": "密码必须包含 2~15 个字符",
-			"key": ""
-		},
-		{
-			"value": "封禁用户(管理员): /ban <客户端ID> <原因> ",
-			"key": ""
-		},
-		{
-			"value": "解封用户(管理员): /unban <昵称>",
-			"key": ""
-		},
-		{
-			"value": "设置用户状态为下线(管理员): /offline <昵称>",
-			"key": ""
-		},
-		{
-			"value": "# 未知命令 {str:cmd} !",
-			"key": ""
-		},
-		{
-			"value": "Boss战被取消了, 玩家们不在等待室内(waiting room)",
-			"key": ""
-		},
-		{
-			"value": "对Boss战开始了. 玩家数量:{int:num}",
-			"key": ""
-		},
-		{
-			"value": "Boss战的玩家都死亡了, boss {str:name} 最终胜利了",
-			"key": ""
-		},
-		{
-			"value": "您的邮箱内有新的信息",
-			"key": ""
-		},
-		{
-			"value": "[Survial] 最少需要两名玩家才能开始",
-			"key": ""
-		},
-		{
-			"value": "[Survial] 游戏开始了, 一共有 {int:num} 名玩家参加",
-			"key": ""
-		},
-		{
-			"value": "[Survial] 游戏结束. 没有玩家获胜",
-			"key": ""
-		},
-		{
-			"value": "[Survial] 游戏结束.最终赢家是:{str:name}:",
-			"key": ""
-		},
-		{
-			"value": "制作者名单:",
-			"key": ""
-		},
-		{
-			"value": "原作者:Kurosio",
-			"key": ""
-		},
-		{
-			"value": "制作者/管理:天上的星星",
-			"key": ""
-		},
-		{
-			"value": "汉化:MC_TYH、Ninecloud及MMOTEE全体国服玩家",
-			"key": ""
-		},
-		{
-			"value": "地图制作:天际",
-			"key": ""
-		},
-		{
-			"value": "玩家 {str:PlayerName} 进入了服务器!",
-			"key": ""
-		},
-		{
-			"value": "欢迎! 请登录(/login)或者注册(/register)一个新的账户,指令见/cmdlist",
-			"key": ""
-		},
-		{
-			"value": "你不能把你自己踢出房间",
-			"key": ""
-		},
-		{
-			"value": "你不能把管理员踢出房间",
-			"key": ""
-		},
-		{
-			"value": "'%s' 投票把你踢出房间",
-			"key": ""
-		},
-		{
-			"value": "InfClass拥有一切解释权",
-			"key": ""
-		},
-		{
-			"value": "主要制作人员:\nNajvlad, Rem1x, Matodor, Kurosio - 原作者",
-			"key": ""
-		},
-		{
-			"value": "天际 - 修改地图\nNinecloud - 协助开发\n天上的星星 - 开发者,服务器管理",
-			"key": ""
-		},
-		{
-			"value": "------- {规则} -------",
-			"key": ""
-		},
-		{
-			"value": "禁止使用游戏漏洞!",
-			"key": ""
-		},
-		{
-			"value": "禁止使用辅助性软件!",
-			"key": ""
-		},
-		{
-			"value": "禁止使用分身!",
-			"key": ""
-		},
-		{
-			"value": "禁止同时在多个服务器登录账号!",
-			"key": ""
-		},
-		{
-			"value": "禁止分享账号!",
-			"key": ""
-		},
-		{
-			"value": "禁止侮辱玩家!",
-			"key": ""
-		},
-		{
-			"value": "禁止进行线下交易!",
-			"key": ""
-		},
-		{
-			"value": "最好不要干涉别人的游戏过程!",
-			"key": ""
-		},
-		{
-			"value": "你需要登录(/login)或者注册(/register)一个新的账户.",
-			"key": ""
-		},
-		{
-			"value": "/register <用户名> <密码> - 创建一个新的账户",
-			"key": ""
-		},
-		{
-			"value": "/login <用户名> <密码> - 登录账户",
-			"key": ""
-		},
-		{
-			"value": "# 你不是该公会的会长或者管理员",
-			"key": ""
-		},
-		{
-			"value": "公会 {str:name} {str:type} 了房屋!",
-			"key": ""
-		},
-		{
-			"value": "打开",
-			"key": ""
-		},
-		{
-			"value": "关闭",
-			"key": ""
-		},
-		{
-			"value": "# 你不能把该公会的会长或者管理员踢出公会",
-			"key": ""
-		},
-		{
-			"value": "会长将玩家 {str:name} 踢出了公会",
-			"key": ""
-		},
-		{
-			"value": "会长将离线玩家 {str:name} 踢出了公会",
-			"key": ""
-		},
-		{
-			"value": "公会新的会长:{str:name}",
-			"key": ""
-		},
-		{
-			"value": "# 你不是该公会的会长",
-			"key": ""
-		},
-		{
-			"value": "公会新的管理员:{str:name}",
-			"key": ""
-		},
-		{
-			"value": "公会原管理员 {str:name} 被罢免了!",
-			"key": ""
-		},
-		{
-			"value": "# 你不是该公会的会长",
-			"key": ""
-		},
-		{
-			"value": "会长不能退出公会",
-			"key": ""
-		},
-		{
-			"value": "人数已达到最大值",
-			"key": ""
-		},
-		{
-			"value": "你所在的公会没有房屋!",
-			"key": ""
-		},
-		{
-			"value": "你向工会捐了 {int:count} 黄金",
-			"key": ""
-		},
-		{
-			"value": "你没有那么多钱,小穷光蛋",
-			"key": ""
-		},
-		{
-			"value": "任务还未完成!",
-			"key": ""
-		},
-		{
-			"value": "你没有足够的升级点",
-			"key": ""
-		},
-		{
-			"value": "你的技能成功提升 {int:lv} 级",
-			"key": ""
-		},
-		{
-			"value": "技能已满级",
-			"key": ""
-		},
-		{
-			"value": "你成功地获得了升级",
-			"key": ""
-		},
-		{
-			"value": "你没有足够的技能点",
-			"key": ""
-		},
-		{
-			"value": "你的技能成功地提升了",
-			"key": ""
-		},
-		{
-			"value": "请等待...",
-			"key": ""
-		},
-		{
-			"value": "需要 1000 材料(material)",
-			"key": ""
-		},
-		{
-			"value": "{str:name} 成功地附魔了物品:{str:item} +{int:enchant}",
-			"key": ""
-		},
-		{
-			"value": "表情-比心",
-			"key": ""
-		},
-		{
-			"value": "表情-Oops",
-			"key": ""
-		},
-		{
-			"value": "表情-...",
-			"key": ""
-		},
-		{
-			"value": "表情-哼歌",
-			"key": ""
-		},
-		{
-			"value": "表情-Sorry",
-			"key": ""
-		},
-		{
-			"value": "表情-鬼",
-			"key": ""
-		},
-		{
-			"value": "设置 {str:stat} {str:name}",
-			"key": ""
-		},
-		{
-			"value": "正常",
-			"key": ""
-		},
-		{
-			"value": "痛苦",
-			"key": ""
-		},
-		{
-			"value": "高兴",
-			"key": ""
-		},
-		{
-			"value": "惊讶",
-			"key": ""
-		},
-		{
-			"value": "愤怒",
-			"key": ""
-		},
-		{
-			"value": "眯眼",
-			"key": ""
-		},
-		{
-			"value": "☪ 信息 ( ′ ω ` )?:",
-			"key": ""
-		},
-		{
-			"value": "制作者名单",
-			"key": ""
-		},
-		{
-			"value": "游戏如何开始?",
-			"key": ""
-		},
-		{
-			"value": "rAzataz 修改 infClass 通过 Kurosio",
-			"key": ""
-		},
-		{
-			"value": "所有制作者信息在 '作者信息' 内",
-			"key": ""
-		},
-		{
-			"value": "☪ 账户: {str:Username}",
-			"key": ""
-		},
-		{
-			"value": "ღ 等级: {int:Level} / 经验: {int:Exp}",
-			"key": ""
-		},
-		{
-			"value": "ღ 黄金: {int:gold} 白银: {int:Money}",
-			"key": ""
-		},
-		{
-			"value": "子菜单--信息",
-			"key": ""
-		},
-		{
-			"value": "☞ QQ群: 736636701",
-			"key": ""
-		},
-		{
-			"value": "☞ 注意事项",
-			"key": ""
-		},
-		{
-			"value": "☞ 通缉犯",
-			"key": ""
-		},
-		{
-			"value": "☞ 事件与奖金",
-			"key": ""
-		},
-		{
-			"value": "☞ 工作与专长",
-			"key": ""
-		},
-		{
-			"value": "☞ 玩家/公会排名",
-			"key": ""
-		},
-		{
-			"value": "子菜单--账户",
-			"key": ""
-		},
-		{
-			"value": "☞ 邮箱 ✉",
-			"key": ""
-		},
-		{
-			"value": "☞ 装备 ☭",
-			"key": ""
-		},
-		{
-			"value": "☞ 物品栏/背包 ✪",
-			"key": ""
-		},
-		{
-			"value": "☞ 合成栏 ☺",
-			"key": ""
-		},
-		{
-			"value": "☞ 任务与报酬 ⊹",
-			"key": ""
-		},
-		{
-			"value": "子菜单--设置",
-			"key": ""
-		},
-		{
-			"value": "☞ 升级与职业 [♣{str:class}♣]",
-			"key": ""
-		},
-		{
-			"value": "☞ 设置与安全",
-			"key": ""
-		},
-		{
-			"value": "☞ 充钱与特权",
-			"key": ""
-		},
-		{
-			"value": "☞ 成就与称号",
-			"key": ""
-		},
-		{
-			"value": "☞ 公会菜单 {str:clan}",
-			"key": ""
-		},
-		{
-			"value": "你向商店提供了 {int:count} 个材料，获得了 {int:money} 黄金",
-			"key": ""
-		},
-		{
-			"value": "物品",
-			"key": ""
-		},
-		{
-			"value": "升级",
-			"key": ""
-		},
-		{
-			"value": "个人",
-			"key": ""
-		},
-		{
-			"value": "稀有物品",
-			"key": ""
-		},
-		{
-			"value": "使你在升级时获得20个钱袋",
-			"key": ""
-		},
-		{
-			"value": "不会受到自己的伤害（比如爆炸）",
-			"key": ""
-		},
-		{
-			"value": "在投票的理由填写处填写出售的个数",
-			"key": ""
-		},
-		{
-			"value": "工作与专长",
-			"key": ""
-		},
-		{
-			"value": "专长 种地 ({int:exp}/{int:nexp} 等级: {int:lvl})",
-			"key": ""
-		},
-		{
-			"value": "专长 挖矿 ({int:exp}/{int:nexp} 等级: {int:lvl})",
-			"key": ""
-		},
-		{
-			"value": "专长 萃取 ({int:exp}/{int:nexp} 等级: {int:lvl})",
-			"key": ""
-		},
-		{
-			"value": "专长 伐木工 (光头强不会升级)",
-			"key": ""
-		},
-		{
-			"value": "专长 摸鱼 (敬请期待)",
-			"key": ""
-		},
-		{
-			"value": "我的邮箱",
-			"key": ""
-		},
-		{
-			"value": "领取在线奖励",
-			"key": ""
-		},
-		{
-			"value": "我的装备",
-			"key": ""
-		},
-		{
-			"value": "◈ 胸甲 {str:enquip} / 生命值 +{int:hp} 装甲值 +{int:arm}",
-			"key": ""
-		},
-		{
-			"value": "◈ 靴子 {str:enquip} / 生命值 +{int:hp} 装甲值 +{int:arm}",
-			"key": ""
-		},
-		{
-			"value": "◈ Stabilized {str:enquip} / 伤害 +{int:dmg}",
-			"key": ""
-		},
-		{
-			"value": "排序与选择",
-			"key": ""
-		},
-		{
-			"value": "☞ 胸甲 {str:enquip}",
-			"key": ""
-		},
-		{
-			"value": "☞ 靴子 {str:enquip}",
-			"key": ""
-		},
-		{
-			"value": "☞ Stabilized {str:enquip}",
-			"key": ""
-		},
-		{
-			"value": "成就与称号",
-			"key": ""
-		},
-		{
-			"value": "你可以使用称号",
-			"key": ""
-		},
-		{
-			"value": "最后显示更多的称号",
-			"key": ""
-		},
-		{
-			"value": "这是动态的设置",
-			"key": ""
-		},
-		{
-			"value": "是提供给私人的升级的",
-			"key": ""
-		},
-		{
-			"value": "当你购买物品后需要到这里来开启",
-			"key": ""
-		},
-		{
-			"value": "修改",
-			"key": ""
-		},
-		{
-			"value": "锤子",
-			"key": ""
-		},
-		{
-			"value": "手枪",
-			"key": ""
-		},
-		{
-			"value": "散弹枪",
-			"key": ""
-		},
-		{
-			"value": "榴弹炮",
-			"key": ""
-		},
-		{
-			"value": "激光枪",
-			"key": ""
-		},
-		{
-			"value": "设置",
-			"key": ""
-		},
-		{
-			"value": "☞ Anti Ping {str:stat}",
-			"key": ""
-		},
-		{
-			"value": "☞ 登录与密码 {str:stat}",
-			"key": ""
-		},
-		{
-			"value": "☞ VIP特权: 禁止PVP {str:stat}",
-			"key": ""
-		},
-		{
-			"value": "☞ 聊天栏提示信息 ({str:stat})",
-			"key": ""
-		},
-		{
-			"value": "过滤",
-			"key": ""
-		},
-		{
-			"value": "最少",
-			"key": ""
-		},
-		{
-			"value": "锤子",
-			"key": ""
-		},
-		{
-			"value": "☞ 拾取物品方法 ({str:stat})",
-			"key": ""
-		},
-		{
-			"value": "这是升级职业的",
-			"key": ""
-		},
-		{
-			"value": "被动技能与主动技能",
-			"key": ""
-		},
-		{
-			"value": "在投票的理由填写处填写升级数",
-			"key": ""
-		},
-		{
-			"value": "统计数据(升级点 - {int:up} / 技能点 - {int:sp})",
-			"key": ""
-		},
-		{
-			"value": "升级选项",
-			"key": ""
-		},
-		{
-			"value": "☞ [{int:sum}] 生命值上限 +40(1升级点 {str:bonus})",
-			"key": ""
-		},
-		{
-			"value": "☞ [{int:sum}] 伤害 +1(1升级点 {str:bonus})",
-			"key": ""
-		},
-		{
-			"value": "☞ [{int:sum}] 子弹回复速度 +1(1升级点 {str:bonus})",
-			"key": ""
-		},
-		{
-			"value": "☞ [{int:sum}] 子弹 +1(5升级点 {str:bonus})",
-			"key": ""
-		},
-		{
-			"value": "☞ [{int:sum}] 生命恢复速度 +1(1升级点 {str:bonus})",
-			"key": ""
-		},
-		{
-			"value": "☞ [{int:sum}] 射速 +1(1升级点 {str:bonus})",
-			"key": ""
-		},
-		{
-			"value": "☞ [{int:sum}] 魔能 +1(1升级点 {str:bonus})",
-			"key": ""
-		},
-		{
-			"value": "☞ [{int:sum}] 子弹散射 +1(10升级点 {str:bonus})",
-			"key": ""
-		},
-		{
-			"value": "职业被动技",
-			"key": ""
-		},
-		{
-			"value": "☞ ({int:need}技能点) 生命值 +4% ({str:act}) ({int:sum})",
-			"key": ""
-		},
-		{
-			"value": "☞ ({int:need}技能点) 伤害减免 +2% ({str:act}) ({int:sum})",
-			"key": ""
-		},
-		{
-			"value": "☞ ({int:need}技能点) 暴击率 +6.67% ({str:act}) ({int:sum})",
-			"key": ""
-		},
-		{
-			"value": "☞ ({int:need}技能点) 暴击伤害 +3% ({str:act}) ({int:sum})",
-			"key": ""
-		},
-		{
-			"value": "☞ ({int:need}技能点) 锤子范围 ({str:act}) ({int:sum})",
-			"key": ""
-		},
-		{
-			"value": "☞ ({int:need}技能点) 伤害 +3% ({str:act}) ({int:sum})",
-			"key": ""
-		},
-		{
-			"value": "☞ ({int:need}技能点) 工作收成+1 20% ({str:act}) ({int:sum})",
-			"key": ""
-		},
-		{
-			"value": "☞ ({int:need}技能点) 工作效率+1 ({str:act}) ({int:sum})",
-			"key": ""
-		},
-		{
-			"value": "☞ (70技能点) 魔能-激光墙 ({str:act})",
-			"key": ""
-		},
-		{
-			"value": "☞ (60技能点) 治疗 ({str:act})",
-			"key": ""
-		},
-		{
-			"value": "☞ (20技能点) 光剑 ({str:act})",
-			"key": ""
-		},
-		{
-			"value": "30 魔能 ✔",
-			"key": ""
-		},
-		{
-			"value": "50 魔能 ✔",
-			"key": ""
-		},
-		{
-			"value": "1 魔能(持续消耗) ✔",
-			"key": ""
-		},
-		{
-			"value": "公会名称: {str:name}(ID:{int:id})",
-			"key": ""
-		},
-		{
-			"value": "黄金储量: {int:bank}",
-			"key": ""
-		},
-		{
-			"value": "会长: {str:leader}",
-			"key": ""
-		},
-		{
-			"value": "管理员: {str:admin}",
-			"key": ""
-		},
-		{
-			"value": "关联: {int:revl}",
-			"key": ""
-		},
-		{
-			"value": "公会人数: {int:count}/{int:maxcount}",
-			"key": ""
-		},
-		{
-			"value": "等级: {int:lvl} 经验 ({int:exp}/{int:maxneed}).",
-			"key": ""
-		},
-		{
-			"value": "奖金: +{int:exp} 经验. +{int:money} 黄金",
-			"key": ""
-		},
-		{
-			"value": "- 捐赠黄金给公会",
-			"key": ""
-		},
-		{
-			"value": "- 公会升级",
-			"key": ""
-		},
-		{
-			"value": "- 房屋菜单与升级",
-			"key": ""
-		},
-		{
-			"value": "- 公会列表",
-			"key": ""
-		},
-		{
-			"value": "- 公会战（敬请期待）",
-			"key": ""
-		},
-		{
-			"value": "- 退出公会!",
-			"key": ""
-		},
-		{
-			"value": "数一数二的公会才能拥有房屋",
-			"key": ""
-		},
-		{
-			"value": "房屋设置",
-			"key": ""
-		},
-		{
-			"value": "房屋的门 [{str:stat}]",
-			"key": ""
-		},
-		{
-			"value": "公会成员的房屋升级",
-			"key": ""
-		},
-		{
-			"value": "- 购买在房屋内的出生点 [{int:price}]",
-			"key": ""
-		},
-		{
-			"value": "- 升级挂机所获 [{int:max}*(+1) {int:coin}]",
-			"key": ""
-		},
-		{
-			"value": "房屋里的家具 - 你的房屋-- 1 级",
-			"key": ""
-		},
-		{
-			"value": "你所在的公会还没有房屋呢!",
-			"key": ""
-		},
-		{
-			"value": "这是会长处置玩家的菜单",
-			"key": ""
-		},
-		{
-			"value": "▶ 选择了玩家 {str:name}",
-			"key": ""
-		},
-		{
-			"value": "▹ 转让公会",
-			"key": ""
-		},
-		{
-			"value": "▹ 授予公会管理员",
-			"key": ""
-		},
-		{
-			"value": "▹ 移除公会管理员",
-			"key": ""
-		},
-		{
-			"value": "▹ 踢出公会",
-			"key": ""
-		},
-		{
-			"value": "公会成员相关的商店",
-			"key": ""
-		},
-		{
-			"value": "只能由会长来购买",
-			"key": ""
-		},
-		{
-			"value": "公会核心升级",
-			"key": ""
-		},
-		{
-			"value": "- 升级公会最大人数 [{int:maxcount}(+1) {int:coin}]",
-			"key": ""
-		},
-		{
-			"value": "升级公会给公会成员的奖金",
-			"key": ""
-		},
-		{
-			"value": "- 升级挂机的经验奖励 [{int:max}*(+1) {int:coin}]",
-			"key": ""
-		},
-		{
-			"value": "- 升级挂机的白银奖励 [{int:max}*(+100) {int:coin}]",
-			"key": ""
-		},
-		{
-			"value": "这个菜单可以捐赠黄金给公会",
-			"key": ""
-		},
-		{
-			"value": "钱是为了大家的",
-			"key": ""
-		},
-		{
-			"value": "- 捐赠黄金给公会",
-			"key": ""
-		},
-		{
-			"value": "事件列表",
-			"key": ""
-		},
-		{
-			"value": "事件汇总(summer):",
-			"key": ""
-		},
-		{
-			"value": "杀死怪物时随机获得合成物品",
-			"key": ""
-		},
-		{
-			"value": "如果成功的话将会随机合成",
-			"key": ""
-		},
-		{
-			"value": "你将得到称号与技能汇总(summer)",
-			"key": ""
-		},
-		{
-			"value": "事件物品(地上掉的锤子):",
-			"key": ""
-		},
-		{
-			"value": "当杀死怪物时随机获得一种盒子",
-			"key": ""
-		},
-		{
-			"value": "在线奖励(Back to School):",
-			"key": ""
-		},
-		{
-			"value": "每30分钟你会得到一次在线奖励",
-			"key": ""
-		},
-		{
-			"value": "肥肠豹潜! 现在没有活动的事件.",
-			"key": ""
-		},
-		{
-			"value": "这是被通缉玩家的列表",
-			"key": ""
-		},
-		{
-			"value": "如果你击败了列表里的玩家",
-			"key": ""
-		},
-		{
-			"value": "你将会得到回报(白银)，而那个玩家将会被打入大牢",
-			"key": ""
-		},
-		{
-			"value": "-%s (%d 白银)",
-			"key": ""
-		},
-		{
-			"value": "这里不能搜索(searchable)",
-			"key": ""
-		},
-		{
-			"value": "玩家/公会排名",
-			"key": ""
-		},
-		{
-			"value": "★ 玩家 - {str:psevdo}",
-			"key": ""
-		},
-		{
-			"value": "☞ 等级排名",
-			"key": ""
-		},
-		{
-			"value": "☞ 黄金排名",
-			"key": ""
-		},
-		{
-			"value": "☞ 任务排名",
-			"key": ""
-		},
-		{
-			"value": "☞ 击杀排名",
-			"key": ""
-		},
-		{
-			"value": "☞ 竞技场胜利次数排名",
-			"key": ""
-		},
-		{
-			"value": "★ 公会 - {str:psevdo}",
-			"key": ""
-		},
-		{
-			"value": "☞ 等级排名",
-			"key": ""
-		},
-		{
-			"value": "☞ 黄金排名",
-			"key": ""
-		},
-		{
-			"value": "☞ Relevance排名",
-			"key": ""
-		},
-		{
-			"value": "这是你的物品栏",
-			"key": ""
-		},
-		{
-			"value": "选择类型在 () 数量",
-			"key": ""
-		},
-		{
-			"value": "☞ 专长与工作 ({int:got})",
-			"key": ""
-		},
-		{
-			"value": "☞ 合成与蓝图 ({int:got})",
-			"key": ""
-		},
-		{
-			"value": "☞ 消耗品 ({int:got})",
-			"key": ""
-		},
-		{
-			"value": "☞ 任务与其他 ({int:got})",
-			"key": ""
-		},
-		{
-			"value": "☞ 稀有物品 ({int:got})",
-			"key": ""
-		},
-		{
-			"value": "☞ 武器与升级 ({int:got})",
-			"key": ""
-		},
-		{
-			"value": "充钱与特权",
-			"key": ""
-		},
-		{
-			"value": "向管理员 天上的星星 捐赠(打钱)",
-			"key": ""
-		},
-		{
-			"value": "服务器目前资金足够,暂时不需要充值",
-			"key": ""
-		},
-		{
-			"value": "$ 你充了 {int:don}",
-			"key": ""
-		},
-		{
-			"value": "☞ VIP 包 [1000]",
-			"key": ""
-		},
-		{
-			"value": "物品 禁止PVP, 技能点(SP)盒子, 10,000 钱袋",
-			"key": ""
-		},
-		{
-			"value": "VIP 称号(吃菜经验/打怪掉落X2) + 专属特效",
-			"key": ""
-		},
-		{
-			"value": "☞ 技能点盒子 [200]",
-			"key": ""
-		},
-		{
-			"value": "获得 20 升级点 + 10 技能点",
-			"key": ""
-		},
-		{
-			"value": "☞ 物品 禁止PVP [200]",
-			"key": ""
-		},
-		{
-			"value": "你将会获得禁止PVP设置",
-			"key": ""
-		},
-		{
-			"value": "在投票的理由填写处填写数量",
-			"key": ""
-		},
-		{
-			"value": "如果投票的理由处不是一个数字或没有东西，就使用一个",
-			"key": ""
-		},
-		{
-			"value": "▶ 你选中了物品 {str:name}",
-			"key": ""
-		},
-		{
-			"value": "▹ 使用该物品",
-			"key": ""
-		},
-		{
-			"value": "▹ 卖出该物品",
-			"key": ""
-		},
-		{
-			"value": "▹ 丢掉该物品 (╯°Д°)╯",
-			"key": ""
-		},
-		{
-			"value": "▹ 附魔该物品 (需要 1000 个材料)",
-			"key": ""
-		},
-		{
-			"value": "▹ 摧毁物品 ㄟ( ▔, ▔ )ㄏ ",
-			"key": ""
-		},
-		{
-			"value": "任务菜单",
-			"key": ""
-		},
-		{
-			"value": "可爱的佩奇 I",
-			"key": ""
-		},
-		{
-			"value": "拿起你的杀猪刀朝可爱的小猪砍去，",
-			"key": ""
-		},
-		{
-			"value": "你将有机会会获得它的肉。",
-			"key": ""
-		},
-		{
-			"value": "[已获得: {int:get}/共需要: {int:need}]",
-			"key": ""
-		},
-		{
-			"value": "任务奖励: {str:got}",
-			"key": ""
-		},
-		{
-			"value": "可爱的佩奇 II",
-			"key": ""
-		},
-		{
-			"value": "Kwah I",
-			"key": ""
-		},
-		{
-			"value": "杀死盘踞在矿坑中部的kwah们,",
-			"key": ""
-		},
-		{
-			"value": "把它们的头给我带过来!",
-			"key": ""
-		},
-		{
-			"value": "Kwah II",
-			"key": ""
-		},
-		{
-			"value": "佩奇与Kwah [第一步] - 猪肉, Kwah 头 [{int:get}/{int:need} & {int:get2}/{int:need2}]",
-			"key": ""
-		},
-		{
-			"value": "你一共有 {str:got} 个所需物品",
-			"key": ""
-		},
-		{
-			"value": "Kwah [第一步] - Kwah 头, Kwah 脚 [{int:get}/{int:need} & {int:get2}/{int:need2}]",
-			"key": ""
-		},
-		{
-			"value": "+ 称号 ♥任务_#",
-			"key": ""
-		},
-		{
-			"value": "任务不可用",
-			"key": ""
-		},
-		{
-			"value": "- 提交通过任务",
-			"key": ""
-		},
-		{
-			"value": "你不在任务大厅(Quest Room)",
-			"key": ""
-		},
-		{
-			"value": "合成菜单",
-			"key": ""
-		},
-		{
-			"value": "▹ 基础物品",
-			"key": ""
-		},
-		{
-			"value": "▹ 神器",
-			"key": ""
-		},
-		{
-			"value": "▹ 配件与武器",
-			"key": ""
-		},
-		{
-			"value": "▹ 增益与食物",
-			"key": ""
-		},
-		{
-			"value": "▹ 工作专长相关",
-			"key": ""
-		},
-		{
-			"value": "▹ 装备",
-			"key": ""
-		},
-		{
-			"value": "与黄金1:100兑换",
-			"key": ""
-		},
-		{
-			"value": "骷髅骨头x30",
-			"key": ""
-		},
-		{
-			"value": "僵尸眼x30",
-			"key": ""
-		},
-		{
-			"value": "铁矿x100, 铜矿x100",
-			"key": ""
-		},
-		{
-			"value": "铁矿x125, 铜矿x125",
-			"key": ""
-		},
-		{
-			"value": "铁矿x150, 铜矿x150",
-			"key": ""
-		},
-		{
-			"value": "铁矿x5",
-			"key": ""
-		},
-		{
-			"value": "注意:合成成功率4%,15次失败后必定合成成功",
-			"key": ""
-		},
-		{
-			"value": "日耀x20",
-			"key": ""
-		},
-		{
-			"value": "戒指蓝图x1, Slime的尸体x1",
-			"key": ""
-		},
-		{
-			"value": "戒指蓝图x1, Boomer的尸体x100",
-			"key": ""
-		},
-		{
-			"value": "耳环蓝图x1, Kwah的脚x100",
-			"key": ""
-		},
-		{
-			"value": "灵魂碎片x25",
-			"key": ""
-		},
-		{
-			"value": "灵魂碎片x50",
-			"key": ""
-		},
-		{
-			"value": "土豆x60,番茄x60,萝卜x60",
-			"key": ""
-		},
-		{
-			"value": "眼睛表情 (快乐, 愤怒, 惊讶, 眨眼, 痛苦)",
-			"key": ""
-		},
-		{
-			"value": "手枪x1, 散弹枪x1, 榴弹炮x1, 激光枪x1",
-			"key": ""
-		},
-		{
-			"value": "武器蓝图x1, Boomer的戒指x1",
-			"key": ""
-		},
-		{
-			"value": "武器蓝图x25",
-			"key": ""
-		},
-		{
-			"value": "木头x30, 铜矿x60",
-			"key": ""
-		},
-		{
-			"value": "木头x40, 铁矿x60",
-			"key": ""
-		},
-		{
-			"value": "木头x50, 金矿x80",
-			"key": ""
-		},
-		{
-			"value": "木头x50, 钻石矿x100",
-			"key": ""
-		},
-		{
-			"value": "木头x200, 龙矿x1000",
-			"key": ""
-		},
-		{
-			"value": "皮革x50, 木头x150",
-			"key": ""
-		},
-		{
-			"value": "皮革x40, 木头x120",
-			"key": ""
-		},
-		{
-			"value": "铜矿x500, 木头x150",
-			"key": ""
-		},
-		{
-			"value": "铜矿x400, 木头x120",
-			"key": ""
-		},
-		{
-			"value": "铁矿x500, 木头x150",
-			"key": ""
-		},
-		{
-			"value": "铁矿x400, 木头x120",
-			"key": ""
-		},
-		{
-			"value": "金矿x500, 木头x150",
-			"key": ""
-		},
-		{
-			"value": "金矿x400, 木头x120",
-			"key": ""
-		},
-		{
-			"value": "钻石矿x500, 木头x150",
-			"key": ""
-		},
-		{
-			"value": "钻石矿x400, 木头x120",
-			"key": ""
-		},
-		{
-			"value": "龙矿x500, 木头x150",
-			"key": ""
-		},
-		{
-			"value": "龙矿x400, 木头x120",
-			"key": ""
-		},
-		{
-			"value": "铜矿x100, 铁矿x10",
-			"key": ""
-		},
-		{
-			"value": "物品: {str:name}",
-			"key": ""
-		},
-		{
-			"value": "需要: {str:need}",
-			"key": ""
-		},
-		{
-			"value": "描述: {str:desc}",
-			"key": ""
-		},
-		{
-			"value": "- 合成 {str:name} !",
-			"key": ""
-		},
-		{
-			"value": "- 返回上一级菜单",
-			"key": ""
-		},
-		{
-			"value": "出售 {str:name}:{int:count} [每个获得{int:price}黄金]",
-			"key": ""
-		},
-		{
-			"value": "({int:al}) (Lv:{int:need}) {str:itemname} [{int:price}黄金]",
-			"key": ""
-		},
-		{
-			"value": "({str:al}) (Lv:{int:need}) {str:itemname} [{int:price}黄金]",
-			"key": ""
-		},
-		{
-			"value": "[Survial] 小游戏 {str:name} 开启了.",
-			"key": ""
-		},
-		{
-			"value": "[Survial] 奖励: 钱袋, 神器 {int:gets}%",
-			"key": ""
-		},
-		{
-			"value": "你被通缉了. 不能进入小游戏.",
-			"key": ""
-		},
-		{
-			"value": "小游戏未开启.请等待开启.",
-			"key": ""
-		},
-		{
-			"value": "用法: /msg <用户名或群体> <信息>",
-			"key": ""
-		},
-		{
-			"value": "向玩家或一群玩家发送私聊消息",
-			"key": ""
-		},
-		{
-			"value": "可用的群体名: #clan(公会名)",
-			"key": ""
-		},
-		{
-			"value": "没有找到该名字的玩家",
-			"key": ""
-		},
-		{
-			"value": "玩家 {str:name} 退出了公会",
-			"key": ""
-		},
-		{
-			"value": "玩家 {str:name} 加入了公会",
-			"key": ""
-		},
-		{
-			"value": "用法: /newclan <公会名> - 创建一个新的公会",
-			"key": ""
-		},
-		{
-			"value": "{str:name} 使用了物品:{str:used} x{int:num} ,获得了 {int:pvar} 黄金与 {int:pvars} 白银",
-			"key": ""
-		},
-		{
-			"value": "{str:name} 使用了物品:{str:used} x{int:num} ,获得了 {int:pvars} 黄金",
-			"key": ""
-		},
-		{
-			"value": "{str:name} 使用了物品:{str:used} x{int:num} ,获得了 {int:pvars} 经验",
-			"key": ""
-		},
-		{
-			"value": "你使用了物品:{str:items}x{int:num}",
-			"key": ""
-		},
-		{
-			"value": "{str:name} 使用了物品:{str:items}x{int:num}",
-			"key": ""
-		},
-		{
-			"value": "你卖出了:{str:name}x{int:count}",
-			"key": ""
-		},
-		{
-			"value": "因此你获得了 {int:count} 黄金",
-			"key": ""
-		},
-		{
-			"value": "你丢出了物品:{str:items}x{int:counts}",
-			"key": ""
-		},
-		{
-			"value": "你被通缉了，不能进入Boss房间.",
-			"key": ""
-		},
-		{
-			"value": "Boss房发起的Boss战即将开始. 进入Boss房以进入Boss战.",
-			"key": ""
-		},
-		{
-			"value": "请创建一个新的请求(/createboss).",
-			"key": ""
-		},
-		{
-			"value": "{str:name} 创建了Boss战, Boss 是 {str:names}",
-			"key": ""
-		},
-		{
-			"value": "欲加入的玩家, 你需要进入Boss房(boss room)",
-			"key": ""
-		},
-		{
-			"value": "你被通缉了，不能进入Boss房间.",
-			"key": ""
-		},
-		{
-			"value": "Boss战进行中. 等待其结束或者创建新的Boss.",
-			"key": ""
-		},
-		{
-			"value": "需要创建请求(/createboss).",
-			"key": ""
-		},
-		{
-			"value": "[公会] Relevance 增加了 +{int:count}",
-			"key": ""
-		},
-		{
-			"value": "请在{int:seconds}秒内登录,否则将被系统自动踢出.",
-			"key": ""
-		},
-		{
-			"value": "{str:name} 使用了物品:{str:used} x{int:num} 而且获得了 {str:get} x{int:num2}",
-			"key": ""
-		},
-		{
-			"value": "系统已收回100个猪肉",
-			"key": ""
-		},
-		{
-			"value": "你现在可以去做任务了.",
-			"key": ""
-		},
-		{
-			"value": "[Level UP] 恭喜你你升级了! 你获得了技能点和升级点.",
-			"key": ""
-		},
-		{
-			"value": "你的账户有风险, 请设置安全设置(security)",
-			"key": ""
-		},
-		{
-			"value": "物品:{str:name} 效果即将在 {int:ends} 分钟后失效.",
-			"key": ""
-		},
-		{
-			"value": "物品:{str:name} 效果失效",
-			"key": ""
-		},
-		{
-			"value": "物品:{str:name} 即将在 {int:ends} 分钟后失效(ending).",
-			"key": ""
-		},
-		{
-			"value": "物品:{str:name} 失效(ended)了",
-			"key": ""
-		},
-		{
-			"value": "在线奖励:{str:name} 获得了 {str:item}.",
-			"key": ""
-		},
-		{
-			"value": "玩家 {str:name} 被通缉了!",
-			"key": ""
-		},
-		{
-			"value": "你进了监狱, 刑期:{sec:siska}.",
-			"key": ""
-		},
-		{
-			"value": "你因得罪皇上（管理员）被打入大牢, 刑期:{sec:siska}.",
-			"key": ""
-		},
-		{
-			"value": "玩家 {str:name}, 出狱了",
-			"key": ""
-		},
-		{
-			"value": "玩家 {str:name} 被取消通缉了",
-			"key": ""
-		},
-		{
-			"value": "热身时间.{int:siska}秒后开始.",
-			"key": ""
-		},
-		{
-			"value": "开战吧!!!",
-			"key": ""
-		},
-		{
-			"value": "{int:siska}秒后结束战斗.{int:num}人存活.",
-			"key": ""
-		},
-		{
-			"value": "等待玩家在 {int:siska} 秒捡起物品.",
-			"key": ""
-		},
-		{
-			"value": "等待玩家加入Boss战 {sec:siska}. Boss:{str:name}",
-			"key": ""
-		},
-		{
-			"value": "[公会] 您所在的公会升级了!",
-			"key": ""
-		},
-		{
-			"value": "{str:PlayerName} 被封禁了 ({str:Reason})",
-			"key": ""
-		},
-		{
-			"value": "{str:PlayerName} 被踢出了 ({str:Reason})",
-			"key": ""
-		},
-		{
-			"value": "{str:PlayerName} 离开了游戏 ({str:Reason})",
-			"key": ""
-		},
-		{
-			"value": "{str:PlayerName} 安心地去了",
-			"key": ""
-		},
-		{
-			"value": "{str:PlayerName} 离开了游戏",
-			"key": ""
-		},
-		{
-			"value": "{str:PlayerName} joined the RPG Azataz",
-			"key": ""
-		},
-		{
-			"value": "这间房屋还没有公会入驻,暂不开放",
-			"key": ""
-		},
-		{
-			"value": "这间公会房不对外开放",
-			"key": ""
-		},
-		{
-			"value": "你没有进入白房间的门票，请前往商店购买门票!",
-			"key": ""
-		},
-		{
-			"value": "欢迎来到白房间.",
-			"key": ""
-		},
-		{
-			"value": "刺客",
-			"key": ""
-		},
-		{
-			"value": "战士",
-			"key": ""
-		},
-		{
-			"value": "医师",
-			"key": ""
-		},
-		{
-			"value": "工人",
-			"key": ""
-		},
-		{
-			"value": "你需要选择一个职业.",
-			"key": ""
-		},
-		{
-			"value": "Boss {str:bossn} 被{int:cwin}个玩家击败.",
-			"key": ""
-		},
-		{
-			"value": "你被 Boss {str:name}击败.",
-			"key": ""
-		},
-		{
-			"value": "你被击败了.",
-			"key": ""
-		},
-		{
-			"value": "交际愤怒值: {int:rel}",
-			"key": ""
-		},
-		{
-			"value": "玩家 {str:name}, 击败玩家 {str:name1}, 并将其打入大牢",
-			"key": ""
-		},
-		{
-			"value": "玩家 {str:name} 被捕了!",
-			"key": ""
-		},
-		{
-			"value": "玩家 {str:name} 出监狱了!",
-			"key": ""
-		},
-		{
-			"value": "被动没有减免伤害",
-			"key": ""
-		},
-		{
-			"value": "暴击伤害 {int:crit}",
-			"key": ""
-		},
-		{
-			"value": "玩家之间分享掉落的物品",
-			"key": ""
-		},
-		{
-			"value": "注意!所有的设置项都在投票选项里面",
-			"key": ""
-		},
-		{
-			"value": "你的 {str:name} 已启用.",
-			"key": ""
-		},
-		{
-			"value": "你的魔能不足.",
-			"key": ""
-		},
-		{
-			"value": "光墙已达最大数量.",
-			"key": ""
-		},
-		{
-			"value": "光剑已关闭.",
-			"key": ""
-		},
-		{
-			"value": "你的魔能不足,需要150.",
-			"key": ""
-		},
-		{
-			"value": "[WORKER] Hello {str:name}, 用投票菜单来进行互动!!",
-			"key": ""
-		},
-		{
-			"value": "[守卫] 你好 {str:name}, 今天天气不错!",
-			"key": ""
-		},
-		{
-			"value": "[守卫] {str:name}. 你觉得我们会得救吗?",
-			"key": ""
-		},
-		{
-			"value": "[守卫] {str:name}. 总是躲在首都不出来. 你这小坏蛋...",
-			"key": ""
-		},
-		{
-			"value": "[NPC] {str:name}, 哟~小家伙",
-			"key": ""
-		},
-		{
-			"value": "{str:name} 捡到钱袋了! 拿到了 {int:got} + {int:bonus} 个钱袋!",
-			"key": ""
-		},
-		{
-			"value": "钱袋底部压着一张纸条",
-			"key": ""
-		},
-		{
-			"value": "~ 农具: {str:name} 已损毁, 不能用了",
-			"key": ""
-		},
-		{
-			"value": "专长 - 种地: {int:lvl}级: {int:exp}/{int:expneed}经验\n工具: {str:name}x{int:count} ({int:brok}/{int:brok2})\n物品 : 采集进度: {str:got} / {int:gotp}%",
-			"key": ""
-		},
-		{
-			"value": "[职业] 蔬菜数量+1",
-			"key": ""
-		},
-		{
-			"value": "~ 种地等级提升~ 获得了农耕盲盒",
-			"key": ""
-		},
-		{
-			"value": "~ 矿具: {str:name} 已损毁, 不能用了",
-			"key": ""
-		},
-		{
-			"value": "专长 - 采掘: {int:lvl}级 : {int:exp}/{int:expneed}经验\n工具: {str:name}x{int:count} ({int:brok}/{int:brok2})\n挖掘进度: {str:got} / {int:gotp}%",
-			"key": ""
-		},
-		{
-			"value": "[职业] 矿物数量+1",
-			"key": ""
-		},
-		{
-			"value": "[Player] 经验+10 +{int:bonus}点专长经验",
-			"key": ""
-		},
-		{
-			"value": "~ 工具: {str:name} 已损毁, 不能用了",
-			"key": ""
-		},
-		{
-			"value": "专长 - 伐木工: (光头强不会升级)\n工具: {str:name}x{int:count} ({int:brok}/{int:brok2})\n砍伐进度: {str:got} / {int:gotp}%",
-			"key": ""
-		},
-		{
-			"value": "[职业] 矿物数量+1",
-			"key": ""
-		},
-		{
-			"value": "[Player] 经验+10 +并不存在的专长经验",
-			"key": ""
-		},
-		{
-			"value": "萃取池中没有足够的附魔材料(material). 至少需要25个",
-			"key": ""
-		},
-		{
-			"value": "物品栏内最多塞50000个附魔材料(material). 在物品栏对装备附魔吧!",
-			"key": ""
-		},
-		{
-			"value": "专长 - 萃取: {int:lvl}级 : {int:exp}/{int:expneed}经验\n奖励: 25+{int:bonus} : 萃取进度: {str:got} / {int:gotp}%",
-			"key": ""
-		},
-		{
-			"value": "在装备栏对装备附魔或者卖给商店吧.",
-			"key": ""
-		},
-		{
-			"value": "[Player] 经验+20 +{int:bonus}点专长经验",
-			"key": ""
-		}
-	]
-}
+{"translation":[
+	{
+		"key": "{str:Victim} has been muted for {sec:Duration} ({str:Reason})",
+		"value": "{str:Victim} 已为静音 {sec:Duration} ({str:Reason})"
+	},
+	{
+		"key": "You are now logged.",
+		"value": "您现在已登录。"
+	},
+	{
+		"key": "Wrong username/password.",
+		"value": "用户名错误或者密码错误。"
+	},
+	{
+		"key": "An error occured during the operation.",
+		"value":"操作出错。"
+	},
+	{
+		"key": "You must be logged for this operation",
+		"value": "你必须为此操作记录日志"
+	},
+	{
+		"key": "Please wait 5 minutes before creating another account",
+		"value": "请等待5分钟，然后再创建其他帐户"
+	},
+	{
+		"key": "An error occured during the creation of your account.",
+		"value": "账户创建失败。"
+	},
+	{
+		"key": "This username is already taken by an existing account",
+		"value": "此用户名已被使用"
+	},
+	{
+		"key": "Your account has been created and you are now logged.",
+		"value": "您的帐户已创建，现在您已登录。"
+	},
+	{
+		"key": "You must be logged to see your rank",
+		"value": "您必须登录才能查看您的排名"
+	},
+	{
+		"key": "You must be logged to see your goal",
+		"value": "您必须登录才能看到您的得分"
+	},
+	{
+		"key": "You have already notified that {str:PlayerName} ought to be banned",
+		"value": "你已经通知{str:PlayerName}应该被禁止 "
+	},
+	{
+		"key": "{str:PlayerName} wants {str:VictimName} to be banned ({str:Reason})",
+		"value": "{str:PlayerName}想要, {str:VictimName} 被禁止({str:Reason})"
+	},
+	{
+		"key": "{str:VictimName} has been infected",
+		"value": "{str:VictimName} 已经被感染"
+	},
+	{
+		"key": "Infected won the round in {sec:RoundDuration}",
+		"value": "{sec:RoundDuration}赢得了这次比赛"
+	},
+	{
+		"key": "{int:NumHumans} humans won the round",
+		"one": "{int:NumHumans} \u0447\u0435\u043b\u043e\u0432\u0435\u043a \u043f\u043e\u0431\u0435\u0434\u0438\u043b.",
+		"few": "{int:NumHumans} \u0447\u0435\u043b\u043e\u0432\u0435\u043a\u0430 \u043f\u043e\u0431\u0435\u0434\u0438\u043b\u0438",
+		"many": "{int:NumHumans} \u043b\u044e\u0434\u0435\u0439 \u043f\u043e\u0431\u0435\u0434\u0438\u043b\u043e"
+	},
+	{
+		"key": "You have survived, +5 points",
+		"value": "\u0422\u044b \u0432\u044b\u0436\u0438\u043b, +5 \u043e\u0447\u043a\u043e\u0432"
+	},
+	{
+		"key": "You have infected {str:VictimName}, +3 points",
+		"value": "\u0422\u044b \u0437\u0430\u0440\u0430\u0437\u0438\u043b {str:VictimName}, +3 \u043e\u0447\u043a\u0430"
+	},
+	{
+		"key": "You have killed a witch, +5 points",
+		"value": "\u0422\u044b \u0443\u0431\u0438\u043b \u0432\u0435\u0434\u044c\u043c\u0443, +5 \u043e\u0447\u043a\u043e\u0432"
+	},
+	{
+		"key": "You have eliminated your target, +2 points",
+		"value": "\u0422\u044b \u0443\u043d\u0438\u0447\u0442\u043e\u0436\u0438\u043b \u0441\u0432\u043e\u044e \u0446\u0435\u043b\u044c, +2 \u043e\u0447\u043a\u0430"
+	},
+	{
+		"key": "Hook protection enabled",
+		"value": "防护罩"
+	},
+	{
+		"key": "Hook protection disabled",
+		"value": "\u0417\u0430\u0449\u0438\u0442\u0430 \u043f\u0440\u043e\u0442\u0438\u0432 \u0437\u0430\u0446\u0435\u043f\u043a\u0438 \u0432\u044b\u043a\u043b\u044e\u0447\u0435\u043d\u0430"
+	},
+	{
+		"key": "{str:PlayerName} has been banned ({str:Reason})",
+		"value": "{str:PlayerName} \u0437\u0430\u0431\u043b\u043e\u043a\u0438\u0440\u043e\u0432\u0430\u043d/\u0437\u0430\u0431\u0430\u043d\u0435\u043d ({str:Reason})"
+	},
+	{
+		"key": "{str:PlayerName} has been kicked ({str:Reason})",
+		"value": "{str:PlayerName} \u0438\u0437\u0433\u043d\u0430\u043d/\u043a\u0438\u043a\u043d\u0443\u0442 \u0438\u0437 \u0438\u0433\u0440\u044b ({str:Reason})"
+	},
+	{
+		"key": "{str:PlayerName} has left the game ({str:Reason})",
+		"value": "{str:PlayerName} \u043f\u043e\u043a\u0438\u043d\u0443\u043b \u0438\u0433\u0440\u0443 ({str:Reason})"
+	},
+	{
+		"key": "{str:PlayerName} has left the game",
+		"value": "{str:PlayerName} \u0432\u044b\u0448\u0435\u043b \u0438\u0437 \u0438\u0433\u0440\u044b"
+	},
+	{
+		"key": "{str:PlayerName} joined the spectators",
+		"value": "{str:PlayerName} \u043f\u0440\u0438\u0441\u043e\u0435\u0434\u0438\u043d\u0438\u043b\u0441\u044f \u043a \u043d\u0430\u0431\u043b\u044e\u0434\u0430\u0442\u0435\u043b\u044f\u043c"
+	},
+	{
+		"key": "{str:PlayerName} joined the game",
+		"value": "{str:PlayerName} \u043f\u0440\u0438\u0441\u043e\u0435\u0434\u0438\u043d\u0438\u043b\u0441\u044f \u043a \u0438\u0433\u0440\u0435"
+	},
+	{
+		"key": "Engineer",
+		"value": "\u0418\u043d\u0436\u0435\u043d\u0435\u0440"
+	},
+	{
+		"key": "Soldier",
+		"value": "\u0421\u043e\u043b\u0434\u0430\u0442"
+	},
+	{
+		"key": "Medic",
+		"value": "\u0412\u0440\u0430\u0447"
+	},
+	{
+		"key": "Hero",
+		"value": "\u0425\u0440\u0430\u0431\u0440\u0435\u0446"
+	},
+	{
+		"key": "Ninja",
+		"value": "\u041d\u0438\u043d\u0434\u0437\u044f"
+	},
+	{
+		"key": "Mercenary",
+		"value": "\u041d\u0430\u0451\u043c\u043d\u0438\u043a"
+	},
+	{
+		"key": "Sniper",
+		"value": "\u0421\u043d\u0430\u0439\u043f\u0435\u0440"
+	},
+	{
+		"key": "Scientist",
+		"value": "\u0423\u0447\u0451\u043d\u044b\u0439"
+	},
+	{
+		"key": "Biologist",
+		"value": "\u0411\u0438\u043e\u043b\u043e\u0433"
+	},
+	{
+		"key": "Smoker",
+		"value": "\u041a\u0443\u0440\u0438\u043b\u044c\u0449\u0438\u043a"
+	},
+	{
+		"key": "Hunter",
+		"value": "\u041e\u0445\u043e\u0442\u043d\u0438\u043a"
+	},
+	{
+		"key": "Boomer",
+		"value": "\u0412\u0437\u0440\u044b\u0432\u0443\u043d"
+	},
+	{
+		"key": "Ghost",
+		"value": "\u041f\u0440\u0438\u0437\u0440\u0430\u043a"
+	},
+	{
+		"key": "Spider",
+		"value": "\u041f\u0430\u0443\u043a"
+	},
+	{
+		"key": "Ghoul",
+		"value": "\u0413\u0443\u043b\u044c"
+	},
+	{
+		"key": "Slug",
+		"value": "\u0423\u043b\u0438\u0442\u043a\u0430"
+	},
+	{
+		"key": "Witch",
+		"value": "\u0412\u0435\u0434\u044c\u043c\u0430"
+	},
+	{
+		"key": "Undead",
+		"value": "\u0411\u0435\u0441\u0441\u043c\u0435\u0440\u0442\u043d\u044b\u0439"
+	},
+	{
+		"key": "Unknown class",
+		"value": "\u041d\u0435\u0438\u0437\u0432\u0435\u0441\u0442\u043d\u044b\u0439 \u043a\u043b\u0430\u0441\u0441"
+	},
+	{
+		"key": "You are a human: {str:ClassName}",
+		"value": "\u0422\u044b \u0447\u0435\u043b\u043e\u0432\u0435\u043a \u0432 \u0440\u043e\u043b\u0438: {str:ClassName}"
+	},
+	{
+		"key": "You are an infected: {str:ClassName}",
+		"value": "\u0422\u044b \u0437\u0430\u0440\u0430\u0436\u0451\u043d\u043d\u044b\u0439 \u0432 \u0440\u043e\u043b\u0438: {str:ClassName}"
+	},
+	{
+		"key": "{str:PlayerName} entered and joined the game",
+		"value": "{str:PlayerName} \u0432\u043e\u0448\u0451\u043b \u0438 \u043f\u0440\u0438\u0441\u043e\u0435\u0434\u0438\u043d\u0438\u043b\u0441\u044f \u043a \u0438\u0433\u0440\u0435"
+	},
+	{
+		"key": "You are muted for {sec:Duration}",
+		"value": "\u0422\u0435\u0431\u044f \u0437\u0430\u0433\u043b\u0443\u0448\u0438\u043b\u0438 \u043d\u0430 {sec:Duration}"
+	},
+	{
+		"key": "You can't join the spectators right now",
+		"value": "\u0422\u044b \u043d\u0435 \u043c\u043e\u0436\u0435\u0448\u044c \u043f\u0440\u0438\u0441\u043e\u0435\u0434\u0438\u043d\u0438\u0442\u044c\u0441\u044f \u043a \u043d\u0430\u0431\u043b\u044e\u0434\u0430\u0442\u0435\u043b\u044f\u043c \u0432 \u0434\u0430\u043d\u043d\u044b\u0439 \u043c\u043e\u043c\u0435\u043d\u0442"
+	},
+	{
+		"key": "{str:PlayerName} changed their name to {str:NewName}",
+		"value": "{str:PlayerName} \u0441\u043c\u0435\u043d\u0438\u043b \u0441\u0432\u043e\u0451 \u0438\u043c\u044f \u043d\u0430 {str:NewName}"
+	},
+	{
+		"key": "Switch language to english ?",
+		"value": "把语言换成英语?"
+	},
+	{
+		"key": "You can change the language of this mod using the command /language.",
+		"value": "你可以通过 /language 命令更改这个模式使用的语言."
+	},
+	{
+		"key": "If your language is not available, you can help with translation (/help translate).",
+		"value": "如果你的语言尚不可用，你可以尝试使用翻译命令 (/help translate)."
+	},
+	{
+		"key": "InfectionClass, by necropotame (version {str:VersionCode})",
+		"value": "InfectionClass, \u043e\u0442 necropotame (version {str:VersionCode})"
+	},
+	{
+		"key": "Based on the concept of Infection mod by Gravity",
+		"value": "\u0420\u0435\u0436\u0438\u043c \u0438\u0433\u0440\u044b \u043e\u0441\u043d\u043e\u0432\u0430\u043d \u043d\u0430 \u043c\u043e\u0434\u0438\u0444\u0438\u043a\u0430\u0446\u0438\u0438 Infection \u0430\u0432\u0442\u043e\u0440\u0430 Gravity"
+	},
+	{
+		"key": "Main contributors: {str:ListOfContributors}",
+		"value": "\u041e\u0441\u043d\u043e\u0432\u043e\u043f\u043e\u043b\u0430\u0433\u0430\u044e\u0449\u0438\u0435 \u0440\u0430\u0437\u0440\u0430\u0431\u043e\u0442\u0447\u0438\u043a\u0438: {str:ListOfContributors}"
+	},
+	{
+		"key": "Thanks to {str:ListOfContributors}",
+		"value": "\u0411\u043b\u0430\u0433\u043e\u0434\u0430\u0440\u044e {str:ListOfContributors}"
+	},
+	{
+		"key": "No player was found with this name",
+		"value": "\u041d\u0435\u043d\u0430\u0439\u0434\u0435\u043d\u043e \u0438\u0433\u0440\u043e\u043a\u0430 \u0441 \u044d\u0442\u0438\u043c \u0438\u043c\u0435\u043d\u0435\u043c"
+	},
+	{
+		"key": "Rules of the game",
+		"value": "\u041f\u0440\u0430\u0432\u0438\u043b\u0430 \u0438\u0433\u0440\u044b"
+	},
+	{
+		"key": "InfectionClass is a team game between humans and infected.",
+		"value": "InfectionClass \u043a\u043e\u043c\u0430\u043d\u0434\u043d\u0430\u044f \u0438\u0433\u0440\u0430, \u0433\u0434\u0435 \u043f\u0440\u043e\u0442\u0438\u0432\u043e\u0431\u043e\u0440\u0441\u0442\u0432\u0443\u044e\u0442 \u0417\u0430\u0440\u0430\u0436\u0451\u043d\u043d\u044b\u0435 \u0438 \u0412\u044b\u0436\u0438\u0432\u0448\u0438\u0435."
+	},
+	{
+		"key": "All players start as human.",
+		"value": "\u0412\u0441\u0435 \u0438\u0433\u0440\u043e\u043a\u0438 \u043d\u0430\u0447\u0438\u043d\u0430\u044e\u0442 \u0437\u0430 \u043b\u044e\u0434\u0435\u0439."
+	},
+	{
+		"key": "10 seconds later, two players become infected.",
+		"value": "10 \u0441\u0435\u043a\u0443\u043d\u0434 \u0441\u043f\u0443\u0441\u0442\u044f, \u0434\u0432\u0430 \u0447\u0435\u043b\u043e\u0432\u0435\u043a\u0430 \u0441\u0442\u0430\u043d\u043e\u0432\u044f\u0442\u0441\u044f \u0437\u0430\u0440\u0430\u0436\u0451\u043d\u043d\u044b\u043c\u0438."
+	},
+	{
+		"key": "The goal for humans is to survive until the army clean the map.",
+		"value": "\u0426\u0435\u043b\u044c \u043b\u044e\u0434\u0435\u0439 - \u0432\u044b\u0436\u0438\u0442\u044c \u043e\u043f\u0440\u0435\u0434\u0435\u043b\u0451\u043d\u043d\u043e\u0435 \u0432\u0440\u0435\u043c\u044f."
+	},
+	{
+		"key": "The goal for infected is to infect all humans.",
+		"value": "\u0426\u0435\u043b\u044c \u0437\u0430\u0440\u0430\u0436\u0451\u043d\u043d\u044b\u0445 - \u0438\u043d\u0444\u0438\u0446\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u043b\u044e\u0434\u0435\u0439."
+	},
+	{
+		"key": "How to translate the mod",
+		"value": "\u041a\u0430\u043a \u043f\u0435\u0440\u0435\u0432\u0435\u0441\u0442\u0438 \u043c\u043e\u0434\u0438\u0444\u0438\u043a\u0430\u0446\u0438\u044e"
+	},
+	{
+		"key": "Create an account on Crowdin and join a translation team:",
+		"value": "\u0421\u043e\u0437\u0434\u0430\u0439\u0442\u0435 \u0443\u0447\u0451\u0442\u043d\u0443\u044e \u0437\u0430\u043f\u0438\u0441\u044c \u0432 Crowdin \u0438 \u043f\u0440\u0438\u0441\u043e\u0435\u0434\u0438\u043d\u0438\u0442\u0435\u0441\u044c \u043a \u043a\u043e\u043c\u0430\u043d\u0434\u0435 \u043f\u0435\u0440\u0435\u0432\u043e\u0434\u0447\u0438\u043a\u043e\u0432:"
+	},
+	{
+		"key": "For any question about the translation process, please contact us on IRC ({str:IRCAddress})",
+		"value": "\u041f\u0440\u0438 \u043d\u0430\u043b\u0438\u0447\u0438\u0435 \u0432\u043e\u043f\u0440\u043e\u0441\u043e\u0432 \u043e \u043f\u0435\u0440\u0435\u0432\u043e\u0434\u0435 \u043e\u0431\u0440\u0430\u0442\u0438\u0442\u0435\u0441\u044c \u043a \u043d\u0430\u043c \u043f\u043e IRC ({str:IRCAddress})"
+	},
+	{
+		"key": "The Engineer can build walls with his hammer to block infected.",
+		"value": "\u0418\u043d\u0436\u0435\u043d\u0435\u0440 \u043c\u043e\u0436\u0435\u0442 \u0441\u0442\u0440\u043e\u0438\u0442\u044c \u0441\u0442\u0435\u043d\u044b, \u0447\u0442\u043e\u0431\u044b \u0431\u043b\u043e\u043a\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0437\u0430\u0440\u0430\u0436\u0451\u043d\u043d\u044b\u0445."
+	},
+	{
+		"key": "When an infected touch the wall, he dies.",
+		"value": "\u041a\u043e\u0433\u0434\u0430 \u0437\u0430\u0440\u0430\u0436\u0451\u043d\u043d\u044b\u0439 \u043f\u0440\u0438\u043a\u0430\u0441\u0430\u0435\u0442\u0441\u044f \u043a \u0441\u0442\u0435\u043d\u0435 \u2013 \u043e\u043d \u0443\u043c\u0438\u0440\u0430\u0435\u0442."
+	},
+	{
+		"key": "The lifespan of a wall is {sec:LifeSpan}, and walls are limited to one per player at the same time.",
+		"value": "\u0421\u0442\u0435\u043d\u0430 \u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u0435\u0442 {sec:LifeSpan}. \u041e\u0434\u0438\u043d \u0447\u0435\u043b\u043e\u0432\u0435\u043a \u043c\u043e\u0436\u0435\u0442 \u043f\u043e\u0441\u0442\u0430\u0432\u0438\u0442\u044c \u0442\u043e\u043b\u044c\u043a\u043e \u043e\u0434\u043d\u0443 \u0441\u0442\u0435\u043d\u0443 \u0437\u0430 \u0440\u0430\u0437."
+	},
+	{
+		"key": "The Soldier can pose floating bombs with his hammer.",
+		"value": "\u0421\u043e\u043b\u0434\u0430\u0442 \u043c\u043e\u0436\u0435\u0442 \u0441\u0442\u0430\u0432\u0438\u0442\u044c \u043b\u0435\u0442\u0430\u044e\u0449\u0438\u0435 \u0431\u043e\u043c\u0431\u044b \u0441 \u043f\u043e\u043c\u043e\u0449\u044c\u044e \u043c\u043e\u043b\u043e\u0442\u0430."
+	},
+	{
+		"key": "Each bomb can explode {int:NumBombs} times.",
+		"one": "\u041a\u0430\u0436\u0434\u0430\u044f \u0431\u043e\u043c\u0431\u0430 \u043c\u043e\u0436\u0435\u0442 \u0432\u0437\u043e\u0440\u0432\u0430\u0442\u044c\u0441\u044f {int:NumBombs} \u0440\u0430\u0437.",
+		"few": "\u041a\u0430\u0436\u0434\u0430\u044f \u0431\u043e\u043c\u0431\u0430 \u043c\u043e\u0436\u0435\u0442 \u0432\u0437\u043e\u0440\u0432\u0430\u0442\u044c\u0441\u044f {int:NumBombs} \u0440\u0430\u0437\u0430.",
+		"many": "\u041a\u0430\u0436\u0434\u0430\u044f \u0431\u043e\u043c\u0431\u0430 \u043c\u043e\u0436\u0435\u0442 \u0432\u0437\u043e\u0440\u0432\u0430\u0442\u044c\u0441\u044f {int:NumBombs} \u0440\u0430\u0437."
+	},
+	{
+		"key": "Use the hammer to place the bomb and explode it multiple times.",
+		"value": "\u0418\u0441\u043f\u043e\u043b\u044c\u0437\u0443\u0439 \u043c\u043e\u043b\u043e\u0442, \u0447\u0442\u043e\u0431\u044b \u043f\u043e\u0441\u0442\u0430\u0432\u0438\u0442\u044c \u0431\u043e\u043c\u0431\u0443 \u0438 \u0432\u0437\u043e\u0440\u0432\u0430\u0442\u044c \u0435\u0451."
+	},
+	{
+		"key": "Bombs are limited to one per player at the same time.",
+		"value": "\u0422\u044b \u043c\u043e\u0436\u0435\u0448\u044c \u0441\u0442\u0430\u0432\u0438\u0442\u044c \u0442\u043e\u043b\u044c\u043a\u043e \u043e\u0434\u043d\u0443 \u0431\u043e\u043c\u0431\u0443 \u0437\u0430 \u0440\u0430\u0437."
+	},
+	{
+		"key": "The Scientist can pose floating mines with his hammer.",
+		"value": "\u0423\u0447\u0451\u043d\u044b\u0439 \u043c\u043e\u0436\u0435\u0442 \u043f\u043e\u043c\u0435\u0449\u0430\u0442\u044c \u043f\u043b\u0430\u0432\u0443\u0447\u0438\u0435 \u043c\u0438\u043d\u044b \u043c\u043e\u043b\u043e\u0442\u043e\u043c."
+	},
+	{
+		"key": "Mines are limited to {int:NumMines} per player at the same time.",
+		"one": "\u041c\u0438\u043d\u044b \u043e\u0433\u0440\u0430\u043d\u0438\u0447\u0435\u043d\u044b \u0432 \u043a\u043e\u043b\u0438\u0447\u0435\u0441\u0442\u0432\u0435 {int:NumMines} \u0434\u043b\u044f \u043a\u0430\u0436\u0434\u043e\u0433\u043e \u0438\u0437 \u0438\u0433\u0440\u043e\u043a\u043e\u0432.",
+		"few": "\u041c\u0438\u043d\u044b \u043e\u0433\u0440\u0430\u043d\u0438\u0447\u0435\u043d\u044b \u043d\u0430 {int:NumMines} \u0434\u043b\u044f \u043a\u0430\u0436\u0434\u043e\u0433\u043e \u0438\u0433\u0440\u043e\u043a\u0430 \u0437\u0430 \u0440\u0430\u0437.",
+		"many": "\u041c\u0438\u043d\u044b \u043e\u0433\u0440\u0430\u043d\u0438\u0447\u0435\u043d\u044b \u0432 \u043a\u043e\u043b\u0438\u0447\u0435\u0441\u0442\u0432\u0435 {int:NumMines} \u0434\u043b\u044f \u043a\u0430\u0436\u0434\u043e\u0433\u043e \u0438\u0437 \u0438\u0433\u0440\u043e\u043a\u043e\u0432."
+	},
+	{
+		"key": "He has also grenades that teleport him.",
+		"value": "\u0422\u0430\u043a\u0436\u0435, \u0443 \u043d\u0435\u0433\u043e \u0435\u0441\u0442\u044c \u0433\u0440\u0430\u043d\u0430\u0442\u044b, \u043a\u043e\u0442\u043e\u0440\u044b\u0435 \u0442\u0435\u043b\u0435\u043f\u043e\u0440\u0442\u0438\u0440\u0443\u044e\u0442 \u0435\u0433\u043e."
+	},
+	{
+		"key": "The biologist has a shotgun with bouncing bullets and can create a spring laser trap by shooting with his rifle.",
+		"value": "\u0423 \u0431\u0438\u043e\u043b\u043e\u0433\u0430 \u0434\u0440\u043e\u0431\u043e\u0432\u0438\u043a \u0441 \u0440\u0438\u043a\u043e\u0448\u0435\u0442\u043e\u043c \u0438 \u043e\u043d \u043c\u043e\u0436\u0435\u0442 \u0441\u0442\u0430\u0432\u0438\u0442\u044c \u043b\u0430\u0437\u0435\u0440\u043d\u044b\u0435 \u043b\u043e\u0432\u0443\u0448\u043a\u0438 \u0441\u0442\u0440\u0435\u043b\u044f\u044f \u043b\u0430\u0437\u0435\u0440\u043d\u043e\u0439 \u0432\u0438\u043d\u0442\u043e\u0432\u043a\u043e\u0439."
+	},
+	{
+		"key": "The Medic can protect humans with his hammer by giving them armor.",
+		"value": "\u0412\u0440\u0430\u0447 \u043c\u043e\u0436\u0435\u0442 \u0432\u043e\u0441\u0441\u0442\u0430\u043d\u0430\u0432\u043b\u0438\u0432\u0430\u0442\u044c \u043b\u044e\u0434\u0435\u0439, \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u0443\u044f \u0441\u0432\u043e\u0439 \u043c\u043e\u043b\u043e\u0442, \u0447\u0442\u043e\u0431\u044b \u0434\u0430\u0442\u044c \u0438\u043c \u0431\u0440\u043e\u043d\u044e."
+	},
+	{
+		"key": "He has also a powerful shotgun that can pullback infected.",
+		"value": "\u0422\u0430\u043a\u0436\u0435 \u043e\u043d \u043e\u0431\u043b\u0430\u0434\u0430\u0435\u0442 \u043c\u043e\u0449\u043d\u044b\u043c \u0434\u0440\u043e\u0431\u043e\u0432\u0438\u043a\u043e\u043c, \u0441\u043f\u043e\u0441\u043e\u0431\u043d\u044b\u043c \u043e\u0442\u0442\u0430\u043b\u043a\u0438\u0432\u0430\u0442\u044c \u0437\u0430\u0440\u0430\u0436\u0451\u043d\u043d\u044b\u0445."
+	},
+	{
+		"key": "The Hero has a shotgun, a laser rifle and grenades.",
+		"value": "\u0423 \u0445\u0440\u0430\u0431\u0440\u0435\u0446\u0430 \u0435\u0441\u0442\u044c \u0434\u0440\u043e\u0431\u043e\u0432\u0438\u043a, \u043b\u0430\u0437\u0435\u0440\u043d\u0430\u044f \u0432\u0438\u043d\u0442\u043e\u0432\u043a\u0430 \u0438 \u0433\u0440\u0430\u043d\u0430\u0442\u044b."
+	},
+	{
+		"key": "The Hero must find a flag hidden in the map.",
+		"value": "\u0425\u0440\u0430\u0431\u0440\u0435\u0446 \u0434\u043e\u043b\u0436\u0435\u043d \u043d\u0430\u0439\u0442\u0438 \u0437\u043d\u0430\u043c\u044f \u0441\u043f\u0440\u044f\u0442\u0430\u043d\u043d\u043e\u0435 \u043d\u0430 \u043a\u0430\u0440\u0442\u0435."
+	},
+	{
+		"key": "Once taken, the flag gives 1 health point, 4 armor points, and full ammo to all humans, furthermore full health and armor to the hero.",
+		"value": "\u041a\u043e\u0433\u0434\u0430 \u043e\u043d \u043f\u043e\u0434\u0431\u0438\u0440\u0430\u0435\u0442 \u0437\u043d\u0430\u043c\u044f, \u043e\u043d\u043e \u0440\u0430\u0441\u043f\u0440\u0435\u0434\u0435\u043b\u044f\u0435\u0442 \u043a\u0430\u0436\u0434\u043e\u043c\u0443 \u0447\u0435\u043b\u043e\u0432\u0435\u043a\u0443 \u043e\u0434\u043d\u043e \u043e\u0447\u043a\u043e \u0437\u0434\u043e\u0440\u043e\u0432\u044c\u044f \u0438 \u0447\u0435\u0442\u044b\u0440\u0435 \u043e\u0447\u043a\u0430 \u0431\u0440\u043e\u043d\u0438, \u0430 \u0436\u0438\u0437\u043d\u044c \u0435\u0433\u043e \u0441\u0430\u043c\u043e\u0433\u043e \u043f\u043e\u043b\u043d\u043e\u0441\u0442\u044c\u044e \u0432\u043e\u0441\u0441\u0442\u0430\u043d\u0430\u0432\u043b\u0438\u0432\u0430\u0435\u0442\u0441\u044f."
+	},
+	{
+		"key": "The hero cannot be healed by a medic, but he can withstand a thrust by an infected, an his health suffice.",
+		"value": "\u0425\u0440\u0430\u0431\u0440\u0435\u0446 \u043d\u0435 \u043c\u043e\u0436\u0435\u0442 \u0431\u044b\u0442\u044c \u0432\u044b\u043b\u0435\u0447\u0435\u043d \u0432\u0440\u0430\u0447\u043e\u043c, \u043d\u043e \u043e\u043d \u043c\u043e\u0436\u0435\u0442 \u0432\u044b\u0434\u0435\u0440\u0436\u0430\u0442\u044c \u043e\u0434\u0438\u043d \u0443\u0434\u0430\u0440 \u0437\u0430\u0440\u0430\u0436\u0451\u043d\u043d\u043e\u0433\u043e, \u0435\u0441\u043b\u0438 \u0435\u0433\u043e \u0431\u0440\u043e\u043d\u044f \u043a\u0440\u0435\u043f\u043a\u0430."
+	},
+	{
+		"key": "The Ninja can throw flash grenades that can freeze infected during three seconds.",
+		"value": "\u041d\u0438\u043d\u0434\u0437\u044f \u043c\u043e\u0436\u0435\u0442 \u043a\u0438\u0434\u0430\u0442\u044c \u0437\u0430\u043c\u043e\u0440\u0430\u0436\u0438\u0432\u0430\u044e\u0449\u0438\u0435 \u0433\u0440\u0430\u043d\u0430\u0442\u044b, \u043a\u043e\u0442\u043e\u0440\u044b\u0435 \u043e\u0441\u0442\u0430\u043d\u0430\u0432\u043b\u0438\u0432\u0430\u044e\u0442 \u0437\u0430\u0440\u0430\u0436\u0451\u043d\u043d\u044b\u0445 \u043d\u0430 3 \u0441\u0435\u043a\u0443\u043d\u0434\u044b."
+	},
+	{
+		"key": "His hammer is replaced by a katana, allowing him to jump {int:NinjaJump} times before touching the ground.",
+		"one": "\u0415\u0433\u043e \u043c\u043e\u043b\u043e\u0442 \u0437\u0430\u043c\u0435\u043d\u0451\u043d \u043a\u0430\u0442\u0430\u043d\u043e\u0439, \u043f\u043e\u0437\u0432\u043e\u043b\u044f\u044e\u0449\u0435\u0439 \u0435\u043c\u0443 \u0434\u0435\u043b\u0430\u0442\u044c \u0440\u044b\u0432\u043e\u043a {int:NinjaJump} \u0440\u0430\u0437, \u043f\u043e\u043a\u0430 \u043e\u043d \u043d\u0435 \u043a\u043e\u0441\u043d\u0451\u0442\u0441\u044f \u0437\u0435\u043c\u043b\u0438",
+		"few": "\u0415\u0433\u043e \u043c\u043e\u043b\u043e\u0442 \u0437\u0430\u043c\u0435\u043d\u0451\u043d \u043a\u0430\u0442\u0430\u043d\u043e\u0439, \u043f\u043e\u0437\u0432\u043e\u043b\u044f\u044e\u0449\u0435\u0439 \u0435\u043c\u0443 \u0434\u0435\u043b\u0430\u0442\u044c \u0440\u044b\u0432\u043e\u043a {int:NinjaJump} \u0440\u0430\u0437\u0430, \u043f\u043e\u043a\u0430 \u043e\u043d \u043d\u0435 \u043a\u043e\u0441\u043d\u0451\u0442\u0441\u044f \u0437\u0435\u043c\u043b\u0438",
+		"many": "\u0415\u0433\u043e \u043c\u043e\u043b\u043e\u0442 \u0437\u0430\u043c\u0435\u043d\u0451\u043d \u043a\u0430\u0442\u0430\u043d\u043e\u0439, \u043f\u043e\u0437\u0432\u043e\u043b\u044f\u044e\u0449\u0435\u0439 \u0435\u043c\u0443 \u0434\u0435\u043b\u0430\u0442\u044c \u043f\u0440\u044b\u0436\u043e\u043a {int:NinjaJump} \u0440\u0430\u0437, \u043f\u043e\u043a\u0430 \u043e\u043d \u043d\u0435 \u043a\u043e\u0441\u043d\u0451\u0442\u0441\u044f \u0437\u0435\u043c\u043b\u0438"
+	},
+	{
+		"key": "The Mercenary fly in air using his machine gun.",
+		"value": "\u041d\u0430\u0451\u043c\u043d\u0438\u043a \u043c\u043e\u0436\u0435\u0442 \u043b\u0435\u0442\u0430\u0442\u044c \u0432 \u0432\u043e\u0437\u0434\u0443\u0445\u0435 \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u0443\u044f \u0441\u0432\u043e\u0439 \u043f\u0443\u043b\u0435\u043c\u0451\u0442."
+	},
+	{
+		"key": "He can coil explosives with his hammer that hinder infected from harming.",
+		"value": "\u041e\u043d \u0438\u043c\u0435\u0435\u0442 \u0441\u043f\u043e\u0441\u043e\u0431\u043d\u043e\u0441\u0442\u044c \u0437\u0430\u0432\u043e\u0434\u0438\u0442\u044c \u0432\u0437\u0440\u044b\u0432\u043d\u044b\u0435 \u0443\u0441\u0442\u0440\u043e\u0439\u0441\u0442\u0432\u0430 \u043a\u043e\u0442\u043e\u0440\u044b\u0435 \u043f\u0440\u0435\u043f\u044f\u0442\u0441\u0432\u0443\u044e\u0442 \u0432\u0440\u0435\u0434\u0443 \u043e\u0442 \u0437\u0430\u0440\u0430\u0436\u0451\u043d\u043d\u044b\u0445."
+	},
+	{
+		"key": "He can also throw poison grenades that each deal {int:NumDamagePoints} damage points.",
+		"one": "\u041f\u0440\u0438\u0442\u043e\u043c \u043e\u043d \u043c\u043e\u0436\u0435\u0442 \u043a\u0438\u0434\u0430\u0442\u044c \u044f\u0434\u043e\u0432\u0438\u0442\u044b\u0435 \u0433\u0440\u0430\u043d\u0430\u0442\u044b, \u043a\u043e\u0442\u043e\u0440\u044b\u0435 \u043f\u0440\u0438\u0447\u0438\u043d\u044f\u044e\u0442 {int:NumDamagePoints} \u043f\u0443\u043d\u043a\u0442 \u0443\u0440\u043e\u043d\u0430.",
+		"few": "\u041f\u0440\u0438\u0442\u043e\u043c \u043e\u043d \u043c\u043e\u0436\u0435\u0442 \u043a\u0438\u0434\u0430\u0442\u044c \u044f\u0434\u043e\u0432\u0438\u0442\u044b\u0435 \u0433\u0440\u0430\u043d\u0430\u0442\u044b, \u043a\u043e\u0442\u043e\u0440\u044b\u0435 \u043f\u0440\u0438\u0447\u0438\u043d\u044f\u044e\u0442 {int:NumDamagePoints} \u043f\u0443\u043d\u043a\u0442\u0430 \u0443\u0440\u043e\u043d\u0430.",
+		"many": "\u041f\u0440\u0438\u0442\u043e\u043c \u043e\u043d \u043c\u043e\u0436\u0435\u0442 \u043a\u0438\u0434\u0430\u0442\u044c \u044f\u0434\u043e\u0432\u0438\u0442\u044b\u0435 \u0433\u0440\u0430\u043d\u0430\u0442\u044b, \u043a\u043e\u0442\u043e\u0440\u044b\u0435 \u043f\u0440\u0438\u0447\u0438\u043d\u044f\u044e\u0442 {int:NumDamagePoints} \u043f\u0443\u043d\u043a\u0442\u043e\u0432 \u0443\u0440\u043e\u043d\u0430."
+	},
+	{
+		"key": "The Sniper can lock his position in air for 15 seconds with his hammer.",
+		"value": "\u0421\u043d\u0430\u0439\u043f\u0435\u0440 \u0441\u043f\u043e\u0441\u043e\u0431\u0435\u043d \u0437\u0430\u043a\u0440\u0435\u043f\u043b\u044f\u0442\u044c \u0441\u0432\u043e\u0451 \u043c\u0435\u0441\u0442\u043e\u043f\u043e\u043b\u043e\u0436\u0435\u043d\u0438\u0435 \u043d\u0430 15 \u0441\u0435\u043a\u0443\u043d\u0434 \u0441 \u043f\u043e\u043c\u043e\u0449\u044c\u044e \u0441\u0432\u043e\u0435\u0433\u043e \u043c\u043e\u043b\u043e\u0442\u0430."
+	},
+	{
+		"key": "He can jump two times in air.",
+		"value": "\u041e\u043d \u0441\u043f\u043e\u0441\u043e\u0431\u0435\u043d \u043d\u0430 \u0442\u0440\u043e\u0439\u043d\u043e\u0439 \u043f\u0440\u044b\u0436\u043e\u043a."
+	},
+	{
+		"key": "He has also a powerful rifle that deals 30 damage points in locked position, and 10\u201313 otherwise.",
+		"value": "\u041f\u0440\u0438\u0442\u043e\u043c \u043e\u043d \u0438\u043c\u0435\u0435\u0442 \u043c\u043e\u0449\u043d\u0443\u044e \u0432\u0438\u043d\u0442\u043e\u0432\u043a\u0443, \u043a\u043e\u0442\u043e\u0440\u0430\u044f \u043f\u0440\u0438\u0447\u0438\u043d\u044f\u0435\u0442 30 \u0443\u0440\u043e\u043d\u0430 \u0432 \u0437\u0430\u043a\u0440\u0435\u043f\u043b\u0451\u043d\u043d\u043e\u043c \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0438, \u0438 \u043e\u0442 10 \u0434\u043e 13 \u0432 \u0434\u0440\u0443\u0433\u0438\u0445 \u0441\u043b\u0443\u0447\u0430\u044f\u0445."
+	},
+	{
+		"key": "The Smoker can infect humans and heal infected with his hammer.",
+		"value": "\u041a\u0443\u0440\u0438\u043b\u044c\u0449\u0438\u043a \u043c\u043e\u0436\u0435\u0442 \u0437\u0430\u0440\u0430\u0436\u0430\u0442\u044c \u043b\u044e\u0434\u0435\u0439 \u0438 \u043b\u0435\u0447\u0438\u0442\u044c \u0437\u0430\u0440\u0430\u0436\u0451\u043d\u043d\u044b\u0445 \u0441 \u043f\u043e\u043c\u043e\u0449\u044c\u044e \u0441\u0432\u043e\u0435\u0433\u043e \u043c\u043e\u043b\u043e\u0442\u0430."
+	},
+	{
+		"key": "He can also inflict 4 damage points per second by hooking humans.",
+		"value": "\u0422\u0430\u043a\u0436\u0435 \u043e\u043d \u043d\u0430\u043d\u043e\u0441\u0438\u0442 4 \u0443\u0440\u043e\u043d\u0430 \u0432 \u0441\u0435\u043a\u0443\u043d\u0434\u0443 \u0447\u0435\u043b\u043e\u0432\u0435\u043a\u0443, \u043a \u043a\u043e\u0442\u043e\u0440\u043e\u043c\u0443 \u043f\u0440\u0438\u0446\u0435\u043f\u043b\u0435\u043d \u0446\u0435\u043f\u043e\u0447\u043a\u043e\u0439 (\u0445\u0443\u043a\u043e\u043c)."
+	},
+	{
+		"key": "The Boomer explodes when he attack.",
+		"value": "\u0412\u0437\u0440\u044b\u0432\u0443\u043d \u043f\u0440\u043e\u0438\u0437\u0432\u043e\u0434\u0438\u0442 \u0432\u0437\u0440\u044b\u0432 \u0432\u043c\u0435\u0441\u0442\u043e \u0430\u0442\u0430\u043a\u0438."
+	},
+	{
+		"key": "All humans affected by the explosion become infected.",
+		"value": "\u0412\u0441\u0435 \u043b\u044e\u0434\u0438, \u0437\u0430\u0434\u0435\u0442\u044b\u0435 \u0432\u0437\u0440\u044b\u0432\u043e\u043c, \u0437\u0430\u0440\u0430\u0436\u0430\u044e\u0442\u0441\u044f."
+	},
+	{
+		"key": "He can also inflict 1 damage point per second by hooking humans.",
+		"value": "\u0415\u0449\u0451 \u043e\u043d \u043d\u0430\u043d\u043e\u0441\u0438\u0442 1 \u0443\u0440\u043e\u043d \u0432 \u0441\u0435\u043a\u0443\u043d\u0434\u0443 \u0447\u0435\u043b\u043e\u0432\u0435\u043a\u0443, \u043a \u043a\u043e\u0442\u043e\u0440\u043e\u043c\u0443 \u043f\u0440\u0438\u0446\u0435\u043f\u043b\u0435\u043d \u0446\u0435\u043f\u043e\u0447\u043a\u043e\u0439 (\u0445\u0443\u043a\u043e\u043c)."
+	},
+	{
+		"key": "The Hunter can infect humans and heal infected with his hammer.",
+		"value": "\u041e\u0445\u043e\u0442\u043d\u0438\u043a \u043c\u043e\u0436\u0435\u0442 \u0437\u0430\u0440\u0430\u0436\u0430\u0442\u044c \u043b\u044e\u0434\u0435\u0439 \u0438 \u043b\u0435\u0447\u0438\u0442\u044c \u0437\u0430\u0440\u0430\u0436\u0451\u043d\u043d\u044b\u0445 \u0441 \u043f\u043e\u043c\u043e\u0449\u044c\u044e \u0441\u0432\u043e\u0435\u0433\u043e \u043c\u043e\u043b\u043e\u0442\u0430."
+	},
+	{
+		"key": "The Ghost can infect humans and heal infected with his hammer.",
+		"value": "\u041f\u0440\u0438\u0437\u0440\u0430\u043a \u043c\u043e\u0436\u0435\u0442 \u0437\u0430\u0440\u0430\u0436\u0430\u0442\u044c \u043b\u044e\u0434\u0435\u0439 \u0438 \u043b\u0435\u0447\u0438\u0442\u044c \u0437\u0430\u0440\u0430\u0436\u0451\u043d\u043d\u044b\u0445 \u0441 \u043f\u043e\u043c\u043e\u0449\u044c\u044e \u0441\u0432\u043e\u0435\u0433\u043e \u043c\u043e\u043b\u043e\u0442\u0430."
+	},
+	{
+		"key": "He is invisible, except if a human is near him, if he takes a damage or if he use his hammer.",
+		"value": "\u041e\u043d \u043d\u0435\u0432\u0438\u0434\u0438\u043c, \u0437\u0430 \u0438\u0441\u043a\u043b\u044e\u0447\u0435\u043d\u0438\u0435\u043c \u0441\u043b\u0443\u0447\u0430\u0435\u0432, \u043a\u043e\u0433\u0434\u0430 \u0447\u0435\u043b\u043e\u0432\u0435\u043a \u043d\u0430\u0445\u043e\u0434\u0438\u0442\u0441\u044f \u0434\u043e\u0441\u0442\u0430\u0442\u043e\u0447\u043d\u043e \u0431\u043b\u0438\u0437\u043a\u043e, \u0435\u043c\u0443 \u043d\u0430\u043d\u043e\u0441\u0435\u043d \u0443\u0440\u043e\u043d, \u0438\u043b\u0438 \u043e\u043d \u043f\u043e\u043b\u044c\u0437\u0443\u0435\u0442\u0441\u044f \u043c\u043e\u043b\u043e\u0442\u043e\u043c."
+	},
+	{
+		"key": "The Spider can infect humans and heal infected with his hammer.",
+		"value": "\u041f\u0430\u0443\u043a \u043c\u043e\u0436\u0435\u0442 \u0437\u0430\u0440\u0430\u0436\u0430\u0442\u044c \u043b\u044e\u0434\u0435\u0439 \u0438 \u043b\u0435\u0447\u0438\u0442\u044c \u0437\u0430\u0440\u0430\u0436\u0451\u043d\u043d\u044b\u0445 \u0441 \u043f\u043e\u043c\u043e\u0449\u044c\u044e \u0441\u0432\u043e\u0435\u0433\u043e \u043c\u043e\u043b\u043e\u0442\u0430."
+	},
+	{
+		"key": "When selecting any gun, his hook enter in web mode.",
+		"value": "\u0412\u044b\u0431\u0438\u0440\u0430\u044f \u043b\u044e\u0431\u043e\u0435 \u043e\u0440\u0443\u0436\u0438\u0435, \u0435\u0433\u043e \u0437\u0430\u0446\u0435\u043f\u043a\u0430 \u043f\u0435\u0440\u0435\u0445\u043e\u0434\u0438\u0442 \u043a \u043f\u0430\u0443\u0442\u0438\u043d\u043d\u043e\u043c\u0443 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u044e."
+	},
+	{
+		"key": "Any human that touch a hook in web mode is automatically grabbed.",
+		"value": "\u041b\u044e\u0431\u043e\u0439 \u0447\u0435\u043b\u043e\u0432\u0435\u043a \u043f\u0440\u0438\u043a\u043e\u0441\u043d\u0443\u0432\u0448\u0438\u0439\u0441\u044f \u043a \u0446\u0435\u043f\u043e\u0447\u043a\u0435 \u0430\u0432\u0442\u043e\u043c\u0430\u0442\u0438\u0447\u0435\u0441\u043a\u0438 \u043a \u043d\u0435\u0439 \u043f\u0440\u0438\u0446\u0435\u043f\u043b\u044f\u0435\u0442\u0441\u044f."
+	},
+	{
+		"key": "The hook of the spider (in both mode) deal 1 damage point per second and can grab a human during 2 seconds.",
+		"value": "\u0417\u0430\u0446\u0435\u043f\u043a\u0430 \u043f\u0430\u0443\u043a\u043e\u043c (\u0432 \u043e\u0431\u043e\u0438\u0445 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u044f\u0445) \u043f\u0440\u0438\u0447\u0438\u043d\u044f\u0435\u0442 1 \u043f\u0443\u043d\u043a\u0442 \u0443\u0440\u043e\u043d\u0430 \u0432 \u0441\u0435\u043a\u0443\u043d\u0434\u0443 \u0438 \u043f\u0440\u0438\u0446\u0435\u043f\u043b\u044f\u0435\u0442 \u0447\u0435\u043b\u043e\u0432\u0435\u043a\u0430 \u043d\u0430 \u0434\u0432\u0430 \u0441\u0435\u043a\u0443\u043d\u0434\u044b."
+	},
+	{
+		"key": "The Ghoul can infect humans and heal infected with his hammer.",
+		"value": "\u0413\u0443\u043b\u044c \u043c\u043e\u0436\u0435\u0442 \u0437\u0430\u0440\u0430\u0436\u0430\u0442\u044c \u043b\u044e\u0434\u0435\u0439 \u0438 \u043b\u0435\u0447\u0438\u0442\u044c \u0437\u0430\u0440\u0430\u0436\u0451\u043d\u043d\u044b\u0445 \u0441 \u043f\u043e\u043c\u043e\u0449\u044c\u044e \u0441\u0432\u043e\u0435\u0433\u043e \u043c\u043e\u043b\u043e\u0442\u0430."
+	},
+	{
+		"key": "He can devour all that has died close to him, which makes him stronger, faster and more resistant.",
+		"value": "\u041e\u043d \u0438\u043c\u0435\u0435\u0442 \u0441\u043f\u043e\u0441\u043e\u0431\u043d\u043e\u0441\u0442\u044c \u0437\u0430\u0433\u043b\u0430\u0442\u044b\u0432\u0430\u0442\u044c \u0432\u0441\u0451, \u0447\u0442\u043e \u0443\u043c\u0435\u0440\u043b\u043e \u0440\u044f\u0434\u043e\u043c \u0441 \u043d\u0438\u043c, \u0438 \u044d\u0442\u043e \u0435\u0433\u043e \u0434\u0435\u043b\u0430\u0435\u0442 \u0441\u0438\u043b\u044c\u043d\u0435\u0435, \u0431\u044b\u0441\u0442\u0440\u0435\u0435 \u0438 \u0443\u0441\u0442\u043e\u0439\u0447\u0438\u0432\u0435\u0435."
+	},
+	{
+		"key": "Thereupon he digests his fodder bit by bit going back to his normal state, and besides, death bereaves him of his nourishment.",
+		"value": "\u041f\u043e\u0442\u043e\u043c \u043e\u043d \u043f\u0435\u0440\u0435\u0432\u0430\u0440\u0438\u0432\u0430\u0435\u0442 \u0441\u0432\u043e\u044e \u043f\u0438\u0449\u0443 \u043f\u043e\u0441\u0442\u0435\u043f\u0435\u043d\u043d\u043e \u0432\u043e\u0437\u0432\u0440\u0430\u0449\u0430\u044f\u0441\u044c \u043a \u0441\u0432\u043e\u0435\u043c\u0443 \u043f\u0435\u0440\u0432\u043e\u043d\u0430\u0447\u0430\u043b\u044c\u043d\u043e\u043c\u0443 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u044e."
+	},
+	{
+		"key": "The Slug can infect humans and heal infected with his hammer.",
+		"value": "\u0423\u043b\u0438\u0442\u043a\u0430 \u043c\u043e\u0436\u0435\u0442 \u0437\u0430\u0440\u0430\u0436\u0430\u0442\u044c \u043b\u044e\u0434\u0435\u0439 \u0438 \u043b\u0435\u0447\u0438\u0442\u044c \u0437\u0430\u0440\u0430\u0436\u0451\u043d\u043d\u044b\u0445 \u0441 \u043f\u043e\u043c\u043e\u0449\u044c\u044e \u0441\u0432\u043e\u0435\u0433\u043e \u043c\u043e\u043b\u043e\u0442\u0430."
+	},
+	{
+		"key": "He can make the ground and walls toxic by spreading slime with his hammer.",
+		"value": "\u041e\u043d\u0430 \u043c\u043e\u0436\u0435\u0442 \u0434\u0435\u043b\u0430\u0442\u044c \u0437\u0435\u043c\u043b\u044e \u0438 \u0441\u0442\u0435\u043d\u044b \u0432\u0440\u0435\u0434\u043e\u043d\u043e\u0441\u043d\u044b\u043c\u0438 \u0440\u0430\u0441\u043f\u0440\u043e\u0441\u0442\u0440\u0430\u043d\u044f\u044f \u0441\u043b\u0438\u0437\u044c \u0441 \u043f\u043e\u043c\u043e\u0449\u044c\u044e \u0441\u0432\u043e\u0435\u0433\u043e \u043c\u043e\u043b\u043e\u0442\u0430."
+	},
+	{
+		"key": "Touching the slime inflicts three damage points in three seconds on a human.",
+		"value": "\u041f\u0440\u0438\u043a\u043e\u0441\u043d\u043e\u0432\u0435\u043d\u0438\u0435 \u0441\u043b\u0438\u0437\u0438 \u043f\u0440\u0438\u0447\u0438\u043d\u044f\u0435\u0442 \u0447\u0435\u043b\u043e\u0432\u0435\u043a\u0443 \u0442\u0440\u0438 \u0443\u0440\u043e\u043d\u0430 \u0447\u0435\u0440\u0435\u0437 \u0442\u0440\u0438 \u0441\u0435\u043a\u0443\u043d\u0434\u044b."
+	},
+	{
+		"key": "The Undead can infect humans and heal infected with his hammer.",
+		"value": "\u0411\u0435\u0441\u0441\u043c\u0435\u0440\u0442\u043d\u044b\u0439 \u043c\u043e\u0436\u0435\u0442 \u0437\u0430\u0440\u0430\u0436\u0430\u0442\u044c \u043b\u044e\u0434\u0435\u0439 \u0438 \u043b\u0435\u0447\u0438\u0442\u044c \u0437\u0430\u0440\u0430\u0436\u0451\u043d\u043d\u044b\u0445 \u0441 \u043f\u043e\u043c\u043e\u0449\u044c\u044e \u0441\u0432\u043e\u0435\u0433\u043e \u043c\u043e\u043b\u043e\u0442\u0430."
+	},
+	{
+		"key": "Instead of dying, he freezes during 10 seconds.",
+		"value": "\u0412\u043c\u0435\u0441\u0442\u043e \u0441\u043c\u0435\u0440\u0442\u0438 \u043e\u043d \u0432\u043f\u0430\u0434\u0430\u0435\u0442 \u0432 \u0441\u043f\u044f\u0447\u043a\u0443 \u043d\u0430 10 \u0441\u0435\u043a\u0443\u043d\u0434."
+	},
+	{
+		"key": "If an infected heals him, the freeze effect disappear.",
+		"value": "\u0415\u0441\u043b\u0438 \u0437\u0430\u0440\u0430\u0436\u0451\u043d\u043d\u044b\u0439 \u0435\u0433\u043e \u0438\u0437\u043b\u0435\u0447\u0438\u0442, \u0442\u043e \u0411\u0435\u0441\u0441\u043c\u0435\u0440\u0442\u043d\u044b\u0439 \u043f\u0440\u043e\u0431\u0443\u0436\u0434\u0430\u0435\u0442\u0441\u044f \u043e\u0442\u043e \u0441\u043d\u0430."
+	},
+	{
+		"key": "The Witch can infect humans and heal infected with his hammer.",
+		"value": "\u0412\u0435\u0434\u044c\u043c\u0430 \u043c\u043e\u0436\u0435\u0442 \u0437\u0430\u0440\u0430\u0436\u0430\u0442\u044c \u043b\u044e\u0434\u0435\u0439 \u0438 \u043b\u0435\u0447\u0438\u0442\u044c \u0437\u0430\u0440\u0430\u0436\u0451\u043d\u043d\u044b\u0445 \u0441 \u043f\u043e\u043c\u043e\u0449\u044c\u044e \u0441\u0432\u043e\u0435\u0433\u043e \u043c\u043e\u043b\u043e\u0442\u0430."
+	},
+	{
+		"key": "When an infected dies, he may re-spawn near her.",
+		"value": "\u041f\u043e\u0441\u043b\u0435 \u0441\u043c\u0435\u0440\u0442\u0438 \u0437\u0430\u0440\u0430\u0436\u0451\u043d\u043d\u044b\u0439 \u0441 \u043e\u043f\u0440\u0435\u0434\u0435\u043b\u0451\u043d\u043d\u044b\u043c \u0448\u0430\u043d\u0441\u043e\u043c \u043c\u043e\u0436\u0435\u0442 \u0432\u043e\u0441\u043a\u0440\u0435\u0441\u043d\u0443\u0442\u044c \u0440\u044f\u0434\u043e\u043c \u0441 \u0412\u0435\u0434\u044c\u043c\u043e\u0439."
+	},
+	{
+		"key": "If the Witch dies, she disappears and is replaced by another class of infected.",
+		"value": "\u041a\u043e\u0433\u0434\u0430 \u043e\u043d\u0430 \u0443\u043c\u0440\u0451\u0442, \u0435\u0451 \u0438\u0433\u0440\u043e\u043a \u043f\u043e\u043b\u0443\u0447\u0438\u0442 \u0434\u0440\u0443\u0433\u043e\u0439 \u043a\u043b\u0430\u0441\u0441 \u0437\u0430\u0440\u0430\u0436\u0435\u043d\u043d\u044b\u0445."
+	},
+	{
+		"key": "She can also inflict 1 damage point per second by hooking humans.",
+		"value": "\u0410 \u0442\u0430\u043a\u0436\u0435 \u043e\u043d\u0430 \u043d\u0430\u043d\u043e\u0441\u0438\u0442 1 \u0443\u0440\u043e\u043d\u0430 \u0432 \u0441\u0435\u043a\u0443\u043d\u0434\u0443 \u0447\u0435\u043b\u043e\u0432\u0435\u043a\u0443, \u043a \u043a\u043e\u0442\u043e\u0440\u043e\u043c\u0443 \u043f\u0440\u0438\u0446\u0435\u043f\u043b\u0435\u043d\u0430 \u0446\u0435\u043f\u043e\u0447\u043a\u043e\u0439 (\u0445\u0443\u043a\u043e\u043c)."
+	},
+	{
+		"key": "Targeted chat messages",
+		"value": "\u0426\u0435\u043b\u0435\u0432\u044b\u0435 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u044f"
+	},
+	{
+		"key": "Use \u201c/msg <PlayerName> <My Message>\u201d to send a private message to this player.",
+		"value": "\u041f\u0440\u0438\u043c\u0435\u043d\u0438 \u00ab/msg <\u0418\u043c\u044f \u0438\u0433\u0440\u043e\u043a\u0430> <\u041c\u043e\u0451 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0435>\u00bb, \u0447\u0442\u043e\u0431\u044b \u043f\u043e\u0441\u043b\u0430\u0442\u044c \u0447\u0430\u0441\u0442\u043d\u043e\u0435 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0435 \u0434\u0430\u043d\u043d\u043e\u043c\u0443 \u0438\u0433\u0440\u043e\u043a\u0443."
+	},
+	{
+		"key": "Use \u201c/msg !<ClassName> <My Message>\u201d to send a private message to all players with a specific class.",
+		"value": "\u041f\u0440\u0438\u043c\u0435\u043d\u0438 \u00ab/msg !<\u0438\u043c\u044f \u043a\u043b\u0430\u0441\u0441\u044b> <\u041c\u043e\u0451 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0435>\u00bb, \u0447\u0442\u043e\u0431\u044b \u043f\u043e\u0441\u043b\u0430\u0442\u044c \u0447\u0430\u0441\u0442\u043d\u043e\u0435 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0435 \u0432\u0441\u0435\u043c \u0438\u0433\u0440\u043e\u043a\u0430\u043c \u043e\u0442\u0434\u0435\u043b\u044c\u043d\u043e\u0433\u043e \u043a\u043b\u0430\u0441\u0441\u0430."
+	},
+	{
+		"key": "Example: \u201c/msg !medic I'm wounded!\u201d",
+		"value": "\u041f\u0440\u0438\u043c\u0435\u0440: \u00ab/msg !medic \u042f \u0440\u0430\u043d\u0435\u043d!\u00bb"
+	},
+	{
+		"key": "Use \u201c/msg !near\u201d to send a private message to all players near you.",
+		"value": "\u041f\u0440\u0438\u043c\u0435\u043d\u0438 \u00ab/msg !near\u00bb, \u0447\u0442\u043e\u0431\u044b \u043f\u043e\u0441\u043b\u0430\u0442\u044c \u0447\u0430\u0441\u0442\u043d\u043e\u0435 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0435 \u0432\u0441\u0435\u043c \u0438\u0433\u0440\u043e\u043a\u0430\u043c \u0432 \u043e\u043a\u0440\u0435\u0441\u0442\u043d\u043e\u0441\u0442\u044f\u0445."
+	},
+	{
+		"key": "Choose a help page with /help <page>",
+		"value": "\u0412\u044b\u0431\u0438\u0440\u0430\u0439 \u0432\u0441\u043f\u043e\u043c\u043e\u0433\u0430\u0442\u0435\u043b\u044c\u043d\u0443\u044e \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0443 \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u0443\u044f /help <\u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0430>"
+	},
+	{
+		"key": "Available help pages: {str:PageList}",
+		"value": "\u0418\u043c\u0435\u044e\u0449\u0438\u0435\u0441\u044f \u0432\u0441\u043f\u043e\u043c\u043e\u0433\u0430\u0442\u0435\u043b\u044c\u043d\u044b\u0435 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u044b: {str:PageList}"
+	},
+	{
+		"key": "A random class will be automatically attributed to you when rounds start",
+		"value": "\u041a\u0430\u043a \u0442\u043e\u043b\u044c\u043a\u043e \u043d\u0430\u0447\u043d\u0451\u0442\u0441\u044f \u0440\u0430\u0443\u043d\u0434, \u0442\u0435\u0431\u0435 \u0431\u0443\u0434\u0435\u0442 \u043d\u0430\u0437\u043d\u0430\u0447\u0435\u043d \u0441\u043b\u0443\u0447\u0430\u0439\u043d\u044b\u0439 \u043a\u043b\u0430\u0441\u0441"
+	},
+	{
+		"key": "The class selector will be displayed when rounds start",
+		"value": "\u0412\u044b\u0431\u043e\u0440 \u043a\u043b\u0430\u0441\u0441\u0430 \u043f\u043e\u044f\u0432\u0438\u0442\u0441\u044f \u0441 \u043d\u0430\u0447\u0430\u043b\u043e\u043c \u0440\u0430\u0443\u043d\u0434\u0430"
+	},
+	{
+		"key": "Unknown language",
+		"value": "\u041d\u0435\u0438\u0437\u0432\u0435\u0441\u0442\u043d\u044b\u0439 \u044f\u0437\u044b\u043a"
+	},
+	{
+		"key": "Available languages: {str:ListOfLanguage}",
+		"value": "可用的语言版本: {str:ListOfLanguage}"
+	},
+	{
+		"key": "List of commands",
+		"value": "\u0421\u043f\u0438\u0441\u043e\u043a \u043a\u043e\u043c\u0430\u043d\u0434"
+	},
+	{
+		"key": "Press <F3> or <F4> to enable or disable hook protection",
+		"value": "\u041d\u0430\u0436\u043c\u0438 <F3> \u0438\u043b\u0438 <F4>, \u0447\u0442\u043e\u0431\u044b \u0432\u043a\u043b\u044e\u0447\u0438\u0442\u044c \u0438\u043b\u0438 \u0432\u044b\u043a\u043b\u044e\u0447\u0438\u0442\u044c \u0437\u0430\u0449\u0438\u0442\u0443 \u043f\u0440\u043e\u0442\u0438\u0432 \u0437\u0430\u0446\u0435\u043f\u043a\u0438"
+	},
+	{
+		"key": "You have held a bonus area for one minute, +5 points",
+		"value": "\u0422\u044b \u043f\u0440\u043e\u0434\u0435\u0440\u0436\u0430\u043b\u0441\u044f \u0432 \u0431\u043e\u043d\u0443\u0441\u043d\u043e\u0439 \u0437\u043e\u043d\u0435 \u043e\u0434\u043d\u0443 \u043c\u0438\u043d\u0443\u0442\u0443, +5 \u043e\u0447\u043a\u043e\u0432"
+	},
+	{
+		"key": "You are frozen: {sec:EffectDuration}",
+		"value": "\u0422\u044b \u0437\u0430\u043c\u043e\u0440\u043e\u0436\u0435\u043d: {sec:EffectDuration}"
+	},
+	{
+		"key": "Random choice",
+		"value": "\u0421\u043b\u0443\u0447\u0430\u0439\u043d\u044b\u0439 \u0432\u044b\u0431\u043e\u0440"
+	},
+	{
+		"key": "Choose your class",
+		"value": "\u0412\u044b\u0431\u0438\u0440\u0430\u0439 \u043a\u043b\u0430\u0441\u0441"
+	},
+	{
+		"key": "Laser wall: {sec:RemainingTime}",
+		"value": "\u0421\u0442\u0435\u043d\u0430: {sec:RemainingTime}"
+	},
+	{
+		"key": "{int:NumBombs} bombs left",
+		"one": "{int:NumBombs} \u0431\u043e\u043c\u0431\u0430 \u043e\u0441\u0442\u0430\u043b\u0430\u0441\u044c.",
+		"few": "{int:NumBombs} \u0431\u043e\u043c\u0431\u044b \u043e\u0441\u0442\u0430\u043b\u0438\u0441\u044c",
+		"many": "{int:NumBombs} \u0431\u043e\u043c\u0431 \u043e\u0441\u0442\u0430\u043b\u043e\u0441\u044c"
+	},
+	{
+		"key": "{int:NumMines} mines are active",
+		"one": "{int:NumMines} \u043c\u0438\u043d\u0430 \u0437\u0430\u0434\u0435\u0439\u0441\u0442\u0432\u043e\u0432\u0430\u043d\u043d\u0430",
+		"few": "{int:NumMines} \u043c\u0438\u043d\u044b \u0437\u0430\u0434\u0435\u0439\u0441\u0442\u0432\u043e\u0432\u0430\u043d\u043d\u044b",
+		"many": "{int:NumMines} \u043c\u0438\u043d\u044b \u0437\u0430\u0434\u0435\u0439\u0441\u0442\u0432\u043e\u0432\u0430\u043d\u043d\u044b"
+	},
+	{
+		"key": "Mine activated",
+		"value": "\u041b\u043e\u0432\u0443\u0448\u043a\u0430 \u0441\u0442\u043e\u0438\u0442"
+	},
+	{
+		"key": "Next target in {sec:RemainingTime}",
+		"value": "\u0421\u043b\u0435\u0434\u0443\u0449\u0430\u044f \u0446\u0435\u043b\u044c \u0447\u0435\u0440\u0435\u0437 {sec:RemainingTime}"
+	},
+	{
+		"key": "Target to eliminate: {str:PlayerName}",
+		"value": "\u0426\u0435\u043b\u044c \u0434\u043b\u044f \u0443\u043d\u0438\u0447\u0442\u043e\u0436\u0435\u043d\u0438\u044f: {str:PlayerName}"
+	},
+	{
+		"key": "Position lock: {sec:RemainingTime}",
+		"value": "\u041c\u0435\u0441\u0442\u043e\u043f\u043e\u043b\u043e\u0436\u0435\u043d\u0438\u0435 \u0437\u0430\u043a\u0440\u0435\u043f\u043b\u0435\u043d\u043e: {sec:RemainingTime}"
+	},
+	{
+		"key": "Explosive yield: {percent:BombLevel}",
+		"value": "\u0420\u0430\u0437\u0440\u044b\u0432\u043d\u043e\u0439 \u0437\u0430\u0440\u044f\u0434: {percent:BombLevel}"
+	},
+	{
+		"key": "Next flag in {sec:RemainingTime}",
+		"value": "\u0421\u043b\u0435\u0434\u0443\u044e\u0449\u0435\u0435 \u0437\u043d\u0430\u043c\u044f \u0447\u0435\u0440\u0435\u0437 {sec:RemainingTime}"
+	},
+	{
+		"key": "Web mode enabled",
+		"value": "\u041f\u0430\u0443\u0442\u0438\u043d\u043d\u043e\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435 \u0432\u043a\u043b\u044e\u0447\u0435\u043d\u043e"
+	},
+	{
+		"key": "Stomach filled by {percent:FodderInStomach}",
+		"value": "\u0411\u0440\u044e\u0445\u043e \u043d\u0430\u043f\u043e\u043b\u043d\u0435\u043d\u043e \u043d\u0430 {percent:FodderInStomach}"
+	},
+	{
+		"key": "The witch is dead",
+		"value": "\u0412\u0435\u0434\u044c\u043c\u0430 \u043c\u0435\u0440\u0442\u0432\u0430"
+	},
+	{
+		"key": "The undead is finally dead",
+		"value": "\u0411\u0435\u0441\u0441\u043c\u0435\u0440\u0442\u043d\u044b\u0439 \u0443\u043d\u0438\u0447\u0442\u043e\u0436\u0435\u043d"
+	},
+	{
+		"key": "Sword velocity increased",
+		"value": "\u0421\u043a\u043e\u0440\u043e\u0441\u0442\u044c \u043c\u0435\u0447\u0430 \u043f\u043e\u0434\u043d\u044f\u0442\u0430"
+	},
+	{
+		"key": "Sword strength increased",
+		"value": "\u0421\u0438\u043b\u0430 \u043c\u0435\u0447\u0430 \u043f\u043e\u0434\u043d\u044f\u0442\u0430"
+	},
+	{
+		"key": "Grenade limit increased",
+		"value": "\u041f\u0440\u0435\u0434\u0435\u043b \u0433\u0440\u0430\u043d\u0430\u0442 \u043f\u043e\u0434\u043d\u044f\u0442"
+	},
+	{
+		"key": "Type \u201c/help {str:ClassName}\u201d for more information about your class",
+		"value": "\u041d\u0430\u043f\u0438\u0448\u0438 \u00ab/help {str:ClassName}\u00bb, \u0447\u0442\u043e\u0431\u044b \u0431\u043e\u043b\u044c\u0448\u0435 \u0443\u0437\u043d\u0430\u0442\u044c \u043e \u0441\u0432\u043e\u0451\u043c \u043a\u043b\u0430\u0441\u0441\u0435"
+	},
+	{
+		"key": "The Hero found the flag!",
+		"value": "\u0425\u0440\u0430\u0431\u0440\u0435\u0446 \u043d\u0430\u0448\u0451\u043b \u0437\u043d\u0430\u043c\u044f!"
+	}
+]}

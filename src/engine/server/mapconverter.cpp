@@ -556,13 +556,13 @@ int CMapConverter::AddExternalImage(const char* pImageName, int Width, int Heigh
 
 void CMapConverter::Finalize()
 {
-	int SoldierImageID = AddExternalImage("../skins/brownbear", 256, 128);
-	int HeroImageID = AddExternalImage("../skins/redstripe", 256, 128);
+	int SoldierImageID = AddExternalImage("../skins/coala", 256, 128);
+	int HeroImageID = AddExternalImage("../skins/bluekitty", 256, 128);
 	int NinjaImageID = AddExternalImage("../skins/x_ninja", 256, 128);
 
 	//Menu
 	
-	const float MenuRadius = 196.0f;
+	const float MenuRadius = 256.0f;
 	const float MenuAngleStart = -pi/2.0f;
 	
 	{

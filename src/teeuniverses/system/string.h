@@ -149,7 +149,7 @@ public:
 		
 		return min(Pos + BufferSize, m_MaxSize-1);
 	}
-		
+	
 	inline int append_at_num(int Pos, const char* pBuffer, int Num)
 	{
 		int Size = Pos+Num+1;
