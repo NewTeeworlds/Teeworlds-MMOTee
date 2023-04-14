@@ -58,7 +58,7 @@ CPlayer::CPlayer(CGameContext *pGameServer, int ClientID, int Team)
 	AccData.Class = PLAYERCLASS_NONE;
 
 	m_pChatCmd = new CCmd(this, m_pGameServer);	
-	SetLanguage("en");
+	SetLanguage(Server()->GetClientLanguage(ClientID));
 }
 
 CPlayer::~CPlayer()
