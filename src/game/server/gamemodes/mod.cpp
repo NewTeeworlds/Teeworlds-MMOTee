@@ -18,7 +18,7 @@
 CGameControllerMOD::CGameControllerMOD(class CGameContext *pGameServer)
 : IGameController(pGameServer)
 {
-	m_pGameType = g_Config.m_SvGametype;
+	m_pGameType = "MMOTee-Azataz-F idm";
 	m_pHeroFlag = 0;
 }
 
@@ -145,20 +145,16 @@ void CGameControllerMOD::Snap(int SnappingClient)
 
 	pGameInfoObj->m_GameFlags = 0;
 	pGameInfoObj->m_GameStateFlags = 0;
-	if(m_GameOverTick != -1)
-		pGameInfoObj->m_GameStateFlags |= GAMESTATEFLAG_GAMEOVER;
-	if(m_SuddenDeath)
-		pGameInfoObj->m_GameStateFlags |= GAMESTATEFLAG_SUDDENDEATH;
 	if(GameServer()->m_World.m_Paused)
 		pGameInfoObj->m_GameStateFlags |= GAMESTATEFLAG_PAUSED;
-	pGameInfoObj->m_RoundStartTick = m_RoundStartTick;
+	pGameInfoObj->m_RoundStartTick = Server()->Tick();
 	pGameInfoObj->m_WarmupTimer = 0;
 
 	pGameInfoObj->m_ScoreLimit = 0;
 	pGameInfoObj->m_TimeLimit = 0;
 
-	pGameInfoObj->m_RoundNum = (str_length(g_Config.m_SvMaprotation) && g_Config.m_SvRoundsPerMap) ? g_Config.m_SvRoundsPerMap : 0;
-	pGameInfoObj->m_RoundCurrent = m_RoundCount+1;
+	pGameInfoObj->m_RoundNum = 0;
+	pGameInfoObj->m_RoundCurrent = 0;
 
 	int ClassMask = 0;
 	ClassMask |= CMapConverter::MASK_DEFENDER;
@@ -166,24 +162,29 @@ void CGameControllerMOD::Snap(int SnappingClient)
 	ClassMask |= CMapConverter::MASK_HERO;
 	ClassMask |= CMapConverter::MASK_SUPPORT;
 
+	// FFS注: 这段代码或将导致三体文明毁灭（WTF???）
 	if(GameServer()->m_apPlayers[SnappingClient])
 	{
-		int Page = -1;
-		
-		if(GameServer()->m_apPlayers[SnappingClient]->MapMenu() == 1)
+		if(GameServer()->m_apPlayers[SnappingClient]->AccData.Class == PLAYERCLASS_NONE && !GameServer()->m_apPlayers[SnappingClient]->IsBot())
 		{
-			int Item = GameServer()->m_apPlayers[SnappingClient]->m_MapMenuItem;
-			Page = CMapConverter::TIMESHIFT_MENUCLASS + 3*((Item+1) + ClassMask*CMapConverter::TIMESHIFT_MENUCLASS_MASK) + 1;
-		}
-		
-		if(Page >= 0)
-		{
-			double PageShift = static_cast<double>(Page * Server()->GetTimeShiftUnit())/1000.0f;
-			double CycleShift = fmod(static_cast<double>(Server()->Tick() - pGameInfoObj->m_RoundStartTick)/Server()->TickSpeed(), Server()->GetTimeShiftUnit()/1000.0);
-			int TimeShift = (PageShift + CycleShift)*Server()->TickSpeed();
+			pGameInfoObj->m_RoundStartTick = 0;
+			int Page = -1;
 			
-			pGameInfoObj->m_RoundStartTick = Server()->Tick() - TimeShift;
-			pGameInfoObj->m_TimeLimit += (TimeShift/Server()->TickSpeed())/60;
+			if(GameServer()->m_apPlayers[SnappingClient]->MapMenu() == 1)
+			{
+				int Item = GameServer()->m_apPlayers[SnappingClient]->m_MapMenuItem;
+				Page = CMapConverter::TIMESHIFT_MENUCLASS + 3*((Item+1) + ClassMask*CMapConverter::TIMESHIFT_MENUCLASS_MASK) + 1;
+			}
+			
+			if(Page >= 0)
+			{
+				double PageShift = static_cast<double>(Page * Server()->GetTimeShiftUnit())/1000.0f;
+				double CycleShift = fmod(static_cast<double>(Server()->Tick() - pGameInfoObj->m_RoundStartTick)/Server()->TickSpeed(), Server()->GetTimeShiftUnit()/1000.0);
+				int TimeShift = (PageShift + CycleShift)*Server()->TickSpeed();
+				
+				pGameInfoObj->m_RoundStartTick = 0;
+				pGameInfoObj->m_TimeLimit += (TimeShift/(Server()->TickSpeed()/20))/60;
+			}
 		}
 	}
 	
