@@ -30,14 +30,14 @@ typedef unsigned __int64 uint64_t;
 #endif
 
 #define BROADCAST_DURATION_REALTIME (0)
-#define BROADCAST_DURATION_GAMEANNOUNCE (Server()->TickSpeed()*2)
+#define BROADCAST_DURATION_GAMEANNOUNCE (Server()->TickSpeed() * 2)
 
 const int BOSSID = MAX_CLIENTS - 1;
 const int MAX_COUNT = 20000000;
 
 enum
 {
-	BROADCAST_PRIORITY_LOWEST=0,
+	BROADCAST_PRIORITY_LOWEST = 0,
 	BROADCAST_PRIORITY_WEAPONSTATE,
 	BROADCAST_PRIORITY_EFFECTSTATE,
 	BROADCAST_PRIORITY_GAMEANNOUNCE,
@@ -47,17 +47,17 @@ enum
 
 enum
 {
-	CLANUPGRADECOUNT=2000000,
+	CLANUPGRADECOUNT = 2000000,
 };
 
 enum
 {
-	NOAUTHED=0,
+	NOAUTHED = 0,
 };
 
 enum
 {
-	INSHOP=1,
+	INSHOP = 1,
 	EXITSHOP,
 	INADDEXP,
 	INADDMONEY,
@@ -71,49 +71,48 @@ enum
 
 enum
 {
-	AMAXHEALTH=400,
-	BMAXHEALTH=300,
-	HMAXHEALTH=500,
-	
-	AMAXDAMAGE=200,
-	BMAXDAMAGE=260,
-	HMAXDAMAGE=140,
-	
-	AMAXAREGEN=270,
-	BMAXAREGEN=300,
-	HMAXAREGEN=270,
-	
-	AMAXAMMO=80,
-	BMAXAMMO=70,
-	HMAXAMMO=100,
-	
-	AMAXHPREGEN=200,
-	BMAXHPREGEN=150,
-	HMAXHPREGEN=250,
-	
-	AMAXHANDLE=400,
-	BMAXHANDLE=350,
-	HMAXHANDLE=300,
-	
-	AMAXSPREAD=30,
-	BMAXSPREAD=30,
-	HMAXSPREAD=30,
+	AMAXHEALTH = 400,
+	BMAXHEALTH = 300,
+	HMAXHEALTH = 500,
+
+	AMAXDAMAGE = 200,
+	BMAXDAMAGE = 260,
+	HMAXDAMAGE = 140,
+
+	AMAXAREGEN = 270,
+	BMAXAREGEN = 300,
+	HMAXAREGEN = 270,
+
+	AMAXAMMO = 80,
+	BMAXAMMO = 70,
+	HMAXAMMO = 100,
+
+	AMAXHPREGEN = 200,
+	BMAXHPREGEN = 150,
+	HMAXHPREGEN = 250,
+
+	AMAXHANDLE = 400,
+	BMAXHANDLE = 350,
+	HMAXHANDLE = 300,
+
+	AMAXSPREAD = 30,
+	BMAXSPREAD = 30,
+	HMAXSPREAD = 30,
 };
 
 enum
 {
-	QUEST1=20,
-	QUEST2=40,
-	QUEST3=60,	
-	QUEST4=80,
-	QUEST5=100,
-	QUEST6=120,
+	QUEST1 = 20,
+	QUEST2 = 40,
+	QUEST3 = 60,
+	QUEST4 = 80,
+	QUEST5 = 100,
+	QUEST6 = 120,
 };
 enum
 {
-	HAMMERRANGE=15
+	HAMMERRANGE = 15
 };
-
 
 class CGameContext : public IGameServer
 {
@@ -124,9 +123,8 @@ class CGameContext : public IGameServer
 	CCollision m_Collision;
 	CNetObjHandler m_NetObjHandler;
 	CTuningParams m_Tuning;
-	//int m_TargetToKill;
-	//int m_TargetToKillCoolDown;
-
+	// int m_TargetToKill;
+	// int m_TargetToKillCoolDown;
 
 	static bool ConTuneParam(IConsole::IResult *pResult, void *pUserData);
 	static bool ConTuneReset(IConsole::IResult *pResult, void *pUserData);
@@ -165,11 +163,11 @@ public:
 
 	enum
 	{
-		VOTE_ENFORCE_UNKNOWN=0,
+		VOTE_ENFORCE_UNKNOWN = 0,
 		VOTE_ENFORCE_NO,
 		VOTE_ENFORCE_YES,
 	};
-	
+
 	enum
 	{
 		MENUONLY,
@@ -187,9 +185,9 @@ public:
 	void CreateHammerHit(vec2 Pos);
 	void CreatePlayerSpawn(vec2 Pos);
 	void CreateDeath(vec2 Pos, int Who);
-	void CreateSound(vec2 Pos, int Sound, int64_t Mask=-1);
-	void CreateSoundGlobal(int Sound, int Target=-1);
-	
+	void CreateSound(vec2 Pos, int Sound, int64_t Mask = -1);
+	void CreateSoundGlobal(int Sound, int Target = -1);
+
 	// Голосования
 	// 投票
 	void ClearVotes(int ClientID);
@@ -198,9 +196,9 @@ public:
 	void AddBack(int ClientID);
 	struct CVoteOptions
 	{
-		char m_aDescription[VOTE_DESC_LENGTH] = { 0 };
-		char m_aCommand[VOTE_CMD_LENGTH] = { 0 };
-		void* data = { 0 };
+		char m_aDescription[VOTE_DESC_LENGTH] = {0};
+		char m_aCommand[VOTE_CMD_LENGTH] = {0};
+		void *data = {0};
 	};
 	array<CVoteOptions> m_PlayerVotes[MAX_CLIENTS];
 
@@ -216,7 +214,7 @@ public:
 	void RemItem(int ClientID, int ItemID, int Count);
 
 	void CreateItem(int ClientID, int ItemID, int Count);
-	void BuyUpgradeClan(int ClientID, int Money, Clan Type, const char* SubType);
+	void BuyUpgradeClan(int ClientID, int Money, Clan Type, const char *SubType);
 	void CreateNewShop(int ClientID, int ItemID, int Type, int Level, int Price);
 	void SkillSettings(int ClientID, int ItemType, const char *Msg);
 	void EyeEmoteSettings(int ClientID, int ItemType, const char *Msg);
@@ -254,7 +252,7 @@ public:
 	void UpdateBotInfo(int ClientID);
 	void CreateBot(int ClientID, int BotType, int BotSubType = 0);
 	void CreateLolText(CEntity *pParent, bool Follow, vec2 Pos, vec2 Vel, int Lifespan, const char *pText);
-	const char* LevelString(int max, int value, int step, char ch1, char ch2);
+	const char *LevelString(int max, int value, int step, char ch1, char ch2);
 	void SendMail(int ClientID, int MailType, int ItemID, int ItemNum);
 
 	// Обновление аккаунта
@@ -268,46 +266,46 @@ public:
 
 	enum
 	{
-		CHAT_ALL=-2,
-		CHAT_SPEC=-1,
-		CHAT_RED=0,
-		CHAT_BLUE=1
+		CHAT_ALL = -2,
+		CHAT_SPEC = -1,
+		CHAT_RED = 0,
+		CHAT_BLUE = 1
 	};
 
 	// Локализация текст
 	// 本地化文本
 	virtual void SendGuide(int ClientID, int BossType);
-	
-	virtual void SendMOTD(int To, const char* pParam);
-	virtual void SendMOTD_Localization(int To, const char* pText, ...);
-	
-	void AddBroadcast(int ClientID, const char* pText, int Priority, int LifeSpan);
+
+	virtual void SendMOTD(int To, const char *pParam);
+	virtual void SendMOTD_Localization(int To, const char *pText, ...);
+
+	void AddBroadcast(int ClientID, const char *pText, int Priority, int LifeSpan);
 	virtual void SendBroadcast(int To, const char *pText, int Priority, int LifeSpan);
 	virtual void SendBroadcast_LStat(int To, int Priority, int LifeSpan, int Type, int Size = 0, int Size2 = 0);
 	virtual void SendBroadcast_LChair(int To, int Size = 0, int SizeMoney = 0);
 	virtual void SendBroadcast_LBossed(int To, int Priority, int LifeSpan);
-	virtual void SendBroadcast_Localization(int To, int Priority, int LifeSpan, const char* pText, ...);
-	virtual void SendBroadcast_Localization_P(int To, int Priority, int LifeSpan, int Number, const char* pText, ...);
+	virtual void SendBroadcast_Localization(int To, int Priority, int LifeSpan, const char *pText, ...);
+	virtual void SendBroadcast_Localization_P(int To, int Priority, int LifeSpan, int Number, const char *pText, ...);
 	virtual void ClearBroadcast(int To, int Priority);
-	
-	virtual void AddVote_Localization(int To, const char* aCmd, const char* pText, ...);
-	virtual void AddVoteMenu_Localization(int To, int MenuID, int Type, const char* pText, ...);
+
+	virtual void AddVote_Localization(int To, const char *aCmd, const char *pText, ...);
+	virtual void AddVoteMenu_Localization(int To, int MenuID, int Type, const char *pText, ...);
 	virtual void AddNewCraftVote(int ClientID, const char *Need, int ItemID);
 
-	const char* LocalizeText(int ClientID, const char* pText);
+	const char *LocalizeText(int ClientID, const char *pText);
 
 	virtual void SendChatTarget(int To, const char *pText);
-	virtual void SendChatTarget_Localization(int To, int Category, const char* pText, ...);
-	virtual void SendChatTarget_Localization_P(int To, int Category, int Number, const char* pText, ...);
-	virtual void SendChatClan(int ClanID, const char* pText, ...);
+	virtual void SendChatTarget_Localization(int To, int Category, const char *pText, ...);
+	virtual void SendChatTarget_Localization_P(int To, int Category, int Number, const char *pText, ...);
+	virtual void SendChatClan(int ClanID, const char *pText, ...);
 
 	// Основные функции
 	// 主要功能
 	void SendChat(int ClientID, int Team, const char *pText);
 	void SendEmoticon(int ClientID, int Emoticon);
 	void SendWeaponPickup(int ClientID, int Weapon);
-	virtual void OnSetAuthed(int ClientID,int Level);
-	
+	virtual void OnSetAuthed(int ClientID, int Level);
+
 	void CheckPureTuning();
 	void SendTuningParams(int ClientID);
 
@@ -334,7 +332,7 @@ public:
 	virtual const char *GameType();
 	virtual const char *Version();
 	virtual const char *NetVersion();
-	
+
 public:
 	int m_ChatResponseTargetID;
 	int m_ChatPrintCBIndex;
@@ -345,16 +343,16 @@ public:
 	int m_InviteTick[MAX_NOBOT];
 
 private:
-	bool PrivateMessage(const char* pStr, int ClientID, bool TeamChat);
+	bool PrivateMessage(const char *pStr, int ClientID, bool TeamChat);
 	class CBroadcastState
 	{
 	public:
 		int m_NoChangeTick;
 		char m_PrevMessage[1024];
-		
+
 		int m_Priority;
 		char m_NextMessage[1024];
-		
+
 		int m_LifeSpanTick;
 		int m_TimedPriority;
 		char m_TimedMessage[1024];
@@ -363,7 +361,7 @@ private:
 };
 
 inline int64_t CmaskAll() { return -1LL; }
-inline int64_t CmaskOne(int ClientID) { return 1LL<<ClientID; }
-inline int64_t CmaskAllExceptOne(int ClientID) { return CmaskAll()^CmaskOne(ClientID); }
-inline bool CmaskIsSet(int64_t Mask, int ClientID) { return (Mask&CmaskOne(ClientID)) != 0; }
+inline int64_t CmaskOne(int ClientID) { return 1LL << ClientID; }
+inline int64_t CmaskAllExceptOne(int ClientID) { return CmaskAll() ^ CmaskOne(ClientID); }
+inline bool CmaskIsSet(int64_t Mask, int ClientID) { return (Mask & CmaskOne(ClientID)) != 0; }
 #endif

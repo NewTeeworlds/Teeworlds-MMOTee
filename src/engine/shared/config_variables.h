@@ -14,7 +14,6 @@ MACRO_CONFIG_STR(SvMaprotation, sv_maprotation, 768, "infc_damascus infc_warehou
 MACRO_CONFIG_INT(SvRoundsPerMap, sv_rounds_per_map, 8, 1, 100, CFGFLAG_SERVER, "Number of rounds on each map before rotating")
 MACRO_CONFIG_INT(SvScorelimit, sv_scorelimit, 0, 0, 1000, CFGFLAG_SERVER, "Score limit (0 disables)")
 //MACRO_CONFIG_INT(SvTimelimit, sv_timelimit, 0, 0, 1000, CFGFLAG_SERVER, "Time limit in minutes (0 disables)")
-MACRO_CONFIG_STR(SvGametype, sv_gametype, 32, "MMOTEE-Azataz", CFGFLAG_SERVER, "Game type (dm, tdm, ctf)")
 MACRO_CONFIG_INT(SvTournamentMode, sv_tournament_mode, 0, 0, 1, CFGFLAG_SERVER, "Tournament mode. When enabled, players join the server as spectators")
 MACRO_CONFIG_INT(SvSpamprotection, sv_spamprotection, 1, 0, 1, CFGFLAG_SERVER, "Spam protection")
 

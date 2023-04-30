@@ -249,7 +249,7 @@ void CMapConverter::AddTeeLayer(const char* pName, int ImageID, vec2 Pos, float 
 	aQuads.add(Quad);
 	
 		//BackFeet, Shadow
-		InitQuad(&Quad, Pos+vec2(-7.0f, 10.0f), vec2(Size, Size/2.0f));
+		InitQuad(&Quad, Pos+vec2(-14.0f, 20.0f), vec2(Size, Size/2.0f));
 		Quad.m_ColorEnv = Env;
 		Quad.m_aTexcoords[0].x = Quad.m_aTexcoords[2].x = 1024.0f*192.0f/256.0f;
 		Quad.m_aTexcoords[1].x = Quad.m_aTexcoords[3].x = 1024.0f;
@@ -258,7 +258,7 @@ void CMapConverter::AddTeeLayer(const char* pName, int ImageID, vec2 Pos, float 
 		aQuads.add(Quad);
 
 		//FrontFeet, Shadow
-		InitQuad(&Quad, Pos+vec2(7.0f, 10.0f), vec2(Size, Size/2.0f));
+		InitQuad(&Quad, Pos+vec2(14.0f, 20.0f), vec2(Size, Size/2.0f));
 		Quad.m_ColorEnv = Env;
 		Quad.m_aTexcoords[0].x = Quad.m_aTexcoords[2].x = 1024.0f*192.0f/256.0f;
 		Quad.m_aTexcoords[1].x = Quad.m_aTexcoords[3].x = 1024.0f;
@@ -269,7 +269,7 @@ void CMapConverter::AddTeeLayer(const char* pName, int ImageID, vec2 Pos, float 
 	//BackFeet, Color
 	if(!Black)
 	{
-		InitQuad(&Quad, Pos+vec2(-7.0f, 10.0f), vec2(Size, Size/2.0f));
+		InitQuad(&Quad, Pos+vec2(-14.0f, 20.0f), vec2(Size, Size/2.0f));
 		Quad.m_ColorEnv = Env;
 		Quad.m_aTexcoords[0].x = Quad.m_aTexcoords[2].x = 1024.0f*192.0f/256.0f;
 		Quad.m_aTexcoords[1].x = Quad.m_aTexcoords[3].x = 1024.0f;
@@ -278,7 +278,7 @@ void CMapConverter::AddTeeLayer(const char* pName, int ImageID, vec2 Pos, float 
 		aQuads.add(Quad);
 		
 		//Body, Color
-		InitQuad(&Quad, Pos+vec2(0.0f, -4.0f), vec2(Size, Size));
+		InitQuad(&Quad, Pos+vec2(0.0f, -8.0f), vec2(Size, Size));
 		Quad.m_ColorEnv = Env;
 		Quad.m_aTexcoords[0].x = Quad.m_aTexcoords[2].x = 0;
 		Quad.m_aTexcoords[1].x = Quad.m_aTexcoords[3].x = 1024.0f*96.0f/256.0f;
@@ -287,7 +287,7 @@ void CMapConverter::AddTeeLayer(const char* pName, int ImageID, vec2 Pos, float 
 		aQuads.add(Quad);
 		
 			//FrontFeet, Color
-			InitQuad(&Quad, Pos+vec2(7.0f, 10.0f), vec2(Size, Size/2.0f));
+			InitQuad(&Quad, Pos+vec2(14.0f, 20.0f), vec2(Size, Size/2.0f));
 			Quad.m_ColorEnv = Env;
 			Quad.m_aTexcoords[0].x = Quad.m_aTexcoords[2].x = 1024.0f*192.0f/256.0f;
 			Quad.m_aTexcoords[1].x = Quad.m_aTexcoords[3].x = 1024.0f;
@@ -296,12 +296,12 @@ void CMapConverter::AddTeeLayer(const char* pName, int ImageID, vec2 Pos, float 
 			aQuads.add(Quad);
 		
 		//Eyes
-		vec2 Direction = normalize(vec2(1.0f, -0.5f));
+		vec2 Direction = normalize(vec2(0.01f, 0.01f));
 		float EyeSeparation = (0.075f - 0.010f*absolute(Direction.x))*Size;
 		vec2 Offset = vec2(Direction.x*0.125f, -0.05f+Direction.y*0.10f)*Size;
 		
 			//Left
-		InitQuad(&Quad, Pos+vec2(Offset.x-EyeSeparation, Offset.y-4.0f), vec2(Size*0.40f, Size*0.40f));
+		InitQuad(&Quad, Pos+vec2(Offset.x-EyeSeparation, Offset.y-8.0f), vec2(Size*0.40f, Size*0.40f));
 		Quad.m_ColorEnv = Env;
 		Quad.m_aTexcoords[0].x = Quad.m_aTexcoords[2].x = 1024.0f*64.0f/256.0f;
 		Quad.m_aTexcoords[1].x = Quad.m_aTexcoords[3].x = 1024.0f*96.0f/256.0f;
@@ -310,7 +310,7 @@ void CMapConverter::AddTeeLayer(const char* pName, int ImageID, vec2 Pos, float 
 		aQuads.add(Quad);
 		
 			//Right
-		InitQuad(&Quad, Pos+vec2(Offset.x+EyeSeparation, Offset.y-4.0f), vec2(-Size*0.40f, Size*0.40f));
+		InitQuad(&Quad, Pos+vec2(Offset.x+EyeSeparation, Offset.y-8.0f), vec2(-Size*0.40f, Size*0.40f));
 		Quad.m_ColorEnv = Env;
 		Quad.m_aTexcoords[0].x = Quad.m_aTexcoords[2].x = 1024.0f*64.0f/256.0f;
 		Quad.m_aTexcoords[1].x = Quad.m_aTexcoords[3].x = 1024.0f*96.0f/256.0f;
@@ -556,13 +556,13 @@ int CMapConverter::AddExternalImage(const char* pImageName, int Width, int Heigh
 
 void CMapConverter::Finalize()
 {
-	int SoldierImageID = AddExternalImage("../skins/coala", 256, 128);
-	int HeroImageID = AddExternalImage("../skins/bluekitty", 256, 128);
+	int SoldierImageID = AddExternalImage("../skins/brownbear", 256, 128);
+	int HeroImageID = AddExternalImage("../skins/redstripe", 256, 128);
 	int NinjaImageID = AddExternalImage("../skins/x_ninja", 256, 128);
 
 	//Menu
 	
-	const float MenuRadius = 256.0f;
+	const float MenuRadius = 96.0f;
 	const float MenuAngleStart = -pi/2.0f;
 	
 	{
@@ -765,7 +765,7 @@ void CMapConverter::Finalize()
 					//Create Circle
 					if(pass == 0)
 					{
-						CreateCircle(&aQuads, m_MenuPosition+rotate(vec2(MenuRadius, 0.0f), MenuAngleStart+MenuAngleStep*i), 96.0f, vec4(1.0f, 1.0f, 1.0f, 0.5f), m_NumEnvs-1);
+						CreateCircle(&aQuads, m_MenuPosition+rotate(vec2(MenuRadius, 0.0f), MenuAngleStart+MenuAngleStep*i), 180.0f, vec4(1.0f, 1.0f, 1.0f, 0.5f), m_NumEnvs-1);
 					}
 					else
 					{
@@ -773,13 +773,13 @@ void CMapConverter::Finalize()
 						switch(i)
 						{
 							case MENUCLASS_ASSASINS:
-								AddTeeLayer("Assasins", NinjaImageID, Pos, 90.0f, m_NumEnvs-1, false);
+								AddTeeLayer("Assasins", NinjaImageID, Pos, 128.0f, m_NumEnvs-1, false);
 								break;
 							case MENUCLASS_BERSERK:
-								AddTeeLayer("Berserk", SoldierImageID, Pos, 90.0f, m_NumEnvs-1, false);
+								AddTeeLayer("Berserk", SoldierImageID, Pos, 128.0f, m_NumEnvs-1, false);
 								break;
 							case MENUCLASS_HEALER:
-								AddTeeLayer("Healer", HeroImageID, Pos, 90.0f, m_NumEnvs-1, false);
+								AddTeeLayer("Healer", HeroImageID, Pos, 128.0f, m_NumEnvs-1, false);
 								break;
 						}
 					}
