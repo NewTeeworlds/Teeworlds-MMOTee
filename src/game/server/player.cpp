@@ -1045,6 +1045,17 @@ void CPlayer::TryRespawn()
 			AccUpgrade.Health = (int)(AccData.Level * 2);
 			m_BigBot = true;
 			break;
+		case BOT_BOSSCLEANER:
+			m_pCharacter = new (m_ClientID) CBossSlime(&GameServer()->m_World);
+			AccData.Level = 1000 + random_int(0, 3);
+
+			m_BigBot = true;
+
+			AccUpgrade.Health = (int)(AccData.Level / 3);
+			AccUpgrade.Damage = 100;
+			if (g_Config.m_SvCityStart == 1)
+				AccUpgrade.Damage = 400;
+			break;
 		default: 
 			dbg_msg("sys", "Invalid value %d in %s:%d", m_BotType, __FILE__, __LINE__); 
 			break;
@@ -1197,6 +1208,12 @@ const char* CPlayer::TitleGot()
 		return "_I<3Summer";
 	else if(Server()->GetItemSettings(m_ClientID, TITLEENCHANT))
 		return "Enchant+10";
+	else if(Server()->GetItemSettings(m_ClientID, TITLE_DONATE_BAOJI50))
+		return "Donate GG爆";
+	else if(Server()->GetItemSettings(m_ClientID, TITLE_DONATE_SHENGMIN70))
+		return "Donate TANK!";
+	else if(Server()->GetItemSettings(m_ClientID, TITLE_SPECIAL_TEEFUN))
+		return "TeeFun成员";
 	//else if(Server()->GetItemSettings(m_ClientID, TITLEMOON))
 	//	return "~〇~ Moon ~〇~";	
 	else 
@@ -1206,7 +1223,7 @@ const char* CPlayer::TitleGot()
 void CPlayer::SetMoveChar()
 {  
 	char aBuf[64];
-	str_format(aBuf, sizeof(aBuf), "%s | %s", Server()->ClientClan(m_ClientID), TitleGot());
+	str_format(aBuf, sizeof(aBuf), "%s|%s", Server()->ClientClan(m_ClientID), TitleGot());
 	str_copy(pTitle, aBuf, sizeof(pTitle));
 	tickstr = 90;
 }  

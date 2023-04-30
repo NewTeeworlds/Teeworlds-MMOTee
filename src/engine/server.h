@@ -29,6 +29,7 @@ enum BotType
 	BOT_BOSSSLIME,
 	BOT_NPCW,
 	BOT_FARMER,
+	BOT_BOSSCLEANER,
 };
 
 enum
@@ -229,8 +230,9 @@ enum Items
 	CABBAGE,
 	GOLDTICKET,
 	EXTENDLIMIT,
-	//TITLEMOON,
-	//FESTITEM,
+	TITLE_DONATE_BAOJI50,
+	TITLE_DONATE_SHENGMIN70,
+	TITLE_SPECIAL_TEEFUN,
 	MAX_ITEM,
 	// 1 - Weapon Upgradins, 2 - Rare Artifacts, 3 - Quest Item's, 4 - Useds Items, 5 - Crafted Item
 	// Sufix S - SettingsItem
