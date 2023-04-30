@@ -1948,7 +1948,10 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 			Dmg = CritDamage;
 			if(pFrom->GetCharacter()->m_ActiveWeapon == WEAPON_SHOTGUN)
 				Dmg = (int)(CritDamage/2);
-				
+			
+			if(Server()->GetItemSettings(From, TITLE_DONATE_BAOJI50))
+				Dmg *= 50;
+
 			if(!Server()->GetItemSettings(From, SCHAT))
 				GameServer()->SendChatTarget_Localization(From, CHATCATEGORY_BERSERK, _("暴击伤害 {int:crit}"), "crit", &Dmg, NULL);
 		}
@@ -2429,6 +2432,9 @@ void CCharacter::ClassSpawnAttributes()
 		m_Health += 1000;
 		m_Armor += 1000;
 	}
+
+	if (Server()->GetItemSettings(m_pPlayer->GetCID(), TITLE_DONATE_SHENGMIN70))
+		m_Health *= 70;
 
 	/*if(Server()->GetItemSettings(m_pPlayer->GetCID(), TITLEMOON))
 	{

@@ -354,7 +354,10 @@ INSERT INTO `tw_uItemList` VALUES
 (128,2,'自定义颜色','让你使用自己的皮肤颜色'),
 (129,4,'卷心菜','- 获得35经验'),
 (130,4,'金券','- 更方便地交易黄金!'),
-(131,10,'技能扩展','- 增加部分技能的上限');
+(131,10,'技能扩展','- 增加部分技能的上限'),
+(132,12,'充值称号 - GG爆!','- 暴击伤害99%几率增加50倍'),
+(133,12,'充值称号 - TANK!','- 生命上限增加70倍'),
+(134,12,'特殊称号 - TeeFun!','- TeeFun成员都得有');
 -- (131,10,'中秋节称号','- 射速+10'),
 -- (132,5,'活动用品','用于合成');
 /*!40000 ALTER TABLE `tw_uItemList` ENABLE KEYS */;
@@ -515,7 +518,10 @@ INSERT INTO `tw_uItemList_en` VALUES
 (128,2,'Custom Color','Use customized tee color'),
 (129,4,'Cabbage','- You got 35 exp'),
 (130,4,'Gold Ticket','- Item for exchanging Gold'),
-(131,10,'Extend Limit','- Item for extending upgrade limit');
+(131,10,'Extend Limit','- Item for extending upgrade limit'),
+(132,12,'Donate Title - GG Bond!','- 暴击伤害99%几率增加50倍'),
+(133,12,'Donate Title - TANK!','- 生命上限增加70倍'),
+(134,12,'Special Title - TeeFun!','- TeeFun成员都得有');
 -- (131,10,'Title Moon','- Special Title for Mid-Autumn Festival'),
 -- (132,5,'Activity Item','For Crafting');
 /*!40000 ALTER TABLE `tw_uItemList_en` ENABLE KEYS */;
